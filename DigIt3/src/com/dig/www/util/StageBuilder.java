@@ -42,7 +42,6 @@ public class StageBuilder {
 
 		try {
 
-			System.out.println("try");
 
 			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
 
@@ -50,7 +49,7 @@ public class StageBuilder {
 
 			if (map.exists()) {
 
-				System.out.println("map exists");
+		
 
 				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				String line;
