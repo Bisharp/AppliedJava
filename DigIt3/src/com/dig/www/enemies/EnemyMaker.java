@@ -16,15 +16,14 @@ public class EnemyMaker {
 			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(s));
 			ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 			
-			enemies.add(new Launch(6700, 1400, "images/enemies/turrets/0.png", 75, false));
-			enemies.add(new Launch(200, 1400, "images/enemies/unique/machineLaunch.png", 20, false));
-			enemies.add(new TrackingEnemy(100, 1000, "images/enemies/unique/chair.png", false));
-			enemies.add(new WalkingEnemy(100, 1400, "images/enemies/unique/ghost.png", false));
-			
-			enemies.add(new StandEnemy(3800, 1500, "images/enemies/unique/fishbowl.png", true));
-			enemies.add(new StandEnemy(3800, 1600, "images/enemies/unique/fishbowl.png", true));
-			enemies.add(new StandEnemy(3800, 1700, "images/enemies/unique/fishbowl.png", true));
-			enemies.add(new StandEnemy(3800, 1800, "images/enemies/unique/fishbowl.png", true));
+//			L,6700, 1400, images/enemies/turrets/0.png, f, 75
+//			L,200, 1400, images/enemies/unique/machineLaunch.png, f, 20
+//			T,100, 1000, images/enemies/unique/chair.png, f
+//			W,100, 1400, images/enemies/unique/ghost.png, f
+//			S,3800, 1500, images/enemies/unique/fishbowl.png, t
+//			S,3800, 1600, images/enemies/unique/fishbowl.png, t
+//			S,3800, 1700, images/enemies/unique/fishbowl.png, t
+//			S,3800, 1800, images/enemies/unique/fishbowl.png, t
 			os.writeObject(enemies);
 			os.close();
 		} catch (Exception ex) {

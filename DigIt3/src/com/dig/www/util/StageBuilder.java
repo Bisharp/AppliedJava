@@ -1,5 +1,8 @@
 package com.dig.www.util;
 
+import java.awt.Image;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +10,15 @@ import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.Launch;
+import com.dig.www.enemies.Projectile;
+import com.dig.www.enemies.StandEnemy;
+import com.dig.www.enemies.TrackingEnemy;
+import com.dig.www.enemies.WalkingEnemy;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -99,20 +109,68 @@ public class StageBuilder {
 
 		return world;
 	}
-	public ArrayList<Enemy> loadEn(String loc) {
-		try {
-			ObjectInputStream is=new ObjectInputStream(new FileInputStream(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "E.ser"));
-			ArrayList<Enemy> objects=(ArrayList<Enemy>) is.readObject();
+	public ArrayList<Enemy> loadEn(String loc,Board owner) {
+		ArrayList<Enemy>enemies=new ArrayList<Enemy>();
+		try{
+			ArrayList<String>strings=new ArrayList<String>();
+			File saveFile=new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "E.txt");
+			if(saveFile.exists()){
+				BufferedReader reader =new BufferedReader(new FileReader(saveFile));
+				String line;
+				while((line=reader.readLine())!=null){
+					strings.add(line);
+				}
+				reader.close();
+			for(int c=0;c<strings.size();c++){
+				ArrayList<String>stuff=new ArrayList<String>();//should have 5
+				String currentS="";
+				for(int c2=0;c2<strings.get(c).length();c2++){
+					
+					if(strings.get(c).charAt(c2)==','){
+						stuff.add(currentS);
+						currentS="";
+						
+					}else{
+						currentS+=strings.get(c).charAt(c2);
+					}
+				}
+				if(currentS!=""){
+					stuff.add(currentS);
+				}
+				try{
+					int enX=Integer.parseInt(stuff.get(1));
+					int enY=Integer.parseInt(stuff.get(2));
+					char ch=stuff.get(0).charAt(0);
+					String enImg=stuff.get(3);
+					boolean flying=stuff.get(4).charAt(0)=='t';
+					
+					switch(ch){
+					case 'L':
+					enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(5)), flying));
+					break;
+					case 'S':
+						enemies.add(new StandEnemy(enX, enY, enImg, owner, flying));
+						break;
+					case 'T':
+						enemies.add(new TrackingEnemy(enX, enY, enImg, owner, flying));
+						break;
+					case 'W':
+						enemies.add(new WalkingEnemy(enX, enY, enImg, owner, flying));
+						break;
+					}
+				}catch(IndexOutOfBoundsException ex){
+					ex.printStackTrace();
+					
+			}
+			}
 			
-			return objects;
-	
-		} catch (Exception ex) {
-		ex.printStackTrace();
-		return new ArrayList<Enemy>();
-			
-			
-			
+		}}
+		catch(Exception ex){
+			ex.printStackTrace();
 		}
-
+		
+		
+		
+		return enemies;
 	}
 }
