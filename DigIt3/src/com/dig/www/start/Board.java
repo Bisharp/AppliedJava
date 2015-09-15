@@ -96,6 +96,7 @@ public class Board extends MPanel implements ActionListener {
 	// * | Getters/setters for owner
 
 	public Board(DigIt dM, String name, int which) {
+		
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
 				Statics.BOARD_HEIGHT / 2 - 50, this);
 		world = StageBuilder.getInstance().read("funLittleMap", this);
