@@ -21,4 +21,3 @@ L,1700,2100,images/enemies/unique/machineLaunch.png,f,20
 L,1700,2000,images/enemies/unique/machineLaunch.png,f,20
 L,2100,2100,images/enemies/unique/machineLaunch.png,f,20
 L,1700,1900,images/enemies/unique/machineLaunch.png,f,20
-L,1800,1950,images/enemies/unique/machineLaunch.png,f,20
