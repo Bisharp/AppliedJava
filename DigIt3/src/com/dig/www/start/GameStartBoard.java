@@ -40,13 +40,16 @@ public class GameStartBoard extends MPanel {
 
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
-	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
+	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>',
+			'|' };
 
 	public GameStartBoard(DigIt dM) {
 
 		setLayout(new BorderLayout());
 
-		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/";
+		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource()
+				.getLocation().getFile()
+				+ "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
 		System.out.println(defaultDir);
 
@@ -92,10 +95,10 @@ public class GameStartBoard extends MPanel {
 
 		super.paint(g);
 
-//		Graphics2D g2d = (Graphics2D) g;
-//
-//		screenImage = newImage(address);
-//		g2d.drawImage(screenImage, 0, 0, this);
+		// Graphics2D g2d = (Graphics2D) g;
+		//
+		// screenImage = newImage(address);
+		// g2d.drawImage(screenImage, 0, 0, this);
 
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
@@ -117,32 +120,36 @@ public class GameStartBoard extends MPanel {
 	}
 
 	public void keyPress(int key) {
-		
+
 	}
 
 	public void keyRelease(int key) {
 	}
 
 	public void newGame() {
-		
-		String s = (String) JOptionPane.showInputDialog(this, "Please enter a name for your save file: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
-				Statics.ICON, null, null);
+
+		String s = (String) JOptionPane.showInputDialog(this,
+				"Please enter a name for your save file: ", DigIt.NAME,
+				JOptionPane.PLAIN_MESSAGE, Statics.ICON, null, null);
 
 		if (s != null && !s.equals("")) {
 
-				new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s).mkdirs();
-				System.out.println("Save name accepted");
-				owner.setUserName(s);
-				address = "images/titleScreen/loading.png";
-				repaint();
-				owner.newGame();
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
+					.getLocation().getFile()
+					+ "saveFiles/" + s).mkdirs();
+			System.out.println("Save name accepted");
+			owner.setUserName(s);
+			address = "images/titleScreen/loading.png";
+			repaint();
+			owner.newGame();
 
 		} else if (s != null)
 			showError("There is no entered name");
 	}
 
 	public void showError(String err) {
-		JOptionPane.showMessageDialog(this, err, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, err, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public DigIt getOwner() {

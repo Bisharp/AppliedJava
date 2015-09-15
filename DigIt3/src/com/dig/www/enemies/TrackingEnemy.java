@@ -47,7 +47,8 @@ public class TrackingEnemy extends Enemy {
 		double d;
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
+				+ -a.getX())) + 180);
 		// System.out.println(d);
 
 		return d;

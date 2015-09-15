@@ -25,7 +25,7 @@ public class DigIt extends JFrame {
 	public static final ImageLibrary lib;
 	public static final SoundPlayer soundPlayer;
 	public static final String NAME = "Quest of Four";
-	
+
 	static {
 		lib = ImageLibrary.getInstance();
 		soundPlayer = new SoundPlayer();
@@ -35,11 +35,13 @@ public class DigIt extends JFrame {
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 
-		JOptionPane.showMessageDialog(this, "Please plug in any game controllers", NAME, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this,
+				"Please plug in any game controllers", NAME,
+				JOptionPane.INFORMATION_MESSAGE);
 
 		controllerThread = new Thread(new GameControllerRunnable(this));
 		controllerThread.start();
-		
+
 		setVisible(true);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +60,7 @@ public class DigIt extends JFrame {
 	public void newGame() {
 
 		nullBoards();
-		
+
 		activePanel = new Board(this, userName, 0);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);

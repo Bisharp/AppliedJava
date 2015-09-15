@@ -14,7 +14,7 @@ public abstract class Enemy extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	protected transient boolean alive = true;
 	protected transient boolean onScreen = true;
 	// protected transient boolean stunned = false;
@@ -25,16 +25,18 @@ public abstract class Enemy extends Sprite {
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner);
-		
+
 		this.flying = flying;
 		// TODO Auto-generated constructor stub
-	alive=true;
+		alive = true;
 	}
-	public Enemy(int x, int y, String loc,boolean flying) {
+
+	public Enemy(int x, int y, String loc, boolean flying) {
 		super(x, y, loc);
 		// TODO Auto-generated constructor stub
-	this.flying=flying;
+		this.flying = flying;
 	}
+
 	public boolean isAlive() {
 		return alive;
 	}
@@ -58,8 +60,12 @@ public abstract class Enemy extends Sprite {
 		// TODO Auto-generated method stub
 
 		if (stunTimer > 0) {
-			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
-			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
+			int x = this.x
+					+ (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1
+							: -1));
+			int y = this.y
+					+ (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1
+							: -1));
 			g2d.drawImage(image, x, y, owner);
 		} else
 			g2d.drawImage(image, x, y, owner);
@@ -84,7 +90,7 @@ public abstract class Enemy extends Sprite {
 			if (this instanceof Projectile)
 				alive = false;
 			break;
-			
+
 		case HEART:
 			stunTimer = STUN_MAX / 2;
 			harms = false;
@@ -95,10 +101,10 @@ public abstract class Enemy extends Sprite {
 	public boolean willHarm() {
 		return harms;
 	}
-	
+
 	public void basicAnimate() {
 		super.basicAnimate();
-		
+
 		if (stunTimer > 0)
 			stunTimer--;
 		else

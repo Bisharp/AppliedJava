@@ -25,7 +25,7 @@ public class SoundPlayer {
 		if (!musicEnabled)
 			return;
 
-		//System.out.println("Playing sound " + url);
+		// System.out.println("Playing sound " + url);
 		this.component = component;
 		InputStream is;
 		BufferedInputStream bis;
@@ -46,8 +46,10 @@ public class SoundPlayer {
 				clip.start();
 			}
 		} catch (Exception e) {
-			String message = "Got Exception playing sound file " + url + "\n" + e.getMessage();
-			JOptionPane.showMessageDialog(component, message, "SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
+			String message = "Got Exception playing sound file " + url + "\n"
+					+ e.getMessage();
+			JOptionPane.showMessageDialog(component, message,
+					"SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -58,8 +60,10 @@ public class SoundPlayer {
 			if (playerThread != null && playerThread.isAlive())
 				playerThread.stop();
 		} catch (JavaLayerException e1) {
-			String message = "Got Exception playing sound mp3 file " + url + "\n" + e1.getMessage();
-			JOptionPane.showMessageDialog(component, message, "SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
+			String message = "Got Exception playing sound mp3 file " + url
+					+ "\n" + e1.getMessage();
+			JOptionPane.showMessageDialog(component, message,
+					"SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		// run in new thread to play in background
@@ -69,8 +73,10 @@ public class SoundPlayer {
 				try {
 					player.play();
 				} catch (Exception e) {
-					String message = "Got Exception playing sound mp3 file " + url + " \n" + e.getMessage();
-					JOptionPane.showMessageDialog(component, message, "SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
+					String message = "Got Exception playing sound mp3 file "
+							+ url + " \n" + e.getMessage();
+					JOptionPane.showMessageDialog(component, message,
+							"SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		};

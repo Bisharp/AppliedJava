@@ -31,25 +31,25 @@ public abstract class Sprite implements Serializable {
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 		visible = true;
-		
+
 		this.owner = owner;
-		
+
 		this.loc = loc;
 		this.x = x;
 		this.y = y;
 	}
+
 	public Sprite(int x, int y, String loc) {
 		image = newImage(loc);
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 		visible = true;
-		
-		
-		
+
 		this.loc = loc;
 		this.x = x;
 		this.y = y;
 	}
+
 	public abstract void animate();
 
 	public int getX() {
@@ -97,34 +97,34 @@ public abstract class Sprite implements Serializable {
 		// TODO Auto-generated method stub
 		return height;
 	}
-	
+
 	public void resetImage(Board b) {
 		image = newImage(loc);
 		owner = b;
 	}
-	
+
 	public int getMidX() {
 		return x + width / 2;
 	}
-	
+
 	public int getMidY() {
 		return y + Statics.BLOCK_HEIGHT / 2;
 	}
-	
+
 	public void flicker() {
 		if (visible)
 			visible = false;
 		else
 			visible = true;
 	}
-	
-	public abstract void draw(Graphics2D g2d) ;
-	
+
+	public abstract void draw(Graphics2D g2d);
+
 	public void basicAnimate() {
 		x += owner.getScrollX();
 		y += owner.getScrollY();
 	}
-	
+
 	public void initialAnimate(int sX, int sY) {
 		x += sX;
 		y += sY;

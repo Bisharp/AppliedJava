@@ -18,7 +18,8 @@ public class Projectile extends Enemy {
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
 
-	public Projectile(double dir, int x, int y, int speed, Launch maker, String loc, Board owner, boolean flying) {
+	public Projectile(double dir, int x, int y, int speed, Launch maker,
+			String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner, flying);
 		d = dir;
 		this.speed = speed;

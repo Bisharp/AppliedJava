@@ -11,7 +11,8 @@ public class ImageLibrary {
 	private HashMap<String, Image> images;
 	private static ImageLibrary me;
 	private Image image;
-	private static final String ADDRESS = ImageLibrary.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+	private static final String ADDRESS = ImageLibrary.class
+			.getProtectionDomain().getCodeSource().getLocation().getFile();
 
 	public static ImageLibrary getInstance() {
 
@@ -46,11 +47,11 @@ public class ImageLibrary {
 		}
 	}
 
-//	public void deleteLibrary() {
-//		images = null;
-//	}
-//
-//	public void resetLibrary() {
-//		images = new HashMap<String, Image>();
-//	}
+	// public void deleteLibrary() {
+	// images = null;
+	// }
+	//
+	// public void resetLibrary() {
+	// images = new HashMap<String, Image>();
+	// }
 }

@@ -41,8 +41,8 @@ public final class Statics {
 	public static final String DAY = "day";
 	public static final String NIGHT = "night";
 
-	public static final Color NIGHT_SKY = //new Color(24, 24, 61);
-			Color.black;
+	public static final Color NIGHT_SKY = // new Color(24, 24, 61);
+	Color.black;
 	public static final Color DAY_SKY = new Color(67, 67, 103);
 	public static final Color TWILIGHT_SKY = new Color(40, 40, 140);
 	public static final Color PURPLE = new Color(128, 0, 128);
@@ -52,18 +52,18 @@ public final class Statics {
 	public static final Color LIGHT_GREEN = new Color(120, 255, 0);
 	public static final Color OFF_GREEN = new Color(148, 190, 50);
 	public static final Color LIGHT_OFF_GREEN = new Color(167, 207, 73);
-	
+
 	public static final Font ACHANGE = new Font("Algerian", Font.PLAIN, 80);
 	public static final Font WARNING = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
-	
+
 	public static final String UN = "+-+\n|?|\n+-+";
 	public static final Color LIGHT_BLUE = new Color(132, 255, 255);
-	
+
 	public static boolean closeTo(int num1, int num2) {
-		
+
 		int threshHold = 5;
-		
+
 		if (Math.min(num1, num2) == num1) {
 			if (num2 - threshHold <= num1)
 				return true;
@@ -120,9 +120,9 @@ public final class Statics {
 			return 0;
 		}
 	}
-	
+
 	public static void playSound(JComponent jC, String url) {
-		
+
 		DigIt.soundPlayer.playSound(jC, url);
 	}
 }

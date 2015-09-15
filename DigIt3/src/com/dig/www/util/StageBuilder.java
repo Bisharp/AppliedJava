@@ -22,15 +22,15 @@ import com.dig.www.enemies.WalkingEnemy;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
-	
+
 	private static final int OFF = Statics.BOARD_WIDTH / 2 - 50;
 	private static StageBuilder me;
-	
+
 	public static StageBuilder getInstance() {
-		
+
 		if (me == null)
 			me = new StageBuilder();
-		
+
 		return me;
 	}
 
@@ -42,58 +42,80 @@ public class StageBuilder {
 
 		try {
 
-
-			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
+			String tryLoc = StageBuilder.class.getProtectionDomain()
+					.getCodeSource().getLocation().getFile()
+					+ "maps/" + loc + ".txt";
 
 			File map = new File(tryLoc);
 
 			if (map.exists()) {
 
-		
-
-				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				BufferedReader reader = new BufferedReader(new FileReader(
+						tryLoc));
 				String line;
 
 				while ((line = reader.readLine()) != null) {
 					// System.out.println(line);
 					for (int i = 0; i < line.length(); i++) {
 						switch (line.charAt(i)) {
-						
+
 						case 'O':
 							par.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
 							par.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
 						case '1':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.GROUND));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par,
+									Block.Blocks.GROUND));
 							break;
-						
+
 						case 'W':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.WALL));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par, Block.Blocks.WALL));
 							break;
 
 						case 'P':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.PIT));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par, Block.Blocks.PIT));
 							break;
-							
+
 						case 'R':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.ROCK));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par, Block.Blocks.ROCK));
 							break;
-							
+
 						case 'C':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.CARPET));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par,
+									Block.Blocks.CARPET));
 							break;
-							
-//						case 'E':
-//							world.add(new EnemyBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, line.charAt(i + 1)));
-//							world.add(new Block(Statics.BLOCK_HEIGHT * (i + 1), Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.GROUND));
-//							i++;
-//							break;
-							
+
+						// case 'E':
+						// world.add(new EnemyBlock(Statics.BLOCK_HEIGHT * i,
+						// Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par,
+						// line.charAt(i + 1)));
+						// world.add(new Block(Statics.BLOCK_HEIGHT * (i + 1),
+						// Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par,
+						// Block.Blocks.GROUND));
+						// i++;
+						// break;
+
 						case '*':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.CRYSTAL));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par,
+									Block.Blocks.CRYSTAL));
 							break;
-							
+
 						case '>':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par, Block.Blocks.SWITCH));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+									Statics.BLOCK_HEIGHT * ln,
+									"images/dummy.png", par,
+									Block.Blocks.SWITCH));
 							break;
 						}
 					}
@@ -108,68 +130,76 @@ public class StageBuilder {
 
 		return world;
 	}
-	public ArrayList<Enemy> loadEn(String loc,Board owner) {
-		ArrayList<Enemy>enemies=new ArrayList<Enemy>();
-		try{
-			ArrayList<String>strings=new ArrayList<String>();
-			File saveFile=new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "E.txt");
-			if(saveFile.exists()){
-				BufferedReader reader =new BufferedReader(new FileReader(saveFile));
+
+	public ArrayList<Enemy> loadEn(String loc, Board owner) {
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		try {
+			ArrayList<String> strings = new ArrayList<String>();
+			File saveFile = new File(StageBuilder.class.getProtectionDomain()
+					.getCodeSource().getLocation().getFile()
+					+ "maps/" + loc + "E.txt");
+			if (saveFile.exists()) {
+				BufferedReader reader = new BufferedReader(new FileReader(
+						saveFile));
 				String line;
-				while((line=reader.readLine())!=null){
+				while ((line = reader.readLine()) != null) {
 					strings.add(line);
 				}
 				reader.close();
-			for(int c=0;c<strings.size();c++){
-				ArrayList<String>stuff=new ArrayList<String>();//should have 5
-				String currentS="";
-				for(int c2=0;c2<strings.get(c).length();c2++){
-					
-					if(strings.get(c).charAt(c2)==','){
+				for (int c = 0; c < strings.size(); c++) {
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+
+						if (strings.get(c).charAt(c2) == ',') {
+							stuff.add(currentS);
+							currentS = "";
+
+						} else {
+							currentS += strings.get(c).charAt(c2);
+						}
+					}
+					if (currentS != "") {
 						stuff.add(currentS);
-						currentS="";
-						
-					}else{
-						currentS+=strings.get(c).charAt(c2);
+					}
+					try {
+						int enX = Integer.parseInt(stuff.get(1));
+						int enY = Integer.parseInt(stuff.get(2));
+						char ch = stuff.get(0).charAt(0);
+						String enImg = stuff.get(3);
+						boolean flying = stuff.get(4).charAt(0) == 't';
+
+						switch (ch) {
+						case 'L':
+							enemies.add(new Launch(enX, enY, enImg, owner,
+									Integer.parseInt(stuff.get(5)), flying));
+							break;
+						case 'S':
+							enemies.add(new StandEnemy(enX, enY, enImg, owner,
+									flying));
+							break;
+						case 'T':
+							enemies.add(new TrackingEnemy(enX, enY, enImg,
+									owner, flying));
+							break;
+						case 'W':
+							enemies.add(new WalkingEnemy(enX, enY, enImg,
+									owner, flying));
+							break;
+						}
+					} catch (IndexOutOfBoundsException ex) {
+						ex.printStackTrace();
+
 					}
 				}
-				if(currentS!=""){
-					stuff.add(currentS);
-				}
-				try{
-					int enX=Integer.parseInt(stuff.get(1));
-					int enY=Integer.parseInt(stuff.get(2));
-					char ch=stuff.get(0).charAt(0);
-					String enImg=stuff.get(3);
-					boolean flying=stuff.get(4).charAt(0)=='t';
-					
-					switch(ch){
-					case 'L':
-					enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(5)), flying));
-					break;
-					case 'S':
-						enemies.add(new StandEnemy(enX, enY, enImg, owner, flying));
-						break;
-					case 'T':
-						enemies.add(new TrackingEnemy(enX, enY, enImg, owner, flying));
-						break;
-					case 'W':
-						enemies.add(new WalkingEnemy(enX, enY, enImg, owner, flying));
-						break;
-					}
-				}catch(IndexOutOfBoundsException ex){
-					ex.printStackTrace();
-					
+
 			}
-			}
-			
-		}}
-		catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
-		
-		
+
 		return enemies;
 	}
 }

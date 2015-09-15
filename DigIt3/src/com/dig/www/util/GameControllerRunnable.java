@@ -80,7 +80,7 @@ public class GameControllerRunnable implements Runnable {
 		try {
 			controller.poll();
 		} catch (NullPointerException ex) {
-		
+
 		}
 		components = controller.getComponents();
 
@@ -108,7 +108,8 @@ public class GameControllerRunnable implements Runnable {
 
 						// keyRelease
 
-					} else if (data < WALK_SENSITIVITY && data > -WALK_SENSITIVITY) {
+					} else if (data < WALK_SENSITIVITY
+							&& data > -WALK_SENSITIVITY) {
 						if (buttonPressed[0]) {
 							rOB.keyRelease(KeyEvent.VK_DOWN);
 							buttonPressed[0] = false;
@@ -133,7 +134,8 @@ public class GameControllerRunnable implements Runnable {
 
 						// keyRelease
 
-					} else if (data < WALK_SENSITIVITY && data > -WALK_SENSITIVITY) {
+					} else if (data < WALK_SENSITIVITY
+							&& data > -WALK_SENSITIVITY) {
 						if (buttonPressed[2]) {
 							rOB.keyRelease(KeyEvent.VK_RIGHT);
 							buttonPressed[2] = false;
@@ -188,7 +190,8 @@ public class GameControllerRunnable implements Runnable {
 	}
 
 	public void getController() {
-		ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
+		ControllerEnvironment ce = ControllerEnvironment
+				.getDefaultEnvironment();
 		// retrieve the available controllers
 		Controller[] controllers = ce.getControllers();
 
