@@ -24,7 +24,7 @@ public class DigIt extends JFrame {
 	private Thread controllerThread;
 	public static final ImageLibrary lib;
 	public static final SoundPlayer soundPlayer;
-	public static final String NAME = "Dig It";
+	public static final String NAME = "Quest of Four";
 	
 	static {
 		lib = ImageLibrary.getInstance();
