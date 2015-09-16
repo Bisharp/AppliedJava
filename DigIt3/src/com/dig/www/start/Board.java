@@ -103,7 +103,6 @@ public class Board extends MPanel implements ActionListener {
 		enemies = StageBuilder.getInstance().loadEn("funLittleMap", this);
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).setAlive(true);
-
 			enemies.get(c).resetImage(this);
 		}
 		wallList = new ArrayList<Block>();
@@ -504,7 +503,8 @@ public class Board extends MPanel implements ActionListener {
 
 		if (key == KeyEvent.VK_O)
 			debug = !debug;
-
+		else if(key==KeyEvent.VK_ESCAPE)
+			System.exit(0);
 		switch (state) {
 
 		case PAUSED:
@@ -518,6 +518,7 @@ public class Board extends MPanel implements ActionListener {
 				repaint();
 				return;
 			}
+		
 			ingameHandler(key);
 			break;
 
