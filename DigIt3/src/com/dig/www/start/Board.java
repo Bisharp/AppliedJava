@@ -96,15 +96,11 @@ public class Board extends MPanel implements ActionListener {
 	// * | Getters/setters for owner
 
 	public Board(DigIt dM, String name, int which) {
-		
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
-				Statics.BOARD_HEIGHT / 2 - 50, this);
+
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 		world = StageBuilder.getInstance().read("funLittleMap", this);
 		enemies = StageBuilder.getInstance().loadEn("funLittleMap", this);
-		for (int c = 0; c < enemies.size(); c++) {
-			enemies.get(c).setAlive(true);
-			enemies.get(c).resetImage(this);
-		}
+
 		wallList = new ArrayList<Block>();
 		owner = dM;
 		timer = new Timer(15, this);
@@ -127,6 +123,8 @@ public class Board extends MPanel implements ActionListener {
 
 		for (Enemy e : enemies) {
 			e.initialAnimate(spawnX, spawnY);
+			e.setAlive(true);
+			e.resetImage(this);
 		}
 
 		addKeyListener(new TAdapter());
@@ -148,36 +146,28 @@ public class Board extends MPanel implements ActionListener {
 
 		switch (c) {
 		case '0':
-			enemies.add(new Launch(x, y,
-					"images/enemies/turrets/"
-							+ Statics.RAND.nextInt(Statics
-									.getFolderCont("images/enemies/turrets/"))
-							+ ".png", this, 75, false));
+			enemies.add(new Launch(x, y, "images/enemies/turrets/" + Statics.RAND.nextInt(Statics.getFolderCont("images/enemies/turrets/")) + ".png",
+					this, 75, false));
 			break;
 
 		case '1':
-			enemies.add(new Launch(x, y,
-					"images/enemies/unique/machineLaunch.png", this, 20, false));
+			enemies.add(new Launch(x, y, "images/enemies/unique/machineLaunch.png", this, 20, false));
 			break;
 
 		case 'W':
-			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png",
-					this, false));
+			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png", this, false));
 			break;
 
 		case 'T':
-			enemies.add(new TrackingEnemy(x, y,
-					"images/enemies/unique/chair.png", this, false));
+			enemies.add(new TrackingEnemy(x, y, "images/enemies/unique/chair.png", this, false));
 			break;
 
 		case 'F':
-			enemies.add(new WalkingEnemy(x, y,
-					"images/enemies/unique/ghost.png", this, true));
+			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/ghost.png", this, true));
 			break;
 
 		case 'S':
-			enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png",
-					this, true));
+			enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png", this, true));
 			break;
 		}
 	}
@@ -204,18 +194,11 @@ public class Board extends MPanel implements ActionListener {
 
 					if (block.getType() != Block.Blocks.WALL) {
 						// Line-of-sight mechanics
-						int[] xs = { block.getMidX() - 10,
-								character.getMidX() - 10,
-								character.getMidX() + 10, block.getMidX() + 10 };
-						int[] ys = { block.getMidY() - 10,
-								character.getMidY() - 10,
-								character.getMidY() + 10, block.getMidY() + 10 };
+						int[] xs = { block.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, block.getMidX() + 10 };
+						int[] ys = { block.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, block.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& new Polygon(xs, ys, xs.length)
-											.intersects(wallList.get(x)
-													.getBounds())) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -243,15 +226,11 @@ public class Board extends MPanel implements ActionListener {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& new Polygon(xs, ys, xs.length)
-										.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -278,7 +257,7 @@ public class Board extends MPanel implements ActionListener {
 
 			g2d.setColor(Color.GREEN);
 			g2d.setFont(Statics.WARNING);
-			g2d.drawString(state.toString(), 200, getHeight() / 3);
+			g2d.drawString(state.toString(), getWidth() / 3, getHeight() / 3);
 			break;
 
 		case DEAD:
@@ -287,7 +266,7 @@ public class Board extends MPanel implements ActionListener {
 
 			g2d.setColor(Color.RED);
 			g2d.setFont(Statics.WARNING);
-			g2d.drawString("GAME OVER", 150, getHeight() / 3);
+			g2d.drawString("GAME OVER", getWidth() / 3, getHeight() / 3);
 			break;
 
 		// case QUIT:
@@ -321,41 +300,32 @@ public class Board extends MPanel implements ActionListener {
 		switching = false;
 
 		// char[] names = {'S', 'C', 'D', 'H'};
-		char decision;
+		String decision;
 
-		try {
-			decision = ((String) JOptionPane.showInputDialog(this,
-					"Please select a character: ", DigIt.NAME,
-					JOptionPane.PLAIN_MESSAGE, Statics.ICON, new String[] {
-							"Spade", "Club", "Heart", "Diamond" }, null))
-					.charAt(0);
-		} catch (NullPointerException ex) {
+		decision = ((String) JOptionPane.showInputDialog(this, "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
+				new String[] { "Clark", "Carl", "Destiny", "Cain" }, null));
 
+		if (decision == null) {
 			timer.restart();
 			return;
 		}
 
-		if (Character.toLowerCase(decision) != character.getType().toString()
-				.charAt(0))
+		if (!decision.equals(character.getType().charName()))
 			switch (decision) {
-			case 'S':
-				character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
-						Statics.BOARD_HEIGHT / 2 - 50, this);
+			case "Clark":
+				character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
-			case 'C':
-				character = new Club(Statics.BOARD_WIDTH / 2 - 50,
-						Statics.BOARD_HEIGHT / 2 - 50, this);
+			case "Carl":
+				character = new Club(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
-			case 'D':
-				character = new Diamond(Statics.BOARD_WIDTH / 2 - 50,
-						Statics.BOARD_HEIGHT / 2 - 50, this);
+			case "Cain":
+				character = new Diamond(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
-			case 'H':
-				character = new Heart(Statics.BOARD_WIDTH / 2 - 50,
-						Statics.BOARD_HEIGHT / 2 - 50, this);
+			case "Destiny":
+				character = new Heart(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 			}
 
@@ -379,8 +349,7 @@ public class Board extends MPanel implements ActionListener {
 				}
 
 				enemies.get(i).animate();
-				enemies.get(i).setOnScreen(
-						enemies.get(i).getBounds().intersects(getScreen()));
+				enemies.get(i).setOnScreen(enemies.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -427,8 +396,7 @@ public class Board extends MPanel implements ActionListener {
 			b.animate();
 			b.setOnScreen(b.getBounds().intersects(getScreen()));
 
-			if (b.getType() != Block.Blocks.GROUND
-					&& b.getBounds().intersects(r3)) {
+			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
 
 				switch (b.getType()) {
 
@@ -448,9 +416,7 @@ public class Board extends MPanel implements ActionListener {
 					character.collision(b.getMidX(), b.getMidY());
 				}
 			} else if (acting) {
-				if (b.getBounds().intersects(character.getActBounds())
-						&& !b.getBounds().intersects(
-								character.getCollisionBounds())) {
+				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
 					character.endAction();
@@ -482,9 +448,7 @@ public class Board extends MPanel implements ActionListener {
 							character.takeDamage();
 						}
 
-						if (character.isActing()
-								&& character.getActBounds().intersects(
-										e.getBounds())) {
+						if (character.isActing() && character.getActBounds().intersects(e.getBounds())) {
 
 							e.interact(character.getType());
 						}
@@ -503,7 +467,7 @@ public class Board extends MPanel implements ActionListener {
 
 		if (key == KeyEvent.VK_O)
 			debug = !debug;
-		else if(key==KeyEvent.VK_ESCAPE)
+		else if (key == KeyEvent.VK_ESCAPE)
 			System.exit(0);
 		switch (state) {
 
@@ -518,7 +482,7 @@ public class Board extends MPanel implements ActionListener {
 				repaint();
 				return;
 			}
-		
+
 			ingameHandler(key);
 			break;
 

@@ -24,23 +24,50 @@ public abstract class GameCharacter extends Sprite {
 	}
 	
 	public enum Types {
+		
 		CLUB {
 			public String toString() {
 				return "club";
+			}
+
+			@Override
+			public String charName() {
+				// TODO Auto-generated method stub
+				return "Carl";
 			}
 		}, HEART {
 			public String toString() {
 				return "heart";
 			}
+
+			@Override
+			public String charName() {
+				// TODO Auto-generated method stub
+				return "Destiny";
+			}
 		}, SPADE {
 			public String toString() {
 				return "shovel";
+			}
+
+			@Override
+			public String charName() {
+				// TODO Auto-generated method stub
+				return "Clark";
 			}
 		}, DIAMOND {
 			public String toString() {
 				return "diamond";
 			}
+
+			@Override
+			public String charName() {
+				// TODO Auto-generated method stub
+				return "Cain";
+			}
 		};
+		
+		public abstract String charName();
 	}
 
 	private int deltaX = 0;

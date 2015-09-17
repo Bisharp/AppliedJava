@@ -137,7 +137,7 @@ public class GameStartBoard extends MPanel {
 			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 					.getLocation().getFile()
 					+ "saveFiles/" + s).mkdirs();
-			System.out.println("Save name accepted");
+			//System.out.println("Save name accepted");
 			owner.setUserName(s);
 			address = "images/titleScreen/loading.png";
 			repaint();

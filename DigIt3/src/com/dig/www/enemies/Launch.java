@@ -40,7 +40,6 @@ public class Launch extends Enemy {
 		String[] s = loc.split("/");
 
 		identity = s[s.length - 1].charAt(0);
-
 		DELAY = delay;
 	}
 
@@ -48,7 +47,7 @@ public class Launch extends Enemy {
 
 		basicAnimate();
 
-		if (stunTimer <= 0) {
+		if (stunTimer <= 0 && willHarm()) {
 
 			if (onScreen && alive) {
 				timer++;

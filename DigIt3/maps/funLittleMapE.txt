@@ -21,3 +21,4 @@ L,1700,2100,images/enemies/unique/machineLaunch.png,f,20
 L,1700,2000,images/enemies/unique/machineLaunch.png,f,20
 L,2100,2100,images/enemies/unique/machineLaunch.png,f,20
 L,1700,1900,images/enemies/unique/machineLaunch.png,f,20
+P,1500,600,images/enemies/unique/pizza.png,f,75

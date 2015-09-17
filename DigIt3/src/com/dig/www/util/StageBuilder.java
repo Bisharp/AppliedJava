@@ -13,12 +13,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.dig.www.blocks.*;
-import com.dig.www.enemies.Enemy;
-import com.dig.www.enemies.Launch;
-import com.dig.www.enemies.Projectile;
-import com.dig.www.enemies.StandEnemy;
-import com.dig.www.enemies.TrackingEnemy;
-import com.dig.www.enemies.WalkingEnemy;
+import com.dig.www.enemies.*;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -176,12 +171,20 @@ public class StageBuilder {
 							enemies.add(new Launch(enX, enY, enImg, owner,
 									Integer.parseInt(stuff.get(5)), flying));
 							break;
+						case 'P':
+							enemies.add(new PursuingLaunch(enX, enY, enImg, owner,
+									Integer.parseInt(stuff.get(5)), flying));
+							break;
 						case 'S':
 							enemies.add(new StandEnemy(enX, enY, enImg, owner,
 									flying));
 							break;
 						case 'T':
 							enemies.add(new TrackingEnemy(enX, enY, enImg,
+									owner, flying));
+							break;
+						case 'C':
+							enemies.add(new ChargeEnemy(enX, enY, enImg,
 									owner, flying));
 							break;
 						case 'W':

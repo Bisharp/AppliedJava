@@ -3,13 +3,14 @@ package com.dig.www.util;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
-
 import javax.swing.JComponent;
+
 
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
@@ -60,21 +61,15 @@ public final class Statics {
 	public static final String UN = "+-+\n|?|\n+-+";
 	public static final Color LIGHT_BLUE = new Color(132, 255, 255);
 
-	public static boolean closeTo(int num1, int num2) {
+	public static double pointTowards(Point b, Point a) {
+		double d;
+		// Point at something, This will be useful for enemies, also in
+		// ImportantLook class
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
+				+ -a.getX())) + 180);
+		// System.out.println(d);
 
-		int threshHold = 5;
-
-		if (Math.min(num1, num2) == num1) {
-			if (num2 - threshHold <= num1)
-				return true;
-			else
-				return false;
-		} else {
-			if (num1 - threshHold <= num2)
-				return true;
-			else
-				return false;
-		}
+		return d;
 	}
 
 	public static boolean willMorph() {

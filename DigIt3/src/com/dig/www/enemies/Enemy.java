@@ -19,7 +19,7 @@ public abstract class Enemy extends Sprite {
 	protected transient boolean onScreen = true;
 	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
-	protected boolean harms = true;
+	protected int harmTimer = 0;
 	public static final int STUN_MAX = 100;
 	public final boolean flying;
 
@@ -60,15 +60,14 @@ public abstract class Enemy extends Sprite {
 		// TODO Auto-generated method stub
 
 		if (stunTimer > 0) {
-			int x = this.x
-					+ (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1
-							: -1));
-			int y = this.y
-					+ (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1
-							: -1));
+			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
+			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(image, x, y, owner);
 		} else
 			g2d.drawImage(image, x, y, owner);
+
+		if (harmTimer > 0)
+			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 	}
 
 	public void interact(Types type) {
@@ -92,14 +91,13 @@ public abstract class Enemy extends Sprite {
 			break;
 
 		case HEART:
-			stunTimer = STUN_MAX / 2;
-			harms = false;
+			harmTimer = STUN_MAX / 2;
 			break;
 		}
 	}
 
 	public boolean willHarm() {
-		return harms;
+		return harmTimer <= 0;
 	}
 
 	public void basicAnimate() {
@@ -107,7 +105,8 @@ public abstract class Enemy extends Sprite {
 
 		if (stunTimer > 0)
 			stunTimer--;
-		else
-			harms = true;
+
+		if (harmTimer > 0)
+			harmTimer--;
 	}
 }
