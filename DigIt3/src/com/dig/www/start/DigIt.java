@@ -61,7 +61,7 @@ public class DigIt extends JFrame {
 
 		nullBoards();
 
-		activePanel = new Board(this, userName, 0);
+		activePanel = new Board(this, userName);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 	}

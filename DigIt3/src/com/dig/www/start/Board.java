@@ -95,7 +95,7 @@ public class Board extends MPanel implements ActionListener {
 	// */ \
 	// * | Getters/setters for owner
 
-	public Board(DigIt dM, String name,int which) {
+	public Board(DigIt dM, String name) {
 
 		
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
