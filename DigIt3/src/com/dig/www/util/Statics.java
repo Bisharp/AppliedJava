@@ -18,18 +18,9 @@ import com.dig.www.start.DigIt;
 public final class Statics {
 
 	public static final int BLOCK_HEIGHT = 100;
-	public static final int INITIAL_OFFSET = 65;
-	public static final int BLOCK_OFFSET = 40;
 
 	public static final int BOARD_WIDTH = 1000;
 	public static final int BOARD_HEIGHT = 700;
-
-	public static final int JUMP_HEIGHT = 5;
-	public static final int SPEED = 7;
-	public static final float DEFENSE = 0.8f;
-	public static final int STRENGTH = 1;
-	public static final int WEIGHT = 10;
-	public static final int JUMP_TIME = 20;
 
 	public static final String INF = "INF.";
 	public static final String LAMBDA = "/\\";
@@ -39,13 +30,6 @@ public final class Statics {
 
 	public static final Random RAND = new Random();
 
-	public static final String DAY = "day";
-	public static final String NIGHT = "night";
-
-	public static final Color NIGHT_SKY = // new Color(24, 24, 61);
-	Color.black;
-	public static final Color DAY_SKY = new Color(67, 67, 103);
-	public static final Color TWILIGHT_SKY = new Color(40, 40, 140);
 	public static final Color PURPLE = new Color(128, 0, 128);
 	public static final Color ORANGE = new Color(254, 83, 1);
 	public static final Color BROWN = new Color(128, 41, 0);
@@ -53,32 +37,18 @@ public final class Statics {
 	public static final Color LIGHT_GREEN = new Color(120, 255, 0);
 	public static final Color OFF_GREEN = new Color(148, 190, 50);
 	public static final Color LIGHT_OFF_GREEN = new Color(167, 207, 73);
-
-	public static final Font ACHANGE = new Font("Algerian", Font.PLAIN, 80);
-	public static final Font WARNING = new Font("Impact", Font.BOLD, 80);
-	public static final String DUMMY = "images/dummy.png";
-
-	public static final String UN = "+-+\n|?|\n+-+";
 	public static final Color LIGHT_BLUE = new Color(132, 255, 255);
 
+	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
+	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
+	public static final String DUMMY = "images/dummy.png";
+
+
 	public static double pointTowards(Point b, Point a) {
-		double d;
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
+		return (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
 				+ -a.getX())) + 180);
-		// System.out.println(d);
-
-		return d;
-	}
-
-	public static boolean willMorph() {
-		switch (RAND.nextInt(300)) {
-		case 0:
-			return true;
-		default:
-			return false;
-		}
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
@@ -117,7 +87,6 @@ public final class Statics {
 	}
 
 	public static void playSound(JComponent jC, String url) {
-
 		DigIt.soundPlayer.playSound(jC, url);
 	}
 }

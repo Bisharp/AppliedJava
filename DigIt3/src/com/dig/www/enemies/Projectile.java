@@ -3,6 +3,8 @@ package com.dig.www.enemies;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 
 public class Projectile extends Enemy {
@@ -18,8 +20,7 @@ public class Projectile extends Enemy {
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
 
-	public Projectile(double dir, int x, int y, int speed, Launch maker,
-			String loc, Board owner, boolean flying) {
+	public Projectile(double dir, int x, int y, int speed, Launch maker, String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner, flying);
 		d = dir;
 		this.speed = speed;
@@ -56,5 +57,29 @@ public class Projectile extends Enemy {
 	public void turnAround() {
 		// TODO Auto-generated method stub
 		alive = false;
+	}
+
+	@Override
+	public void interact(Moves type) {
+
+		if (type != Moves.CLUB)
+			super.interact(type);
+		else
+			alive = false;
+	}
+
+	/* 
+	 * TODO The below method will be deprecated upon Jonah's finishing of adding
+	 * extra move code. If this is still present in the second semester, delete
+	 * without mercy
+	 */
+	
+	@Override
+	public void interact(Types type) {
+
+		if (type != Types.CLUB)
+			super.interact(type);
+		else
+			alive = false;
 	}
 }

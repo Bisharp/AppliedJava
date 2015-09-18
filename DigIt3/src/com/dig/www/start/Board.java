@@ -183,41 +183,11 @@ public class Board extends MPanel implements ActionListener {
 
 			// Tag boolean part of line-of-sight
 			boolean tag = true;
-			Block block;
 			Enemy e;
 
 			for (int i = 0; i < world.size(); i++) {
-
-				if (world.get(i).isOnScreen()) {
-
-					block = world.get(i);
-
-					if (block.getType() != Block.Blocks.WALL) {
-						// Line-of-sight mechanics
-						int[] xs = { block.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, block.getMidX() + 10 };
-						int[] ys = { block.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, block.getMidY() + 10 };
-
-						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
-								tag = false;
-								break;
-							}
-
-							tag = true;
-						}
-						// end of that code
-					}
-
-					// if statement part of line-of-sight
-					if (tag)
-						block.draw(g2d);
-					else {
-						g2d.setColor(Color.black);
-						g2d.fill(block.getBounds());
-					}
-
-					tag = true;
-				}
+				if (world.get(i).isOnScreen())
+					world.get(i).draw(g2d);
 			}
 
 			for (int i = 0; i < enemies.size(); i++) {
@@ -256,7 +226,7 @@ public class Board extends MPanel implements ActionListener {
 			g2d.fill(getScreen());
 
 			g2d.setColor(Color.GREEN);
-			g2d.setFont(Statics.WARNING);
+			g2d.setFont(Statics.MENU);
 			g2d.drawString(state.toString(), getWidth() / 3, getHeight() / 3);
 			break;
 
@@ -265,8 +235,16 @@ public class Board extends MPanel implements ActionListener {
 			g2d.fill(getScreen());
 
 			g2d.setColor(Color.RED);
-			g2d.setFont(Statics.WARNING);
+			g2d.setFont(Statics.MENU);
 			g2d.drawString("GAME OVER", getWidth() / 3, getHeight() / 3);
+			break;
+		case LOADING:
+			break;
+		case QUIT:
+			break;
+		case SHOP:
+			break;
+		default:
 			break;
 
 		// case QUIT:
@@ -388,6 +366,7 @@ public class Board extends MPanel implements ActionListener {
 
 		// GameCharacter.Types type = character.getType();
 		boolean acting = character.isActing();
+		boolean tag = false;
 
 		for (int i = 0; i < world.size(); i++) {
 
@@ -395,6 +374,27 @@ public class Board extends MPanel implements ActionListener {
 
 			b.animate();
 			b.setOnScreen(b.getBounds().intersects(getScreen()));
+
+			// Line-of-sight
+			if (b.isOnScreen())
+				if (b.getType() != Block.Blocks.WALL) {
+					int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
+					int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
+
+					for (int x = 0; x < wallList.size(); x++) {
+						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+							tag = false;
+							break;
+						}
+
+						tag = true;
+					}
+					// end of that code
+				} else
+					tag = true;
+
+			b.setCanSee(tag);
+			// End of line-of-sight
 
 			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
 
@@ -440,17 +440,20 @@ public class Board extends MPanel implements ActionListener {
 							case WALL:
 								e.turnAround();
 								break;
+								
+							default:
+								break;
 							}
+						}
+
+						if (character.isActing() && character.getActBounds().intersects(e.getBounds())) {
+							// TODO implement proper interaction code here
+							e.interact(character.getType());
 						}
 
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround();
 							character.takeDamage();
-						}
-
-						if (character.isActing() && character.getActBounds().intersects(e.getBounds())) {
-
-							e.interact(character.getType());
 						}
 					}
 				}

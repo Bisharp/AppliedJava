@@ -1,9 +1,11 @@
 package com.dig.www.enemies;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
-import com.dig.www.blocks.Block;
 import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -17,23 +19,23 @@ public abstract class Enemy extends Sprite {
 
 	protected transient boolean alive = true;
 	protected transient boolean onScreen = true;
+	protected transient int health = 10;
 	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
 	protected int harmTimer = 0;
 	public static final int STUN_MAX = 100;
 	public final boolean flying;
+	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner);
 
 		this.flying = flying;
-		// TODO Auto-generated constructor stub
 		alive = true;
 	}
 
 	public Enemy(int x, int y, String loc, boolean flying) {
 		super(x, y, loc);
-		// TODO Auto-generated constructor stub
 		this.flying = flying;
 	}
 
@@ -57,7 +59,6 @@ public abstract class Enemy extends Sprite {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		// TODO Auto-generated method stub
 
 		if (stunTimer > 0) {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
@@ -68,10 +69,68 @@ public abstract class Enemy extends Sprite {
 
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+
+		if (!(this instanceof Projectile)) {
+			g2d.setFont(enFont);
+			g2d.setColor(Color.BLACK);
+			g2d.drawString("" + health, x, y - 10);
+		}
 	}
 
+	public void interact(Moves move) {
+
+		switch (move) {
+
+		// Clark
+		case SPADE:
+			takeDamage(1);
+			break;
+		case ARROW:
+			takeDamage(2);
+			break;
+		case PIT:
+			break;
+
+		// Carl
+		case CLUB:
+			stunTimer = STUN_MAX;
+			owner.getCharacter().endAction();
+			Statics.playSound(owner, "weapons/whop.wav");
+			break;
+		case MPITCH:
+			stunTimer = STUN_MAX;
+			owner.getCharacter().endAction();
+			Statics.playSound(owner, "weapons/whop.wav");
+		case PITCH:
+			takeDamage(3);
+			break;
+
+		// Destiny
+		case AURA:
+			harmTimer = STUN_MAX / 2;
+			break;
+		case HAZE:
+			takeDamage(1);
+			break;
+		case DISPENSER:
+			// TODO implement slow code
+
+			// Cain
+		case SHIELD:
+			if (this instanceof Projectile)
+				alive = false;
+			break;
+		case CHAIN:
+			takeDamage(2);
+			break;
+		case BASH:
+			takeDamage(5);
+			break;
+		}
+	}
+
+	// TODO temporary method
 	public void interact(Types type) {
-		// TODO Auto-generated method stub
 
 		switch (type) {
 
@@ -94,6 +153,16 @@ public abstract class Enemy extends Sprite {
 			harmTimer = STUN_MAX / 2;
 			break;
 		}
+	}
+
+	private boolean takeDamage(int i) {
+
+		health--;
+
+		if (health <= 0)
+			alive = false;
+
+		return health > 0;
 	}
 
 	public boolean willHarm() {

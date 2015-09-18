@@ -1,11 +1,6 @@
 package com.dig.www.enemies;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 
 import com.dig.www.start.Board;
 
@@ -60,7 +55,7 @@ public class Launch extends Enemy {
 		}
 	}
 
-	private static final int SPEED = 10;
+	private static final int SPEED = 20;
 
 	public void addBall() {
 		owner.addEnemy(new Projectile(pointTowards(new Point(x, y), new Point(

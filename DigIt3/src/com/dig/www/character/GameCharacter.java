@@ -7,7 +7,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
-import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -305,7 +304,6 @@ public abstract class GameCharacter extends Sprite {
 		g2d.fillRect(10, 20, 180, 80);
 
 		for (int i = 1; i <= HP_MAX; i++) {
-
 			g2d.setColor(health >= i ? Color.RED : Color.DARK_GRAY);
 			g2d.fillRect(i * 30, 70, 20, 20);
 			g2d.setColor(Color.WHITE);

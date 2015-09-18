@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import com.dig.www.start.Board;
-import com.dig.www.util.Statics;
 
 public class Diamond extends GameCharacter {
 
@@ -46,10 +45,11 @@ public class Diamond extends GameCharacter {
 			actTimer = 40;
 	}
 	
+	private static final int RANGE = 20;
 	@Override
 	public Rectangle getActBounds() {
 		
-		return new Rectangle(x - 20, y - 20, width + 40, height + 40);
+		return new Rectangle(x - RANGE, y - RANGE, width + RANGE * 2, height + RANGE * 2);
 	}
 	
 	protected void drawTool(Graphics2D g2d) {

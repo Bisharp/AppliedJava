@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
-import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.character.GameCharacter;
 
 public class Block extends Sprite {
@@ -20,6 +19,8 @@ public class Block extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = 1866822784974593245L;
+
+	protected boolean canSee;
 	protected boolean onScreen;
 	protected Blocks type;
 
@@ -65,46 +66,53 @@ public class Block extends Sprite {
 
 	public void draw(Graphics2D g2d) {
 
-		switch (type) {
-		case GROUND:
-			g2d.setColor(Statics.LIGHT_OFF_GREEN);
-			g2d.fill(new Rectangle(x + 40, y + 40, width - 80, height - 80));
-			g2d.draw(getBounds());
-			break;
+		if (canSee)
+			switch (type) {
+			
+			case GROUND:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Statics.LIGHT_OFF_GREEN);
+				g2d.fill(new Rectangle(x + 40, y + 40, width - 80, height - 80));
+				g2d.draw(getBounds());
+				break;
 
-		case WALL:
-			g2d.setColor(getColor());
+			case WALL:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.BLACK);
+				g2d.draw(getBounds());
+				break;
+
+			case CARPET:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.RED);
+				g2d.drawLine(x, y, x + width, y + height);
+				g2d.drawLine(x + width, y, x, y + height);
+				g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+				g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+				break;
+
+			case SWITCH:
+
+				g2d.setFont(Statics.BLOCK);
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.BLUE);
+				g2d.drawString("<->", x, y + 70);
+				g2d.draw(getBounds());
+				break;
+
+			default:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				break;
+			}
+		else {
+			g2d.setColor(Color.black);
 			g2d.fill(getBounds());
-			g2d.setColor(Color.BLACK);
-			g2d.draw(getBounds());
-			break;
-
-		case CARPET:
-			g2d.setColor(getColor());
-			g2d.fill(getBounds());
-			g2d.setColor(Color.RED);
-			g2d.drawLine(x, y, x + width, y + height);
-			g2d.drawLine(x + width, y, x, y + height);
-			g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-			g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-			break;
-
-		case SWITCH:
-
-			g2d.setFont(Statics.ACHANGE);
-			g2d.setColor(getColor());
-			g2d.fill(getBounds());
-			g2d.setColor(Color.BLUE);
-			g2d.drawString("<->", x, y + 70);
-			g2d.draw(getBounds());
-			break;
-
-		default:
-			g2d.setColor(getColor());
-			g2d.fill(getBounds());
-			break;
 		}
-
 	}
 
 	public Color getColor() {
@@ -113,7 +121,7 @@ public class Block extends Sprite {
 		case DIRT:
 			return Statics.BROWN;
 		case GROUND:
-			return Color.GREEN;
+			return Statics.OFF_GREEN;
 		case WALL:
 			return Color.DARK_GRAY;
 		case PIT:
@@ -144,10 +152,17 @@ public class Block extends Sprite {
 
 		case CLUB:
 			if (type == Blocks.CRYSTAL) {
-				type = Blocks.GROUND;
+				type = Blocks.ROCK;
 				Statics.playSound(owner, "blocks/shatter.wav");
 			}
 			break;
+			
+		default:
+			break;
 		}
+	}
+
+	public void setCanSee(boolean canSee) {
+		this.canSee = canSee;
 	}
 }

@@ -1,16 +1,9 @@
 package com.dig.www.util;
 
-import java.awt.Image;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
@@ -60,56 +53,46 @@ public class StageBuilder {
 						case '1':
 							world.add(new Block(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par,
+									Statics.DUMMY, par,
 									Block.Blocks.GROUND));
 							break;
 
 						case 'W':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par, Block.Blocks.WALL));
+									Statics.DUMMY, par, Block.Blocks.WALL));
 							break;
 
 						case 'P':
 							world.add(new Block(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par, Block.Blocks.PIT));
+									Statics.DUMMY, par, Block.Blocks.PIT));
 							break;
 
 						case 'R':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par, Block.Blocks.ROCK));
+									Statics.DUMMY, par, Block.Blocks.ROCK));
 							break;
 
 						case 'C':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par,
+									Statics.DUMMY, par,
 									Block.Blocks.CARPET));
 							break;
 
-						// case 'E':
-						// world.add(new EnemyBlock(Statics.BLOCK_HEIGHT * i,
-						// Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par,
-						// line.charAt(i + 1)));
-						// world.add(new Block(Statics.BLOCK_HEIGHT * (i + 1),
-						// Statics.BLOCK_HEIGHT * ln, "images/dummy.png", par,
-						// Block.Blocks.GROUND));
-						// i++;
-						// break;
-
 						case '*':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i,
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par,
+									Statics.DUMMY, par,
 									Block.Blocks.CRYSTAL));
 							break;
 
 						case '>':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 									Statics.BLOCK_HEIGHT * ln,
-									"images/dummy.png", par,
+									Statics.DUMMY, par,
 									Block.Blocks.SWITCH));
 							break;
 						}

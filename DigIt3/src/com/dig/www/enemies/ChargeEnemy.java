@@ -8,9 +8,12 @@ import com.dig.www.util.Statics;
 public class ChargeEnemy extends TrackingEnemy {
 
 	private int chargeTimer = 0;
-	private static final int CHARGE_MAX = 80;
+	private static final int CHARGE_MAX = 60;
 	private static final int COOLDOWN = 20;
 	protected int speedMult = 4;
+
+	protected boolean gX;
+	protected boolean gY;
 
 	public ChargeEnemy(int x, int y, String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner, flying);
@@ -39,7 +42,7 @@ public class ChargeEnemy extends TrackingEnemy {
 		// TODO Auto-generated method stub
 		basicAnimate();
 
-		if (stunTimer <= 0 && onScreen && chargeTimer > COOLDOWN) {
+		if (onScreen && stunTimer <= 0 && chargeTimer > COOLDOWN) {
 			x += Math.cos((double) Math.toRadians((double) d)) * speed * speedMult;
 			y += Math.sin((double) Math.toRadians((double) d)) * speed * speedMult;
 		}
@@ -49,6 +52,13 @@ public class ChargeEnemy extends TrackingEnemy {
 		else {
 			chargeTimer = CHARGE_MAX;
 			d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
+
+			gX = x > owner.getCharacterX();
+			gY = y > owner.getCharacterY();
 		}
+
+//		if (onScreen && (gX && x < owner.getCharacterX()) || (!gX && x > owner.getCharacterX()) || (gY && y < owner.getCharacterY())
+//				|| (!gY && y > owner.getCharacterY()))
+//			chargeTimer = CHARGE_MAX;
 	}
 }

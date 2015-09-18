@@ -3,11 +3,15 @@ package com.dig.www.character;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public class Heart extends GameCharacter {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Heart(int x, int y, Board owner) {
 		super(x, y, owner, Types.HEART, "heart");

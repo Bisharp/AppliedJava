@@ -8,6 +8,11 @@ import com.dig.www.util.Statics;
 
 public class Spade extends GameCharacter {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private int dirt = 0;
 
 	public Spade(int x, int y, Board owner) {
