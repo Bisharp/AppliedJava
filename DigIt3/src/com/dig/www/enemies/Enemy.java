@@ -20,6 +20,7 @@ public abstract class Enemy extends Sprite {
 	protected transient boolean alive = true;
 	protected transient boolean onScreen = true;
 	protected transient int health;
+	protected int maxHealth;
 	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
 	protected int harmTimer = 0;
@@ -29,7 +30,8 @@ public abstract class Enemy extends Sprite {
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying,int health) {
 		super(x, y, loc, owner);
-this.health=health;
+this.maxHealth=health;
+		this.health=health;
 		this.flying = flying;
 		alive = true;
 	}
@@ -71,9 +73,10 @@ this.health=health;
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 
 		if (!(this instanceof Projectile)) {
-			g2d.setFont(enFont);
-			g2d.setColor(Color.BLACK);
-			g2d.drawString("" + health, x, y - 10);
+//			g2d.setFont(enFont);
+//			g2d.setColor(Color.BLACK);
+//			g2d.drawString("" + health, x, y - 10);
+			drawBar((double)health/(double)maxHealth, g2d);
 		}
 	}
 
@@ -116,6 +119,7 @@ this.health=health;
 			// TODO implement slow code
 
 			// Cain
+			
 		case SHIELD:
 			if (this instanceof Projectile)
 				alive = false;
@@ -125,6 +129,8 @@ this.health=health;
 			break;
 		case BASH:
 			takeDamage(5);
+			stunTimer = STUN_MAX;
+			//TODO implement launch
 			break;
 		}
 	}
@@ -139,6 +145,7 @@ this.health=health;
 
 		case CLUB:
 			stunTimer = STUN_MAX;
+			takeDamage(1);
 			owner.getCharacter().endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
 			break;
@@ -177,5 +184,10 @@ this.health=health;
 
 		if (harmTimer > 0)
 			harmTimer--;
+	}
+	@Override
+	public void resetImage(Board b) {
+	super.resetImage(b);
+		health=maxHealth;
 	}
 }

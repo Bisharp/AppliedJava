@@ -1,10 +1,12 @@
 package com.dig.www.util;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import com.dig.www.enemies.Enemy;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 
@@ -128,5 +130,11 @@ public abstract class Sprite implements Serializable {
 	public void initialAnimate(int sX, int sY) {
 		x += sX;
 		y += sY;
+	}
+	public void drawBar(double per,Graphics2D g2d){
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(x, y-10, width, 10);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(x, y-10, (int)((double)width*(double)per), 10);
 	}
 }
