@@ -79,9 +79,9 @@ public class Projectile extends Enemy {
 	@Override
 	public void interact(Types type) {
 
-		if (type != Types.CLUB)
-			super.interact(type);
-		else
-			alive = false;
+//		if (type != Types.CLUB)
+//			super.interact(type);
+//		else
+//			alive = false;
 	}
 }
