@@ -107,9 +107,7 @@ public class Board extends MPanel implements ActionListener {
 		}
 
 
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		world = StageBuilder.getInstance().read("map1", this);
-		enemies = StageBuilder.getInstance().loadEn("map1", this);
+		
 
 
 		wallList = new ArrayList<Block>();
