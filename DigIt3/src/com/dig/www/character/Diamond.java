@@ -59,8 +59,8 @@ public class Diamond extends GameCharacter {
 
 		actTimer--;
 		
-		if (actTimer == 0)
-			acting = false;
+		
+			
 	}
 	
 	@Override

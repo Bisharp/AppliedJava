@@ -259,6 +259,8 @@ public abstract class GameCharacter extends Sprite {
 			moveY = false;
 
 			break;
+		case KeyEvent.VK_SPACE:
+			acting=false;
 		}
 	}
 
