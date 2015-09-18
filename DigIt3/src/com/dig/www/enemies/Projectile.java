@@ -22,6 +22,8 @@ public class Projectile extends Enemy {
 
 	public Projectile(double dir, int x, int y, int speed, Launch maker, String loc, Board owner, boolean flying) {
 		super(x, y, loc, owner, flying);
+		
+		health = 1;
 		d = dir;
 		this.speed = speed;
 
