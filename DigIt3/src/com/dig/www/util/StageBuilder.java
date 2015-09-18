@@ -148,31 +148,31 @@ public class StageBuilder {
 						char ch = stuff.get(0).charAt(0);
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
-
+int health=Integer.parseInt(stuff.get(5));
 						switch (ch) {
 						case 'L':
 							enemies.add(new Launch(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(5)), flying));
+									Integer.parseInt(stuff.get(6)), flying,health));
 							break;
 						case 'P':
 							enemies.add(new PursuingLaunch(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(5)), flying));
+									Integer.parseInt(stuff.get(6)), flying,health));
 							break;
 						case 'S':
 							enemies.add(new StandEnemy(enX, enY, enImg, owner,
-									flying));
+									flying,health));
 							break;
 						case 'T':
 							enemies.add(new TrackingEnemy(enX, enY, enImg,
-									owner, flying));
+									owner, flying,health));
 							break;
 						case 'C':
 							enemies.add(new ChargeEnemy(enX, enY, enImg,
-									owner, flying));
+									owner, flying,health));
 							break;
 						case 'W':
 							enemies.add(new WalkingEnemy(enX, enY, enImg,
-									owner, flying));
+									owner, flying,health));
 							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {

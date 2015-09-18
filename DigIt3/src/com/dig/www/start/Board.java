@@ -153,35 +153,35 @@ public class Board extends MPanel implements ActionListener {
 		return 0;
 	}
 
-	public void spawnEnemy(char c, int x, int y) {
-
-		switch (c) {
-		case '0':
-			enemies.add(new Launch(x, y, "images/enemies/turrets/" + Statics.RAND.nextInt(Statics.getFolderCont("images/enemies/turrets/")) + ".png",
-					this, 75, false));
-			break;
-
-		case '1':
-			enemies.add(new Launch(x, y, "images/enemies/unique/machineLaunch.png", this, 20, false));
-			break;
-
-		case 'W':
-			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png", this, false));
-			break;
-
-		case 'T':
-			enemies.add(new TrackingEnemy(x, y, "images/enemies/unique/chair.png", this, false));
-			break;
-
-		case 'F':
-			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/ghost.png", this, true));
-			break;
-
-		case 'S':
-			enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png", this, true));
-			break;
-		}
-	}
+//	public void spawnEnemy(char c, int x, int y) {
+//
+//		switch (c) {
+//		case '0':
+//			enemies.add(new Launch(x, y, "images/enemies/turrets/" + Statics.RAND.nextInt(Statics.getFolderCont("images/enemies/turrets/")) + ".png",
+//					this, 75, false));
+//			break;
+//
+//		case '1':
+//			enemies.add(new Launch(x, y, "images/enemies/unique/machineLaunch.png", this, 20, false));
+//			break;
+//
+//		case 'W':
+//			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png", this, false));
+//			break;
+//
+//		case 'T':
+//			enemies.add(new TrackingEnemy(x, y, "images/enemies/unique/chair.png", this, false));
+//			break;
+//
+//		case 'F':
+//			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/ghost.png", this, true));
+//			break;
+//
+//		case 'S':
+//			enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png", this, true));
+//			break;
+//		}
+//	}
 
 	public void paint(Graphics g) {
 		super.paint(g);

@@ -16,9 +16,9 @@ public class Launch extends Enemy {
 	private final int DELAY;
 
 	public Launch(int width, int height, String loc, Board owner, int delay,
-			boolean flying) {
+			boolean flying,int health) {
 
-		super(width, height, loc, owner, flying);
+		super(width, height, loc, owner, flying,health);
 
 		String[] s = loc.split("/");
 

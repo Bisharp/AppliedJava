@@ -11,8 +11,8 @@ public class PursuingLaunch extends Launch {
 	private double d = 0.0;
 	private static final int speed = 10;
 
-	public PursuingLaunch(int width, int height, String loc, Board owner, int delay, boolean flying) {
-		super(width, height, loc, owner, delay, flying);
+	public PursuingLaunch(int width, int height, String loc, Board owner, int delay, boolean flying,int health) {
+		super(width, height, loc, owner, delay, flying,health);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -19,7 +19,7 @@ public abstract class Enemy extends Sprite {
 
 	protected transient boolean alive = true;
 	protected transient boolean onScreen = true;
-	protected transient int health = 10;
+	protected transient int health;
 	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
 	protected int harmTimer = 0;
@@ -27,9 +27,9 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 
-	public Enemy(int x, int y, String loc, Board owner, boolean flying) {
+	public Enemy(int x, int y, String loc, Board owner, boolean flying,int health) {
 		super(x, y, loc, owner);
-
+this.health=health;
 		this.flying = flying;
 		alive = true;
 	}

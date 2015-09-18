@@ -11,8 +11,8 @@ public class WalkingEnemy extends Enemy {
 
 	public static final int ANIMAX = 75;
 
-	public WalkingEnemy(int x, int y, String loc, Board owner, boolean flying) {
-		super(x, y, loc, owner, flying);
+	public WalkingEnemy(int x, int y, String loc, Board owner, boolean flying,int health) {
+		super(x, y, loc, owner, flying,health);
 		// TODO Auto-generated constructor stub
 	}
 

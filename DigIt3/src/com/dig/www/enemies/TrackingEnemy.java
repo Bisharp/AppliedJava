@@ -10,8 +10,8 @@ public class TrackingEnemy extends Enemy {
 	protected double d = 0;
 	protected int speed = 5;
 
-	public TrackingEnemy(int x, int y, String loc, Board owner, boolean flying) {
-		super(x, y, loc, owner, flying);
+	public TrackingEnemy(int x, int y, String loc, Board owner, boolean flying,int health) {
+		super(x, y, loc, owner, flying,health);
 		// TODO Auto-generated constructor stub
 	}
 
