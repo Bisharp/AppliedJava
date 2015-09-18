@@ -95,11 +95,22 @@ public class Board extends MPanel implements ActionListener {
 	// */ \
 	// * | Getters/setters for owner
 
-	public Board(DigIt dM, String name, int which) {
+	public Board(DigIt dM, String name,int which) {
+
+		
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
+				Statics.BOARD_HEIGHT / 2 - 50, this);
+		world = StageBuilder.getInstance().read("map1", this);
+		enemies = StageBuilder.getInstance().loadEn("map1", this);
+		for (int c = 0; c < enemies.size(); c++) {
+			enemies.get(c).resetImage(this);
+		}
+
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		world = StageBuilder.getInstance().read("funLittleMap", this);
-		enemies = StageBuilder.getInstance().loadEn("funLittleMap", this);
+		world = StageBuilder.getInstance().read("map1", this);
+		enemies = StageBuilder.getInstance().loadEn("map1", this);
+
 
 		wallList = new ArrayList<Block>();
 		owner = dM;
