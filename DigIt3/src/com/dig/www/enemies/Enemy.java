@@ -132,40 +132,42 @@ this.maxHealth=health;
 			stunTimer = STUN_MAX;
 			//TODO implement launch
 			break;
+			default:
+				break;
 		}
 	}
 
 	// TODO temporary method
-	public void interact(Types type) {
-
-		switch (type) {
-
-		case SPADE:
-			break;
-
-		case CLUB:
-			stunTimer = STUN_MAX;
-			takeDamage(1);
-			owner.getCharacter().endAction();
-			Statics.playSound(owner, "weapons/whop.wav");
-			break;
-
-		case DIAMOND:
-
-			if (this instanceof Projectile)
-				alive = false;
-			break;
-
-		case HEART:
-			harmTimer = STUN_MAX / 2;
-			break;
-		}
-	}
+//	public void interact(Types type) {
+//
+//		switch (type) {
+//
+//		case SPADE:
+//			break;
+//
+//		case CLUB:
+//			stunTimer = STUN_MAX;
+//			takeDamage(1);
+//			owner.getCharacter().endAction();
+//			Statics.playSound(owner, "weapons/whop.wav");
+//			break;
+//
+//		case DIAMOND:
+//
+//			if (this instanceof Projectile)
+//				alive = false;
+//			break;
+//
+//		case HEART:
+//			harmTimer = STUN_MAX / 2;
+//			break;
+//		}
+//	}
 
 	private boolean takeDamage(int i) {
 
 		health--;
-
+owner.getCharacter().endAction();
 		if (health <= 0)
 			alive = false;
 

@@ -56,7 +56,7 @@ public class Block extends Sprite {
 
 		if (this.type != Blocks.PIT && this.type != Blocks.CRYSTAL && owner.getCharacter().getType() == GameCharacter.Types.SPADE)
 			owner.getCharacter().getsActor();
-
+		
 		if (this.type != Blocks.CRYSTAL)
 			if (this.type == type && owner.getCharacter().canAct())
 				this.type = Blocks.DIRT;
@@ -145,8 +145,8 @@ public class Block extends Sprite {
 	public void interact() {
 		// TODO Auto-generated method stub
 
-		switch (owner.getCharacter().getType()) {
-		case SPADE:
+		switch (owner.getCharacter().getMove()) {
+		case PIT:
 			setType(Blocks.PIT);
 			break;
 

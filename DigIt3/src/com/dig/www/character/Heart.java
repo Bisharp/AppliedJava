@@ -78,14 +78,46 @@ public class Heart extends GameCharacter {
 			break;
 		}
 
-		g2d.drawImage(newImage(type.toString()), dX, dY, owner);
+		if(toMoveString()!=null){
+			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+	}
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 
-		actTimer--;
+		timersCount();
+	}
+
+	@Override
+	public Moves getMove() {
+		// TODO Auto-generated method stub
+		switch(getActing()){
+		case 1:
+			return Moves.AURA;
+		case 2:
+			return Moves.HAZE;
+		case 3:
+			return Moves.DISPENSER;
+			default:
+			return Moves.NONE;	
+		}
+	}
+	@Override
+	public String toMoveString(){
+		switch(getActing()){
+		case 1:
+		return getType().toString();
 		
-		if (actTimer == 0)
-			acting = false;
+		
+		case 3:
+		return "dispenser";
+		default:
+			case 2:
+			return null;
+		}
+	}@Override
+	public Moves getRangedMove() {
+		// TODO Auto-generated method stub
+		return Moves.HAZE;
 	}
 }

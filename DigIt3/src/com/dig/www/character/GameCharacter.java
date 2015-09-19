@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Window.Type;
 import java.awt.event.KeyEvent;
 
 import com.dig.www.start.Board;
@@ -64,9 +65,21 @@ public abstract class GameCharacter extends Sprite {
 				// TODO Auto-generated method stub
 				return "Cain";
 			}
-		};
+		},PROJECTILE {
+			public String toString() {
+				return "projectile";
+			}
+
+			@Override
+			public String charName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		} ;
 		
 		public abstract String charName();
+
+		
 	}
 
 	private int deltaX = 0;
@@ -81,9 +94,12 @@ public abstract class GameCharacter extends Sprite {
 //	private int wallX = 0;
 //	private int wallY = 0;
 
-	protected boolean acting = false;
-	protected int actTimer = 0;
-
+//	protected boolean acting = false;
+//	protected int actTimer = 0;
+protected transient int meleeTimer;
+protected transient int rangedTimer;
+protected transient int specialTimer;
+protected transient int energy=100;
 	private final int SPEED = 10;
 
 	private int counter = 0;
@@ -93,9 +109,11 @@ public abstract class GameCharacter extends Sprite {
 	private static final int MAX = 4;
 	private String charName = "reyzu";
 
-	private static final int HP_MAX = 5;
+	private static final int HP_MAX =100;
 	private static final int HP_TIMER_MAX = 50;
 	private static final int HITSTUN_MAX = 10;
+	protected static final int NEG_TIMER_NORM = -20;
+protected   static final int TIMER_NORM = 10;
 	private int health = HP_MAX;
 	private int hpTimer = 0;
 	private int hitstunTimer = 0;
@@ -216,12 +234,63 @@ public abstract class GameCharacter extends Sprite {
 
 			break;
 
-		case KeyEvent.VK_SPACE:
-			acting = true;
-			actTimer = 10;
+		case KeyEvent.VK_SPACE://Melee
+			if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
+			meleeTimer=TIMER_NORM;}
+			break;  
+		case KeyEvent.VK_E://Ranged
+		case KeyEvent.VK_C:
+			if(rangedTimer<=NEG_TIMER_NORM){
+				rangedTimer=TIMER_NORM;	
+//				int xD=deltaX==0?0:1;
+//				if(xD==1){
+//					xD=deltaX>0?1:-1;
+//				}
+//				xD*=90;
+				int dir=0;
+				boolean changed=false;
+				if(deltaX<0){
+					dir=0;
+					changed=true;
+				}else if(deltaX>0){
+					dir=180;
+					changed=true;
+				}
+				if(deltaY<0){
+					if(changed){
+					
+						if(dir==180){
+							dir-=45;
+						}else{
+							dir+=45;
+						}
+					}else{
+						dir=90;
+					}
+				} else if(deltaY>0){
+					if(changed){
+						if(dir==180){
+							dir+=45;
+						}else{
+							dir-=45;
+						}
+					}else{
+						dir=270;
+					}
+				}
+				owner.getfP().add(new FProjectile(dir, x, y, 15, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
+			}
+			break;
+		case KeyEvent.VK_Q://Special
+		case KeyEvent.VK_SLASH:
+			if(specialTimer<=NEG_TIMER_NORM){
+				specialTimer=TIMER_NORM;	
+			}
 			break;
 		}
 	}
+
+	public abstract Moves getRangedMove();
 
 	public void keyReleased(int keyCode) {
 
@@ -259,10 +328,23 @@ public abstract class GameCharacter extends Sprite {
 			moveY = false;
 
 			break;
-		case KeyEvent.VK_SPACE:
-			acting=false;
+		case KeyEvent.VK_SPACE://Melee
+			if(meleeTimer<=NEG_TIMER_NORM)
+			meleeTimer=TIMER_NORM; 
+			break;
+		case KeyEvent.VK_E://Ranged
+		case KeyEvent.VK_C:
+			if(rangedTimer<=NEG_TIMER_NORM)
+				rangedTimer=TIMER_NORM; 
+			break;
+		case KeyEvent.VK_Q://Special
+		case KeyEvent.VK_SLASH:
+			if(specialTimer<=NEG_TIMER_NORM)
+				specialTimer=TIMER_NORM; 
+			break;
 		}
-	}
+		}
+	
 
 	public void collision(int midX, int midY) {
 		// TODO Auto-generated method stub
@@ -298,9 +380,9 @@ public abstract class GameCharacter extends Sprite {
 			else
 				g2d.drawImage(image, x + width, y, -width, height, owner);
 
-		if (acting || actTimer > 0) {
+		
 			drawTool(g2d);
-		}
+		
 		
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(10, 20, 180, 80);
@@ -344,16 +426,13 @@ public abstract class GameCharacter extends Sprite {
 			dY = y;
 			break;
 		}
-
-		g2d.drawImage(newImage(type.toString()), dX, dY, owner);
-
+if(toMoveString()!=null){
+		g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+}
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
-
-		actTimer--;
+timersCount();
 		
-		if (actTimer == 0)
-			acting = false;
 	}
 	
 	protected abstract void drawCSHUD(Graphics2D g2d) ;
@@ -376,13 +455,18 @@ public abstract class GameCharacter extends Sprite {
 		return i;
 	}
 
-	public boolean isActing() {
-		return acting;
-	}
+//	public boolean isActing() {
+//		return acting;
+//	}
 
 	public void endAction() {
 		// TODO Auto-generated method stub
-		acting = false;
+		if(meleeTimer>0)
+			meleeTimer=0;
+		if(rangedTimer>0)
+			rangedTimer=0;
+		if(specialTimer>0)
+			specialTimer=0;
 	}
 
 	public Image newImage(String name) {
@@ -445,4 +529,30 @@ public abstract class GameCharacter extends Sprite {
 		deltaX = 0;
 		deltaY = 0;
 	}
+	protected void timersCount(){
+		if(meleeTimer>NEG_TIMER_NORM){
+			meleeTimer--;
+		}
+		if(rangedTimer>NEG_TIMER_NORM){
+			rangedTimer--;
+		}
+		if(specialTimer>NEG_TIMER_NORM){
+			specialTimer--;
+		}
+	}
+
+	public int getActing() {
+		// TODO Auto-generated method stub
+		if(specialTimer>0)
+			return 3;
+		else if(rangedTimer>0)
+			return 2;
+		else if(meleeTimer>0)
+			return 1;
+		else
+			return 0;
+	}
+
+	public abstract Moves getMove();
+	public abstract String toMoveString();
 }

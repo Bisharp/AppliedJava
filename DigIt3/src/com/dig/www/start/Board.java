@@ -39,6 +39,8 @@ public class Board extends MPanel implements ActionListener {
 	private Timer timer// = new Timer(15, this)
 	;
 	private GameCharacter character;
+protected ArrayList<GameCharacter>friends=new ArrayList<GameCharacter>();
+protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 	private State state;
 	private boolean debug = false;
 
@@ -222,7 +224,30 @@ public class Board extends MPanel implements ActionListener {
 						enemies.get(i).draw(g2d);
 				}
 			}
+			FProjectile p;
+			for (int i = 0; i < fP.size(); i++) {
 
+				if (fP.get(i).isOnScreen()) {
+
+					p= fP.get(i);
+					// Line-of-sight mechanics
+					int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
+					int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
+
+					for (int x = 0; x < wallList.size(); x++) {
+						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+							tag = false;
+							break;
+						}
+
+						tag = true;
+					}
+					// end of that code
+
+					if (tag)
+						fP.get(i).draw(g2d);
+				}
+			}
 			character.draw(g2d);
 
 			if (!isDay)
@@ -340,7 +365,20 @@ public class Board extends MPanel implements ActionListener {
 				// /\
 				// || Nightmare Fuel
 			}
+			
+			for (int i = 0; i < fP.size(); i++) {
+				
+				if (!fP.get(i).isOnScreen()) {
+					fP.remove(i);
+					i--;
+					continue;
+				}
 
+				fP.get(i).animate();
+				fP.get(i).setOnScreen(fP.get(i).getBounds().intersects(getScreen()));
+				// /\
+				// || Nightmare Fuel
+			}
 			if (switching)
 				openSwitchDialogue();
 
@@ -374,7 +412,7 @@ public class Board extends MPanel implements ActionListener {
 		Block b;
 
 		// GameCharacter.Types type = character.getType();
-		boolean acting = character.isActing();
+		int acting = character.getActing();
 		boolean tag = false;
 
 		for (int i = 0; i < world.size(); i++) {
@@ -424,7 +462,7 @@ public class Board extends MPanel implements ActionListener {
 				case CRYSTAL:
 					character.collision(b.getMidX(), b.getMidY());
 				}
-			} else if (acting) {
+			} else if (character.getMove()==Moves.CLUB||character.getMove()==Moves.PIT) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -433,6 +471,23 @@ public class Board extends MPanel implements ActionListener {
 			}
 
 			if (b.isOnScreen()) {
+				FProjectile p;
+				for (int u = 0; u < fP.size(); u++) {
+
+					p = fP.get(u);
+					if (p.isOnScreen()) {
+						if (p.getBounds().intersects(b.getBounds())) {
+							switch (b.getType()) {
+							
+
+							case CRYSTAL:
+							case WALL:
+								p.setOnScreen(false);
+								break;
+								
+							default:
+								break;
+							} } } }
 				Enemy e;
 				for (int u = 0; u < enemies.size(); u++) {
 
@@ -455,11 +510,25 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 
-						if (character.isActing() && character.getActBounds().intersects(e.getBounds())) {
+						if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
 							// TODO implement proper interaction code here
-							e.interact(character.getType());
+							e.interact(character.getMove());
 						}
-
+						for(int c=0;c<fP.size();c++){
+							FProjectile character=fP.get(c);
+							if ( character.getBounds().intersects(e.getBounds())) {
+								// TODO implement proper interaction code here
+								e.interact(character.getMove());
+								fP.remove(character);
+								c--;
+							}
+						}
+for(GameCharacter character:friends){
+	if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
+		// TODO implement proper interaction code here
+		e.interact(character.getMove());
+	}
+}
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround();
 							character.takeDamage();
@@ -604,5 +673,21 @@ public class Board extends MPanel implements ActionListener {
 	public Point getCharPoint() {
 		// TODO Auto-generated method stub
 		return new Point(character.getX(), character.getY());
+	}
+
+	public ArrayList<GameCharacter> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(ArrayList<GameCharacter> friends) {
+		this.friends = friends;
+	}
+
+	public ArrayList<FProjectile> getfP() {
+		return fP;
+	}
+
+	public void setfP(ArrayList<FProjectile> fP) {
+		this.fP = fP;
 	}
 }

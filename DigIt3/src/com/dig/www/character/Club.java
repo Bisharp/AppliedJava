@@ -51,15 +51,14 @@ public class Club extends GameCharacter {
 			break;
 		}
 
-		g2d.drawImage(newImage(type.toString()), dX, dY, owner);
+		if(toMoveString()!=null){
+			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+	}
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 
-		actTimer--;
-		
-		if (actTimer == 0)
-			acting = false;
+		timersCount();
 	}
 
 	@Override
@@ -88,5 +87,38 @@ public class Club extends GameCharacter {
 		default:
 			return new Rectangle(x - 40, y + 15, 20, 80);
 		}
+	}
+	@Override
+	public Moves getMove() {
+		// TODO Auto-generated method stub
+		switch(getActing()){
+		case 1:
+			return Moves.CLUB;
+		case 2:
+			return Moves.PITCH;
+		case 3:
+			return Moves.MPITCH;
+			default:
+			return Moves.NONE;	
+		}
+	}
+	@Override
+	public String toMoveString(){
+		switch(getActing()){
+		case 1:
+		return getType().toString();
+		
+		
+		case 3:
+		return getType().toString();
+		default:
+			case 2:
+			return null;
+		}
+	}
+	@Override
+	public Moves getRangedMove() {
+		// TODO Auto-generated method stub
+		return Moves.PITCH;
 	}
 }

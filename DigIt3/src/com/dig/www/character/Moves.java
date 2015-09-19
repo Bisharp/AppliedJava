@@ -4,5 +4,5 @@ package com.dig.www.character;
 public enum Moves {
 	// }(B-)
 
-	SPADE, ARROW, PIT, CLUB, PITCH, MPITCH, AURA, HAZE, DISPENSER, SHIELD, CHAIN, BASH;
+	SPADE, ARROW, PIT, CLUB, PITCH, MPITCH, AURA, HAZE, DISPENSER, SHIELD, CHAIN, BASH,NONE;
 }

@@ -1,29 +1,32 @@
-package com.dig.www.enemies;
+package com.dig.www.character;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
+import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.Launch;
 import com.dig.www.start.Board;
+import com.dig.www.util.Sprite;
 
-public class Projectile extends Enemy {
-
+public class FProjectile extends Sprite {
+protected boolean onScreen=true;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	double d;
 	int speed;
-
+private Moves move;
 	// half height of image
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
 
-	public Projectile(double dir, int x, int y, int speed, Launch maker, String loc, Board owner, boolean flying) {
-		super(x, y, loc, owner, flying,1);
+	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move) {
+		super(x, y, loc, owner);
 		
-		
+		this.setMove(move);
 		d = dir;
 		this.speed = speed;
 
@@ -46,29 +49,39 @@ public class Projectile extends Enemy {
 		// Move, This is the code Micah it is also in the ImportantLook class
 
 		
-			x += Math.cos((double) Math.toRadians((double) d)) * speed;
-			y += Math.sin((double) Math.toRadians((double) d)) * speed;
-		
-		
-
 		if (!onScreen)
-			alive = false;
+			owner.getfP().remove(owner.getfP().indexOf(this));
+	}
+	public boolean isOnScreen() {
+		return onScreen;
 	}
 
+	public void setOnScreen(boolean onScreen) {
+		this.onScreen = onScreen;
+	}
+//	@Override
+//	public void turnAround() {
+//		// TODO Auto-generated method stub
+//		owner.getfP().remove(owner.getfP().indexOf(this));
+//	}
+
 	@Override
-	public void turnAround() {
+	public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-		alive = false;
+		x += Math.cos((double) Math.toRadians((double) d)) * speed;
+		y += Math.sin((double) Math.toRadians((double) d)) * speed;
+		g2d.drawImage(image, x, y, owner);
 	}
 
-	@Override
-	public void interact(Moves type) {
-
-		if (type != Moves.CLUB)
-			super.interact(type);
-		else
-			alive = false;
+	public Moves getMove() {
+		return move;
 	}
+
+	public void setMove(Moves move) {
+		this.move = move;
+	}
+
+	
 
 	/* 
 	 * TODO The below method will be deprecated upon Jonah's finishing of adding

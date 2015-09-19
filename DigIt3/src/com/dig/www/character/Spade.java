@@ -42,4 +42,37 @@ public class Spade extends GameCharacter {
 	public void getsActor() {
 		dirt++;
 	}
+	@Override
+	public Moves getMove() {
+		// TODO Auto-generated method stub
+		switch(getActing()){
+		case 1:
+			return Moves.SPADE;
+		case 2:
+			return Moves.ARROW;
+		case 3:
+			return Moves.PIT;
+			default:
+			return Moves.NONE;	
+		}
+	}
+	@Override
+	public String toMoveString(){
+		switch(getActing()){
+		case 1:
+		return getType().toString();
+		
+		
+		case 3:
+		return getType().toString();
+		default:
+			case 2:
+			return null;
+		}
+	}
+	@Override
+	public Moves getRangedMove() {
+		// TODO Auto-generated method stub
+		return Moves.ARROW;
+	}
 }
