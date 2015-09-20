@@ -32,6 +32,7 @@ public class DigIt extends JFrame {
 	}
 
 	public DigIt() {
+		setUndecorated(true);
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 

@@ -247,7 +247,7 @@ protected   static final int TIMER_NORM = 10;
 			
 			break;
 		case KeyEvent.VK_Q://Special
-		case KeyEvent.VK_SLASH:
+		case KeyEvent.VK_V:
 			specialPress=true;
 			
 			break;
@@ -339,7 +339,7 @@ protected   static final int TIMER_NORM = 10;
 private void setAttacks(){
 	if(meleePress){
 		if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
-			meleeTimer=TIMER_NORM;}
+			meleeTimer=TIMER_NORM*(this instanceof Club?2:1);}
 	}
 	if(rangedPress){
 		if(rangedTimer<=NEG_TIMER_NORM){

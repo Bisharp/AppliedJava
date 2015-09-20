@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+
 
 
 //import com.manor.www.start.Board;
@@ -19,8 +21,8 @@ public final class Statics {
 
 	public static final int BLOCK_HEIGHT = 100;
 
-	public static final int BOARD_WIDTH = 1000;
-	public static final int BOARD_HEIGHT = 700;
+	public static final int BOARD_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(); 
+	public static final int BOARD_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();;
 
 	public static final String INF = "INF.";
 	public static final String LAMBDA = "/\\";

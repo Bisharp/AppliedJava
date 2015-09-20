@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import com.dig.www.blocks.*;
+import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
 import com.dig.www.enemies.*;
@@ -462,7 +463,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 				case CRYSTAL:
 					character.collision(b.getMidX(), b.getMidY());
 				}
-			} else if (character.getMove()==Moves.CLUB||character.getMove()==Moves.PIT) {
+			} else if ((character.getMove()==Moves.CLUB&&b.getType()==Blocks.CRYSTAL)||(character.getMove()==Moves.PIT&&(b.getType()==Blocks.GROUND||b.getType()==Blocks.DIRT||b.getType()==Blocks.PIT))) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -519,8 +520,9 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 							if ( character.getBounds().intersects(e.getBounds())) {
 								// TODO implement proper interaction code here
 								e.interact(character.getMove());
+								if(!(e instanceof Projectile )){
 								fP.remove(character);
-								c--;
+								c--;}
 							}
 						}
 for(GameCharacter character:friends){
