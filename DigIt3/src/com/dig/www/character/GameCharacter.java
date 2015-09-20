@@ -21,7 +21,7 @@ public abstract class GameCharacter extends Sprite {
 int dir=0;
 boolean meleePress=false;
 boolean rangedPress=false;
-boolean specialPress=true;
+boolean specialPress=false;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
