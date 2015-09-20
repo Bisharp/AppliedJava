@@ -95,6 +95,7 @@ private Moves move;
 
 	public void setOnScreen(boolean onScreen) {
 		this.onScreen = onScreen;
+		
 	}
 //	@Override
 //	public void turnAround() {
