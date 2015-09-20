@@ -21,6 +21,7 @@ import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.*;
 
 public class Board extends MPanel implements ActionListener {
@@ -103,8 +104,8 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 		
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
 				Statics.BOARD_HEIGHT / 2 - 50, this);
-		world = StageBuilder.getInstance().read("LuigisMansion", this);
-		enemies = StageBuilder.getInstance().loadEn("LuigisMansion", this);
+		world = StageBuilder.getInstance().read("map1", this);
+		enemies = StageBuilder.getInstance().loadEn("map1", this);
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
@@ -370,10 +371,27 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 			for (int i = 0; i < fP.size(); i++) {
 				
 				if (!fP.get(i).isOnScreen()) {
-					fP.remove(i);
-					i--;
+					
+					
+					if(fP.get(i).getMove()==Moves.CHAIN){
+						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(),fP.get(i).getSpeed(), 100, fP.get(i).getLoc(), fP.get(i).getOwner(), fP.get(i).getMove(),-1));
+					}fP.remove(i);i--;
 					continue;
 				}
+				else if(fP.get(i).getCharNum()!=-2){
+					GameCharacter chara;
+				int charNum=fP.get(i).getCharNum();
+					if(charNum==-1){
+						chara=character;
+					}else{
+						chara=friends.get(charNum);
+								
+					}
+					if(fP.get(i).getBounds().intersects(chara.getBounds())){
+						fP.remove(i);i--;
+						continue;
+					}}
+				
 
 				fP.get(i).animate();
 				fP.get(i).setOnScreen(fP.get(i).getBounds().intersects(getScreen()));
