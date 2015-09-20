@@ -64,7 +64,7 @@ private Moves move;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 	}
 	public FProjectile(double dir, int x, int y, int speed, int maxImg, String loc,
-			Board owner, Moves move2, int charHoming) {
+			Board owner, Moves move, int charHoming) {
 		super(x, y, loc, owner);
 		this.charHoming=charHoming;
 		this.setMove(move);

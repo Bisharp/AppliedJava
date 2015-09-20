@@ -374,7 +374,8 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 					
 					
 					if(fP.get(i).getMove()==Moves.CHAIN){
-						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(),fP.get(i).getSpeed(), 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1));
+						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed()
+								, 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1));
 					}fP.remove(i);i--;
 					continue;
 				}

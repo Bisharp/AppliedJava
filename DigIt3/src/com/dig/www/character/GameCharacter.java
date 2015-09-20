@@ -354,8 +354,10 @@ private Point setAttacks(){
 	}if(rangedPress){
 		if(rangedTimer<=NEG_TIMER_NORM){
 			rangedTimer=TIMER_NORM;	
-
-			owner.getfP().add(new FProjectile(dir, x, y, 25, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
+String s="images/enemies/blasts/0.png";
+if(type==Types.DIAMOND)
+	s=getPath()+"diamond.png";
+			owner.getfP().add(new FProjectile(dir, x, y, 25, this,s, owner,getRangedMove()));
 		
 		}
 	}
@@ -363,15 +365,19 @@ private Point setAttacks(){
 	if(type==Types.DIAMOND){
 		boolean found=false;
 		for(int c=0;c<owner.getfP().size();c++){
+			
 			if(owner.getfP().get(c).getMove()==Moves.CHAIN){
+				
 			specialTimer=0;
 			meleeTimer=0;
+			rangedTimer=0;
 			found=true;
 			FProjectile fp=owner.getfP().get(c);
 			shieldPos=new Point(fp.getX(),fp.getY());
 			break;}
 		}
 		if(!found){
+			
 			if(rangedTimer>0)
 			rangedTimer=0;}
 		}
