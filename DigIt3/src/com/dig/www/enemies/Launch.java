@@ -55,7 +55,7 @@ public class Launch extends Enemy {
 		}
 	}
 
-	private static final int SPEED = 20;
+	static final int SPEED = 20;
 
 	public void addBall() {
 		owner.addEnemy(new Projectile(pointTowards(new Point(x, y), new Point(

@@ -174,6 +174,16 @@ int health=Integer.parseInt(stuff.get(5));
 							enemies.add(new WalkingEnemy(enX, enY, enImg,
 									owner, flying,health));
 							break;
+							
+						// Lowercase denotes an enemy that must see you before attacking.
+						case 'w':
+							enemies.add(new SeeChaseEnemy(enX, enY, enImg,
+									owner, flying,health));
+							break;
+						case 'l':
+							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner,
+									Integer.parseInt(stuff.get(6)), flying,health));
+							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
