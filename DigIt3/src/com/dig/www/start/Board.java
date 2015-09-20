@@ -103,8 +103,8 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 		
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
 				Statics.BOARD_HEIGHT / 2 - 50, this);
-		world = StageBuilder.getInstance().read("map1", this);
-		enemies = StageBuilder.getInstance().loadEn("map1", this);
+		world = StageBuilder.getInstance().read("LuigisMansion", this);
+		enemies = StageBuilder.getInstance().loadEn("LuigisMansion", this);
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
@@ -519,9 +519,11 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 							FProjectile character=fP.get(c);
 							if ( character.getBounds().intersects(e.getBounds())) {
 								// TODO implement proper interaction code here
+								if(!(e instanceof Projectile)){
 								e.interact(character.getMove());
+								
 								fP.remove(character);
-								c--;
+								c--;}
 							}
 						}
 for(GameCharacter character:friends){

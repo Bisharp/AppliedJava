@@ -65,7 +65,7 @@ public class Projectile extends Enemy {
 	public void interact(Moves type) {
 
 		if (type == Moves.SHIELD)
-			super.interact(type);
+			alive = false;
 	
 	}
 
