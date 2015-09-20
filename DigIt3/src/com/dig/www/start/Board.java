@@ -374,7 +374,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 					
 					
 					if(fP.get(i).getMove()==Moves.CHAIN){
-						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(),fP.get(i).getSpeed(), 100, fP.get(i).getLoc(), fP.get(i).getOwner(), fP.get(i).getMove(),-1));
+						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(),fP.get(i).getSpeed(), 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1));
 					}fP.remove(i);i--;
 					continue;
 				}
@@ -535,13 +535,12 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 						}
 						for(int c=0;c<fP.size();c++){
 							FProjectile character=fP.get(c);
-							if ( character.getBounds().intersects(e.getBounds())) {
+							if ( character.getBounds().intersects(e.getBounds())&&character.isOnScreen()) {
 								// TODO implement proper interaction code here
 								if(!(e instanceof Projectile)){
 								e.interact(character.getMove());
-								
-								fP.remove(character);
-								c--;}
+								fP.get(c).setOnScreen(false);
+								}
 							}
 						}
 for(GameCharacter character:friends){
