@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
 import java.awt.event.KeyEvent;
@@ -112,7 +113,7 @@ protected transient int energy=100;
 	private static final int MAX = 4;
 	private String charName = "reyzu";
 
-	private static final int HP_MAX =100;
+	private static final int HP_MAX =10;
 	private static final int HP_TIMER_MAX = 50;
 	private static final int HITSTUN_MAX = 10;
 	protected static final int NEG_TIMER_NORM = -20;
@@ -255,7 +256,10 @@ protected   static final int TIMER_NORM = 10;
 	}
 
 	public abstract Moves getRangedMove();
-
+public Moves getSpecialProMove(){
+	return Moves.NONE;
+	
+}
 	public void keyReleased(int keyCode) {
 
 		switch (keyCode) {
@@ -336,23 +340,42 @@ protected   static final int TIMER_NORM = 10;
 	}
 
 	private Font HUD = new Font("Broadway", Font.BOLD, 30);
-private void setAttacks(){
+private Point setAttacks(){
+	Point shieldPos=null;
 	if(meleePress){
 		if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
 			meleeTimer=TIMER_NORM*(this instanceof Club?2:1);}
 	}
-	if(rangedPress){
-		if(rangedTimer<=NEG_TIMER_NORM){
-			rangedTimer=TIMER_NORM;	
-
-			owner.getfP().add(new FProjectile(dir, x, y, 15, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
-		}
-	}
+	
 	if(specialPress){
 		if(specialTimer<=NEG_TIMER_NORM){
 			specialTimer=TIMER_NORM;	
 		}
+	}if(rangedPress){
+		if(rangedTimer<=NEG_TIMER_NORM){
+			rangedTimer=TIMER_NORM;	
+
+			owner.getfP().add(new FProjectile(dir, x, y, 25, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
+		
+		}
 	}
+	
+	if(type==Types.DIAMOND){
+		boolean found=false;
+		for(int c=0;c<owner.getfP().size();c++){
+			if(owner.getfP().get(c).getMove()==Moves.CHAIN){
+			specialTimer=0;
+			meleeTimer=0;
+			found=true;
+			FProjectile fp=owner.getfP().get(c);
+			shieldPos=new Point(fp.getX(),fp.getY());
+			break;}
+		}
+		if(!found){
+			if(rangedTimer>0)
+			rangedTimer=0;}
+		}
+	return shieldPos;
 }
 	@Override
 	public void draw(Graphics2D g2d) {
@@ -389,13 +412,19 @@ private void setAttacks(){
 					dir=270;
 				}
 			}}
-		setAttacks();
+		Point p=setAttacks();
 		if (visible)
-			if (direction != Direction.LEFT)
+			if (direction != Direction.LEFT){
 				g2d.drawImage(image, x, y, owner);
-			else
+				if(p!=null){
+				g2d.setColor(Color.black);
+				g2d.drawLine(x, y+height, (int)p.getX(), (int)p.getY());}}
+			else{
 				g2d.drawImage(image, x + width, y, -width, height, owner);
-
+				if(p!=null){
+					g2d.setColor(Color.black);
+					g2d.drawLine(x+ width, y, (int)p.getX(), (int)p.getY());}
+			}
 		
 			drawTool(g2d);
 		
@@ -550,6 +579,7 @@ timersCount();
 			meleeTimer--;
 		}
 		if(rangedTimer>NEG_TIMER_NORM){
+			if((!(type==Types.DIAMOND))||rangedTimer<=0)
 			rangedTimer--;
 		}
 		if(specialTimer>NEG_TIMER_NORM){

@@ -120,7 +120,9 @@ public class GameStartBoard extends MPanel {
 	}
 
 	public void keyPress(int key) {
-
+if(key==KeyEvent.VK_ESCAPE){
+	System.exit(0);
+}
 	}
 
 	public void keyRelease(int key) {

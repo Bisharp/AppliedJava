@@ -121,6 +121,7 @@ this.maxHealth=health;
 			// Cain
 			
 		case SHIELD:
+			
 			if (this instanceof Projectile)
 				alive = false;
 			break;
@@ -175,7 +176,7 @@ owner.getCharacter().endAction();
 	}
 
 	public boolean willHarm() {
-		return harmTimer <= 0;
+		return harmTimer <= 0&&alive==true;
 	}
 
 	public void basicAnimate() {

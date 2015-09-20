@@ -520,9 +520,8 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 							if ( character.getBounds().intersects(e.getBounds())) {
 								// TODO implement proper interaction code here
 								e.interact(character.getMove());
-								if(!(e instanceof Projectile )){
 								fP.remove(character);
-								c--;}
+								c--;
 							}
 						}
 for(GameCharacter character:friends){
