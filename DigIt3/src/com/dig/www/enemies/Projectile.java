@@ -64,10 +64,10 @@ public class Projectile extends Enemy {
 	@Override
 	public void interact(Moves type) {
 
-		if (type != Moves.CLUB)
-			super.interact(type);
-		else
-			alive = false;
+//		if (type != Moves.CLUB)
+//			super.interact(type);
+//		else
+//			alive = false;
 	}
 
 	/* 

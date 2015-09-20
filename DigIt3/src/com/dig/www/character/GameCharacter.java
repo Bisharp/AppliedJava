@@ -18,7 +18,10 @@ public abstract class GameCharacter extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+int dir=0;
+boolean meleePress=false;
+boolean rangedPress=false;
+boolean specialPress=true;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -235,57 +238,18 @@ protected   static final int TIMER_NORM = 10;
 			break;
 
 		case KeyEvent.VK_SPACE://Melee
-			if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
-			meleeTimer=TIMER_NORM;}
+			meleePress=true;
+			
 			break;  
 		case KeyEvent.VK_E://Ranged
 		case KeyEvent.VK_C:
-			if(rangedTimer<=NEG_TIMER_NORM){
-				rangedTimer=TIMER_NORM;	
-//				int xD=deltaX==0?0:1;
-//				if(xD==1){
-//					xD=deltaX>0?1:-1;
-//				}
-//				xD*=90;
-				int dir=0;
-				boolean changed=false;
-				if(deltaX<0){
-					dir=0;
-					changed=true;
-				}else if(deltaX>0){
-					dir=180;
-					changed=true;
-				}
-				if(deltaY<0){
-					if(changed){
-					
-						if(dir==180){
-							dir-=45;
-						}else{
-							dir+=45;
-						}
-					}else{
-						dir=90;
-					}
-				} else if(deltaY>0){
-					if(changed){
-						if(dir==180){
-							dir+=45;
-						}else{
-							dir-=45;
-						}
-					}else{
-						dir=270;
-					}
-				}
-				owner.getfP().add(new FProjectile(dir, x, y, 15, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
-			}
+			rangedPress=true;
+			
 			break;
 		case KeyEvent.VK_Q://Special
 		case KeyEvent.VK_SLASH:
-			if(specialTimer<=NEG_TIMER_NORM){
-				specialTimer=TIMER_NORM;	
-			}
+			specialPress=true;
+			
 			break;
 		}
 	}
@@ -329,18 +293,21 @@ protected   static final int TIMER_NORM = 10;
 
 			break;
 		case KeyEvent.VK_SPACE://Melee
-			if(meleeTimer<=NEG_TIMER_NORM)
-			meleeTimer=TIMER_NORM; 
+			meleePress=false;
+			if(meleeTimer>0)
+			meleeTimer=0; 
 			break;
 		case KeyEvent.VK_E://Ranged
 		case KeyEvent.VK_C:
-			if(rangedTimer<=NEG_TIMER_NORM)
-				rangedTimer=TIMER_NORM; 
+			rangedPress=false;
+			if(rangedTimer>0)
+			rangedTimer=0; 
 			break;
 		case KeyEvent.VK_Q://Special
-		case KeyEvent.VK_SLASH:
-			if(specialTimer<=NEG_TIMER_NORM)
-				specialTimer=TIMER_NORM; 
+		case KeyEvent.VK_V:
+			specialPress=false;
+			if(specialTimer>0)
+			specialTimer=0; 
 			break;
 		}
 		}
@@ -369,11 +336,60 @@ protected   static final int TIMER_NORM = 10;
 	}
 
 	private Font HUD = new Font("Broadway", Font.BOLD, 30);
+private void setAttacks(){
+	if(meleePress){
+		if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
+			meleeTimer=TIMER_NORM;}
+	}
+	if(rangedPress){
+		if(rangedTimer<=NEG_TIMER_NORM){
+			rangedTimer=TIMER_NORM;	
 
+			owner.getfP().add(new FProjectile(dir, x, y, 15, this, "images/enemies/blasts/0.png", owner,getRangedMove()));
+		}
+	}
+	if(specialPress){
+		if(specialTimer<=NEG_TIMER_NORM){
+			specialTimer=TIMER_NORM;	
+		}
+	}
+}
 	@Override
 	public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-
+		if(deltaX!=0||deltaY!=0){
+		dir=0;
+			boolean changed=false;
+			if(deltaX<0){
+				dir=0;
+				changed=true;
+			}else if(deltaX>0){
+				dir=180;
+				changed=true;
+			}
+			if(deltaY<0){
+				if(changed){
+				
+					if(dir==180){
+						dir-=45;
+					}else{
+						dir+=45;
+					}
+				}else{
+					dir=90;
+				}
+			} else if(deltaY>0){
+				if(changed){
+					if(dir==180){
+						dir+=45;
+					}else{
+						dir-=45;
+					}
+				}else{
+					dir=270;
+				}
+			}}
+		setAttacks();
 		if (visible)
 			if (direction != Direction.LEFT)
 				g2d.drawImage(image, x, y, owner);
