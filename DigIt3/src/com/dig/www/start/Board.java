@@ -375,7 +375,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 					
 					if(fP.get(i).getMove()==Moves.CHAIN){
 						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed()
-								, 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1));
+								, 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1,false));
 					}fP.remove(i);i--;
 					continue;
 				}
@@ -536,7 +536,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 						}
 						for(int c=0;c<fP.size();c++){
 							FProjectile character=fP.get(c);
-							if ( character.getBounds().intersects(e.getBounds())&&character.isOnScreen()) {
+							if ( character.getBounds().intersects(e.getBounds())&&character.isOnScreen()&&character.getHarming()) {
 								// TODO implement proper interaction code here
 								if(!(e instanceof Projectile)){
 								e.interact(character.getMove());
@@ -552,7 +552,7 @@ for(GameCharacter character:friends){
 }
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround();
-							character.takeDamage();
+							character.takeDamage(e.getDamage());
 						}
 					}
 				}

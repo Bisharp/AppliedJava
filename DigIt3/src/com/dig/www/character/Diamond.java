@@ -16,6 +16,7 @@ public class Diamond extends GameCharacter {
 	public Diamond(int x, int y, Board owner) {
 		super(x, y,  owner, Types.DIAMOND, "diamond");
 		// TODO Auto-generated constructor stub
+		NEG_TIMER_NORM=-50;
 	}
 
 	@Override

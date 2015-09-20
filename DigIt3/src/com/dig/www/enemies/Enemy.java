@@ -27,7 +27,7 @@ public abstract class Enemy extends Sprite {
 	public static final int STUN_MAX = 100;
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
-
+    protected int damage=10;
 	public Enemy(int x, int y, String loc, Board owner, boolean flying,int health) {
 		super(x, y, loc, owner);
 this.maxHealth=health;
@@ -192,5 +192,10 @@ owner.getCharacter().endAction();
 	public void resetImage(Board b) {
 	super.resetImage(b);
 		health=maxHealth;
+	}
+
+	public int getDamage() {
+		// TODO Auto-generated method stub
+		return damage;
 	}
 }

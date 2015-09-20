@@ -113,11 +113,11 @@ protected transient int energy=100;
 	private static final int MAX = 4;
 	private String charName = "reyzu";
 
-	private static final int HP_MAX =10;
+	private static final int HP_MAX =50;
 	private static final int HP_TIMER_MAX = 50;
 	private static final int HITSTUN_MAX = 10;
-	protected static final int NEG_TIMER_NORM = -20;
-protected   static final int TIMER_NORM = 10;
+	protected  int NEG_TIMER_NORM = -20;
+protected    int TIMER_NORM = 10;
 	private int health = HP_MAX;
 	private int hpTimer = 0;
 	private int hitstunTimer = 0;
@@ -146,7 +146,10 @@ protected   static final int TIMER_NORM = 10;
 			hpTimer--;
 
 			if (hpTimer <= 0 && health < HP_MAX) {
-				health++;
+				health+=3;
+				if(health>HP_MAX){
+					health=HP_MAX;
+				}
 				hpTimer = HP_TIMER_MAX;
 			}
 		}
@@ -343,15 +346,20 @@ public Moves getSpecialProMove(){
 private Point setAttacks(){
 	Point shieldPos=null;
 	if(meleePress){
-		if(meleeTimer<=NEG_TIMER_NORM||this instanceof Diamond){
+		System.out.println(meleeTimer);
+		if(meleeTimer<=NEG_TIMER_NORM//||this instanceof Diamond
+				){
 			meleeTimer=TIMER_NORM*(this instanceof Club?2:1);}
 	}
 	
-	if(specialPress){
-		if(specialTimer<=NEG_TIMER_NORM){
+	if(specialPress&&!meleePress&&!rangedPress){
+		if(specialTimer<=NEG_TIMER_NORM*(this instanceof Diamond?2:1)){
 			specialTimer=TIMER_NORM;	
+			if(this instanceof Club){
+				
+			}
 		}
-	}if(rangedPress){
+	}if(rangedPress&&!meleePress){
 		if(rangedTimer<=NEG_TIMER_NORM){
 			rangedTimer=TIMER_NORM;	
 String s="images/enemies/blasts/0.png";
@@ -436,10 +444,11 @@ if(type==Types.DIAMOND)
 		
 		
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(10, 20, 180, 80);
+		int normWidth=(int)Math.ceil((double)HP_MAX/(double)10)*30+30;
+		g2d.fillRect(10, 20, (normWidth>170?normWidth:170), 80);
 
-		for (int i = 1; i <= HP_MAX; i++) {
-			g2d.setColor(health >= i ? Color.RED : Color.DARK_GRAY);
+		for (int i = 1; i <= (int)Math.ceil((double)HP_MAX/(double)10); i++) {
+			g2d.setColor((int)Math.ceil((double)health/(double)10) >= i ? Color.RED : Color.DARK_GRAY);
 			g2d.fillRect(i * 30, 70, 20, 20);
 			g2d.setColor(Color.WHITE);
 			g2d.drawRect(i * 30, 70, 20, 20);
@@ -447,7 +456,7 @@ if(type==Types.DIAMOND)
 
 		g2d.setColor(Color.RED);
 		g2d.setFont(HUD);
-		g2d.drawString("HEALTH:", 20, 50);
+		g2d.drawString("HEALTH:", 30, 50);
 		
 		drawCSHUD(g2d);
 	}
@@ -552,10 +561,10 @@ timersCount();
 		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
 	}
 
-	public void takeDamage() {
+	public void takeDamage(int amount) {
 
 		if (hitstunTimer <= 0) {
-			health--;
+			health-=amount;
 			hpTimer = 100;
 			hitstunTimer = HITSTUN_MAX;
 
@@ -581,26 +590,27 @@ timersCount();
 		deltaY = 0;
 	}
 	protected void timersCount(){
-		if(meleeTimer>NEG_TIMER_NORM){
+		if(meleeTimer>NEG_TIMER_NORM&&(type!=Types.DIAMOND||((type==Types.DIAMOND)&&meleeTimer<=0))){
 			meleeTimer--;
 		}
 		if(rangedTimer>NEG_TIMER_NORM){
 			if((!(type==Types.DIAMOND))||rangedTimer<=0)
 			rangedTimer--;
 		}
-		if(specialTimer>NEG_TIMER_NORM){
+		if(specialTimer>NEG_TIMER_NORM*(this instanceof Diamond?2:1)){
 			specialTimer--;
 		}
 	}
 
 	public int getActing() {
 		// TODO Auto-generated method stub
-		if(specialTimer>0)
-			return 3;
+		if(meleeTimer>0)
+			return 1; 
 		else if(rangedTimer>0)
 			return 2;
-		else if(meleeTimer>0)
-			return 1;
+		else if(specialTimer>0)
+			return 3;
+		 
 		else
 			return 0;
 	}

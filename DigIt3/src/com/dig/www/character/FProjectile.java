@@ -20,6 +20,7 @@ protected boolean onScreen=true;
 	double d;
 	int speed;
 	int charHoming=-2;
+	boolean harming=true;
 private Moves move;
 	// half height of image
 	int hImgX = image.getWidth(null) / 2;
@@ -44,8 +45,9 @@ private Moves move;
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 	}
-	public FProjectile(double dir, int x, int y, int speed, Sprite maker, String loc, Board owner,Moves move,int charHoming) {
+	public FProjectile(double dir, int x, int y, int speed, Sprite maker, String loc, Board owner,Moves move,int charHoming,boolean harming) {
 		super(x, y, loc, owner);
+	this.harming=harming;
 		this.charHoming=charHoming;
 		this.setMove(move);
 		d = dir;
@@ -64,8 +66,9 @@ private Moves move;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 	}
 	public FProjectile(double dir, int x, int y, int speed, int maxImg, String loc,
-			Board owner, Moves move, int charHoming) {
+			Board owner, Moves move, int charHoming,boolean harming) {
 		super(x, y, loc, owner);
+		this.harming=harming;
 		this.charHoming=charHoming;
 		this.setMove(move);
 		d = dir;
@@ -172,5 +175,8 @@ private Moves move;
 	public int getCharNum() {
 		// TODO Auto-generated method stub
 		return charHoming;
+	}
+	public boolean getHarming(){
+		return harming;
 	}
 }
