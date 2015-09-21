@@ -532,14 +532,14 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 
 						if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
 							// TODO implement proper interaction code here
-							e.interact(character.getMove());
+							e.interact(character.getMove(),true);
 						}
 						for(int c=0;c<fP.size();c++){
 							FProjectile character=fP.get(c);
 							if ( character.getBounds().intersects(e.getBounds())&&character.isOnScreen()&&character.getHarming()) {
 								// TODO implement proper interaction code here
 								if(!(e instanceof Projectile)){
-								e.interact(character.getMove());
+								e.interact(character.getMove(),false);
 								fP.get(c).setOnScreen(false);
 								}
 							}
@@ -547,7 +547,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 for(GameCharacter character:friends){
 	if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
 		// TODO implement proper interaction code here
-		e.interact(character.getMove());
+		e.interact(character.getMove(),true);
 	}
 }
 						if (e.getBounds().intersects(r3) && e.willHarm()) {

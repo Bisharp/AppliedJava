@@ -89,8 +89,8 @@ private Moves move;
 		// Move, This is the code Micah it is also in the ImportantLook class
 
 		
-		if (!onScreen)
-			owner.getfP().remove(owner.getfP().indexOf(this));
+//		if (!onScreen)
+//			owner.getfP().remove(owner.getfP().indexOf(this));
 	}
 	public boolean isOnScreen() {
 		return onScreen;

@@ -62,7 +62,7 @@ public class Projectile extends Enemy {
 	}
 
 	@Override
-	public void interact(Moves type) {
+	public void interact(Moves type,boolean player) {
 
 		if (type == Moves.SHIELD)
 			alive = false;

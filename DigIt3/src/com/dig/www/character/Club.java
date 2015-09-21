@@ -1,5 +1,6 @@
 package com.dig.www.character;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -50,8 +51,14 @@ public class Club extends GameCharacter {
 			dY = y;
 			break;
 		}
-
 		if(toMoveString()!=null){
+		if(getMove()==Moves.MPITCH){
+		
+		
+		if(specialTimer>0&&specialTimer%50<20)
+		g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+	}
+		else
 			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
 	}
 

@@ -58,19 +58,12 @@ public class Launch extends Enemy {
 	static final int SPEED = 20;
 
 	public void addBall() {
-		owner.addEnemy(new Projectile(pointTowards(new Point(x, y), new Point(
-				owner.getCharacterX()+(owner.getCharacter().getWidth()/2), owner.getCharacterY()+(owner.getCharacter().getHeight()/3))), x, y, SPEED,
+		owner.addEnemy(new Projectile(pointTowards( new Point(
+				owner.getCharacterX()+(owner.getCharacter().getWidth()/2), owner.getCharacterY()+(owner.getCharacter().getHeight()/2))), x, y, SPEED,
 				this, "images/enemies/blasts/" + identity + ".png", owner, true));
 	}
 
-	private static double pointTowards(Point b, Point a) {
-		double d;
-		// Point at something, This will be useful for enemies, also in
-		// ImportantLook class
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
-				+ -a.getX())) + 180);
-		return d;
-	}
+	
 
 	@Override
 	public void turnAround() {

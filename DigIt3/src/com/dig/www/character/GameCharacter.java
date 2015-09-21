@@ -100,9 +100,9 @@ boolean specialPress=false;
 
 //	protected boolean acting = false;
 //	protected int actTimer = 0;
-protected transient int meleeTimer;
-protected transient int rangedTimer;
-protected transient int specialTimer;
+protected transient int meleeTimer=-1;
+protected transient int rangedTimer=-1;
+protected transient int specialTimer=-1;
 protected transient int energy=100;
 	private final int SPEED = 10;
 
@@ -113,7 +113,7 @@ protected transient int energy=100;
 	private static final int MAX = 4;
 	private String charName = "reyzu";
 
-	private static final int HP_MAX =50;
+	private static final int HP_MAX =100;
 	private static final int HP_TIMER_MAX = 50;
 	private static final int HITSTUN_MAX = 10;
 	protected  int NEG_TIMER_NORM = -20;
@@ -313,8 +313,10 @@ public Moves getSpecialProMove(){
 		case KeyEvent.VK_Q://Special
 		case KeyEvent.VK_V:
 			specialPress=false;
+			if(!(type==Types.CLUB)){
+			
 			if(specialTimer>0)
-			specialTimer=0; 
+			specialTimer=0; }
 			break;
 		}
 		}
@@ -353,11 +355,10 @@ private Point setAttacks(){
 	}
 	
 	if(specialPress&&!meleePress&&!rangedPress){
-		if(specialTimer<=NEG_TIMER_NORM*(this instanceof Diamond?2:1)){
-			specialTimer=TIMER_NORM;	
-			if(this instanceof Club){
-				
-			}
+		if(specialTimer<=NEG_TIMER_NORM*2*(this instanceof Club?2:1)){
+			specialTimer=(this instanceof Club?14*TIMER_NORM:TIMER_NORM);
+			
+			
 		}
 	}if(rangedPress&&!meleePress){
 		if(rangedTimer<=NEG_TIMER_NORM){
@@ -369,8 +370,13 @@ if(type==Types.DIAMOND)
 		
 		}
 	}
-	
-	if(type==Types.DIAMOND){
+	if(this instanceof Club){
+		if(specialTimer>=0&&specialTimer%50==0){
+		String s="images/enemies/blasts/0.png";
+		owner.getfP().add(new FProjectile(dir, x+(this.getWidth()/2), y+(this.getHeight()/2), 30, this,s, owner,Moves.MPITCH));
+		
+	}}
+	else if(type==Types.DIAMOND){
 		boolean found=false;
 		for(int c=0;c<owner.getfP().size();c++){
 			
@@ -486,9 +492,10 @@ if(type==Types.DIAMOND)
 			dY = y;
 			break;
 		}
-if(toMoveString()!=null){
+		
+	if(toMoveString()!=null)
 		g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-}
+
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 timersCount();
@@ -597,7 +604,7 @@ timersCount();
 			if((!(type==Types.DIAMOND))||rangedTimer<=0)
 			rangedTimer--;
 		}
-		if(specialTimer>NEG_TIMER_NORM*(this instanceof Diamond?2:1)){
+		if(specialTimer>NEG_TIMER_NORM*2*(this instanceof Club?2:1)){
 			specialTimer--;
 		}
 	}

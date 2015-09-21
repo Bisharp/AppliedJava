@@ -3,6 +3,7 @@ package com.dig.www.enemies;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
@@ -70,7 +71,7 @@ this.maxHealth=health;
 			g2d.drawImage(image, x, y, owner);
 
 		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+			g2d.drawImage(newImage("images/effects/heart.png"), x-(this.getWidth()/2), y-(this.getHeight()/2), owner);
 
 		if (!(this instanceof Projectile)) {
 //			g2d.setFont(enFont);
@@ -80,37 +81,43 @@ this.maxHealth=health;
 		}
 	}
 
-	public void interact(Moves move) {
+	public void interact(Moves move,boolean playerHit) {
 
 		switch (move) {
 
 		// Clark
 		case SPADE:
 			takeDamage(1);
+			owner.getCharacter().endAction();
 			break;
 		case ARROW:
 			takeDamage(2);
+			owner.getCharacter().endAction();
 			break;
 		case PIT:
 			break;
 
 		// Carl
 		case CLUB:
-			stunTimer = STUN_MAX;
+			stunTimer = STUN_MAX/8;
+			takeDamage(2);
 			owner.getCharacter().endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
 			break;
 		case MPITCH:
-			stunTimer = STUN_MAX;
-			owner.getCharacter().endAction();
-			Statics.playSound(owner, "weapons/whop.wav");
+			if(!playerHit){
+			stunTimer = (int)((double)STUN_MAX/(double)1.5);
+			//owner.getCharacter().endAction();
+			Statics.playSound(owner, "weapons/whop.wav");}
 		case PITCH:
-			takeDamage(3);
+			if(!playerHit){
+			takeDamage(2);}
 			break;
 
 		// Destiny
 		case AURA:
 			harmTimer = STUN_MAX / 2;
+			
 			break;
 		case HAZE:
 			takeDamage(1);
@@ -131,6 +138,10 @@ this.maxHealth=health;
 		case BASH:
 			takeDamage(5);
 			stunTimer = STUN_MAX;
+			int d=(int) pointTowards(new Point(owner.getCharacter().getX(),owner.getCharacter().getY()));
+			d+=180;
+			x += Math.cos((double) Math.toRadians((double) d)) * 100;
+			y += Math.sin((double) Math.toRadians((double) d)) * 100;
 			//TODO implement launch
 			break;
 			default:
@@ -168,7 +179,7 @@ this.maxHealth=health;
 	private boolean takeDamage(int i) {
 
 		health--;
-owner.getCharacter().endAction();
+//owner.getCharacter().endAction();
 		if (health <= 0)
 			alive = false;
 
@@ -197,5 +208,14 @@ owner.getCharacter().endAction();
 	public int getDamage() {
 		// TODO Auto-generated method stub
 		return damage;
+	}
+	protected double pointTowards( Point a) {
+		double d;
+		// Point at something, This will be useful for enemies, also in
+		// ImportantLook class
+		Point b=new Point(x,y);
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
+				+ -a.getX())) + 180);
+		return d;
 	}
 }
