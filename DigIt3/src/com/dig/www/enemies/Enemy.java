@@ -28,11 +28,12 @@ public abstract class Enemy extends Sprite {
 	public static final int STUN_MAX = 100;
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
-    protected int damage=10;
-	public Enemy(int x, int y, String loc, Board owner, boolean flying,int health) {
+	protected int damage = 10;
+
+	public Enemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner);
-this.maxHealth=health;
-		this.health=health;
+		this.maxHealth = health;
+		this.health = health;
 		this.flying = flying;
 		alive = true;
 	}
@@ -58,7 +59,34 @@ this.maxHealth=health;
 		this.onScreen = onScreen;
 	}
 
-	public abstract void turnAround();
+	private static final int BLOCK = 5;
+
+	public void turnAround(int wallX, int wallY) {
+
+		int myX = round(x, 2);
+		int myY = round(y, 2);
+		wallX = round(wallX, 2);
+		wallY = round(wallY, 2);
+
+		if (wallX > myX)
+			x -= BLOCK;
+		else if (wallX < myX)
+			x += BLOCK;
+
+		if (wallY > myY)
+			y -= BLOCK;
+		else if (wallY < myY)
+			y += BLOCK;
+	}
+
+	public int round(int round, int val) {
+
+		int div = (int) Math.pow(1, val);
+		double d = round / div;
+		d = Math.round(d);
+
+		return (int) (d * div);
+	}
 
 	@Override
 	public void draw(Graphics2D g2d) {
@@ -71,17 +99,17 @@ this.maxHealth=health;
 			g2d.drawImage(image, x, y, owner);
 
 		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x-(this.getWidth()/2), y-(this.getHeight()/2), owner);
+			g2d.drawImage(newImage("images/effects/heart.png"), x - (this.getWidth() / 2), y - (this.getHeight() / 2), owner);
 
 		if (!(this instanceof Projectile)) {
-//			g2d.setFont(enFont);
-//			g2d.setColor(Color.BLACK);
-//			g2d.drawString("" + health, x, y - 10);
-			drawBar((double)health/(double)maxHealth, g2d);
+			// g2d.setFont(enFont);
+			// g2d.setColor(Color.BLACK);
+			// g2d.drawString("" + health, x, y - 10);
+			drawBar((double) health / (double) maxHealth, g2d);
 		}
 	}
 
-	public void interact(Moves move,boolean playerHit) {
+	public void interact(Moves move, boolean playerHit) {
 
 		switch (move) {
 
@@ -99,25 +127,27 @@ this.maxHealth=health;
 
 		// Carl
 		case CLUB:
-			stunTimer = STUN_MAX/8;
+			stunTimer = STUN_MAX / 8;
 			takeDamage(2);
 			owner.getCharacter().endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
 			break;
 		case MPITCH:
-			if(!playerHit){
-			stunTimer = (int)((double)STUN_MAX/(double)1.5);
-			//owner.getCharacter().endAction();
-			Statics.playSound(owner, "weapons/whop.wav");}
+			if (!playerHit) {
+				stunTimer = (int) ((double) STUN_MAX / (double) 1.5);
+				// owner.getCharacter().endAction();
+				Statics.playSound(owner, "weapons/whop.wav");
+			}
 		case PITCH:
-			if(!playerHit){
-			takeDamage(2);}
+			if (!playerHit) {
+				takeDamage(2);
+			}
 			break;
 
 		// Destiny
 		case AURA:
 			harmTimer = STUN_MAX / 2;
-			
+
 			break;
 		case HAZE:
 			takeDamage(1);
@@ -126,9 +156,9 @@ this.maxHealth=health;
 			// TODO implement slow code
 
 			// Cain
-			
+
 		case SHIELD:
-			
+
 			if (this instanceof Projectile)
 				alive = false;
 			break;
@@ -138,48 +168,21 @@ this.maxHealth=health;
 		case BASH:
 			takeDamage(5);
 			stunTimer = STUN_MAX;
-			int d=(int) pointTowards(new Point(owner.getCharacter().getX(),owner.getCharacter().getY()));
-			d+=180;
+			int d = (int) pointTowards(new Point(owner.getCharacter().getX(), owner.getCharacter().getY()));
+			d += 180;
 			x += Math.cos((double) Math.toRadians((double) d)) * 100;
 			y += Math.sin((double) Math.toRadians((double) d)) * 100;
-			//TODO implement launch
+			// TODO implement launch
 			break;
-			default:
-				break;
+		default:
+			break;
 		}
 	}
-
-	// TODO temporary method
-//	public void interact(Types type) {
-//
-//		switch (type) {
-//
-//		case SPADE:
-//			break;
-//
-//		case CLUB:
-//			stunTimer = STUN_MAX;
-//			takeDamage(1);
-//			owner.getCharacter().endAction();
-//			Statics.playSound(owner, "weapons/whop.wav");
-//			break;
-//
-//		case DIAMOND:
-//
-//			if (this instanceof Projectile)
-//				alive = false;
-//			break;
-//
-//		case HEART:
-//			harmTimer = STUN_MAX / 2;
-//			break;
-//		}
-//	}
 
 	private boolean takeDamage(int i) {
 
 		health--;
-//owner.getCharacter().endAction();
+		// owner.getCharacter().endAction();
 		if (health <= 0)
 			alive = false;
 
@@ -187,7 +190,7 @@ this.maxHealth=health;
 	}
 
 	public boolean willHarm() {
-		return harmTimer <= 0&&alive==true;
+		return harmTimer <= 0 && alive == true;
 	}
 
 	public void basicAnimate() {
@@ -199,23 +202,24 @@ this.maxHealth=health;
 		if (harmTimer > 0)
 			harmTimer--;
 	}
+
 	@Override
 	public void resetImage(Board b) {
-	super.resetImage(b);
-		health=maxHealth;
+		super.resetImage(b);
+		health = maxHealth;
 	}
 
 	public int getDamage() {
 		// TODO Auto-generated method stub
 		return damage;
 	}
-	protected double pointTowards( Point a) {
+
+	protected double pointTowards(Point a) {
 		double d;
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class
-		Point b=new Point(x,y);
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
-				+ -a.getX())) + 180);
+		Point b = new Point(x, y);
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
 		return d;
 	}
 }

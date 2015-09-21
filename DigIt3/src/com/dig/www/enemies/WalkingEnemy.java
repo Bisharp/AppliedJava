@@ -22,7 +22,7 @@ public class WalkingEnemy extends Enemy {
 	}
 
 	@Override
-	public void turnAround() {
+	public void turnAround(int wallX, int wallY) {
 		// TODO Auto-generated method stub
 		scrollX *= -1;
 		scrollY *= -1;

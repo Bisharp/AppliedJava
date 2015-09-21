@@ -41,8 +41,8 @@ public class Board extends MPanel implements ActionListener {
 	private Timer timer// = new Timer(15, this)
 	;
 	private GameCharacter character;
-protected ArrayList<GameCharacter>friends=new ArrayList<GameCharacter>();
-protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
+	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
+	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
 	private State state;
 	private boolean debug = false;
 
@@ -101,18 +101,12 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 
 	public Board(DigIt dM, String name) {
 
-		
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
-				Statics.BOARD_HEIGHT / 2 - 50, this);
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
 		world = StageBuilder.getInstance().read("map1", this);
 		enemies = StageBuilder.getInstance().loadEn("map1", this);
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
-
-
-		
-
 
 		wallList = new ArrayList<Block>();
 		owner = dM;
@@ -155,35 +149,42 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 		return 0;
 	}
 
-//	public void spawnEnemy(char c, int x, int y) {
-//
-//		switch (c) {
-//		case '0':
-//			enemies.add(new Launch(x, y, "images/enemies/turrets/" + Statics.RAND.nextInt(Statics.getFolderCont("images/enemies/turrets/")) + ".png",
-//					this, 75, false));
-//			break;
-//
-//		case '1':
-//			enemies.add(new Launch(x, y, "images/enemies/unique/machineLaunch.png", this, 20, false));
-//			break;
-//
-//		case 'W':
-//			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png", this, false));
-//			break;
-//
-//		case 'T':
-//			enemies.add(new TrackingEnemy(x, y, "images/enemies/unique/chair.png", this, false));
-//			break;
-//
-//		case 'F':
-//			enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/ghost.png", this, true));
-//			break;
-//
-//		case 'S':
-//			enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png", this, true));
-//			break;
-//		}
-//	}
+	// public void spawnEnemy(char c, int x, int y) {
+	//
+	// switch (c) {
+	// case '0':
+	// enemies.add(new Launch(x, y, "images/enemies/turrets/" +
+	// Statics.RAND.nextInt(Statics.getFolderCont("images/enemies/turrets/")) +
+	// ".png",
+	// this, 75, false));
+	// break;
+	//
+	// case '1':
+	// enemies.add(new Launch(x, y, "images/enemies/unique/machineLaunch.png",
+	// this, 20, false));
+	// break;
+	//
+	// case 'W':
+	// enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/tv.png", this,
+	// false));
+	// break;
+	//
+	// case 'T':
+	// enemies.add(new TrackingEnemy(x, y, "images/enemies/unique/chair.png",
+	// this, false));
+	// break;
+	//
+	// case 'F':
+	// enemies.add(new WalkingEnemy(x, y, "images/enemies/unique/ghost.png",
+	// this, true));
+	// break;
+	//
+	// case 'S':
+	// enemies.add(new StandEnemy(x, y, "images/enemies/unique/tires.png", this,
+	// true));
+	// break;
+	// }
+	// }
 
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -231,7 +232,7 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 
 				if (fP.get(i).isOnScreen()) {
 
-					p= fP.get(i);
+					p = fP.get(i);
 					// Line-of-sight mechanics
 					int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
 					int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
@@ -367,32 +368,33 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 				// /\
 				// || Nightmare Fuel
 			}
-			
+
 			for (int i = 0; i < fP.size(); i++) {
-				
+
 				if (!fP.get(i).isOnScreen()) {
-					
-					
-					if(fP.get(i).getMove()==Moves.CHAIN){
-						fP.add(new FProjectile(fP.get(i).getD()-180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed()
-								, 100, fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN,-1,false));
-					}fP.remove(i);i--;
-					continue;
-				}
-				else if(fP.get(i).getCharNum()!=-2){
-					GameCharacter chara;
-				int charNum=fP.get(i).getCharNum();
-					if(charNum==-1){
-						chara=character;
-					}else{
-						chara=friends.get(charNum);
-								
+
+					if (fP.get(i).getMove() == Moves.CHAIN) {
+						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), 100, fP.get(i)
+								.getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
 					}
-					if(fP.get(i).getBounds().intersects(chara.getBounds())){
-						fP.remove(i);i--;
+					fP.remove(i);
+					i--;
+					continue;
+				} else if (fP.get(i).getCharNum() != -2) {
+					GameCharacter chara;
+					int charNum = fP.get(i).getCharNum();
+					if (charNum == -1) {
+						chara = character;
+					} else {
+						chara = friends.get(charNum);
+
+					}
+					if (fP.get(i).getBounds().intersects(chara.getBounds())) {
+						fP.remove(i);
+						i--;
 						continue;
-					}}
-				
+					}
+				}
 
 				fP.get(i).animate();
 				fP.get(i).setOnScreen(fP.get(i).getBounds().intersects(getScreen()));
@@ -482,7 +484,8 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 				case CRYSTAL:
 					character.collision(b.getMidX(), b.getMidY());
 				}
-			} else if ((character.getMove()==Moves.CLUB&&b.getType()==Blocks.CRYSTAL)||(character.getMove()==Moves.PIT&&(b.getType()==Blocks.GROUND||b.getType()==Blocks.DIRT||b.getType()==Blocks.PIT))) {
+			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
+					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -498,16 +501,18 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 					if (p.isOnScreen()) {
 						if (p.getBounds().intersects(b.getBounds())) {
 							switch (b.getType()) {
-							
 
 							case CRYSTAL:
 							case WALL:
 								p.setOnScreen(false);
 								break;
-								
+
 							default:
 								break;
-							} } } }
+							}
+						}
+					}
+				}
 				Enemy e;
 				for (int u = 0; u < enemies.size(); u++) {
 
@@ -522,36 +527,36 @@ protected ArrayList<FProjectile>fP=new ArrayList<FProjectile>();
 
 							case CRYSTAL:
 							case WALL:
-								e.turnAround();
+								e.turnAround(b.getX(), b.getY());
 								break;
-								
+
 							default:
 								break;
 							}
 						}
 
-						if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
+						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 							// TODO implement proper interaction code here
-							e.interact(character.getMove(),true);
+							e.interact(character.getMove(), true);
 						}
-						for(int c=0;c<fP.size();c++){
-							FProjectile character=fP.get(c);
-							if ( character.getBounds().intersects(e.getBounds())&&character.isOnScreen()&&character.getHarming()) {
+						for (int c = 0; c < fP.size(); c++) {
+							FProjectile character = fP.get(c);
+							if (character.getBounds().intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
 								// TODO implement proper interaction code here
-								if(!(e instanceof Projectile)){
-								e.interact(character.getMove(),false);
-								fP.get(c).setOnScreen(false);
+								if (!(e instanceof Projectile)) {
+									e.interact(character.getMove(), false);
+									fP.get(c).setOnScreen(false);
 								}
 							}
 						}
-for(GameCharacter character:friends){
-	if (character.getActing()>0 && character.getActBounds().intersects(e.getBounds())) {
-		// TODO implement proper interaction code here
-		e.interact(character.getMove(),true);
-	}
-}
+						for (GameCharacter character : friends) {
+							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+								// TODO implement proper interaction code here
+								e.interact(character.getMove(), true);
+							}
+						}
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
-							e.turnAround();
+							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
 						}
 					}
@@ -569,8 +574,10 @@ for(GameCharacter character:friends){
 
 		if (key == KeyEvent.VK_O)
 			debug = !debug;
-		else if (key == KeyEvent.VK_ESCAPE)
-			System.exit(0);
+		else if (key == KeyEvent.VK_ESCAPE) {
+			state = State.PAUSED;
+			Statics.exit(this);
+		}
 		switch (state) {
 
 		case PAUSED:

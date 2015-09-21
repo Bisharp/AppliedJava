@@ -14,6 +14,8 @@ import javax.swing.JComponent;
 
 
 
+import javax.swing.JOptionPane;
+
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
 
@@ -90,5 +92,13 @@ public final class Statics {
 
 	public static void playSound(JComponent jC, String url) {
 		DigIt.soundPlayer.playSound(jC, url);
+	}
+
+	public static void exit(JComponent owner) {
+		// TODO Auto-generated method stub
+
+		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to quit?\n(Unsaved data will be lost)", DigIt.NAME,
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
+			System.exit(0);
 	}
 }
