@@ -3,6 +3,7 @@ package com.dig.www.enemies;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -15,8 +16,7 @@ public abstract class SeeEnemy extends WalkingEnemy {
 	private static final long serialVersionUID = 1L;
 
 	private static final int SIGHT_DISTANCE = 1000;
-	private boolean hasTarget = false;
-	private Polygon lineOfSight;
+	protected boolean hasTarget = false;
 
 	public SeeEnemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner, flying, health);
@@ -56,27 +56,35 @@ public abstract class SeeEnemy extends WalkingEnemy {
 				}
 				animateTimer = Statics.RAND.nextInt(ANIMAX) + 50;
 			}
-		} else if (onScreen && stunTimer <= 0) {
-			
+		} else if (onScreen && stunTimer <= 0 && hasTarget) {
+			act();
 		}
 
-		int[] xs = { x, x + width, x + scrollX * SIGHT_DISTANCE + width, x + scrollX * SIGHT_DISTANCE };
-		int[] ys = { y, y + height, y + scrollY * SIGHT_DISTANCE + height, y + scrollY * SIGHT_DISTANCE };
-		lineOfSight = new Polygon(xs, ys, xs.length);
-
-		if (lineOfSight.intersects(owner.getCharacter().getBounds()))
+		if (getSight().intersects(owner.getCharacter().getBounds()))
 			hasTarget = true;
 		else if (hasTarget && new Point(x, y).distance(owner.getCharPoint()) >= SIGHT_DISTANCE)
 			hasTarget = false;
 	}
-	
-	public abstract void act() ;
+
+	protected Rectangle getSight() {
+
+		int x = scrollX > 0 ? this.x + width : this.x;
+		int y = scrollY > 0 ? this.y + height : this.y;
+		int width = scrollX == 0 ? this.width : SIGHT_DISTANCE * scrollX;
+		int height = scrollY == 0 ? this.height : SIGHT_DISTANCE * scrollY;
+
+		if (width < 0)
+			return new Rectangle(x + width, y, -width, height);
+		else if (height < 0)
+			return new Rectangle(x, y + height, width, -height);
+		else
+			return new Rectangle(x, y, width, height);
+	}
+
+	public abstract void act();
 
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
-
-		if (lineOfSight != null)
-			g2d.draw(lineOfSight);
 	}
 }

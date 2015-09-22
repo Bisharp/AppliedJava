@@ -156,6 +156,9 @@ public class StageBuilder {
 						case 'l':
 							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
+						case 's':
+							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
+							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();

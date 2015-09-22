@@ -102,8 +102,8 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		world = StageBuilder.getInstance().read("map1", this);
-		enemies = StageBuilder.getInstance().loadEn("map1", this);
+		world = StageBuilder.getInstance().read("LuigisMansion", this);
+		enemies = StageBuilder.getInstance().loadEn("LuigisMansion", this);
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
@@ -574,6 +574,8 @@ public class Board extends MPanel implements ActionListener {
 
 		if (key == KeyEvent.VK_O)
 			debug = !debug;
+		else if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R)
+			switching = true;
 		else if (key == KeyEvent.VK_ESCAPE) {
 			state = State.PAUSED;
 			Statics.exit(this);
