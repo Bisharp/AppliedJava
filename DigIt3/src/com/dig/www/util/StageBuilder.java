@@ -144,7 +144,7 @@ public class StageBuilder {
 						case 'W':
 							enemies.add(new WalkingEnemy(enX, enY, enImg, owner, flying, health));
 							break;
-						case 'D':
+						case 'E':
 							enemies.add(new ExplosivesSpawner(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 
