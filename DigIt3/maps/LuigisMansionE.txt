@@ -2,7 +2,7 @@ T,4450,2900,images/enemies/unique/chair.png,f,10
 T,3950,2900,images/enemies/unique/chair.png,f,10
 W,2100,4000,images/enemies/unique/pizza.png,f,10
 T,400,2100,images/enemies/unique/ghost.png,t,10
-L,800,2100,images/enemies/turrets/0.png,f,10,75
+D,800,2100,images/enemies/unique/explosiveBox.png,f,10,75
 S,2850,3250,images/enemies/unique/blob.png,f,10
 S,1250,3250,images/enemies/unique/blob.png,f,10
 W,2600,3750,images/enemies/unique/pizza.png,f,10

@@ -30,16 +30,13 @@ public class StageBuilder {
 
 		try {
 
-			String tryLoc = StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + ".txt";
+			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
 
 			File map = new File(tryLoc);
 
 			if (map.exists()) {
 
-				BufferedReader reader = new BufferedReader(new FileReader(
-						tryLoc));
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				String line;
 
 				while ((line = reader.readLine()) != null) {
@@ -51,49 +48,31 @@ public class StageBuilder {
 							par.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
 							par.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
 						case '1':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par,
-									Block.Blocks.GROUND));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.GROUND));
 							break;
 
 						case 'W':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par, Block.Blocks.WALL));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.WALL));
 							break;
 
 						case 'P':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par, Block.Blocks.PIT));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.PIT));
 							break;
 
 						case 'R':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par, Block.Blocks.ROCK));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.ROCK));
 							break;
 
 						case 'C':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par,
-									Block.Blocks.CARPET));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.CARPET));
 							break;
 
 						case '*':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par,
-									Block.Blocks.CRYSTAL));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.CRYSTAL));
 							break;
 
 						case '>':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-									Statics.BLOCK_HEIGHT * ln,
-									Statics.DUMMY, par,
-									Block.Blocks.SWITCH));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.SWITCH));
 							break;
 						}
 					}
@@ -113,12 +92,9 @@ public class StageBuilder {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "E.txt");
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "E.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				while ((line = reader.readLine()) != null) {
 					strings.add(line);
@@ -148,41 +124,37 @@ public class StageBuilder {
 						char ch = stuff.get(0).charAt(0);
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
-int health=Integer.parseInt(stuff.get(5));
+						int health = Integer.parseInt(stuff.get(5));
 						switch (ch) {
 						case 'L':
-							enemies.add(new Launch(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(6)), flying,health));
+							enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case 'P':
-							enemies.add(new PursuingLaunch(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(6)), flying,health));
+							enemies.add(new PursuingLaunch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case 'S':
-							enemies.add(new StandEnemy(enX, enY, enImg, owner,
-									flying,health));
+							enemies.add(new StandEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 'T':
-							enemies.add(new TrackingEnemy(enX, enY, enImg,
-									owner, flying,health));
+							enemies.add(new TrackingEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 'C':
-							enemies.add(new ChargeEnemy(enX, enY, enImg,
-									owner, flying,health));
+							enemies.add(new ChargeEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 'W':
-							enemies.add(new WalkingEnemy(enX, enY, enImg,
-									owner, flying,health));
+							enemies.add(new WalkingEnemy(enX, enY, enImg, owner, flying, health));
 							break;
-							
-						// Lowercase denotes an enemy that must see you before attacking.
+						case 'D':
+							enemies.add(new ExplosivesSpawner(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
+							break;
+
+						// Lowercase denotes an enemy that must see you before
+						// attacking.
 						case 'w':
-							enemies.add(new SeeChaseEnemy(enX, enY, enImg,
-									owner, flying,health));
+							enemies.add(new SeeChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 'l':
-							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(6)), flying,health));
+							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {

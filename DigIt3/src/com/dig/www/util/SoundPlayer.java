@@ -50,6 +50,7 @@ public class SoundPlayer {
 					+ e.getMessage();
 			JOptionPane.showMessageDialog(component, message,
 					"SoundPlayer Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 	}
 
