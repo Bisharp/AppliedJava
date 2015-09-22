@@ -50,7 +50,9 @@ public class StageBuilder {
 						case '1':
 							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.GROUND));
 							break;
-
+						case '2':
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.DIRT));
+							break;
 						case 'W':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.WALL));
 							break;
