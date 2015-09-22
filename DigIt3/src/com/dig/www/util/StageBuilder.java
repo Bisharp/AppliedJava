@@ -2,34 +2,41 @@ package com.dig.www.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.start.Board;
+import com.dig.www.start.TexturePack;
 
 public class StageBuilder {
 
 	private static final int OFF = Statics.BOARD_WIDTH / 2 - 50;
 	private static StageBuilder me;
-
-	public static StageBuilder getInstance() {
+private String loc;
+private Board owner;
+	public static StageBuilder getInstance(String loc,Board owner) {
 
 		if (me == null)
-			me = new StageBuilder();
+			me = new StageBuilder(loc,owner);
 
 		return me;
+	}public StageBuilder(String loc,Board owner){
+		this.loc=loc;
+		this.owner=owner;
 	}
 
-	public ArrayList<Block> read(String loc, Board par) {
-
+	public ArrayList<Block> read() {
 		ArrayList<Block> world = new ArrayList<Block>();
 
-		int ln = 0;
+		
 
 		try {
-
+int ln = 0;
+boolean first=true;
 			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
 
 			File map = new File(tryLoc);
@@ -41,43 +48,49 @@ public class StageBuilder {
 
 				while ((line = reader.readLine()) != null) {
 					// System.out.println(line);
+					
+						if(first){
+							first=false;
+						}
+				else{
 					for (int i = 0; i < line.length(); i++) {
 						switch (line.charAt(i)) {
 
 						case 'O':
-							par.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-							par.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
+							owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
+							owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
 						case '1':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.GROUND));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
 							break;
 						case '2':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.DIRT));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY,owner, Block.Blocks.DIRT));
 							break;
 						case 'W':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.WALL));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
 							break;
 
 						case 'P':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.PIT));
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.PIT));
 							break;
 
 						case 'R':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.ROCK));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.ROCK));
 							break;
 
 						case 'C':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.CARPET));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.CARPET));
 							break;
 
 						case '*':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.CRYSTAL));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.CRYSTAL));
 							break;
 
 						case '>':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, par, Block.Blocks.SWITCH));
+							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.SWITCH));
 							break;
-						}
+						
 					}
+				}}
 					ln++;
 				}
 				reader.close();
@@ -90,7 +103,7 @@ public class StageBuilder {
 		return world;
 	}
 
-	public ArrayList<Enemy> loadEn(String loc, Board owner) {
+	public ArrayList<Enemy> loadEn() {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
@@ -174,5 +187,34 @@ public class StageBuilder {
 		}
 
 		return enemies;
+	}
+	public TexturePack readText() {
+		// TODO Auto-generated method stub
+		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
+TexturePack pack=TexturePack.GRASSY;
+		File map = new File(tryLoc);
+
+		if (map.exists()) {
+
+			try {
+				String line;
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				if((line=reader.readLine())!=null){
+					switch(line.charAt(0)){
+					case 'D':
+					pack=TexturePack.DESERT;
+					break;
+					case 'G':
+					default:
+					pack=TexturePack.GRASSY;	
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+	}
+	return pack;	
 	}
 }

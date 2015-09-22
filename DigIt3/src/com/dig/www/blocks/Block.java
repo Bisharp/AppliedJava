@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
+import com.dig.www.start.TexturePack;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 import com.dig.www.character.GameCharacter;
@@ -66,14 +67,19 @@ public class Block extends Sprite {
 
 	public void draw(Graphics2D g2d) {
 
-		if (canSee)
+		if (canSee){
+			switch(owner.getTexturePack()){
+			case DESERT://Start desert
 			switch (type) {
 			
 			case GROUND:
-				g2d.setColor(getColor());
+				g2d.setColor(Statics.OFF_TAN);
 				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_OFF_GREEN);
-				g2d.fill(new Rectangle(x + 40, y + 40, width - 80, height - 80));
+				g2d.setColor(Statics.LIGHT_OFF_TAN);
+				g2d.fill(new Rectangle(x, y + 30, 60, 4));
+				g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
+				g2d.fill(new Rectangle(x, y + 80, 30, 4));
+				g2d.fill(new Rectangle(x + 30, y + 76, 70,4));
 				g2d.draw(getBounds());
 				break;
 
@@ -109,6 +115,61 @@ public class Block extends Sprite {
 				g2d.fill(getBounds());
 				break;
 			}
+			break;
+			
+			case GRASSY:
+			default://Start grassy
+			switch (type) {
+			
+			case GROUND:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Statics.LIGHT_OFF_GREEN);
+				g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+				g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+				g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+				g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
+				g2d.draw(getBounds());
+				break;
+
+			case WALL:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.BLACK);
+				g2d.draw(getBounds());
+				break;
+
+			case CARPET:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.RED);
+				g2d.drawLine(x, y, x + width, y + height);
+				g2d.drawLine(x + width, y, x, y + height);
+				g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+				g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+				break;
+
+			case SWITCH:
+
+				g2d.setFont(Statics.BLOCK);
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Color.BLUE);
+				g2d.drawString("<->", x, y + 70);
+				g2d.draw(getBounds());
+				break;
+
+			default:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				break;
+			}
+			break;// End Grassy
+			
+			
+			}//End Switch of texturePacks
+			
+		}//End canSee
 		else {
 			g2d.setColor(Color.black);
 			g2d.fill(getBounds());
@@ -117,6 +178,33 @@ public class Block extends Sprite {
 
 	public Color getColor() {
 		// TODO Auto-generated method stub
+		switch (owner.getTexturePack()){
+		case DESERT:
+	switch (type) {
+	case DIRT:
+	case GROUND:
+		return Statics.OFF_TAN;
+	case WALL:
+		return Color.DARK_GRAY;
+	case PIT:
+		return Statics.LIGHT_OFF_TAN;
+	case ROCK:
+	case SWITCH:
+		return Color.LIGHT_GRAY;
+	case CARPET:
+		return Statics.TAN;
+
+	case CRYSTAL:
+		return Statics.LIGHT_BLUE;
+
+	default:
+		System.err.println("Type " + type + " does not have a color case");
+		return Color.RED;
+	}
+	
+		
+		case GRASSY:
+			default:
 		switch (type) {
 		case DIRT:
 			return Statics.BROWN;
@@ -139,7 +227,8 @@ public class Block extends Sprite {
 			System.err.println("Type " + type + " does not have a color case");
 			return Color.RED;
 		}
-
+		
+		}
 	}
 
 	public void interact() {
