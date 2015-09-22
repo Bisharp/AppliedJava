@@ -103,7 +103,7 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB=StageBuilder.getInstance("map1",this);
+		StageBuilder sB=StageBuilder.getInstance("LuigisMansion",this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
