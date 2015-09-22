@@ -99,7 +99,7 @@ public abstract class Enemy extends Sprite {
 			g2d.drawImage(image, x, y, owner);
 
 		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x - (this.getWidth() / 2), y - (this.getHeight() / 2), owner);
+			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 
 		if (!(this instanceof Projectile)) {
 			// g2d.setFont(enFont);
