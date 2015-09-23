@@ -215,6 +215,15 @@ TexturePack pack=TexturePack.GRASSY;
 					case 'D':
 					pack=TexturePack.DESERT;
 					break;
+					case 'S':
+						pack=TexturePack.SNOWY;
+						break;
+					case 'I':
+						pack=TexturePack.ISLAND;
+						break;
+					case 'V':
+						pack=TexturePack.VOLCANO;
+						break;
 					case 'G':
 					default:
 					pack=TexturePack.GRASSY;	

@@ -4,5 +4,5 @@ package com.dig.www.start;
 public enum TexturePack {
 	// }(B-)
 
-	GRASSY,DESERT;
+	GRASSY,DESERT, SNOWY, ISLAND,VOLCANO;
 }

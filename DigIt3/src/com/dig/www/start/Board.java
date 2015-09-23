@@ -102,9 +102,10 @@ public class Board extends MPanel implements ActionListener {
 
 	public Board(DigIt dM, String name) {
 
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB = StageBuilder.getInstance("waterTest", this);
-		sB.changeState("waterTest", this);
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
+				Statics.BOARD_HEIGHT / 2 - 50, this);
+		StageBuilder sB = StageBuilder.getInstance("LuigisMansion", this);
+		sB.changeState("LuigisMansion", this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -214,11 +215,15 @@ public class Board extends MPanel implements ActionListener {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10,
+							character.getMidX() + 10, e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10,
+							character.getMidY() + 10, e.getMidY() + 10 };
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen()
+								&& new Polygon(xs, ys, xs.length)
+										.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -238,11 +243,15 @@ public class Board extends MPanel implements ActionListener {
 
 					p = fP.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
-					int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
+					int[] xs = { p.getMidX() - 10, character.getMidX() - 10,
+							character.getMidX() + 10, p.getMidX() + 10 };
+					int[] ys = { p.getMidY() - 10, character.getMidY() - 10,
+							character.getMidY() + 10, p.getMidY() + 10 };
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen()
+								&& new Polygon(xs, ys, xs.length)
+										.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -321,8 +330,10 @@ public class Board extends MPanel implements ActionListener {
 		// char[] names = {'S', 'C', 'D', 'H'};
 		String decision;
 
-		decision = ((String) JOptionPane.showInputDialog(this, "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
-				new String[] { "Clark", "Carl", "Destiny", "Cain" }, null));
+		decision = ((String) JOptionPane.showInputDialog(this,
+				"Please select a character: ", DigIt.NAME,
+				JOptionPane.PLAIN_MESSAGE, Statics.ICON, new String[] {
+						"Clark", "Carl", "Destiny", "Cain" }, null));
 
 		if (decision == null) {
 			timer.restart();
@@ -332,19 +343,23 @@ public class Board extends MPanel implements ActionListener {
 		if (!decision.equals(character.getType().charName()))
 			switch (decision) {
 			case "Clark":
-				character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
+				character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
+						Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
 			case "Carl":
-				character = new Club(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
+				character = new Club(Statics.BOARD_WIDTH / 2 - 50,
+						Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
 			case "Cain":
-				character = new Diamond(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
+				character = new Diamond(Statics.BOARD_WIDTH / 2 - 50,
+						Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 
 			case "Destiny":
-				character = new Heart(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
+				character = new Heart(Statics.BOARD_WIDTH / 2 - 50,
+						Statics.BOARD_HEIGHT / 2 - 50, this);
 				break;
 			}
 
@@ -368,7 +383,8 @@ public class Board extends MPanel implements ActionListener {
 				}
 
 				enemies.get(i).animate();
-				enemies.get(i).setOnScreen(enemies.get(i).getBounds().intersects(getScreen()));
+				enemies.get(i).setOnScreen(
+						enemies.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -378,8 +394,10 @@ public class Board extends MPanel implements ActionListener {
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
-						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), 100, fP.get(i)
-								.getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
+						fP.add(new FProjectile(fP.get(i).getD() - 180, fP
+								.get(i).getX(), fP.get(i).getY(), fP.get(i)
+								.getSpeed(), 100, fP.get(i).getLoc(), fP.get(i)
+								.getOwner(), Moves.CHAIN, -1, false));
 					}
 					fP.remove(i);
 					i--;
@@ -401,7 +419,8 @@ public class Board extends MPanel implements ActionListener {
 				}
 
 				fP.get(i).animate();
-				fP.get(i).setOnScreen(fP.get(i).getBounds().intersects(getScreen()));
+				fP.get(i).setOnScreen(
+						fP.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -451,11 +470,15 @@ public class Board extends MPanel implements ActionListener {
 			// Line-of-sight
 			if (b.isOnScreen())
 				if (b.getType() != Block.Blocks.WALL) {
-					int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
-					int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
+					int[] xs = { b.getMidX() - 10, character.getMidX() - 10,
+							character.getMidX() + 10, b.getMidX() + 10 };
+					int[] ys = { b.getMidY() - 10, character.getMidY() - 10,
+							character.getMidY() + 10, b.getMidY() + 10 };
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen()
+								&& new Polygon(xs, ys, xs.length)
+										.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -469,7 +492,8 @@ public class Board extends MPanel implements ActionListener {
 			b.setCanSee(tag);
 			// End of line-of-sight
 
-			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
+			if (b.getType() != Block.Blocks.GROUND
+					&& b.getBounds().intersects(r3)) {
 
 				switch (b.getType()) {
 
@@ -490,8 +514,11 @@ public class Board extends MPanel implements ActionListener {
 					character.collision(b.getMidX(), b.getMidY());
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND
+							|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+				if (b.getBounds().intersects(character.getActBounds())
+						&& !b.getBounds().intersects(
+								character.getCollisionBounds())) {
 
 					b.interact();
 					character.endAction();
@@ -543,13 +570,17 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 
-						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+						if (character.getActing() > 0
+								&& character.getActBounds().intersects(
+										e.getBounds())) {
 							// TODO implement proper interaction code here
 							e.interact(character.getMove(), true);
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
-							if (character.getBounds().intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
+							if (character.getBounds().intersects(e.getBounds())
+									&& character.isOnScreen()
+									&& character.getHarming()) {
 								// TODO implement proper interaction code here
 								if (!(e instanceof Projectile)) {
 									e.interact(character.getMove(), false);
@@ -558,7 +589,9 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 						for (GameCharacter character : friends) {
-							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+							if (character.getActing() > 0
+									&& character.getActBounds().intersects(
+											e.getBounds())) {
 								// TODO implement proper interaction code here
 								e.interact(character.getMove(), true);
 							}
@@ -741,6 +774,12 @@ public class Board extends MPanel implements ActionListener {
 		switch (texturePack) {
 		case DESERT:
 			return Statics.OFF_TAN;
+		case ISLAND:
+			return Color.BLUE;
+		case SNOWY:
+			return Color.WHITE;
+		case VOLCANO:
+			return Color.DARK_GRAY;
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;

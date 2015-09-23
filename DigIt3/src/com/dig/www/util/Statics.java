@@ -47,7 +47,7 @@ public final class Statics {
 	public static final Color LIGHT_OFF_TAN = new Color(225,180,0);
 	public static final Color OFF_TAN = new Color(220,185,60);
 	public static final Color SAND_STONE = new Color(110,90,30);
-	
+	public static final Color LIGHT_BROWN=new Color(175, 75, 0);
 	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
