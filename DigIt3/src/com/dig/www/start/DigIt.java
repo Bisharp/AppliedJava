@@ -61,7 +61,7 @@ public class DigIt extends JFrame {
 	public void newGame() {
 
 		nullBoards();
-
+activePanel=null;
 		activePanel = new Board(this, userName);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
