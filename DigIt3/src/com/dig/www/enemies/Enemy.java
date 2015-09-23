@@ -59,7 +59,7 @@ public abstract class Enemy extends Sprite {
 		this.onScreen = onScreen;
 	}
 
-	private static final int BLOCK = 5;
+	protected static final int BLOCK = 5;
 
 	public void turnAround(int wallX, int wallY) {
 

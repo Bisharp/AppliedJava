@@ -63,7 +63,7 @@ public class Board extends MPanel implements ActionListener {
 	private Image sky = Statics.newImage("images/sky.png");
 	private boolean isDay = true;
 	private boolean switching = false;
-	private TexturePack texturePack=TexturePack.GRASSY;
+	private TexturePack texturePack = TexturePack.GRASSY;
 
 	// Yes, I put my getters/setters for scrollX & scrollY here.
 	public ArrayList<Block> getWorld() {
@@ -103,7 +103,8 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB=StageBuilder.getInstance("DesertTemple",this);
+		StageBuilder sB = StageBuilder.getInstance("DesertTemple", this);
+		sB.changeState("DesertTemple", this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -731,8 +732,9 @@ public class Board extends MPanel implements ActionListener {
 	public void setTexturePack(TexturePack texturePack2) {
 		this.texturePack = texturePack2;
 	}
-	public Color getTextureBack(){
-		switch(texturePack){
+
+	public Color getTextureBack() {
+		switch (texturePack) {
 		case DESERT:
 			return Statics.OFF_TAN;
 		case GRASSY:

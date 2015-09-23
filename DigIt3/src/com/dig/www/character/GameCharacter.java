@@ -639,4 +639,9 @@ public abstract class GameCharacter extends Sprite {
 	public abstract Moves getMove();
 
 	public abstract String toMoveString();
+
+	public Direction getDirection() {
+		// TODO Auto-generated method stub
+		return direction;
+	}
 }

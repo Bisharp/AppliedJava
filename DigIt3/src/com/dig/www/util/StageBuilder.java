@@ -28,6 +28,11 @@ private Board owner;
 		this.loc=loc;
 		this.owner=owner;
 	}
+	
+	public void changeState(String loc, Board owner) {
+		this.owner = owner;
+		this.loc = loc;
+	}
 
 	public ArrayList<Block> read() {
 		ArrayList<Block> world = new ArrayList<Block>();
@@ -173,6 +178,9 @@ boolean first=true;
 							break;
 						case 's':
 							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
+							break;
+						case 'c':
+							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
