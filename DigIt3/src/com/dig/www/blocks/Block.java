@@ -13,7 +13,7 @@ import com.dig.www.character.GameCharacter;
 public class Block extends Sprite {
 
 	public enum Blocks {
-		GROUND, DIRT, WALL, PIT, ROCK, CARPET, CRYSTAL, SWITCH;
+		GROUND, DIRT, WALL, PIT, ROCK, CARPET, CRYSTAL, SWITCH, LIQUID;
 	}
 
 	/**
@@ -82,7 +82,13 @@ public class Block extends Sprite {
 				g2d.fill(new Rectangle(x + 30, y + 76, 70,4));
 				g2d.draw(getBounds());
 				break;
-
+			case LIQUID:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Statics.LIGHT_BLUE);
+				g2d.fill(new Rectangle(x + 60, y + 67, 40, 3));
+				g2d.fill(new Rectangle(x, y + 70, 60, 3));
+				break;
 			case WALL:
 				g2d.setColor(getColor());
 				g2d.fill(getBounds());
@@ -131,7 +137,15 @@ public class Block extends Sprite {
 				g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
 				g2d.draw(getBounds());
 				break;
-
+			case LIQUID:
+				g2d.setColor(getColor());
+				g2d.fill(getBounds());
+				g2d.setColor(Statics.LIGHT_BLUE);
+				g2d.fill(new Rectangle(x, y + 30, 40, 4));
+				g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
+				g2d.fill(new Rectangle(x, y + 80, 80, 4));
+				g2d.fill(new Rectangle(x + 40, y + 26, 60,4));
+				break;
 			case WALL:
 				g2d.setColor(getColor());
 				g2d.fill(getBounds());
@@ -182,8 +196,11 @@ public class Block extends Sprite {
 		case DESERT:
 	switch (type) {
 	case DIRT:
+		
 	case GROUND:
 		return Statics.OFF_TAN;
+	case LIQUID:
+		return Statics.DESERT_BLUE;
 	case WALL:
 		return Statics.SAND_STONE;
 	case PIT:
@@ -211,6 +228,8 @@ public class Block extends Sprite {
 			return Statics.BROWN;
 		case GROUND:
 			return Statics.OFF_GREEN;
+		case LIQUID:
+			return Statics.BLUE;
 		case WALL:
 			return Color.DARK_GRAY;
 		case PIT:

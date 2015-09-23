@@ -70,6 +70,9 @@ boolean first=true;
 						case '2':
 							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY,owner, Block.Blocks.DIRT));
 							break;
+						case 'L':
+							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.LIQUID));
+							break;
 						case 'W':
 							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
 							break;

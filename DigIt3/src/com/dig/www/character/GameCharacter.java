@@ -355,7 +355,6 @@ public abstract class GameCharacter extends Sprite {
 	private Point setAttacks() {
 		Point shieldPos = null;
 		if (meleePress) {
-			System.out.println(meleeTimer);
 			if (meleeTimer <= NEG_TIMER_NORM// ||this instanceof Diamond
 			) {
 				meleeTimer = TIMER_NORM * (this instanceof Club ? 2 : 1);

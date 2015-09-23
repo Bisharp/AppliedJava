@@ -42,14 +42,18 @@ public final class Statics {
 	public static final Color OFF_GREEN = new Color(148, 190, 50);
 	public static final Color LIGHT_OFF_GREEN = new Color(167, 207, 73);
 	public static final Color LIGHT_BLUE = new Color(132, 255, 255);
-
+	public static final Color DESERT_BLUE = new Color(100, 200, 255);
+	public static final Color BLUE = new Color(50, 100, 255);
+	public static final Color LIGHT_OFF_TAN = new Color(225,180,0);
+	public static final Color OFF_TAN = new Color(220,185,60);
+	public static final Color SAND_STONE = new Color(110,90,30);
+	
+	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
 
-	public static final Color LIGHT_OFF_TAN = new Color(225,180,0);
-	public static final Color OFF_TAN = new Color(220,185,60);
-	public static final Color SAND_STONE = new Color(110,90,30);
+	
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class

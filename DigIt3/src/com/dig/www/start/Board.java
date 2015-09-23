@@ -103,8 +103,8 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB = StageBuilder.getInstance("DesertTemple", this);
-		sB.changeState("DesertTemple", this);
+		StageBuilder sB = StageBuilder.getInstance("waterTest", this);
+		sB.changeState("waterTest", this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -486,6 +486,7 @@ public class Board extends MPanel implements ActionListener {
 				case PIT:
 				case WALL:
 				case CRYSTAL:
+				case LIQUID:
 					character.collision(b.getMidX(), b.getMidY());
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
@@ -533,7 +534,10 @@ public class Board extends MPanel implements ActionListener {
 							case WALL:
 								e.turnAround(b.getX(), b.getY());
 								break;
-
+							case LIQUID:
+								if (!e.flying)
+									e.turnAround(b.getX(), b.getY());
+								break;
 							default:
 								break;
 							}
