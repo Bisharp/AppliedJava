@@ -47,9 +47,9 @@ public final class Statics {
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
 
-	public static final Color LIGHT_OFF_TAN = new Color(225,180,0);//209,169,120
-	public static final Color OFF_TAN = new Color(220,185,60);// 222,184,135
-
+	public static final Color LIGHT_OFF_TAN = new Color(225,180,0);
+	public static final Color OFF_TAN = new Color(220,185,60);
+	public static final Color SAND_STONE = new Color(110,90,30);
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class

@@ -73,7 +73,7 @@ public class Block extends Sprite {
 			switch (type) {
 			
 			case GROUND:
-				g2d.setColor(Statics.OFF_TAN);
+				g2d.setColor(getColor());
 				g2d.fill(getBounds());
 				g2d.setColor(Statics.LIGHT_OFF_TAN);
 				g2d.fill(new Rectangle(x, y + 30, 60, 4));
@@ -93,7 +93,7 @@ public class Block extends Sprite {
 			case CARPET:
 				g2d.setColor(getColor());
 				g2d.fill(getBounds());
-				g2d.setColor(Color.RED);
+				g2d.setColor(Statics.LIGHT_OFF_TAN);
 				g2d.drawLine(x, y, x + width, y + height);
 				g2d.drawLine(x + width, y, x, y + height);
 				g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
@@ -185,10 +185,11 @@ public class Block extends Sprite {
 	case GROUND:
 		return Statics.OFF_TAN;
 	case WALL:
-		return Color.DARK_GRAY;
+		return Statics.SAND_STONE;
 	case PIT:
 		return Statics.LIGHT_OFF_TAN;
 	case ROCK:
+		return Statics.TAN;
 	case SWITCH:
 		return Color.LIGHT_GRAY;
 	case CARPET:
