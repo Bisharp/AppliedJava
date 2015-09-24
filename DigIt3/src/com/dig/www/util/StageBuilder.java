@@ -10,25 +10,27 @@ import java.util.ArrayList;
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.start.Board;
-import com.dig.www.start.TexturePack;
 
 public class StageBuilder {
 
 	private static final int OFF = Statics.BOARD_WIDTH / 2 - 50;
 	private static StageBuilder me;
-private String loc;
-private Board owner;
-	public static StageBuilder getInstance(String loc,Board owner) {
+	private String loc;
+	private Board owner;
+
+	public static StageBuilder getInstance(String loc, Board owner) {
 
 		if (me == null)
-			me = new StageBuilder(loc,owner);
+			me = new StageBuilder(loc, owner);
 
 		return me;
-	}public StageBuilder(String loc,Board owner){
-		this.loc=loc;
-		this.owner=owner;
 	}
-	
+
+	public StageBuilder(String loc, Board owner) {
+		this.loc = loc;
+		this.owner = owner;
+	}
+
 	public void changeState(String loc, Board owner) {
 		this.owner = owner;
 		this.loc = loc;
@@ -37,11 +39,9 @@ private Board owner;
 	public ArrayList<Block> read() {
 		ArrayList<Block> world = new ArrayList<Block>();
 
-		
-
 		try {
-int ln = 0;
-boolean first=true;
+			int ln = 0;
+			boolean first = true;
 			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
 
 			File map = new File(tryLoc);
@@ -53,52 +53,55 @@ boolean first=true;
 
 				while ((line = reader.readLine()) != null) {
 					// System.out.println(line);
-					
-						if(first){
-							first=false;
+
+					if (first) {
+						first = false;
+					} else {
+						for (int i = 0; i < line.length(); i++) {
+							switch (line.charAt(i)) {
+
+							case 'O':
+								owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
+								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
+							case '1':
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
+								break;
+							case '2':
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.DIRT));
+								break;
+							case 'L':
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.LIQUID));
+								break;
+							case 'W':
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
+								break;
+
+							case 'P':
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.PIT));
+								break;
+
+							case 'R':
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.ROCK));
+								break;
+
+							case 'C':
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+										Block.Blocks.CARPET));
+								break;
+
+							case '*':
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+										Block.Blocks.CRYSTAL));
+								break;
+
+							case '>':
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+										Block.Blocks.SWITCH));
+								break;
+
+							}
 						}
-				else{
-					for (int i = 0; i < line.length(); i++) {
-						switch (line.charAt(i)) {
-
-						case 'O':
-							owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-							owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
-						case '1':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
-							break;
-						case '2':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY,owner, Block.Blocks.DIRT));
-							break;
-						case 'L':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.LIQUID));
-							break;
-						case 'W':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
-							break;
-
-						case 'P':
-							world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.PIT));
-							break;
-
-						case 'R':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.ROCK));
-							break;
-
-						case 'C':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.CARPET));
-							break;
-
-						case '*':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.CRYSTAL));
-							break;
-
-						case '>':
-							world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.SWITCH));
-							break;
-						
 					}
-				}}
 					ln++;
 				}
 				reader.close();
@@ -199,10 +202,11 @@ boolean first=true;
 
 		return enemies;
 	}
+
 	public TexturePack readText() {
 		// TODO Auto-generated method stub
 		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
-TexturePack pack=TexturePack.GRASSY;
+		TexturePack pack = TexturePack.GRASSY;
 		File map = new File(tryLoc);
 
 		if (map.exists()) {
@@ -210,31 +214,31 @@ TexturePack pack=TexturePack.GRASSY;
 			try {
 				String line;
 				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				if((line=reader.readLine())!=null){
-					switch(line.charAt(0)){
+				if ((line = reader.readLine()) != null) {
+					switch (line.charAt(0)) {
 					case 'D':
-					pack=TexturePack.DESERT;
-					break;
+						pack = TexturePack.DESERT;
+						break;
 					case 'S':
-						pack=TexturePack.SNOWY;
+						pack = TexturePack.SNOWY;
 						break;
 					case 'I':
-						pack=TexturePack.ISLAND;
+						pack = TexturePack.ISLAND;
 						break;
 					case 'V':
-						pack=TexturePack.VOLCANO;
+						pack = TexturePack.VOLCANO;
 						break;
 					case 'G':
 					default:
-					pack=TexturePack.GRASSY;	
+						pack = TexturePack.GRASSY;
 					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-	}
-	return pack;	
+
+		}
+		return pack;
 	}
 }

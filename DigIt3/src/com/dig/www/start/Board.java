@@ -104,8 +104,8 @@ public class Board extends MPanel implements ActionListener {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
 				Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB = StageBuilder.getInstance("LuigisMansion", this);
-		sB.changeState("LuigisMansion", this);
+		StageBuilder sB = StageBuilder.getInstance("islandTest", this);
+		sB.changeState("islandTest", this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();

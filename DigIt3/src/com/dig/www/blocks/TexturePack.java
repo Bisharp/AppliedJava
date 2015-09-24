@@ -1,4 +1,4 @@
-package com.dig.www.start;
+package com.dig.www.blocks;
 
 //		Show me ya
 public enum TexturePack {

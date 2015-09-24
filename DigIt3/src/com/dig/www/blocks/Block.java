@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
-import com.dig.www.start.TexturePack;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 import com.dig.www.character.GameCharacter;
