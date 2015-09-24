@@ -29,11 +29,17 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 	protected int damage = 10;
+	
+	protected boolean invincible = false;
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner);
 		this.maxHealth = health;
 		this.health = health;
+		
+		if (health < 0)
+			invincible = true;
+		
 		this.flying = flying;
 		alive = true;
 	}
@@ -181,12 +187,12 @@ public abstract class Enemy extends Sprite {
 
 	private boolean takeDamage(int i) {
 
-		health--;
+		health -= i;
 		// owner.getCharacter().endAction();
-		if (health <= 0)
+		if (health <= 0 && !invincible)
 			alive = false;
 
-		return health > 0;
+		return alive;
 	}
 
 	public boolean willHarm() {

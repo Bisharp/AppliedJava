@@ -28,12 +28,10 @@ public class Block extends Sprite {
 		super(x, y, loc, owner);
 
 		type = block;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
 		x += owner.getScrollX();
 		y += owner.getScrollY();
 	}
@@ -47,16 +45,14 @@ public class Block extends Sprite {
 	}
 
 	public Blocks getType() {
-		// TODO Auto-generated method stub
 		return type;
 	}
 
 	public void setType(Blocks type) {
-		// TODO Auto-generated method stub
 
 		if (this.type != Blocks.PIT && this.type != Blocks.CRYSTAL && owner.getCharacter().getType() == GameCharacter.Types.SPADE)
 			owner.getCharacter().getsActor();
-		
+
 		if (this.type != Blocks.CRYSTAL)
 			if (this.type == type && owner.getCharacter().canAct())
 				this.type = Blocks.DIRT;
@@ -66,72 +62,74 @@ public class Block extends Sprite {
 
 	public void draw(Graphics2D g2d) {
 
-		if (canSee){
-			switch(owner.getTexturePack()){
-			case DESERT://Start desert
-			switch (type) {
+		if (canSee) {
+			switch (owner.getTexturePack()) {
 			
-			case GROUND:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_OFF_TAN);
-				g2d.fill(new Rectangle(x, y + 30, 60, 4));
-				g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
-				g2d.fill(new Rectangle(x, y + 80, 30, 4));
-				g2d.fill(new Rectangle(x + 30, y + 76, 70,4));
-				g2d.draw(getBounds());
-				break;
-			case LIQUID:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_BLUE);
-				g2d.fill(new Rectangle(x + 60, y + 67, 40, 3));
-				g2d.fill(new Rectangle(x, y + 70, 60, 3));
-				break;
-			case WALL:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Color.BLACK);
-				g2d.draw(getBounds());
-				break;
-
-			case CARPET:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_OFF_TAN);
-				g2d.drawLine(x, y, x + width, y + height);
-				g2d.drawLine(x + width, y, x, y + height);
-				g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-				g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-				break;
-
-			case SWITCH:
-
-				g2d.setFont(Statics.BLOCK);
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Color.BLUE);
-				g2d.drawString("<->", x, y + 70);
-				g2d.draw(getBounds());
-				break;
-
-			default:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				break;
-			}
-			break;
-			
-			
-			case SNOWY://Start snowy
+			// TODO Desert Draw
+			case DESERT:
 				switch (type) {
-				
+
+				case GROUND:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.LIGHT_OFF_TAN);
+					g2d.fill(new Rectangle(x, y + 30, 60, 4));
+					g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
+					g2d.fill(new Rectangle(x, y + 80, 30, 4));
+					g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
+					g2d.draw(getBounds());
+					break;
+				case LIQUID:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.LIGHT_BLUE);
+					g2d.fill(new Rectangle(x + 60, y + 67, 40, 3));
+					g2d.fill(new Rectangle(x, y + 70, 60, 3));
+					break;
+				case WALL:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLACK);
+					g2d.draw(getBounds());
+					break;
+
+				case CARPET:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.LIGHT_OFF_TAN);
+					g2d.drawLine(x, y, x + width, y + height);
+					g2d.drawLine(x + width, y, x, y + height);
+					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+					break;
+
+				case SWITCH:
+
+					g2d.setFont(Statics.BLOCK);
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLUE);
+					g2d.drawString("<->", x, y + 70);
+					g2d.draw(getBounds());
+					break;
+
+				default:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					break;
+				}
+				break;
+
+			// TODO Snowy Draw
+			case SNOWY:
+				switch (type) {
+
 				case GROUND:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.fill(new Rectangle(x+60,y+40,4,4));
-					g2d.fill(new Rectangle(x+30,y+80,3,3));
+					g2d.fill(new Rectangle(x + 60, y + 40, 4, 4));
+					g2d.fill(new Rectangle(x + 30, y + 80, 3, 3));
 					g2d.draw(getBounds());
 					break;
 				case LIQUID:
@@ -139,14 +137,14 @@ public class Block extends Sprite {
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.LIGHT_BLUE);
 					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x+30, y + 30, 15, 15));
+					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
 					break;
 				case WALL:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.BROWN);
-					g2d.fill(new Rectangle(x,y+20,100,10));
-					g2d.fill(new Rectangle(x,y+70,100,10));
+					g2d.fill(new Rectangle(x, y + 20, 100, 10));
+					g2d.fill(new Rectangle(x, y + 70, 100, 10));
 					g2d.setColor(Color.BLACK);
 					g2d.draw(getBounds());
 					break;
@@ -155,8 +153,8 @@ public class Block extends Sprite {
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.LIGHT_BROWN);
-					g2d.fill(new Rectangle(x,y+20,100,10));
-					g2d.fill(new Rectangle(x,y+70,100,10));
+					g2d.fill(new Rectangle(x, y + 20, 100, 10));
+					g2d.fill(new Rectangle(x, y + 70, 100, 10));
 					break;
 
 				case SWITCH:
@@ -172,9 +170,9 @@ public class Block extends Sprite {
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Color.WHITE);
-					g2d.fill(new Rectangle(x+70, y + 30,5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5,5));
-					g2d.fill(new Rectangle(x+10,y+15,3,3));
+					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
 					g2d.setColor(Color.LIGHT_GRAY);
 					g2d.draw(getBounds());
 					break;
@@ -184,16 +182,18 @@ public class Block extends Sprite {
 					break;
 				}
 				break;
-			case ISLAND://Start tropic
-				switch (type) {
 				
+			// TODO Island Draw
+			case ISLAND:
+				switch (type) {
+
 				case GROUND:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.OFF_TAN);
-					g2d.fill(new Rectangle(x+70, y + 30,5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5,5));
-					g2d.fill(new Rectangle(x+10,y+15,3,3));
+					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
 					g2d.setColor(Statics.LIGHT_OFF_GREEN);
 					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
 					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
@@ -213,8 +213,8 @@ public class Block extends Sprite {
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.BROWN);
-					g2d.fill(new Rectangle(x,y+20,100,10));
-					g2d.fill(new Rectangle(x,y+70,100,10));
+					g2d.fill(new Rectangle(x, y + 20, 100, 10));
+					g2d.fill(new Rectangle(x, y + 70, 100, 10));
 					g2d.setColor(Color.BLACK);
 					g2d.draw(getBounds());
 					break;
@@ -223,8 +223,8 @@ public class Block extends Sprite {
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Statics.LIGHT_BROWN);
-					g2d.fill(new Rectangle(x,y+20,100,10));
-					g2d.fill(new Rectangle(x,y+70,100,10));
+					g2d.fill(new Rectangle(x, y + 20, 100, 10));
+					g2d.fill(new Rectangle(x, y + 70, 100, 10));
 					break;
 
 				case SWITCH:
@@ -243,7 +243,7 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x, y + 30, 60, 4));
 					g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
 					g2d.fill(new Rectangle(x, y + 80, 30, 4));
-					g2d.fill(new Rectangle(x + 30, y + 76, 70,4));
+					g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
 					g2d.draw(getBounds());
 					break;
 				default:
@@ -252,10 +252,11 @@ public class Block extends Sprite {
 					break;
 				}
 				break;
-				
-			case VOLCANO://Start volcano
+
+			// TODO Volcano Draw
+			case VOLCANO:
 				switch (type) {
-				
+
 				case GROUND:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
@@ -264,9 +265,9 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
 					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
 					g2d.setColor(Color.GRAY);
-					g2d.fill(new Rectangle(x+70, y + 30,5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5,5));
-					g2d.fill(new Rectangle(x+10,y+15,3,3));
+					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
 					g2d.setColor(Color.DARK_GRAY);
 					g2d.draw(getBounds());
 					break;
@@ -275,7 +276,7 @@ public class Block extends Sprite {
 					g2d.fill(getBounds());
 					g2d.setColor(Color.ORANGE);
 					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x+30, y + 30, 15, 15));
+					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
 					break;
 				case WALL:
 					g2d.setColor(getColor());
@@ -319,65 +320,67 @@ public class Block extends Sprite {
 					break;
 				}
 				break;
+				
+			// TODO Grassy Draw
 			case GRASSY:
-			default://Start grassy
-			switch (type) {
-			
-			case GROUND:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_OFF_GREEN);
-				g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
-				g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
-				g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-				g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
-				g2d.draw(getBounds());
-				break;
-			case LIQUID:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Statics.LIGHT_BLUE);
-				g2d.fill(new Rectangle(x, y + 30, 40, 4));
-				g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
-				g2d.fill(new Rectangle(x, y + 80, 80, 4));
-				g2d.fill(new Rectangle(x + 40, y + 26, 60,4));
-				break;
-			case WALL:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Color.BLACK);
-				g2d.draw(getBounds());
-				break;
+			default:// Start grassy
+				switch (type) {
 
-			case CARPET:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Color.RED);
-				g2d.drawLine(x, y, x + width, y + height);
-				g2d.drawLine(x + width, y, x, y + height);
-				g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-				g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-				break;
+				case GROUND:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.LIGHT_OFF_GREEN);
+					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+					g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
+					g2d.draw(getBounds());
+					break;
+				case LIQUID:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.LIGHT_BLUE);
+					g2d.fill(new Rectangle(x, y + 30, 40, 4));
+					g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
+					g2d.fill(new Rectangle(x, y + 80, 80, 4));
+					g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
+					break;
+				case WALL:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLACK);
+					g2d.draw(getBounds());
+					break;
 
-			case SWITCH:
+				case CARPET:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.RED);
+					g2d.drawLine(x, y, x + width, y + height);
+					g2d.drawLine(x + width, y, x, y + height);
+					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+					break;
 
-				g2d.setFont(Statics.BLOCK);
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				g2d.setColor(Color.BLUE);
-				g2d.drawString("<->", x, y + 70);
-				g2d.draw(getBounds());
-				break;
+				case SWITCH:
 
-			default:
-				g2d.setColor(getColor());
-				g2d.fill(getBounds());
-				break;
-			}
-			break;// End Grassy
-			}//End Switch of texturePacks
-			
-		}//End canSee
+					g2d.setFont(Statics.BLOCK);
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLUE);
+					g2d.drawString("<->", x, y + 70);
+					g2d.draw(getBounds());
+					break;
+
+				default:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					break;
+				}
+				break;// End Grassy
+			}// End Switch of texturePacks
+
+		}// End canSee
 		else {
 			g2d.setColor(Color.black);
 			g2d.fill(getBounds());
@@ -385,62 +388,65 @@ public class Block extends Sprite {
 	}
 
 	public Color getColor() {
-		// TODO Auto-generated method stub
-		switch (owner.getTexturePack()){
+		switch (owner.getTexturePack()) {
+		
+		// TODO Desert Color
 		case DESERT:
-	switch (type) {
-	case DIRT:
-		
-	case GROUND:
-		return Statics.OFF_TAN;
-	case LIQUID:
-		return Statics.DESERT_BLUE;
-	case WALL:
-		return Statics.SAND_STONE;
-	case PIT:
-		return Statics.LIGHT_OFF_TAN;
-	case ROCK:
-		return Statics.TAN;
-	case SWITCH:
-		return Color.LIGHT_GRAY;
-	case CARPET:
-		return Statics.TAN;
+			switch (type) {
+			case DIRT:
 
-	case CRYSTAL:
-		return Statics.LIGHT_BLUE;
+			case GROUND:
+				return Statics.OFF_TAN;
+			case LIQUID:
+				return Statics.DESERT_BLUE;
+			case WALL:
+				return Statics.SAND_STONE;
+			case PIT:
+				return Color.BLACK;
+			case ROCK:
+				return Statics.TAN;
+			case SWITCH:
+				return Color.LIGHT_GRAY;
+			case CARPET:
+				return Statics.TAN;
 
-	default:
-		System.err.println("Type " + type + " does not have a color case");
-		return Color.RED;
-	}
-	
-		
+			case CRYSTAL:
+				return Statics.LIGHT_BLUE;
+
+			default:
+				System.err.println("Type " + type + " does not have a color case");
+				return Color.RED;
+			}
+
+		// TODO Snowy Color
 		case SNOWY:
-		switch (type) {
-		case DIRT:
-			return Statics.BROWN;
-		case GROUND:
-			return Color.WHITE;
-		case LIQUID:
-			return Statics.BLUE;
-		case WALL:
-			return Statics.LIGHT_BROWN;
-		case PIT:
-			return Color.BLACK;
-		case ROCK:
-			return Color.GRAY;
-		case SWITCH:
-			return Color.LIGHT_GRAY;
-		case CARPET:
-			return Statics.BROWN;
+			switch (type) {
+			case DIRT:
+				return Statics.BROWN;
+			case GROUND:
+				return Color.WHITE;
+			case LIQUID:
+				return Statics.BLUE;
+			case WALL:
+				return Statics.LIGHT_BROWN;
+			case PIT:
+				return Color.BLACK;
+			case ROCK:
+				return Color.GRAY;
+			case SWITCH:
+				return Color.LIGHT_GRAY;
+			case CARPET:
+				return Statics.BROWN;
 
-		case CRYSTAL:
-			return Statics.LIGHT_BLUE;
+			case CRYSTAL:
+				return Statics.LIGHT_BLUE;
 
-		default:
-			System.err.println("Type " + type + " does not have a color case");
-			return Color.RED;
-		}
+			default:
+				System.err.println("Type " + type + " does not have a color case");
+				return Color.RED;
+			}
+			
+		// TODO Island Color
 		case ISLAND:
 			switch (type) {
 			case DIRT:
@@ -467,6 +473,8 @@ public class Block extends Sprite {
 				System.err.println("Type " + type + " does not have a color case");
 				return Color.RED;
 			}
+			
+		// TODO Volcano Color
 		case VOLCANO:
 			switch (type) {
 			case DIRT:
@@ -483,8 +491,6 @@ public class Block extends Sprite {
 			case SWITCH:
 			case CARPET:
 				return Color.LIGHT_GRAY;
-			
-			
 
 			case CRYSTAL:
 				return Statics.LIGHT_BLUE;
@@ -493,37 +499,38 @@ public class Block extends Sprite {
 				System.err.println("Type " + type + " does not have a color case");
 				return Color.RED;
 			}
-			case GRASSY:
-			default:
-		switch (type) {
-		case DIRT:
-			return Statics.BROWN;
-		case GROUND:
-			return Statics.OFF_GREEN;
-		case LIQUID:
-			return Statics.BLUE;
-		case WALL:
-			return Color.DARK_GRAY;
-		case PIT:
-			return Color.BLACK;
-		case ROCK:
-		case SWITCH:
-			return Color.LIGHT_GRAY;
-		case CARPET:
-			return Statics.TAN;
-
-		case CRYSTAL:
-			return Statics.LIGHT_BLUE;
-
+			
+		// TODO Grassy Color
+		case GRASSY:
 		default:
-			System.err.println("Type " + type + " does not have a color case");
-			return Color.RED;
-		}
+			switch (type) {
+			case DIRT:
+				return Statics.BROWN;
+			case GROUND:
+				return Statics.OFF_GREEN;
+			case LIQUID:
+				return Statics.BLUE;
+			case WALL:
+				return Color.DARK_GRAY;
+			case PIT:
+				return Color.BLACK;
+			case ROCK:
+			case SWITCH:
+				return Color.LIGHT_GRAY;
+			case CARPET:
+				return Statics.TAN;
+
+			case CRYSTAL:
+				return Statics.LIGHT_BLUE;
+
+			default:
+				System.err.println("Type " + type + " does not have a color case");
+				return Color.RED;
+			}
 		}
 	}
 
 	public void interact() {
-		// TODO Auto-generated method stub
 
 		switch (owner.getCharacter().getMove()) {
 		case PIT:
@@ -536,7 +543,7 @@ public class Block extends Sprite {
 				Statics.playSound(owner, "blocks/shatter.wav");
 			}
 			break;
-			
+
 		default:
 			break;
 		}

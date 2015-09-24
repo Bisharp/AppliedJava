@@ -1,5 +1,6 @@
 package com.dig.www.enemies;
 
+import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -37,5 +38,12 @@ public class Explosive extends TrackingEnemy {
 			if (boomTimer <= 0)
 				alive = false;
 		}
+	}
+	
+	@Override
+	public void interact(Moves move, boolean playerHit) {
+		
+		if (!exploded)
+			super.interact(move, playerHit);
 	}
 }
