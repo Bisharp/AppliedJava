@@ -200,10 +200,7 @@ public abstract class GameCharacter extends Sprite {
 			owner.setScrollY(-owner.getScrollY());
 
 			owner.reAnimate();
-
-			owner.setScrollX(0);
-			owner.setScrollY(0);
-
+			
 			wallBound = false;
 		}
 	}
@@ -445,7 +442,7 @@ public abstract class GameCharacter extends Sprite {
 		}
 		Point p = setAttacks();
 		if (visible) {
-			
+
 			if (direction != Direction.LEFT && direction != Direction.UP)
 				g2d.drawImage(image, x, y, owner);
 			else if (direction != Direction.UP)

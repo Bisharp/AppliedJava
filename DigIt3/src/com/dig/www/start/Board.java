@@ -680,6 +680,9 @@ public class Board extends MPanel implements ActionListener {
 
 		for (i = 0; i < enemies.size(); i++)
 			enemies.get(i).basicAnimate();
+		
+		for (i = 0; i < portals.size(); i++)
+			portals.get(i).basicAnimate();
 	}
 
 	public GameCharacter getCharacter() {
