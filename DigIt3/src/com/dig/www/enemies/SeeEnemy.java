@@ -60,10 +60,14 @@ public abstract class SeeEnemy extends WalkingEnemy {
 			act();
 		}
 
+		checkForTarget();
+	}
+	
+	public void checkForTarget() {
 		if (getSight().intersects(owner.getCharacter().getBounds()))
 			hasTarget = true;
 		else if (hasTarget && new Point(x, y).distance(owner.getCharPoint()) >= SIGHT_DISTANCE)
-			hasTarget = false;
+			hasTarget = false;	
 	}
 
 	protected Rectangle getSight() {

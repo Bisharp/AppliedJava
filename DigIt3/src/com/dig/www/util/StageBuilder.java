@@ -62,7 +62,7 @@ public class StageBuilder {
 
 							case 'O':
 								owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF);
+								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF - 300);
 							case '1':
 								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
 								break;
@@ -119,7 +119,8 @@ public class StageBuilder {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + "E.txt");
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
+					+ "E.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
@@ -184,7 +185,11 @@ public class StageBuilder {
 							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case 's':
-							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
+							// TODO securityEnemy
+							if (stuff.get(8).charAt(0) == 'B')
+								enemies.add(new BackwardSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
+							else
+								enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							break;
 						case 'c':
 							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
@@ -202,6 +207,35 @@ public class StageBuilder {
 		}
 
 		return enemies;
+	}
+
+	private int[][] createArray(String string) {
+		// TODO Auto-generated method stub
+
+		System.out.println(string);
+		String[] split = string.split("\'");
+		int splitLength = split.length / 2;
+
+		int splitCounter = 0;
+		int p2;
+		int[][] toReturn = new int[splitLength][2];
+
+		for (int p1 = 0; p1 < splitLength; p1++) {
+
+			System.out.println("In loop");
+			for (p2 = 0; p2 < toReturn[p1].length; p2++) {
+				toReturn[p1][p2] = Integer.parseInt(split[splitCounter]);
+				splitCounter++;
+			}
+		}
+
+		for (int k = 0; k < toReturn.length; k++) {
+			for (int c = 0; c < toReturn[k].length; c++)
+				System.out.print(toReturn[k][c] + " ");
+			System.out.println();
+		}
+
+		return toReturn;
 	}
 
 	public TexturePack readText() {
@@ -250,7 +284,8 @@ public class StageBuilder {
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + "P.txt");
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
+					+ "P.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;

@@ -12,19 +12,42 @@ public class SecurityEnemy extends SeeEnemy {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final String summon;
-	private Enemy e;
+	protected final String summon;
+	protected int[][] points;
+	protected int position = -1;
 
-	public SecurityEnemy(int x, int y, String loc, Board owner, boolean flying, int health, String summoned) {
+	protected int startX;
+	protected int startY;
+
+	protected static final int MOVE_MAX = 50;
+	protected int moveTimer = 0;
+
+	protected Enemy e;
+
+	public SecurityEnemy(int x, int y, String loc, Board owner, boolean flying, int health, String summoned, int[][] point) {
 		super(x, y, loc, owner, flying, health);
 
 		summon = summoned;
-		// TODO Auto-generated constructor stub
+		points = point;
+
+		startX = x;
+		startY = y;
 	}
 
 	@Override
 	public void animate() {
-		super.animate();
+
+		basicAnimate();
+		checkForTarget();
+
+		if (!hasTarget) {
+			x += scrollX;
+			y += scrollY;
+			moveTimer--;
+			if (moveTimer <= 0)
+				changePos();
+		} else
+			act();
 
 		if (e != null && (!e.isAlive() || !e.isOnScreen())) {
 			e.setAlive(false);
@@ -32,9 +55,44 @@ public class SecurityEnemy extends SeeEnemy {
 		}
 	}
 
+	protected void changePos() {
+
+		position++;
+		if (position >= points.length) {
+			position = 0;
+
+			x = startX;
+			y = startY;
+		}
+		
+		scrollX = points[position][0] * 2;
+		scrollY = points[position][1] * 2;
+		moveTimer = MOVE_MAX;
+	}
+	
+	public void turnAround() {
+		
+	}
+
+	@Override
+	public void basicAnimate() {
+
+		super.basicAnimate();
+
+		startX += owner.getScrollX();
+		startY += owner.getScrollY();
+	}
+	
+	@Override
+	public void initialAnimate(int sX, int sY) {
+		super.initialAnimate(sX, sY);
+		
+		startX = x;
+		startY = y;
+	}
+
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
 		hasTarget = false;
 
 		if (e == null) {
@@ -49,5 +107,8 @@ public class SecurityEnemy extends SeeEnemy {
 
 		g2d.setColor(Color.yellow);
 		g2d.fill(getSight());
+		
+		if (scrollY < 0)
+			drawBar((double) health / (double) maxHealth, g2d);
 	}
 }
