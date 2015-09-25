@@ -42,7 +42,7 @@ public class StageBuilder {
 		try {
 			int ln = 0;
 			boolean first = true;
-			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
+			String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + ".txt";
 
 			File map = new File(tryLoc);
 
@@ -115,10 +115,11 @@ public class StageBuilder {
 	}
 
 	public ArrayList<Enemy> loadEn() {
+
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "E.txt");
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + "E.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
@@ -205,7 +206,7 @@ public class StageBuilder {
 
 	public TexturePack readText() {
 		// TODO Auto-generated method stub
-		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + ".txt";
+		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
 		File map = new File(tryLoc);
 
@@ -232,6 +233,7 @@ public class StageBuilder {
 					default:
 						pack = TexturePack.GRASSY;
 					}
+					reader.close();
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -239,6 +241,56 @@ public class StageBuilder {
 			}
 
 		}
+
 		return pack;
+	}
+
+	public ArrayList<Portal> loadPortals() {
+		// TODO Auto-generated method stub
+		ArrayList<Portal> portals = new ArrayList<Portal>();
+		try {
+			ArrayList<String> strings = new ArrayList<String>();
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + "P.txt");
+			if (saveFile.exists()) {
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					strings.add(line);
+				}
+				reader.close();
+				for (int c = 0; c < strings.size(); c++) {
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+
+						if (strings.get(c).charAt(c2) == ',') {
+							stuff.add(currentS);
+							currentS = "";
+
+						} else {
+							currentS += strings.get(c).charAt(c2);
+						}
+					}
+
+					if (currentS != "") {
+						stuff.add(currentS);
+					}
+
+					int enX = Integer.parseInt(stuff.get(0));
+					int enY = Integer.parseInt(stuff.get(1));
+					String enImg = stuff.get(2);
+					String area = stuff.get(3);
+					int collectibleNum = Integer.parseInt(stuff.get(4));
+					portals.add(new Portal(enX, enY, enImg, owner, area, collectibleNum));
+				}
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return portals;
 	}
 }

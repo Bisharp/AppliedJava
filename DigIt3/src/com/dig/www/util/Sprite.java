@@ -24,6 +24,7 @@ public abstract class Sprite implements Serializable {
 	protected int width;
 	protected int height;
 	protected boolean visible;
+	protected boolean onScreen = true;
 	protected transient Image image;
 
 	protected transient Board owner;
@@ -136,5 +137,13 @@ public abstract class Sprite implements Serializable {
 		g2d.fillRect(x, y-10, width, 10);
 		g2d.setColor(Color.RED);
 		g2d.fillRect(x, y-10, (int)((double)width*(double)per), 10);
+	}
+	
+	public boolean isOnScreen() {
+		return onScreen;
+	}
+
+	public void setOnScreen(boolean onScreen) {
+		this.onScreen = onScreen;
 	}
 }

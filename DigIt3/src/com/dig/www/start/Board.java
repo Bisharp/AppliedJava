@@ -21,7 +21,6 @@ import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
-import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.*;
 
 public class Board extends MPanel implements ActionListener {
@@ -51,6 +50,7 @@ public class Board extends MPanel implements ActionListener {
 	private ArrayList<Block> world;
 	private ArrayList<Block> wallList;
 	private ArrayList<Enemy> enemies;
+	private ArrayList<Portal> portals;
 
 	private int scrollX = 0;
 	private int scrollY = 0;
@@ -103,21 +103,37 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		StageBuilder sB = StageBuilder.getInstance("islandTest", this);
-		sB.changeState("islandTest", this);
-		setTexturePack(sB.readText());
-		world = sB.read();
-		enemies = sB.loadEn();
-		for (int c = 0; c < enemies.size(); c++) {
-			enemies.get(c).resetImage(this);
-		}
+		changeArea("snowyTest");
 
-		wallList = new ArrayList<Block>();
 		owner = dM;
 		timer = new Timer(15, this);
 
 		owner.setFocusable(false);
 
+		addKeyListener(new TAdapter());
+		setFocusable(true);
+
+		setDoubleBuffered(true);
+		state = State.INGAME;
+		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
+
+		timer.start();
+	}
+
+	public void changeArea(String area) {
+
+		StageBuilder sB = StageBuilder.getInstance(area, this);
+		sB.changeState(area, this);
+		setTexturePack(sB.readText());
+		world = sB.read();
+		enemies = sB.loadEn();
+		portals = sB.loadPortals();
+
+		for (int c = 0; c < enemies.size(); c++) {
+			enemies.get(c).resetImage(this);
+		}
+
+		wallList = new ArrayList<Block>();
 		for (Block b : world) {
 
 			b.initialAnimate(spawnX, spawnY);
@@ -131,6 +147,9 @@ public class Board extends MPanel implements ActionListener {
 				wallList.add(b);
 
 		}
+		
+		for (Portal p : portals)
+			p.initialAnimate(spawnX, spawnY);
 
 		for (Enemy e : enemies) {
 			e.initialAnimate(spawnX, spawnY);
@@ -138,15 +157,9 @@ public class Board extends MPanel implements ActionListener {
 			e.resetImage(this);
 		}
 
-		addKeyListener(new TAdapter());
-		setFocusable(true);
 		setBackground(getTextureBack());
 
-		setDoubleBuffered(true);
-		state = State.INGAME;
-		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
-
-		timer.start();
+		System.gc();
 	}
 
 	public int spawnTreasure(int i, int keyNum) {
@@ -219,17 +232,22 @@ public class Board extends MPanel implements ActionListener {
 						fP.get(i).draw(g2d);
 				}
 			}
+
+			for (Portal p2 : portals)
+				if (p2.isOnScreen())
+					p2.draw(g2d);
+
 			character.draw(g2d);
 
 			if (!isDay)
 				g2d.drawImage(sky, 0, 0, this);
 
 			if (state == State.NPC) {
-				
-				//TODO implement NPC draw code
+
+				// TODO implement NPC draw code
 				g2d.setColor(Color.LIGHT_GRAY);
 				g2d.fillRect(0, Statics.BOARD_HEIGHT - 150, Statics.BOARD_WIDTH, 150);
-				
+
 				// getsNPC talking image, draws it at an appropriate spot.
 				// draws text.
 			}
@@ -410,8 +428,6 @@ public class Board extends MPanel implements ActionListener {
 
 		Block b;
 
-		// GameCharacter.Types type = character.getType();
-		int acting = character.getActing();
 		boolean tag = false;
 
 		for (int i = 0; i < world.size(); i++) {
@@ -543,12 +559,26 @@ public class Board extends MPanel implements ActionListener {
 
 			}
 		}
+
+		Portal p;
+		for (int i = 0; i < portals.size(); i++) {
+
+			p = portals.get(i);
+			p.animate();
+			p.setOnScreen(p.getBounds().intersects(getScreen()));
+
+			if (r3.intersects(p.getBounds())) {
+				timer.stop();
+				changeArea(p.getArea());
+				timer.restart();
+			}
+		}
 	}
 
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
-		
+
 		if (key == KeyEvent.VK_O)
 			if (state == State.NPC)
 				state = State.INGAME;
@@ -560,7 +590,7 @@ public class Board extends MPanel implements ActionListener {
 
 			if (state != State.DEAD)
 				state = State.PAUSED;
-			
+
 			Statics.exit(this);
 		}
 		switch (state) {

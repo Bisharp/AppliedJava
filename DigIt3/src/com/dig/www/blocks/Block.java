@@ -21,12 +21,10 @@ public class Block extends Sprite {
 	private static final long serialVersionUID = 1866822784974593245L;
 
 	protected boolean canSee;
-	protected boolean onScreen;
 	protected Blocks type;
 
 	public Block(int x, int y, String loc, Board owner, Blocks block) {
 		super(x, y, loc, owner);
-
 		type = block;
 	}
 
@@ -34,14 +32,6 @@ public class Block extends Sprite {
 	public void animate() {
 		x += owner.getScrollX();
 		y += owner.getScrollY();
-	}
-
-	public boolean isOnScreen() {
-		return onScreen;
-	}
-
-	public void setOnScreen(boolean onScreen) {
-		this.onScreen = onScreen;
 	}
 
 	public Blocks getType() {

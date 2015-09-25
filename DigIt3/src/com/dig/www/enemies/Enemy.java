@@ -19,7 +19,6 @@ public abstract class Enemy extends Sprite {
 	private static final long serialVersionUID = 1L;
 
 	protected transient boolean alive = true;
-	protected transient boolean onScreen = true;
 	protected transient int health;
 	protected int maxHealth;
 	// protected transient boolean stunned = false;
@@ -55,14 +54,6 @@ public abstract class Enemy extends Sprite {
 
 	public void setAlive(boolean alive) {
 		this.alive = alive;
-	}
-
-	public boolean isOnScreen() {
-		return onScreen;
-	}
-
-	public void setOnScreen(boolean onScreen) {
-		this.onScreen = onScreen;
 	}
 
 	protected static final int BLOCK = 5;
@@ -107,7 +98,7 @@ public abstract class Enemy extends Sprite {
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 
-		if (!(this instanceof Projectile)) {
+		if (!(this instanceof Projectile) && !invincible) {
 			// g2d.setFont(enFont);
 			// g2d.setColor(Color.BLACK);
 			// g2d.drawString("" + health, x, y - 10);
