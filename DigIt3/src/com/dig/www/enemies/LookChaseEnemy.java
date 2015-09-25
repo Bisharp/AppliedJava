@@ -14,7 +14,8 @@ public class LookChaseEnemy extends StandEnemy {
 	private GameCharacter chara;
 	private double d = 0;
 	private int speed = 10;
-	private transient Image cloud = newImage("images/effects/corruption.png");
+	private static transient Image cloud = Statics.newImage("images/effects/shadow.png");
+	private static transient Image corruption = Statics.newImage("images/effects/corruption.png");
 
 	public LookChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner, flying, health);
@@ -67,7 +68,7 @@ public class LookChaseEnemy extends StandEnemy {
 
 		if (onScreen && Math.sqrt(Math.pow(x - owner.getCharacterX(), 2) + Math.pow(y - owner.getCharacterY(), 2)) <= sight) {
 			g2d.drawImage(cloud, owner.getCharacterX(), owner.getCharacterY(), owner);
-			g2d.drawImage(cloud, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
+			g2d.drawImage(corruption, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
 		}
 	}
 }
