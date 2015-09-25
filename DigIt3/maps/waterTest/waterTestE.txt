@@ -1,0 +1,1 @@
+L,800,800,images/enemies/turrets/0.png,f,6,75

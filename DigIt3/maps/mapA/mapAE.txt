@@ -1,0 +1,15 @@
+T,1500,500,images/enemies/unique/chair.png,f
+T,1500,100,images/enemies/unique/chair.png,f
+S,1600,300,images/enemies/unique/fishbowl.png,f
+L,2000,200,images/enemies/turrets/0.png,f,75
+S,1100,1000,images/enemies/unique/cactus.png,f
+S,1100,1100,images/enemies/unique/cactus.png,f
+S,1100,1200,images/enemies/unique/cactus.png,f
+S,1100,1300,images/enemies/unique/cactus.png,f
+S,1100,1400,images/enemies/unique/cactus.png,f
+S,1100,1500,images/enemies/unique/cactus.png,f
+S,1100,1600,images/enemies/unique/cactus.png,f
+S,1100,1700,images/enemies/unique/cactus.png,f
+W,200,1500,images/enemies/unique/pizza.png,f
+W,800,1300,images/enemies/unique/pizza.png,f
+W,200,1150,images/enemies/unique/pizza.png,f
