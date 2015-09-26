@@ -147,7 +147,7 @@ public class Board extends MPanel implements ActionListener {
 				wallList.add(b);
 
 		}
-		
+
 		for (Portal p : portals)
 			p.initialAnimate(spawnX, spawnY);
 
@@ -178,14 +178,15 @@ public class Board extends MPanel implements ActionListener {
 
 			// Tag boolean part of line-of-sight
 			boolean tag = true;
+			int i;
 			Enemy e;
 
-			for (int i = 0; i < world.size(); i++) {
-				if (world.get(i).isOnScreen())
+			for (i = 0; i < world.size(); i++) {
+				if (world.get(i).isOnScreen() && world.get(i).isVisible())
 					world.get(i).draw(g2d);
 			}
 
-			for (int i = 0; i < enemies.size(); i++) {
+			for (i = 0; i < enemies.size(); i++) {
 
 				if (enemies.get(i).isOnScreen()) {
 
@@ -209,7 +210,7 @@ public class Board extends MPanel implements ActionListener {
 				}
 			}
 			FProjectile p;
-			for (int i = 0; i < fP.size(); i++) {
+			for (i = 0; i < fP.size(); i++) {
 
 				if (fP.get(i).isOnScreen()) {
 
@@ -437,26 +438,28 @@ public class Board extends MPanel implements ActionListener {
 			b.animate();
 			b.setOnScreen(b.getBounds().intersects(getScreen()));
 
-			// Line-of-sight
-			if (b.isOnScreen())
-				if (b.getType() != Block.Blocks.WALL) {
-					int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
-					int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
+			if (b.isVisible()) {
 
-					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
-							tag = false;
-							break;
+				// Line-of-sight
+				if (b.isOnScreen())
+					if (b.getType() != Block.Blocks.WALL) {
+						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
+						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
+
+						for (int x = 0; x < wallList.size(); x++) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+								tag = false;
+								break;
+							}
+
+							tag = true;
 						}
-
+						// end of that code
+					} else
 						tag = true;
-					}
-					// end of that code
-				} else
-					tag = true;
-
-			b.setCanSee(tag);
-			// End of line-of-sight
+				b.setCanSee(tag);
+				// End of line-of-sight
+			}
 
 			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
 
@@ -680,7 +683,7 @@ public class Board extends MPanel implements ActionListener {
 
 		for (i = 0; i < enemies.size(); i++)
 			enemies.get(i).basicAnimate();
-		
+
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
 	}
