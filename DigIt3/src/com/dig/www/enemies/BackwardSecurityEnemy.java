@@ -2,7 +2,7 @@ package com.dig.www.enemies;
 
 import com.dig.www.start.Board;
 
-public class BackwardSecurityEnemy extends SecurityEnemy {
+public class BackwardSecurityEnemy extends PatrolSecurityEnemy {
 	
 	private boolean backwards = false;
 

@@ -184,12 +184,15 @@ public class StageBuilder {
 						case 'l':
 							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
-						case 's':
+						case 'b':
 							// TODO securityEnemy
 							if (stuff.get(8).charAt(0) == 'B')
 								enemies.add(new BackwardSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							else
-								enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
+								enemies.add(new PatrolSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
+							break;
+						case 's':
+							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
 							break;
 						case 'c':
 							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
