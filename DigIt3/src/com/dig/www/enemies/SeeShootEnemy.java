@@ -37,4 +37,23 @@ public class SeeShootEnemy extends SeeEnemy {
 				owner.getCharacterX(), owner.getCharacterY())), x, y, Launch.SPEED,
 				this, "images/enemies/blasts/" + identity + ".png", owner, true));
 	}
+	
+	@Override
+	public void turnAround(int wallX, int wallY) {
+
+		int myX = round(x, 2);
+		int myY = round(y, 2);
+		wallX = round(wallX, 2);
+		wallY = round(wallY, 2);
+
+		if (wallX > myX)
+			x -= BLOCK * 1.5;
+		else if (wallX < myX)
+			x += BLOCK * 1.5;
+
+		if (wallY > myY)
+			y -= BLOCK * 1.5;
+		else if (wallY < myY)
+			y += BLOCK * 1.5;
+	}
 }

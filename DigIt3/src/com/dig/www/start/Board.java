@@ -103,7 +103,7 @@ public class Board extends MPanel implements ActionListener {
 	public Board(DigIt dM, String name) {
 
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-		changeArea("LuigisMansion");
+		changeArea("DesertTemple");
 
 		owner = dM;
 		timer = new Timer(15, this);

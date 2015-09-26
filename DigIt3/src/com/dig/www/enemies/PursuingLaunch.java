@@ -21,14 +21,23 @@ public class PursuingLaunch extends Launch {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void turnAround() {
-		d += 180;
+	@Override
+	public void turnAround(int wallX, int wallY) {
 
-		if (d > 360)
-			d -= 360;
+		int myX = round(x, 2);
+		int myY = round(y, 2);
+		wallX = round(wallX, 2);
+		wallY = round(wallY, 2);
 
-		x += Math.cos((double) Math.toRadians((double) d)) * speed * 2;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed * 2;
+		if (wallX > myX)
+			x -= BLOCK * 1.5;
+		else if (wallX < myX)
+			x += BLOCK * 1.5;
+
+		if (wallY > myY)
+			y -= BLOCK * 1.5;
+		else if (wallY < myY)
+			y += BLOCK * 1.5;
 	}
 
 	public void animate() {

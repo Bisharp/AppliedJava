@@ -23,4 +23,23 @@ public class SeeChaseEnemy extends SeeEnemy {
 		x += Math.cos((double) Math.toRadians((double) d)) * speed;
 		y += Math.sin((double) Math.toRadians((double) d)) * speed;
 	}
+	
+	@Override
+	public void turnAround(int wallX, int wallY) {
+
+		int myX = round(x, 2);
+		int myY = round(y, 2);
+		wallX = round(wallX, 2);
+		wallY = round(wallY, 2);
+
+		if (wallX > myX)
+			x -= BLOCK * 1.5;
+		else if (wallX < myX)
+			x += BLOCK * 1.5;
+
+		if (wallY > myY)
+			y -= BLOCK * 1.5;
+		else if (wallY < myY)
+			y += BLOCK * 1.5;
+	}
 }
