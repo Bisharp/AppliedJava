@@ -191,6 +191,13 @@ public class StageBuilder {
 							else
 								enemies.add(new PatrolSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							break;
+						case 'p':
+							// TODO securityEnemy
+							if (stuff.get(7).charAt(0) == 'B')
+								enemies.add(new BackwardPathEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
+							else
+								enemies.add(new PathEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
+							break;
 						case 's':
 							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
 							break;

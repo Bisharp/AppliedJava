@@ -50,4 +50,9 @@ public class SecurityEnemy extends SeeEnemy {
 		g2d.setColor(Color.yellow);
 		g2d.fill(getSight());
 	}
+	
+	@Override
+	public void turnAround(int wallX, int wallY) {
+		
+	}
 }
