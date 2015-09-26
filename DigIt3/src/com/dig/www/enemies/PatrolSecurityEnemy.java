@@ -70,7 +70,8 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 		moveTimer = MOVE_MAX;
 	}
 	
-	public void turnAround() {
+	@Override
+	public void turnAround(int wallX, int wallY) {
 		
 	}
 
