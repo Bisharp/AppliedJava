@@ -18,6 +18,9 @@ public abstract class GameCharacter extends Sprite {
 	/**
 	 * 
 	 */
+	int wallX;
+	int wallY;
+	Rectangle collideRect;
 	private Point getToPoint;
 	private static final long serialVersionUID = 1L;
 	int dir = 0;
@@ -253,8 +256,15 @@ if(player){
 
 			owner.reAnimate();}
 else{
+
+	if(new Point(getMidX(),getMidY()).distance(new Point(wallX,getMidY()))<100){
 	deltaX=-deltaX;
-	deltaY=-deltaY;
+	x+=deltaX;}
+	if(new Point(getMidX(),getMidY()).distance(new Point(getMidX(),wallY))<100){
+		deltaY=-deltaY;	
+		y+=deltaY;
+	}
+
 	
 		x+=deltaX;
 		y+=deltaY;
@@ -391,9 +401,10 @@ else{
 	public void collision(int midX, int midY) {
 		// TODO Auto-generated method stub
 		wallBound = true;
-		// wallX = midX;
-		// wallY = midY;
-	}
+		if(!player){
+		 wallX = midX;
+		 wallY = midY;
+		}}
 
 	public Rectangle getActBounds() {
 
@@ -710,5 +721,23 @@ else{
 	public void setPlayer(boolean b) {
 		// TODO Auto-generated method stub
 		player=b;
+	}
+
+	public void heal(int i) {
+		// TODO Auto-generated method stub
+		health+=i;
+		if(health>HP_MAX){
+			health=HP_MAX;
+		}
+	}
+
+	public void setMelee(int i) {
+		// TODO Auto-generated method stub
+		meleeTimer=i;
+	}
+
+	public boolean getWallBound() {
+		// TODO Auto-generated method stub
+		return wallBound;
 	}
 }

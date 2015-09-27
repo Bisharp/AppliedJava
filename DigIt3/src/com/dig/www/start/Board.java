@@ -645,17 +645,58 @@ for(GameCharacter character:friends){
 							}
 						}
 						for(int c=0;c<friends.size();c++){
-							for(int c2=0;c2<friends.size();c++){
-								if(c==c2)
-									continue;
-								if(c>=friends.size()){
-									break;
-								}
-								if(c<friends.size()&&friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
+							for(int c2=0;c2<friends.size();c2++){
+								if(c==c2){
+									
+								}else{
+								if(!friends.get(c).getWallBound()&&!friends.get(c2).getWallBound()){	
+								
+								if(friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
 								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY());	
-								}
+								}}}
 							}
 						}
+						if(character.getMove()==Moves.AURA){
+							
+							boolean healed=false;
+						
+						for(GameCharacter friend2:friends){
+						
+								if(character.getActBounds().intersects(friend2.getBounds())){
+									friend2.heal(3);
+									healed=true;
+								}
+							}
+						
+						if(healed){
+							character.heal(3);
+							character.setMelee(0);
+						}
+					}
+						for(GameCharacter friend:friends){
+							if(friend.getMove()==Moves.AURA){
+								
+								boolean healed=false;
+								if(friend.getActBounds().intersects(r3)){
+									character.heal(3);
+									healed=true;
+								}
+							for(GameCharacter friend2:friends){
+								if(friend==friend2){
+									
+								}else{
+									if(friend.getActBounds().intersects(friend2.getBounds())){
+										friend2.heal(3);
+										healed=true;
+									}
+								}
+							}
+							if(healed){
+							
+								friend.heal(3);
+								friend.setMelee(0);
+							}
+						} }
 					}
 				}
 				// end of enemy loop

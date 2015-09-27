@@ -134,10 +134,11 @@ public abstract class Enemy extends Sprite {
 				stunTimer = (int) ((double) STUN_MAX / (double) 1.5);
 				// owner.getCharacter().endAction();
 				Statics.playSound(owner, "weapons/whop.wav");
+				takeDamage(1);
 			}
 		case PITCH:
 			if (!playerHit) {
-				takeDamage(2);
+				takeDamage(1);
 			}
 			break;
 
@@ -147,7 +148,8 @@ public abstract class Enemy extends Sprite {
 
 			break;
 		case HAZE:
-			takeDamage(1);
+			if(!playerHit){
+			takeDamage(1);}
 			break;
 		case DISPENSER:
 			// TODO implement slow code
