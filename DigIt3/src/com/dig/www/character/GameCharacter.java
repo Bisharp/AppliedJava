@@ -201,7 +201,11 @@ else{
 	moveX=false;
 	moveY=false;
 	}}
-	}
+if(new Point(x,y).distance(new Point(owner.getBounds().getLocation()))>Statics.BOARD_WIDTH){
+	x=owner.getCharacterX();
+	y=owner.getCharacterY();
+}
+}
 
 if (hitstunTimer > 0) {
 			hitstunTimer--;
