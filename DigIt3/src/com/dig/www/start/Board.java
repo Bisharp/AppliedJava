@@ -102,7 +102,11 @@ public class Board extends MPanel implements ActionListener {
 
 	public Board(DigIt dM, String name) {
 
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this,true);
+		friends.clear();
+		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this,false));
+		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this,false));
+		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this,false));
 		changeArea("LuigisMansion");
 
 		owner = dM;
@@ -128,7 +132,15 @@ public class Board extends MPanel implements ActionListener {
 		world = sB.read();
 		enemies = sB.loadEn();
 		portals = sB.loadPortals();
-
+for(int c=0;c<friends.size();c++){
+	if(c>1){
+	friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);	
+	friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50-((c-1)*100));
+	}else{
+		friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50+(c*100));
+		friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+	}
+}
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
@@ -238,6 +250,9 @@ public class Board extends MPanel implements ActionListener {
 					p2.draw(g2d);
 
 			character.draw(g2d);
+			for(GameCharacter character:friends){
+				character.draw(g2d);
+			}
 
 			if (!isDay)
 				g2d.drawImage(sky, 0, 0, this);
@@ -320,26 +335,58 @@ public class Board extends MPanel implements ActionListener {
 			return;
 		}
 
-		if (!decision.equals(character.getType().charName()))
-			switch (decision) {
-			case "Clark":
-				character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-				break;
+		if (!decision.equals(character.getType().charName())){
+			
+				GameCharacter current=character;
+				int friendNum= getFriend(decision);
+				character=friends.get(friendNum);
+				friends.set(friendNum, current);
+character.setPlayer(true);
+friends.get(friendNum).setPlayer(false);
+character.stop();
+System.out.println(Statics.BOARD_WIDTH / 2 - 50-character.getX());
+scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2 - 50-character.getY()
+		);
+		}timer.restart();
+	}
 
-			case "Carl":
-				character = new Club(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-				break;
+	private void scroll(int x, int y) {
+		// TODO Auto-generated method stub
+		
+			character.setX(character.getX()+x);
+			character.setY(character.getY()+y);
+		
+		for(Block b:world){
+			b.setX(b.getX()+x);
+			b.setY(b.getY()+y);
+		}
+		for(GameCharacter b:friends){
+			b.setX(b.getX()+x);
+			b.setY(b.getY()+y);
+		}
+		for(Enemy b:enemies){
+			b.setX(b.getX()+x);
+			b.setY(b.getY()+y);
+		}
+		for(FProjectile b:fP){
+			b.setX(b.getX()+x);
+			b.setY(b.getY()+y);
+		}
+		for(Portal b:portals){
+			b.setX(b.getX()+x);
+			b.setY(b.getY()+y);
+		}
+	}
 
-			case "Cain":
-				character = new Diamond(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-				break;
-
-			case "Destiny":
-				character = new Heart(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this);
-				break;
-			}
-
-		timer.restart();
+	public int getFriend(String decision) {
+		// TODO Auto-generated method stub
+	
+	for(int c=0;c<friends.size();c++){
+		if(friends.get(c).getType().charName().equals(decision)){
+			return c;
+		}
+	}
+	return 0;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -349,6 +396,9 @@ public class Board extends MPanel implements ActionListener {
 		case INGAME:
 
 			character.animate();
+			for(GameCharacter character:friends){
+				character.animate();
+			}
 
 			for (int i = 0; i < enemies.size(); i++) {
 
@@ -458,6 +508,9 @@ public class Board extends MPanel implements ActionListener {
 			b.setCanSee(tag);
 			// End of line-of-sight
 
+			
+			
+			
 			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
 
 				switch (b.getType()) {
@@ -486,6 +539,37 @@ public class Board extends MPanel implements ActionListener {
 					character.endAction();
 				}
 			}
+for(GameCharacter character:friends){
+	Rectangle r2 = character.getCollisionBounds();
+	if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r2)) {
+
+		switch (b.getType()) {
+
+		// Cases for the floor
+		case GROUND:
+		case ROCK:
+		case CARPET:
+		case DIRT:
+			break;
+
+		// Cases for raised obstructions
+		case SWITCH:
+			//switching = true;
+		case PIT:
+		case WALL:
+		case CRYSTAL:
+		case LIQUID:
+			character.collision(b.getMidX(), b.getMidY());
+		}
+	} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
+			|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+		if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+
+			b.interact();
+			character.endAction();
+		}
+	}
+}
 
 			if (b.isOnScreen()) {
 				FProjectile p;
@@ -552,6 +636,25 @@ public class Board extends MPanel implements ActionListener {
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
+						}
+						for(GameCharacter character:friends){
+							Rectangle r2 = character.getCollisionBounds();
+							if (e.getBounds().intersects(r2) && e.willHarm()) {
+								e.turnAround(character.getX(), character.getY());
+								character.takeDamage(e.getDamage());
+							}
+						}
+						for(int c=0;c<friends.size();c++){
+							for(int c2=0;c2<friends.size();c++){
+								if(c==c2)
+									continue;
+								if(c>=friends.size()){
+									break;
+								}
+								if(c<friends.size()&&friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
+								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY());	
+								}
+							}
 						}
 					}
 				}
@@ -752,5 +855,8 @@ public class Board extends MPanel implements ActionListener {
 		default:
 			return Statics.OFF_GREEN;
 		}
+	}
+	public ArrayList<Enemy>getEnemies(){
+		return enemies;
 	}
 }
