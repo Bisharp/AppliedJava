@@ -13,8 +13,8 @@ public class Diamond extends GameCharacter {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Diamond(int x, int y, Board owner) {
-		super(x, y,  owner, Types.DIAMOND, "diamond");
+	public Diamond(int x, int y, Board owner,boolean player) {
+		super(x, y,  owner, Types.DIAMOND, "diamond",player);
 		// TODO Auto-generated constructor stub
 		NEG_TIMER_NORM=-50;
 	}

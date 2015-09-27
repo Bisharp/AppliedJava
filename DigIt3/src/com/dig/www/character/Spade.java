@@ -15,8 +15,8 @@ public class Spade extends GameCharacter {
 	
 	private int dirt = 0;
 
-	public Spade(int x, int y, Board owner) {
-		super(x, y,  owner, Types.SPADE, "spade");
+	public Spade(int x, int y, Board owner,boolean player) {
+		super(x, y,  owner, Types.SPADE, "spade",player);
 		// TODO Auto-generated constructor stub
 	}
 

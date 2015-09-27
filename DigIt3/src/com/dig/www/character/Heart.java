@@ -13,8 +13,8 @@ public class Heart extends GameCharacter {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Heart(int x, int y, Board owner) {
-		super(x, y, owner, Types.HEART, "heart");
+	public Heart(int x, int y, Board owner,boolean player) {
+		super(x, y, owner, Types.HEART, "heart",player);
 		// TODO Auto-generated constructor stub
 	}
 

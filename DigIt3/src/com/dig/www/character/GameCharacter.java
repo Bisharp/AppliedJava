@@ -18,12 +18,15 @@ public abstract class GameCharacter extends Sprite {
 	/**
 	 * 
 	 */
+	private Point getToPoint;
 	private static final long serialVersionUID = 1L;
 	int dir = 0;
 	boolean meleePress = false;
 	boolean rangedPress = false;
 	boolean specialPress = false;
+int me=-1;
 
+boolean player;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -126,9 +129,9 @@ public abstract class GameCharacter extends Sprite {
 	private int hpTimer = 0;
 	private int hitstunTimer = 0;
 
-	public GameCharacter(int x, int y, Board owner, Types type, String charName) {
+	public GameCharacter(int x, int y, Board owner, Types type, String charName,boolean player) {
 		super(x, y, "n", owner);
-
+this.player=player;
 		this.charName = charName;
 		this.type = type;
 	}
@@ -136,8 +139,68 @@ public abstract class GameCharacter extends Sprite {
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
+if(player){
+		
+		
+		}
+else{
+	x += owner.getScrollX();
+	y += owner.getScrollY();
+	if(me==-1){
+		for(int c=0;c<owner.getFriends().size();c++){
+			if(owner.getFriends().get(c)==this){
+				me=c;
+				break;
+			}
+		}
+	}
+	
+	
+	if(!wallBound){
+	getToPoint=owner.getCharacter().getBounds().getLocation();
+	if(getToPoint.distance(x,y)>125){
+		if(x>getToPoint.x+(SPEED*2)){
+			deltaX=-SPEED;
+			moveX=true;
+			direction=Direction.LEFT;
+			
+		}
+		else if(x<getToPoint.x-(SPEED*2)){
+			deltaX=SPEED;
+			moveX=true;
+			direction=Direction.RIGHT;
+			
+		}else{
+			deltaX=0;
+			moveX=false;
+		}
+		if(y>getToPoint.y+(SPEED*2)){
+			deltaY=-SPEED;
+			moveY=true;
+			if(y>getToPoint.y+50)
+			direction=Direction.UP;
+			
+		}
+		else if(y<getToPoint.y-(SPEED*2)){
+			deltaY=SPEED;
+			moveY=true;
+			if(y<getToPoint.y-50)
+				direction=Direction.DOWN;
+			
+		
+		}else{
+			moveY=false;
+			deltaY=0;
+		}
+	}else{
+	deltaX=0;
+	deltaY=0;
+	moveX=false;
+	moveY=false;
+	}}
+	}
 
-		if (hitstunTimer > 0) {
+if (hitstunTimer > 0) {
 			hitstunTimer--;
 			flicker();
 
@@ -174,36 +237,36 @@ public abstract class GameCharacter extends Sprite {
 					image = newImage("n");
 			} else
 				animationTimer++;
-
+if(player){
 			owner.setScrollX(deltaX);
-			owner.setScrollY(deltaY);
+			owner.setScrollY(deltaY);}
+else{
+	x+=deltaX;
+	y+=deltaY;
+}
 		} else {
 
-			// int tempX = 0;
-			// int tempY = 0;
-			//
-			// if (wallX - 10 > getMidX())
-			// tempX = SPEED;
-			// else if (wallX + 10 < getMidX())
-			// tempX = -SPEED;
-			// else
-			// tempX = 0;
-			//
-			// if (wallY - 10 > getMidY())
-			// tempY = SPEED;
-			// else if (wallY + 10 < getMidY())
-			// tempY = -SPEED;
-			// else
-			// tempY = 0;
-
+	
+if(player){
 			owner.setScrollX(-owner.getScrollX());
 			owner.setScrollY(-owner.getScrollY());
 
-			owner.reAnimate();
+			owner.reAnimate();}
+else{
+	deltaX=-deltaX;
+	deltaY=-deltaY;
+	
+		x+=deltaX;
+		y+=deltaY;
+	
+}
 			
 			wallBound = false;
 		}
-	}
+
+
+}
+	
 
 	public void keyPressed(int keyCode) {
 
@@ -457,7 +520,7 @@ public abstract class GameCharacter extends Sprite {
 		}
 
 		drawTool(g2d);
-
+if(player){
 		g2d.setColor(Color.BLACK);
 		int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
 		g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
@@ -473,7 +536,10 @@ public abstract class GameCharacter extends Sprite {
 		g2d.setFont(HUD);
 		g2d.drawString("HEALTH:", 30, 50);
 
-		drawCSHUD(g2d);
+		drawCSHUD(g2d);}
+else{
+	drawBar((double) health / (double) HP_MAX, g2d);
+}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -639,5 +705,10 @@ public abstract class GameCharacter extends Sprite {
 	public Direction getDirection() {
 		// TODO Auto-generated method stub
 		return direction;
+	}
+
+	public void setPlayer(boolean b) {
+		// TODO Auto-generated method stub
+		player=b;
 	}
 }
