@@ -131,6 +131,7 @@ boolean player;
 	private int health = HP_MAX;
 	private int hpTimer = 0;
 	private int hitstunTimer = 0;
+	private boolean isPlayerCollide;
 
 	public GameCharacter(int x, int y, Board owner, Types type, String charName,boolean player) {
 		super(x, y, "n", owner);
@@ -260,7 +261,7 @@ if(player){
 
 			owner.reAnimate();}
 else{
-
+if(!isPlayerCollide){
 	if(new Point(getMidX(),getMidY()).distance(new Point(wallX,getMidY()))<100){
 	deltaX=-deltaX;
 	x+=deltaX;}
@@ -271,7 +272,14 @@ else{
 
 	
 		x+=deltaX;
-		y+=deltaY;
+		y+=deltaY;}
+else{
+	deltaX=0;
+	deltaY=0;
+	moveX=false;
+	moveY=false;
+	image = newImage("n");
+}
 	
 }
 			
@@ -402,10 +410,11 @@ else{
 		}
 	}
 
-	public void collision(int midX, int midY) {
+	public void collision(int midX, int midY,boolean isPlayer) {
 		// TODO Auto-generated method stub
 		wallBound = true;
 		if(!player){
+			this.isPlayerCollide=isPlayer;
 		 wallX = midX;
 		 wallY = midY;
 		}}

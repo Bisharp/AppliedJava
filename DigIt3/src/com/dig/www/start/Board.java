@@ -451,6 +451,18 @@ scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2
 
 			checkCollisions();
 			repaint();
+			for(int c=0;c<friends.size();c++){
+				for(int c2=0;c2<friends.size();c2++){
+					if(c==c2){
+						
+					}else{
+					if(!friends.get(c).getWallBound()&&!friends.get(c2).getWallBound()){	
+					
+					if(friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
+					friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY(), true);	
+					}}}
+				}
+			}
 			break;
 
 		case DEAD:
@@ -529,7 +541,7 @@ scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2
 				case WALL:
 				case CRYSTAL:
 				case LIQUID:
-					character.collision(b.getMidX(), b.getMidY());
+					character.collision(b.getMidX(), b.getMidY(),false);
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -559,7 +571,7 @@ for(GameCharacter character:friends){
 		case WALL:
 		case CRYSTAL:
 		case LIQUID:
-			character.collision(b.getMidX(), b.getMidY());
+			character.collision(b.getMidX(), b.getMidY(),false);
 		}
 	} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 			|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -637,26 +649,20 @@ for(GameCharacter character:friends){
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
 						}
-						for(GameCharacter character:friends){
-							Rectangle r2 = character.getCollisionBounds();
+						
+						
+					for(GameCharacter character:friends){
+							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
 								character.takeDamage(e.getDamage());
 							}
-						}
-						for(int c=0;c<friends.size();c++){
-							for(int c2=0;c2<friends.size();c2++){
-								if(c==c2){
-									
-								}else{
-								if(!friends.get(c).getWallBound()&&!friends.get(c2).getWallBound()){	
-								
-								if(friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
-								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY());	
-								}}}
-							}
-						}
-						if(character.getMove()==Moves.AURA){
+						}	
+					}
+					
+				}
+				// end of enemy loop
+if(character.getMove()==Moves.AURA){
 							
 							boolean healed=false;
 						
@@ -697,10 +703,6 @@ for(GameCharacter character:friends){
 								friend.setMelee(0);
 							}
 						} }
-					}
-				}
-				// end of enemy loop
-
 			}
 		}
 
