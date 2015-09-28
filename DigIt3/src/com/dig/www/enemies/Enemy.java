@@ -116,7 +116,7 @@ public abstract class Enemy extends Sprite {
 			owner.getCharacter().endAction();
 			break;
 		case ARROW:
-			takeDamage(2);
+			takeDamage(3);
 			owner.getCharacter().endAction();
 			break;
 		case PIT:
@@ -124,7 +124,7 @@ public abstract class Enemy extends Sprite {
 
 		// Carl
 		case CLUB:
-			stunTimer = STUN_MAX / 8;
+			stunTimer = STUN_MAX / 10;
 			takeDamage(2);
 			owner.getCharacter().endAction();
 			Statics.playSound(owner, "weapons/whop.wav");

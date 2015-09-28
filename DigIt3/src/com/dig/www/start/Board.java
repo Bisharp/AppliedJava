@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -122,6 +123,7 @@ public class Board extends MPanel implements ActionListener {
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
 
 		timer.start();
+		Collections.sort(friends);
 	}
 
 	public void changeArea(String area) {
@@ -347,6 +349,7 @@ character.stop();
 System.out.println(Statics.BOARD_WIDTH / 2 - 50-character.getX());
 scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2 - 50-character.getY()
 		);
+Collections.sort(friends);
 		}timer.restart();
 	}
 

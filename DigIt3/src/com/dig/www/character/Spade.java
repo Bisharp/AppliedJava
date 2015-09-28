@@ -16,7 +16,16 @@ public class Spade extends GameCharacter {
 	private int dirt = 0;
 
 	public Spade(int x, int y, Board owner,boolean player) {
-		super(x, y,  owner, Types.SPADE, "spade",player);
+		super(x, y,  owner, Types.SPADE, "spade",player
+				,-20, 
+				-25,
+				-50,
+				15,
+				15,
+				10, 
+				80,
+				10,
+				100);
 		// TODO Auto-generated constructor stub
 	}
 

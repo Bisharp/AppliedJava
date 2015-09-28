@@ -13,7 +13,7 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public abstract class GameCharacter extends Sprite {
+public abstract class GameCharacter extends Sprite implements Comparable<GameCharacter>{
 
 	/**
 	 * 
@@ -27,9 +27,10 @@ public abstract class GameCharacter extends Sprite {
 	boolean meleePress = false;
 	boolean rangedPress = false;
 	boolean specialPress = false;
-int me=-1;
+	int me = -1;
 
-boolean player;
+	boolean player;
+
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -113,8 +114,9 @@ boolean player;
 	protected transient int meleeTimer = -1;
 	protected transient int rangedTimer = -1;
 	protected transient int specialTimer = -1;
-	protected transient int energy = 100;
-	private final int SPEED = 10;
+	protected transient int energy;
+	protected int MAX_ENERGY;
+	private int SPEED;
 
 	private int counter = 0;
 	private int animationTimer = 7;
@@ -123,92 +125,112 @@ boolean player;
 	private static final int MAX = 4;
 	private String charName = "reyzu";
 
-	private static final int HP_MAX = 100;
-	private static final int HP_TIMER_MAX = 50;
-	private static final int HITSTUN_MAX = 10;
-	protected int NEG_TIMER_NORM = -20;
-	protected int TIMER_NORM = 10;
+	private int HP_MAX;
+	private int HP_TIMER_MAX = 50;
+	private int HITSTUN_MAX = 10;
+
+	protected int NEG_TIMER_MELEE;
+	protected int NEG_TIMER_RANGED;
+	protected int NEG_TIMER_SPECIAL;
+	protected int TIMER_MELEE;
+	protected int TIMER_RANGED;
+	protected int TIMER_SPECIAL;
 	private int health = HP_MAX;
 	private int hpTimer = 0;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
 
-	public GameCharacter(int x, int y, Board owner, Types type, String charName,boolean player) {
+	public GameCharacter(int x, int y, Board owner, Types type,String charName, boolean player, 
+			int NEG_TIMER_MELEE,
+			int NEG_TIMER_RANGED,
+			int NEG_TIMER_SPECIAL, 
+			int TIMER_MELEE,
+			int TIMER_RANGED, int 
+			TIMER_SPECIAL, 
+			int HP_MAX,
+			int SPEED,
+			int MAX_ENERGY) {
 		super(x, y, "n", owner);
-this.player=player;
+		this.player = player;
 		this.charName = charName;
 		this.type = type;
+		this. NEG_TIMER_MELEE=NEG_TIMER_MELEE;
+		this. NEG_TIMER_RANGED=NEG_TIMER_RANGED;
+		this. NEG_TIMER_SPECIAL= NEG_TIMER_SPECIAL;
+		this.TIMER_MELEE=TIMER_MELEE;
+		this. TIMER_RANGED=TIMER_RANGED;
+		this.TIMER_SPECIAL =TIMER_SPECIAL;
+		this. HP_MAX=HP_MAX;
+		this. SPEED=SPEED;
+		this. MAX_ENERGY=MAX_ENERGY;
+		health=HP_MAX;
 	}
 
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
-if(player){
-		
-		
-		}
-else{
-	x += owner.getScrollX();
-	y += owner.getScrollY();
-	if(me==-1){
-		for(int c=0;c<owner.getFriends().size();c++){
-			if(owner.getFriends().get(c)==this){
-				me=c;
-				break;
+		if (player) {
+
+		} else {
+			x += owner.getScrollX();
+			y += owner.getScrollY();
+			if (me == -1) {
+				for (int c = 0; c < owner.getFriends().size(); c++) {
+					if (owner.getFriends().get(c) == this) {
+						me = c;
+						break;
+					}
+				}
+			}
+
+			if (!wallBound) {
+				getToPoint = owner.getCharacter().getBounds().getLocation();
+				if (getToPoint.distance(x, y) > 125) {
+					if (x > getToPoint.x + (SPEED * 2)) {
+						deltaX = -SPEED;
+						moveX = true;
+						direction = Direction.LEFT;
+
+					} else if (x < getToPoint.x - (SPEED * 2)) {
+						deltaX = SPEED;
+						moveX = true;
+						direction = Direction.RIGHT;
+
+					} else {
+						deltaX = 0;
+						moveX = false;
+					}
+					if (y > getToPoint.y + (SPEED * 2)) {
+						deltaY = -SPEED;
+						moveY = true;
+						if (y > getToPoint.y + 50)
+							direction = Direction.UP;
+
+					} else if (y < getToPoint.y - (SPEED * 2)) {
+						deltaY = SPEED;
+						moveY = true;
+						if (y < getToPoint.y - 50)
+							direction = Direction.DOWN;
+
+					} else {
+						moveY = false;
+						deltaY = 0;
+					}
+				} else {
+					deltaX = 0;
+					deltaY = 0;
+					moveX = false;
+					moveY = false;
+				}
+			}
+			if (new Point(x, y).distance(new Point(owner.getBounds()
+					.getLocation())) > Statics.BOARD_WIDTH) {
+				x = owner.getCharacterX();
+				y = owner.getCharacterY();
 			}
 		}
-	}
-	
-	
-	if(!wallBound){
-	getToPoint=owner.getCharacter().getBounds().getLocation();
-	if(getToPoint.distance(x,y)>125){
-		if(x>getToPoint.x+(SPEED*2)){
-			deltaX=-SPEED;
-			moveX=true;
-			direction=Direction.LEFT;
-			
-		}
-		else if(x<getToPoint.x-(SPEED*2)){
-			deltaX=SPEED;
-			moveX=true;
-			direction=Direction.RIGHT;
-			
-		}else{
-			deltaX=0;
-			moveX=false;
-		}
-		if(y>getToPoint.y+(SPEED*2)){
-			deltaY=-SPEED;
-			moveY=true;
-			if(y>getToPoint.y+50)
-			direction=Direction.UP;
-			
-		}
-		else if(y<getToPoint.y-(SPEED*2)){
-			deltaY=SPEED;
-			moveY=true;
-			if(y<getToPoint.y-50)
-				direction=Direction.DOWN;
-			
-		
-		}else{
-			moveY=false;
-			deltaY=0;
-		}
-	}else{
-	deltaX=0;
-	deltaY=0;
-	moveX=false;
-	moveY=false;
-	}}
-if(new Point(x,y).distance(new Point(owner.getBounds().getLocation()))>Statics.BOARD_WIDTH){
-	x=owner.getCharacterX();
-	y=owner.getCharacterY();
-}
-}
 
-if (hitstunTimer > 0) {
+		if (hitstunTimer > 0) {
 			hitstunTimer--;
 			flicker();
 
@@ -245,50 +267,49 @@ if (hitstunTimer > 0) {
 					image = newImage("n");
 			} else
 				animationTimer++;
-if(player){
-			owner.setScrollX(deltaX);
-			owner.setScrollY(deltaY);}
-else{
-	x+=deltaX;
-	y+=deltaY;
-}
+			if (player) {
+				owner.setScrollX(deltaX);
+				owner.setScrollY(deltaY);
+			} else {
+				x += deltaX;
+				y += deltaY;
+			}
 		} else {
 
-	
-if(player){
-			owner.setScrollX(-owner.getScrollX());
-			owner.setScrollY(-owner.getScrollY());
+			if (player) {
+				owner.setScrollX(-owner.getScrollX());
+				owner.setScrollY(-owner.getScrollY());
 
-			owner.reAnimate();}
-else{
-if(!isPlayerCollide){
-	if(new Point(getMidX(),getMidY()).distance(new Point(wallX,getMidY()))<100){
-	deltaX=-deltaX;
-	x+=deltaX;}
-	if(new Point(getMidX(),getMidY()).distance(new Point(getMidX(),wallY))<100){
-		deltaY=-deltaY;	
-		y+=deltaY;
-	}
+				owner.reAnimate();
+			} else {
+				if (!isPlayerCollide) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(
+							wallX, getMidY())) < 100) {
+						deltaX = -deltaX;
+						x += deltaX;
+					}
+					if (new Point(getMidX(), getMidY()).distance(new Point(
+							getMidX(), wallY)) < 100) {
+						deltaY = -deltaY;
+						y += deltaY;
+					}
 
-	
-		x+=deltaX;
-		y+=deltaY;}
-else{
-	deltaX=0;
-	deltaY=0;
-	moveX=false;
-	moveY=false;
-	image = newImage("n");
-}
-	
-}
-			
+					x += deltaX;
+					y += deltaY;
+				} else {
+					deltaX = 0;
+					deltaY = 0;
+					moveX = false;
+					moveY = false;
+					image = newImage("n");
+				}
+
+			}
+
 			wallBound = false;
 		}
 
-
-}
-	
+	}
 
 	public void keyPressed(int keyCode) {
 
@@ -410,14 +431,15 @@ else{
 		}
 	}
 
-	public void collision(int midX, int midY,boolean isPlayer) {
+	public void collision(int midX, int midY, boolean isPlayer) {
 		// TODO Auto-generated method stub
 		wallBound = true;
-		if(!player){
-			this.isPlayerCollide=isPlayer;
-		 wallX = midX;
-		 wallY = midY;
-		}}
+		if (!player) {
+			this.isPlayerCollide = isPlayer;
+			wallX = midX;
+			wallY = midY;
+		}
+	}
 
 	public Rectangle getActBounds() {
 
@@ -427,7 +449,8 @@ else{
 		case DOWN:
 			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y
+					+ Statics.BLOCK_HEIGHT - 6, 6, 6);
 		case LEFT:
 		default:
 			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
@@ -439,21 +462,20 @@ else{
 	private Point setAttacks() {
 		Point shieldPos = null;
 		if (meleePress) {
-			if (meleeTimer <= NEG_TIMER_NORM// ||this instanceof Diamond
+			if (meleeTimer <= NEG_TIMER_MELEE// ||this instanceof Diamond
 			) {
-				meleeTimer = TIMER_NORM * (this instanceof Club ? 2 : 1);
+				meleeTimer = TIMER_MELEE ;
 			}
 		}
 
 		if (specialPress && !meleePress && !rangedPress) {
-			if (specialTimer <= NEG_TIMER_NORM * 2 * (this instanceof Club ? 2 : 1)) {
-				specialTimer = (this instanceof Club ? 14 * TIMER_NORM : TIMER_NORM);
-
+			if (specialTimer <= NEG_TIMER_SPECIAL ) {
+				specialTimer = TIMER_SPECIAL;
 			}
 		}
 		if (rangedPress && !meleePress) {
-			if (rangedTimer <= NEG_TIMER_NORM) {
-				rangedTimer = TIMER_NORM;
+			if (rangedTimer <= NEG_TIMER_RANGED) {
+				rangedTimer = TIMER_RANGED;
 				String s = "images/enemies/blasts/0.png";
 				if (type == Types.DIAMOND)
 					s = getPath() + "diamond.png";
@@ -537,33 +559,36 @@ else{
 
 			if (p != null) {
 				g2d.setColor(Color.black);
-				g2d.drawLine(getMidX(), getMidY(), (int) p.getX() + Statics.BLOCK_HEIGHT / 2, (int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+				g2d.drawLine(getMidX(), getMidY(), (int) p.getX()
+						+ Statics.BLOCK_HEIGHT / 2, (int) p.getY()
+						+ Statics.BLOCK_HEIGHT / 2);
 			}
 			if (direction == Direction.UP)
 				g2d.drawImage(image, x, y, owner);
 		}
 
 		drawTool(g2d);
-if(player){
-		g2d.setColor(Color.BLACK);
-		int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
-		g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
+		if (player) {
+			g2d.setColor(Color.BLACK);
+			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
+			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
 
-		for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
-			g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
-			g2d.fillRect(i * 30, 70, 20, 20);
-			g2d.setColor(Color.WHITE);
-			g2d.drawRect(i * 30, 70, 20, 20);
+			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
+				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED
+						: Color.DARK_GRAY);
+				g2d.fillRect(i * 30, 70, 20, 20);
+				g2d.setColor(Color.WHITE);
+				g2d.drawRect(i * 30, 70, 20, 20);
+			}
+
+			g2d.setColor(Color.RED);
+			g2d.setFont(HUD);
+			g2d.drawString("HEALTH:", 30, 50);
+
+			drawCSHUD(g2d);
+		} else {
+			drawBar((double) health / (double) HP_MAX, g2d);
 		}
-
-		g2d.setColor(Color.RED);
-		g2d.setFont(HUD);
-		g2d.drawString("HEALTH:", 30, 50);
-
-		drawCSHUD(g2d);}
-else{
-	drawBar((double) health / (double) HP_MAX, g2d);
-}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -659,7 +684,8 @@ else{
 			}
 		else
 			dir = "side";
-		return "images/characters/" + (charName != null ? charName : "spade") + "/" + dir + "/";
+		return "images/characters/" + (charName != null ? charName : "spade")
+				+ "/" + dir + "/";
 	}
 
 	public Rectangle getCollisionBounds() {
@@ -697,14 +723,15 @@ else{
 	}
 
 	protected void timersCount() {
-		if (meleeTimer > NEG_TIMER_NORM && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
+		if (meleeTimer > NEG_TIMER_MELEE
+				&& (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
 			meleeTimer--;
 		}
-		if (rangedTimer > NEG_TIMER_NORM) {
+		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
 				rangedTimer--;
 		}
-		if (specialTimer > NEG_TIMER_NORM * 2 * (this instanceof Club ? 2 : 1)) {
+		if (specialTimer > NEG_TIMER_SPECIAL) {
 			specialTimer--;
 		}
 	}
@@ -733,24 +760,30 @@ else{
 
 	public void setPlayer(boolean b) {
 		// TODO Auto-generated method stub
-		player=b;
+		player = b;
 	}
 
 	public void heal(int i) {
 		// TODO Auto-generated method stub
-		health+=i;
-		if(health>HP_MAX){
-			health=HP_MAX;
+		health += i;
+		if (health > HP_MAX) {
+			health = HP_MAX;
 		}
 	}
 
 	public void setMelee(int i) {
 		// TODO Auto-generated method stub
-		meleeTimer=i;
+		meleeTimer = i;
 	}
 
 	public boolean getWallBound() {
 		// TODO Auto-generated method stub
 		return wallBound;
 	}
+	@Override
+	public int compareTo(GameCharacter g){
+		return Integer.compare(this.SPEED, g.SPEED);
+		
+	}
+	
 }
