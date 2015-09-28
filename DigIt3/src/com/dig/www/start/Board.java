@@ -829,6 +829,9 @@ if(character.getMove()==Moves.AURA){
 		
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
+		
+		for (i = 0; i < friends.size(); i++)
+			friends.get(i).basicAnimate();
 	}
 
 	public GameCharacter getCharacter() {
