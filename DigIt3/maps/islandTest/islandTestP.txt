@@ -1,1 +1,1 @@
-1300,1300,images/icon.png,LuigisMansion,0
+1300,1300,LuigisMansion,0,normal

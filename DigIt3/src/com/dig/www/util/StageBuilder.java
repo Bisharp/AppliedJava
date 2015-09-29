@@ -329,10 +329,11 @@ public class StageBuilder {
 
 					int enX = Integer.parseInt(stuff.get(0));
 					int enY = Integer.parseInt(stuff.get(1));
-					String enImg = stuff.get(2);
-					String area = stuff.get(3);
-					int collectibleNum = Integer.parseInt(stuff.get(4));
-					portals.add(new Portal(enX, enY, enImg, owner, area, collectibleNum));
+					String area = stuff.get(2);
+					int collectibleNum = Integer.parseInt(stuff.get(3));
+					String type = stuff.get(4);
+					
+					portals.add(new Portal(enX, enY, owner, area, collectibleNum, type));
 				}
 
 			}
