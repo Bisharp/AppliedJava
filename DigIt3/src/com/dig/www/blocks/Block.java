@@ -54,7 +54,7 @@ public class Block extends Sprite {
 
 		if (canSee) {
 			switch (owner.getTexturePack()) {
-			
+
 			// TODO Desert Draw
 			case DESERT:
 				switch (type) {
@@ -172,7 +172,7 @@ public class Block extends Sprite {
 					break;
 				}
 				break;
-				
+
 			// TODO Island Draw
 			case ISLAND:
 				switch (type) {
@@ -310,7 +310,7 @@ public class Block extends Sprite {
 					break;
 				}
 				break;
-				
+
 			// TODO Grassy Draw
 			case GRASSY:
 			default:// Start grassy
@@ -379,7 +379,7 @@ public class Block extends Sprite {
 
 	public Color getColor() {
 		switch (owner.getTexturePack()) {
-		
+
 		// TODO Desert Color
 		case DESERT:
 			switch (type) {
@@ -408,7 +408,7 @@ public class Block extends Sprite {
 				return Color.RED;
 			}
 
-		// TODO Snowy Color
+			// TODO Snowy Color
 		case SNOWY:
 			switch (type) {
 			case DIRT:
@@ -435,8 +435,8 @@ public class Block extends Sprite {
 				System.err.println("Type " + type + " does not have a color case");
 				return Color.RED;
 			}
-			
-		// TODO Island Color
+
+			// TODO Island Color
 		case ISLAND:
 			switch (type) {
 			case DIRT:
@@ -463,8 +463,8 @@ public class Block extends Sprite {
 				System.err.println("Type " + type + " does not have a color case");
 				return Color.RED;
 			}
-			
-		// TODO Volcano Color
+
+			// TODO Volcano Color
 		case VOLCANO:
 			switch (type) {
 			case DIRT:
@@ -489,8 +489,8 @@ public class Block extends Sprite {
 				System.err.println("Type " + type + " does not have a color case");
 				return Color.RED;
 			}
-			
-		// TODO Grassy Color
+
+			// TODO Grassy Color
 		case GRASSY:
 		default:
 			switch (type) {
