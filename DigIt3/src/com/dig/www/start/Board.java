@@ -107,7 +107,7 @@ public class Board extends MPanel implements ActionListener {
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this,false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this,false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this,false));
-		changeArea("LuigisMansion");
+		changeArea("snowyTest");
 
 		owner = dM;
 		timer = new Timer(15, this);
