@@ -1,5 +1,6 @@
 package com.dig.www.enemies;
 
+import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -8,7 +9,7 @@ public class WalkingEnemy extends Enemy {
 	protected int animateTimer = 0;
 	protected int scrollX = 0;
 	protected int scrollY = 0;
-
+protected int speed=5;
 	public static final int ANIMAX = 75;
 
 	public WalkingEnemy(int x, int y, String loc, Board owner, boolean flying,int health) {
@@ -41,8 +42,8 @@ public class WalkingEnemy extends Enemy {
 		if (stunTimer <= 0 && onScreen) {
 
 			if (animateTimer > 0) {
-				x += 5 * scrollX;
-				y += 5 * scrollY;
+				x += speed * scrollX;
+				y += speed * scrollY;
 
 				animateTimer--;
 			} else {
@@ -88,4 +89,5 @@ public class WalkingEnemy extends Enemy {
 		}
 
 	}
+	
 }

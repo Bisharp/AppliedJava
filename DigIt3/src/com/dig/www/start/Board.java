@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -122,6 +123,7 @@ public class Board extends MPanel implements ActionListener {
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
 
 		timer.start();
+		Collections.sort(friends);
 	}
 
 	public void changeArea(String area) {
@@ -348,6 +350,7 @@ character.stop();
 System.out.println(Statics.BOARD_WIDTH / 2 - 50-character.getX());
 scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2 - 50-character.getY()
 		);
+Collections.sort(friends);
 		}timer.restart();
 	}
 
@@ -452,6 +455,18 @@ scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2
 
 			checkCollisions();
 			repaint();
+			for(int c=0;c<friends.size();c++){
+				for(int c2=0;c2<friends.size();c2++){
+					if(c==c2){
+						
+					}else{
+					if(!friends.get(c).getWallBound()&&!friends.get(c2).getWallBound()){	
+					
+					if(friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
+					friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY(), true);	
+					}}}
+				}
+			}
 			break;
 
 		case DEAD:
@@ -532,7 +547,7 @@ scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2
 				case WALL:
 				case CRYSTAL:
 				case LIQUID:
-					character.collision(b.getMidX(), b.getMidY());
+					character.collision(b.getMidX(), b.getMidY(),false);
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -562,7 +577,7 @@ for(GameCharacter character:friends){
 		case WALL:
 		case CRYSTAL:
 		case LIQUID:
-			character.collision(b.getMidX(), b.getMidY());
+			character.collision(b.getMidX(), b.getMidY(),false);
 		}
 	} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 			|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -640,29 +655,60 @@ for(GameCharacter character:friends){
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
 						}
-						for(GameCharacter character:friends){
-							Rectangle r2 = character.getCollisionBounds();
+						
+						
+					for(GameCharacter character:friends){
+							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
 								character.takeDamage(e.getDamage());
 							}
-						}
-						for(int c=0;c<friends.size();c++){
-							for(int c2=0;c2<friends.size();c++){
-								if(c==c2)
-									continue;
-								if(c>=friends.size()){
-									break;
-								}
-								if(c<friends.size()&&friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
-								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY());	
-								}
-							}
-						}
+						}	
 					}
+					
 				}
 				// end of enemy loop
-
+if(character.getMove()==Moves.AURA){
+							
+							boolean healed=false;
+						
+						for(GameCharacter friend2:friends){
+						
+								if(character.getActBounds().intersects(friend2.getBounds())){
+									friend2.heal(3);
+									healed=true;
+								}
+							}
+						
+						if(healed){
+							character.heal(3);
+							character.setMelee(0);
+						}
+					}
+						for(GameCharacter friend:friends){
+							if(friend.getMove()==Moves.AURA){
+								
+								boolean healed=false;
+								if(friend.getActBounds().intersects(r3)){
+									character.heal(3);
+									healed=true;
+								}
+							for(GameCharacter friend2:friends){
+								if(friend==friend2){
+									
+								}else{
+									if(friend.getActBounds().intersects(friend2.getBounds())){
+										friend2.heal(3);
+										healed=true;
+									}
+								}
+							}
+							if(healed){
+							
+								friend.heal(3);
+								friend.setMelee(0);
+							}
+						} }
 			}
 		}
 
@@ -789,6 +835,9 @@ for(GameCharacter character:friends){
 
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
+		
+		for (i = 0; i < friends.size(); i++)
+			friends.get(i).basicAnimate();
 	}
 
 	public GameCharacter getCharacter() {

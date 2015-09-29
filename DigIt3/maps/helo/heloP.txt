@@ -1,0 +1,1 @@
+2050,600,images/portal1.png,islandTest,0

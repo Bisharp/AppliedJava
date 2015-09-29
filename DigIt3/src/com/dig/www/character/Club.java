@@ -15,7 +15,16 @@ public class Club extends GameCharacter {
 	private static final long serialVersionUID = 1L;
 
 	public Club(int x, int y, Board owner,boolean player) {
-		super(x, y, owner, Types.CLUB, "club",player);
+		super(x, y, owner, Types.CLUB, "club",player
+				,-20, 
+				-40,
+				-50,
+				20,
+				10,
+				140, 
+				100,
+				10,
+				100);
 		// TODO Auto-generated constructor stub
 	}
 
