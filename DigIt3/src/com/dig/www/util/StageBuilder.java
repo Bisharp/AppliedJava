@@ -98,10 +98,10 @@ public class StageBuilder {
 										Block.Blocks.CRYSTAL));
 								break;
 
-							case '>':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
-										Block.Blocks.SWITCH));
-								break;
+//							case '>':
+//								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+//										Block.Blocks.SWITCH));
+//								break;
 
 							}
 						}

@@ -318,7 +318,7 @@ public class Block extends Sprite {
 				case GROUND:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Statics.HAUNTED_GREEN);
+					g2d.setColor(Statics.LIGHT_SAND_BLUE);
 					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
 					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
 					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
@@ -326,15 +326,16 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
 					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
 					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
-					g2d.setColor(Statics.PURPLE);
 					g2d.draw(getBounds());
 					break;
 				case LIQUID:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Statics.HAUNTED_GREEN);
-					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+					g2d.setColor(Statics.LIGHT_BLUE);
+					g2d.fill(new Rectangle(x, y + 30, 40, 4));
+					g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
+					g2d.fill(new Rectangle(x, y + 80, 80, 4));
+					g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
 					break;
 				case WALL:
 					g2d.setColor(getColor());
@@ -346,7 +347,7 @@ public class Block extends Sprite {
 				case CARPET:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Statics.PURPLE);
+					g2d.setColor(Color.LIGHT_GRAY);
 					g2d.drawLine(x, y, x + width, y + height);
 					g2d.drawLine(x + width, y, x, y + height);
 					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
@@ -365,30 +366,24 @@ public class Block extends Sprite {
 				case DIRT:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Color.DARK_GRAY);
+					g2d.setColor(Statics.SAND_BLUE);
 					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
 					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
 					g2d.draw(getBounds());
 					break;
-					
+
 				case ROCK:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Color.BLACK);
-					g2d.fill(new Rectangle(x, y + 10, width, 10));
-					g2d.fill(new Rectangle(x, y + 30, width, 10));
-					g2d.fill(new Rectangle(x, y + 50, width, 10));
-					g2d.fill(new Rectangle(x, y + 70, width, 10));
-					g2d.fill(new Rectangle(x, y + 90, width, 10));
-					
-					g2d.fill(new Rectangle(x + 5, y, 5, height));
-					g2d.fill(new Rectangle(x + 25, y, 5, height));
-					g2d.fill(new Rectangle(x + 45, y, 5, height));
-					g2d.fill(new Rectangle(x + 65, y, 5, height));
-					g2d.fill(new Rectangle(x + 85, y, 5, height));
 
+					int i;
+					for (i = 0; i < 10; i++)
+						g2d.fill(new Rectangle(x, y + (10 * i), width, 5));
+					for (i = 0; i < 9; i++)
+						g2d.fill(new Rectangle(x + (20 * i), y, 5, height));
 					break;
-					
+
 				default:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
@@ -469,7 +464,6 @@ public class Block extends Sprite {
 		case DESERT:
 			switch (type) {
 			case DIRT:
-
 			case GROUND:
 				return Statics.OFF_TAN;
 			case LIQUID:
@@ -579,12 +573,13 @@ public class Block extends Sprite {
 		case HAUNTED:
 			switch (type) {
 			case DIRT:
+				return Statics.DRAB_BROWN;
 			case GROUND:
-				return Statics.BROWN;
+				return Statics.SAND_BLUE;
 			case LIQUID:
-				return Statics.HAUNTED_LIGHT_GREEN;
+				return Statics.BLUE;
 			case WALL:
-				return Color.LIGHT_GRAY;
+				return Color.DARK_GRAY;
 			case PIT:
 				return Color.BLACK;
 			case ROCK:
@@ -592,7 +587,7 @@ public class Block extends Sprite {
 			case SWITCH:
 				return Color.LIGHT_GRAY;
 			case CARPET:
-				return Color.LIGHT_GRAY;
+				return Statics.HAUNTED_GREEN;
 
 			case CRYSTAL:
 				return Statics.LIGHT_BLUE;

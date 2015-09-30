@@ -904,7 +904,7 @@ if(character.getMove()==Moves.AURA){
 		case VOLCANO:
 			return Color.DARK_GRAY;
 		case HAUNTED:
-			return Statics.BROWN;
+			return Statics.SAND_BLUE;
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;
