@@ -62,7 +62,7 @@ public class StageBuilder {
 
 							case 'O':
 								owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF - 300);
+								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln + OFF - 299);
 							case '1':
 								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
 								break;
