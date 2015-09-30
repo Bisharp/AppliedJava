@@ -108,7 +108,7 @@ public class Board extends MPanel implements ActionListener {
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this,false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this,false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this,false));
-		changeArea("snowyTest");
+		changeArea("hauntedTest");
 
 		owner = dM;
 		timer = new Timer(15, this);
@@ -903,6 +903,8 @@ if(character.getMove()==Moves.AURA){
 			return Color.WHITE;
 		case VOLCANO:
 			return Color.DARK_GRAY;
+		case HAUNTED:
+			return Statics.BROWN;
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;

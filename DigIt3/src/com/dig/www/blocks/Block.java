@@ -311,6 +311,91 @@ public class Block extends Sprite {
 				}
 				break;
 
+			// TODO Haunted Draw
+			case HAUNTED:
+				switch (type) {
+
+				case GROUND:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.HAUNTED_GREEN);
+					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+					g2d.setColor(Color.DARK_GRAY);
+					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
+					g2d.setColor(Statics.PURPLE);
+					g2d.draw(getBounds());
+					break;
+				case LIQUID:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.HAUNTED_GREEN);
+					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
+					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+					break;
+				case WALL:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.HAUNTED_GREEN);
+					g2d.draw(getBounds());
+					break;
+
+				case CARPET:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.PURPLE);
+					g2d.drawLine(x, y, x + width, y + height);
+					g2d.drawLine(x + width, y, x, y + height);
+					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+					break;
+
+				case SWITCH:
+
+					g2d.setFont(Statics.BLOCK);
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLUE);
+					g2d.drawString("<->", x, y + 70);
+					g2d.draw(getBounds());
+					break;
+				case DIRT:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.DARK_GRAY);
+					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
+					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+					g2d.draw(getBounds());
+					break;
+					
+				case ROCK:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Color.BLACK);
+					g2d.fill(new Rectangle(x, y + 10, width, 10));
+					g2d.fill(new Rectangle(x, y + 30, width, 10));
+					g2d.fill(new Rectangle(x, y + 50, width, 10));
+					g2d.fill(new Rectangle(x, y + 70, width, 10));
+					g2d.fill(new Rectangle(x, y + 90, width, 10));
+					
+					g2d.fill(new Rectangle(x + 5, y, 5, height));
+					g2d.fill(new Rectangle(x + 25, y, 5, height));
+					g2d.fill(new Rectangle(x + 45, y, 5, height));
+					g2d.fill(new Rectangle(x + 65, y, 5, height));
+					g2d.fill(new Rectangle(x + 85, y, 5, height));
+
+					break;
+					
+				default:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					break;
+				}
+				break;
+
 			// TODO Grassy Draw
 			case GRASSY:
 			default:// Start grassy
@@ -479,6 +564,33 @@ public class Block extends Sprite {
 			case ROCK:
 				return Color.GRAY;
 			case SWITCH:
+			case CARPET:
+				return Color.LIGHT_GRAY;
+
+			case CRYSTAL:
+				return Statics.LIGHT_BLUE;
+
+			default:
+				System.err.println("Type " + type + " does not have a color case");
+				return Color.RED;
+			}
+
+			// TODO Haunted Color
+		case HAUNTED:
+			switch (type) {
+			case DIRT:
+			case GROUND:
+				return Statics.BROWN;
+			case LIQUID:
+				return Statics.HAUNTED_LIGHT_GREEN;
+			case WALL:
+				return Color.LIGHT_GRAY;
+			case PIT:
+				return Color.BLACK;
+			case ROCK:
+				return Statics.SAND_RED;
+			case SWITCH:
+				return Color.LIGHT_GRAY;
 			case CARPET:
 				return Color.LIGHT_GRAY;
 

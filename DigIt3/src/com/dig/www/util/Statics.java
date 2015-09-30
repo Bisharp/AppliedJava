@@ -48,11 +48,13 @@ public final class Statics {
 	public static final Color OFF_TAN = new Color(220,185,60);
 	public static final Color SAND_STONE = new Color(110,90,30);
 	public static final Color LIGHT_BROWN=new Color(175, 75, 0);
+	public static final Color HAUNTED_GREEN = new Color(48, 118, 48);
+	public static final Color SAND_RED = new Color(155, 36, 36);
+	public static final Color HAUNTED_LIGHT_GREEN = new Color(14, 152, 14);
 	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
-
 	
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in

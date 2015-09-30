@@ -277,6 +277,9 @@ public class StageBuilder {
 					case 'V':
 						pack = TexturePack.VOLCANO;
 						break;
+					case 'H':
+						pack = TexturePack.HAUNTED;
+						break;
 					case 'G':
 					default:
 						pack = TexturePack.GRASSY;
