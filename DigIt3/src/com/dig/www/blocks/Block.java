@@ -331,7 +331,7 @@ public class Block extends Sprite {
 				case LIQUID:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BLUE);
+					g2d.setColor(Statics.LIGHT_SAND_BLUE);
 					g2d.fill(new Rectangle(x, y + 30, 40, 4));
 					g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
 					g2d.fill(new Rectangle(x, y + 80, 80, 4));
@@ -369,6 +369,8 @@ public class Block extends Sprite {
 					g2d.setColor(Statics.SAND_BLUE);
 					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
 					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+					g2d.fill(new Rectangle(x + 65, y + 20, 15, 15));
+					g2d.fill(new Rectangle(x + 50, y + 70, 20, 20));
 					g2d.draw(getBounds());
 					break;
 
@@ -383,7 +385,7 @@ public class Block extends Sprite {
 						g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0? 2 : 0), width, i != 0? 5 : 3));
 					g2d.fill(new Rectangle(x, y + 98, width, 2));
 					for (i = 0; i < 9; i++)
-						g2d.fill(new Rectangle(x + (20 * i)- (i != 0? 2 : 0), y, i != 0? 5 : 2, height));
+						g2d.fill(new Rectangle(x + (20 * i)- (i != 0? 2 : 0), y, i != 0? 5 : 3, height));
 					break;
 
 				default:

@@ -137,6 +137,8 @@ public abstract class Sprite implements Serializable {
 		g2d.fillRect(x, y-10, width, 10);
 		g2d.setColor(Color.RED);
 		g2d.fillRect(x, y-10, (int)((double)width*(double)per), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(x - 1, y - 11, width + 1, 11);
 	}
 	
 	public boolean isOnScreen() {

@@ -123,8 +123,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	private static final int ANIMAX = 7;
 	private static final int MAX = 4;
-	private String charName = "reyzu";
-
+	private String charName;
 	private int HP_MAX;
 	private int HP_TIMER_MAX = 50;
 	private int HITSTUN_MAX = 10;

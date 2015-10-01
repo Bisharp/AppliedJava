@@ -10,6 +10,7 @@ import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Launch;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
+import com.dig.www.util.Statics;
 
 public class FProjectile extends Sprite {
 protected boolean onScreen=true;
@@ -112,9 +113,9 @@ private Moves move;
 		if(charHoming==-2){
 			
 		}else if(charHoming==-1){
-			d=pointTowards(new Point(owner.getCharacter().getX(),owner.getCharacter().getY()));
+			d=Statics.pointTowards(new Point(x, y), new Point(owner.getCharacter().getX(),owner.getCharacter().getY()));
 		}else{
-			d=pointTowards(new Point(owner.getFriends().get(charHoming).getX(),owner.getFriends().get(charHoming).getY()));
+			d=Statics.pointTowards(new Point(x, y), new Point(owner.getFriends().get(charHoming).getX(),owner.getFriends().get(charHoming).getY()));
 		}
 			
 			
@@ -148,15 +149,7 @@ private Moves move;
 ////		else
 ////			alive = false;
 //	}
-	private  double pointTowards( Point a) {
-		double d;
-		Point b=new Point(x,y);
-		// Point at something, This will be useful for enemies, also in
-		// ImportantLook class
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
-				+ -a.getX())) + 180);
-		return d;
-	}
+
 	public double getD(){
 		return d;
 	}

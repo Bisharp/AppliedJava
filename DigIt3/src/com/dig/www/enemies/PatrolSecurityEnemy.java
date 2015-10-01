@@ -64,15 +64,15 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 			x = startX;
 			y = startY;
 		}
-		
+
 		scrollX = points[position][0] * 2;
 		scrollY = points[position][1] * 2;
 		moveTimer = MOVE_MAX;
 	}
-	
+
 	@Override
 	public void turnAround(int wallX, int wallY) {
-		
+
 	}
 
 	@Override
@@ -83,11 +83,11 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 		startX += owner.getScrollX();
 		startY += owner.getScrollY();
 	}
-	
+
 	@Override
 	public void initialAnimate(int sX, int sY) {
 		super.initialAnimate(sX, sY);
-		
+
 		startX = x;
 		startY = y;
 	}
@@ -108,7 +108,7 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 
 		g2d.setColor(Color.yellow);
 		g2d.fill(getSight());
-		
+
 		if (scrollY < 0)
 			drawBar((double) health / (double) maxHealth, g2d);
 	}
