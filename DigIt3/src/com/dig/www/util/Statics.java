@@ -50,8 +50,8 @@ public final class Statics {
 	public static final Color LIGHT_BROWN=new Color(175, 75, 0);
 	
 	public static final Color HAUNTED_GREEN = new Color(48, 118, 48);
-	public static final Color LIGHT_SAND_BLUE = new Color(85, 115, 155);
 	public static final Color DRAB_BROWN = new Color(104, 34, 23);
+	public static final Color LIGHT_SAND_BLUE = new Color(85, 115, 155);
 	public static final Color SAND_BLUE = new Color(63, 85, 116);
 	public static final Color DARK_SAND_BLUE = new Color(48, 65, 88);
 	public static final Color SAND_RED = new Color(155, 36, 36);

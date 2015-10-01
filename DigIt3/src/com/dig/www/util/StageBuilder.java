@@ -111,7 +111,6 @@ public class StageBuilder {
 				reader.close();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -189,14 +188,12 @@ public class StageBuilder {
 							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case 'b':
-							// TODO securityEnemy
 							if (stuff.get(8).charAt(0) == 'B')
 								enemies.add(new BackwardSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							else
 								enemies.add(new PatrolSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							break;
 						case 'p':
-							// TODO securityEnemy
 							if (stuff.get(7).charAt(0) == 'B')
 								enemies.add(new BackwardPathEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
 							else
@@ -224,9 +221,7 @@ public class StageBuilder {
 	}
 
 	private int[][] createArray(String string) {
-		// TODO Auto-generated method stub
 
-		System.out.println(string);
 		String[] split = string.split("\'");
 		int splitLength = split.length / 2;
 
@@ -236,24 +231,16 @@ public class StageBuilder {
 
 		for (int p1 = 0; p1 < splitLength; p1++) {
 
-			System.out.println("In loop");
 			for (p2 = 0; p2 < toReturn[p1].length; p2++) {
 				toReturn[p1][p2] = Integer.parseInt(split[splitCounter]);
 				splitCounter++;
 			}
 		}
 
-		for (int k = 0; k < toReturn.length; k++) {
-			for (int c = 0; c < toReturn[k].length; c++)
-				System.out.print(toReturn[k][c] + " ");
-			System.out.println();
-		}
-
 		return toReturn;
 	}
 
 	public TexturePack readText() {
-		// TODO Auto-generated method stub
 		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
 		File map = new File(tryLoc);
@@ -287,7 +274,6 @@ public class StageBuilder {
 					reader.close();
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -297,7 +283,6 @@ public class StageBuilder {
 	}
 
 	public ArrayList<Portal> loadPortals() {
-		// TODO Auto-generated method stub
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();

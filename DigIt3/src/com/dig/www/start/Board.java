@@ -258,7 +258,7 @@ for(int c=0;c<friends.size();c++){
 			}
 
 			if (!isDay)
-				g2d.drawImage(sky, 0, 0, this);
+				g2d.drawImage(sky, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, this);
 
 			if (state == State.NPC) {
 

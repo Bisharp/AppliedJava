@@ -322,7 +322,7 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
 					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
 					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-					g2d.setColor(Color.DARK_GRAY);
+					g2d.setColor(Statics.DARK_SAND_BLUE);
 					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
 					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
 					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
@@ -340,7 +340,7 @@ public class Block extends Sprite {
 				case WALL:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Statics.HAUNTED_GREEN);
+					g2d.setColor(Statics.LIGHT_SAND_BLUE);
 					g2d.draw(getBounds());
 					break;
 
@@ -579,7 +579,7 @@ public class Block extends Sprite {
 			case LIQUID:
 				return Statics.BLUE;
 			case WALL:
-				return Color.DARK_GRAY;
+				return Statics.DARK_SAND_BLUE;
 			case PIT:
 				return Color.BLACK;
 			case ROCK:
