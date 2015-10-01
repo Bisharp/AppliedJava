@@ -23,7 +23,6 @@ public class Launch extends Enemy {
 		String[] s = loc.split("/");
 
 		identity = s[s.length - 1].charAt(0);
-		System.out.println(identity);
 		// identity=1;
 		DELAY = delay;
 	}

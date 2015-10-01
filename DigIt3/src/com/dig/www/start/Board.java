@@ -66,7 +66,6 @@ public class Board extends MPanel implements ActionListener {
 	private boolean switching = false;
 	private TexturePack texturePack = TexturePack.GRASSY;
 
-	// Yes, I put my getters/setters for scrollX & scrollY here.
 	public ArrayList<Block> getWorld() {
 		return world;
 	}
@@ -86,8 +85,6 @@ public class Board extends MPanel implements ActionListener {
 	public void setScrollY(int scrollY) {
 		this.scrollY = scrollY;
 	}
-
-	// Get used to it.
 
 	public DigIt getOwner() {
 		return owner;

@@ -51,7 +51,6 @@ public class GameStartBoard extends MPanel {
 				.getLocation().getFile()
 				+ "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
-		System.out.println(defaultDir);
 
 		owner = dM;
 		owner.setFocusable(false);
@@ -86,7 +85,6 @@ public class GameStartBoard extends MPanel {
 
 		this.addKeyListener(new MyAdapter());
 		setFocusable(true);
-		System.out.println(requestFocusInWindow());
 
 		repaint();
 	}
@@ -146,12 +144,7 @@ if(key==KeyEvent.VK_ESCAPE){
 			owner.newGame();
 
 		} else if (s != null)
-			showError("There is no entered name");
-	}
-
-	public void showError(String err) {
-		JOptionPane.showMessageDialog(this, err, "Error",
-				JOptionPane.ERROR_MESSAGE);
+			Statics.showError("There is no entered name", this);
 	}
 
 	public DigIt getOwner() {

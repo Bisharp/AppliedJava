@@ -7,6 +7,10 @@ import com.dig.www.util.Sprite;
 
 public class Portal extends Sprite {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected final String area;
 	protected final int collectibleNum;
 	protected final String type;
@@ -22,9 +26,6 @@ public class Portal extends Sprite {
 		this.area = area;
 		this.type = type;
 		collectibleNum = collectibles;
-
-		System.out.println("New portal");
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getArea() {
@@ -33,7 +34,6 @@ public class Portal extends Sprite {
 
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
 		basicAnimate();
 
 		timer--;
@@ -50,7 +50,6 @@ public class Portal extends Sprite {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		// TODO Auto-generated method stub
 		g2d.drawImage(image, x, y, owner);
 	}
 

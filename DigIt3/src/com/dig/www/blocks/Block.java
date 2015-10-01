@@ -278,9 +278,9 @@ public class Block extends Sprite {
 				case CARPET:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.drawLine(x, y, x + width, y + height);
-					g2d.drawLine(x + width, y, x, y + height);
+					g2d.setColor(Color.ORANGE);
+					g2d.drawLine(x, y + 15, x + width, y + 15);
+					g2d.drawLine(x, y + height - 14, x + width, y + height - 14);
 					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
 					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
 					break;
@@ -303,6 +303,14 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x, y + 80, 4, 4));
 					g2d.setColor(Color.DARK_GRAY);
 					g2d.draw(getBounds());
+					break;
+				case ROCK:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(Statics.MED_GRAY);
+					g2d.fill(new Rectangle(x, y + 30, 4, 4));
+					g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
+					g2d.fill(new Rectangle(x, y + 80, 4, 4));
 					break;
 				default:
 					g2d.setColor(getColor());
@@ -382,10 +390,10 @@ public class Block extends Sprite {
 					// Brick pattern
 					int i;
 					for (i = 0; i < 10; i++)
-						g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0? 2 : 0), width, i != 0? 5 : 3));
+						g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0 ? 2 : 0), width, i != 0 ? 5 : 3));
 					g2d.fill(new Rectangle(x, y + 98, width, 2));
 					for (i = 0; i < 9; i++)
-						g2d.fill(new Rectangle(x + (20 * i)- (i != 0? 2 : 0), y, i != 0? 5 : 3, height));
+						g2d.fill(new Rectangle(x + (20 * i) - (i != 0 ? 2 : 0), y, i != 0 ? 5 : 3, height));
 					break;
 
 				default:
@@ -410,6 +418,7 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
 					g2d.draw(getBounds());
 					break;
+
 				case LIQUID:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
@@ -419,10 +428,23 @@ public class Block extends Sprite {
 					g2d.fill(new Rectangle(x, y + 80, 80, 4));
 					g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
 					break;
+
 				case WALL:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
 					g2d.setColor(Color.BLACK);
+					g2d.draw(getBounds());
+					break;
+
+				case DIRT:
+				case ROCK:
+					g2d.setColor(getColor());
+					g2d.fill(getBounds());
+					g2d.setColor(type == Blocks.ROCK ? Statics.MED_GRAY : Statics.DRAB_BROWN);
+					g2d.fillRect(x + 70, y + 10, 20, 20);
+					g2d.fillRect(x + 10, y + 70, 5, 5);
+					g2d.fillRect(x + 50, y + 30, 10, 10);
+					g2d.fillRect(x + 80, y + 80, 10, 10);
 					g2d.draw(getBounds());
 					break;
 
@@ -555,6 +577,7 @@ public class Block extends Sprite {
 				return Statics.BROWN;
 			case LIQUID:
 				return Statics.ORANGE;
+			case CARPET:
 			case WALL:
 				return Color.DARK_GRAY;
 			case PIT:
@@ -562,7 +585,7 @@ public class Block extends Sprite {
 			case ROCK:
 				return Color.GRAY;
 			case SWITCH:
-			case CARPET:
+			//case CARPET:
 				return Color.LIGHT_GRAY;
 
 			case CRYSTAL:

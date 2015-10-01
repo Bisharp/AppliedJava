@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 
 import javax.swing.JOptionPane;
 
+
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
 
@@ -48,6 +49,7 @@ public final class Statics {
 	public static final Color OFF_TAN = new Color(220,185,60);
 	public static final Color SAND_STONE = new Color(110,90,30);
 	public static final Color LIGHT_BROWN=new Color(175, 75, 0);
+	public static final Color MED_GRAY = new Color(150, 150, 160);
 	
 	// Colors likely used exclusively in the haunted skin.
 	public static final Color DARK_GREEN = new Color(30, 72, 30);
@@ -68,12 +70,18 @@ public final class Statics {
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
+
 	
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class
 		return (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX()
 				+ -a.getX())) + 180);
+	}
+
+	public static void showError(String err, JComponent owner) {
+		JOptionPane.showMessageDialog(owner, err, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
