@@ -377,11 +377,13 @@ public class Block extends Sprite {
 					g2d.fill(getBounds());
 					g2d.setColor(Color.BLACK);
 
+					// Brick pattern
 					int i;
 					for (i = 0; i < 10; i++)
-						g2d.fill(new Rectangle(x, y + (10 * i), width, 5));
+						g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0? 2 : 0), width, i != 0? 5 : 3));
+					g2d.fill(new Rectangle(x, y + 98, width, 2));
 					for (i = 0; i < 9; i++)
-						g2d.fill(new Rectangle(x + (20 * i), y, 5, height));
+						g2d.fill(new Rectangle(x + (20 * i)- (i != 0? 2 : 0), y, i != 0? 5 : 2, height));
 					break;
 
 				default:
@@ -587,7 +589,7 @@ public class Block extends Sprite {
 			case SWITCH:
 				return Color.LIGHT_GRAY;
 			case CARPET:
-				return Statics.HAUNTED_GREEN;
+				return Statics.DARK_GREEN;
 
 			case CRYSTAL:
 				return Statics.LIGHT_BLUE;
