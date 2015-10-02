@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
+import com.dig.www.objects.Objects;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -286,7 +287,60 @@ public class StageBuilder {
 
 		return npcs;
 	}
+public ArrayList<Objects> loadObjects() {
+		
+		ArrayList<Objects> npcs = new ArrayList<Objects>();
+		try {
+			ArrayList<String> strings = new ArrayList<String>();
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
+					+ "O.txt");
+			if (saveFile.exists()) {
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					strings.add(line);
+				}
+				reader.close();
+				for (int c = 0; c < strings.size(); c++) {
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
 
+						if (strings.get(c).charAt(c2) == ',') {
+							stuff.add(currentS);
+							currentS = "";
+
+						} else {
+							currentS += strings.get(c).charAt(c2);
+						}
+					}
+					if (currentS != "") {
+						stuff.add(currentS);
+					}
+					try {
+						int nX = Integer.parseInt(stuff.get(0));
+						int nY = Integer.parseInt(stuff.get(1));
+						String loc = stuff.get(2);
+						boolean wall=false;
+						if(stuff.get(3).charAt(0)=='t')
+							wall=true;
+					npcs.add(new Objects(nX, nY, loc, wall,owner));
+						
+					} catch (IndexOutOfBoundsException ex) {
+						ex.printStackTrace();
+
+					}
+				}
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return npcs;
+	}
 	private int[][] createArray(String string) {
 
 		String[] split = string.split("\'");

@@ -21,6 +21,7 @@ import javax.swing.Timer;
 import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.npc.*;
+import com.dig.www.objects.Objects;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
 import com.dig.www.enemies.*;
@@ -44,6 +45,7 @@ public class Board extends MPanel implements ActionListener {
 	private GameCharacter character;
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
+	protected ArrayList<Objects>objects=new ArrayList<Objects>();
 	private State state;
 	private boolean debug = false;
 
@@ -135,6 +137,7 @@ public class Board extends MPanel implements ActionListener {
 		enemies = sB.loadEn();
 		portals = sB.loadPortals();
 		npcs = sB.loadNPC();
+		objects=sB.loadObjects();
 		for (int c = 0; c < friends.size(); c++) {
 			if (c > 1) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -175,6 +178,9 @@ public class Board extends MPanel implements ActionListener {
 		for (NPC n : npcs)
 			n.initialAnimate(spawnX, spawnY);
 
+		for (Objects n : objects)
+			n.initialAnimate(spawnX, spawnY);
+		
 		setBackground(getTextureBack());
 
 		System.gc();
@@ -251,7 +257,10 @@ public class Board extends MPanel implements ActionListener {
 						fP.get(i).draw(g2d);
 				}
 			}
-
+			for (Objects npc : objects)
+				if (npc.isOnScreen())
+					npc.draw(g2d);
+			
 			for (Portal p2 : portals)
 				if (p2.isOnScreen())
 					p2.draw(g2d);
@@ -260,11 +269,12 @@ public class Board extends MPanel implements ActionListener {
 			for (NPC npc : npcs)
 				if (npc.isOnScreen())
 					npc.draw(g2d);
-
-			character.draw(g2d);
-			for (GameCharacter character : friends) {
+			
+for (GameCharacter character : friends) {
 				character.draw(g2d);
 			}
+			character.draw(g2d);
+			
 
 			if (!isDay)
 				g2d.drawImage(sky, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, this);
@@ -407,6 +417,10 @@ public class Board extends MPanel implements ActionListener {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
 		}
+		for (Objects b : objects) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
+		}
 	}
 
 	public int getFriend(String decision) {
@@ -442,7 +456,9 @@ public class Board extends MPanel implements ActionListener {
 				// /\
 				// || Nightmare Fuel
 			}
+			
 
+	
 			for (int i = 0; i < fP.size(); i++) {
 
 				if (!fP.get(i).isOnScreen()) {
@@ -758,6 +774,20 @@ public class Board extends MPanel implements ActionListener {
 				}
 			}
 		}
+		for(Objects n:objects){
+			n.animate();
+			n.setOnScreen(n.getBounds().intersects(getScreen()));
+			if(n.getBounds().intersects(character.getCollisionBounds())){
+				n.collidePlayer(-1);
+			}
+			for(int c=0;c<friends.size();c++){
+				
+				if(n.getBounds().intersects(friends.get(c).getCollisionBounds())){
+			n.collidePlayer(c);
+		}
+			}
+		
+		}
 	}
 
 	@Override
@@ -888,6 +918,9 @@ public class Board extends MPanel implements ActionListener {
 
 		for (i = 0; i < npcs.size(); i++)
 			npcs.get(i).basicAnimate();
+		
+		for (i = 0; i < objects.size(); i++)
+			objects.get(i).basicAnimate();
 	}
 
 	public GameCharacter getCharacter() {
