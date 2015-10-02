@@ -35,6 +35,8 @@ protected boolean wall;
 		if(loc.equals("images/objects/Leaves.png")){
 			loc="images/objects/LeavesSc.png";
 			image=newImage(loc);
+			x-=15;
+			y-=15;
 		}
 		if(playerNum==-1){
 			if(wall)

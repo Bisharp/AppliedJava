@@ -138,7 +138,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int TIMER_RANGED;
 	protected int TIMER_SPECIAL;
 	private int health = HP_MAX;
-	private int hpTimer = 0;
+	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
 
@@ -157,6 +157,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.HP_MAX = HP_MAX;
 		this.SPEED = SPEED;
 		this.MAX_ENERGY = MAX_ENERGY;
+		energy=MAX_ENERGY;
 		health = HP_MAX;
 	}
 
@@ -235,14 +236,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (hpTimer > 0) {
 			hpTimer--;
 
-			if (hpTimer <= 0 && health < HP_MAX) {
+			
+		}if (hpTimer <= 0 && health < HP_MAX) {
 				health += 3;
 				if (health > HP_MAX) {
 					health = HP_MAX;
 				}
 				hpTimer = HP_TIMER_MAX;
 			}
-		}
 
 		if (!wallBound) {
 
@@ -793,5 +794,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public int compareTo(GameCharacter g) {
 		return Integer.compare(this.SPEED, g.SPEED);
 
+	}
+
+	public String getSave() {
+		// TODO Auto-generated method stub
+		return ""+getType()+","+HP_MAX+","+MAX_ENERGY;
+	}
+	public void setMaxHealth(int setter){
+		HP_MAX=setter;
 	}
 }

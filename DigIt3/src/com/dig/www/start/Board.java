@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -42,6 +45,8 @@ public class Board extends MPanel implements ActionListener {
 
 	private Timer timer// = new Timer(15, this)
 	;
+	String userName;
+	String level;
 	private GameCharacter character;
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
@@ -104,14 +109,14 @@ public class Board extends MPanel implements ActionListener {
 	// * | Getters/setters for owner
 
 	public Board(DigIt dM, String name) {
-
+this.userName=name;
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
-		changeArea("hauntedTest");
-
+		level="hauntedTest";
+		changeArea();
 		owner = dM;
 		timer = new Timer(15, this);
 
@@ -128,10 +133,10 @@ public class Board extends MPanel implements ActionListener {
 		Collections.sort(friends);
 	}
 
-	public void changeArea(String area) {
+	public void changeArea() {
 
-		StageBuilder sB = StageBuilder.getInstance(area, this);
-		sB.changeState(area, this);
+		StageBuilder sB = StageBuilder.getInstance(level, this);
+		sB.changeState(level, this);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -182,7 +187,7 @@ public class Board extends MPanel implements ActionListener {
 			n.initialAnimate(spawnX, spawnY);
 		
 		setBackground(getTextureBack());
-
+save();
 		System.gc();
 	}
 
@@ -753,7 +758,8 @@ for (GameCharacter character : friends) {
 
 			if (r3.intersects(p.getBounds())) {
 				timer.stop();
-				changeArea(p.getArea());
+				level=p.getArea();
+				changeArea();
 				timer.restart();
 			}
 		}
@@ -796,6 +802,10 @@ for (GameCharacter character : friends) {
 
 		if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R && state != State.NPC)
 			switching = true;
+		else if(key==KeyEvent.VK_I){
+			character.setMaxHealth(1000);
+		}
+		
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
 			if (state != State.DEAD)
@@ -996,5 +1006,32 @@ for (GameCharacter character : friends) {
 
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
+	}
+	public void save(){
+	String location=
+		(GameStartBoard.class.getProtectionDomain().getCodeSource()
+				.getLocation().getFile().toString()
+				+ "saveFiles/" + userName+".txt");
+	File locFile=new File(location);
+	if(locFile.exists()){
+		//locFile.delete();
+		try{
+		BufferedWriter writer=new BufferedWriter(new FileWriter(location));
+		writer.write("level");
+		writer.newLine();
+		
+		writer.write(character.getSave());
+		for(int c=0;c<friends.size();c++){
+			writer.newLine();
+			writer.write(friends.get(c).getSave());
+		}
+		writer.close();
+		writer.close();}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}else{
+		 JOptionPane.showMessageDialog(owner, "Could not save.");
+	}
 	}
 }
