@@ -826,8 +826,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			
 			int health=Integer.parseInt(stuff.get(0));
 			int energy=Integer.parseInt(stuff.get(1));
-			System.out.println(getType().toString()+" health: "+health);
-			System.out.println(getType().toString()+" energy: "+energy);
 			HP_MAX=health;
 			MAX_ENERGY=energy;
 			this.health=HP_MAX;
