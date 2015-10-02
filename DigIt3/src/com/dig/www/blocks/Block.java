@@ -278,7 +278,7 @@ public class Block extends Sprite {
 				case CARPET:
 					g2d.setColor(getColor());
 					g2d.fill(getBounds());
-					g2d.setColor(Color.ORANGE);
+					g2d.setColor(Color.LIGHT_GRAY);
 					g2d.drawLine(x, y + 15, x + width, y + 15);
 					g2d.drawLine(x, y + height - 14, x + width, y + height - 14);
 					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);

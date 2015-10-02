@@ -764,12 +764,7 @@ public class Board extends MPanel implements ActionListener {
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
 
-		if (key == KeyEvent.VK_O)
-			if (state == State.NPC)
-				state = State.INGAME;
-			else
-				state = State.NPC;
-		else if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R)
+		if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R && state != State.NPC)
 			switching = true;
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -781,12 +776,22 @@ public class Board extends MPanel implements ActionListener {
 		switch (state) {
 
 		case NPC:
-			timer.stop();
-			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER)
+
+			// TODO npc
+			boolean exitNPC = false;
+			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER) {
 				((ServiceNPC) current).service();
-			state = State.INGAME;
-			current = null;
-			timer.restart();
+				exitNPC = true;
+			} else if (key == KeyEvent.VK_SPACE)
+				exitNPC = true;
+
+			if (exitNPC) {
+				timer.stop();
+				state = State.INGAME;
+				current = null;
+				timer.restart();
+			}
+
 			break;
 
 		case PAUSED:

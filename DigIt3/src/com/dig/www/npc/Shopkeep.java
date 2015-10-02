@@ -9,11 +9,11 @@ import com.dig.www.start.Board.State;
 
 public class Shopkeep extends ServiceNPC {
 	
-	private String crucialString = "Do you want me to heal you? (Enter ==> yes)";
+	private static String crucialString = "Do you want me to heal you? (Enter ==> yes)";
 
 	public Shopkeep(int x, int y, String loc, Board owner) {
-		super(x, y, loc, owner, new String[] { "",
-				"Lamp oil, rope, bo... never mind. " }, "shopkeep");
+		super(x, y, loc, owner, new String[] { crucialString,
+				"Lamp oil, rope, bo... never mind. " + crucialString }, "shopkeep", "Sorry; I can't give credit.");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,9 +28,5 @@ public class Shopkeep extends ServiceNPC {
 		// }
 
 		owner.setState(State.INGAME);
-	}
-	
-	public String getLine() {
-		return dialogs[line] + crucialString;
 	}
 }
