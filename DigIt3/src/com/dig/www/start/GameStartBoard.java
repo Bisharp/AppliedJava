@@ -88,8 +88,14 @@ loadGame.addActionListener(new ActionListener() {
 		String[]files=new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 				.getLocation().getFile()
 				+ "saveFiles").list();
-		
+		if(files==null){
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
+					.getLocation().getFile()
+					+ "saveFiles").mkdirs();
+			files=new String[0];
+		}
 		String[]options=new String[files.length+1];
+		
 		options[0]="Cancel";
 		for(int c=1;c<files.length+1;c++){
 			options[c]=files[c-1];
@@ -159,13 +165,20 @@ if(key==KeyEvent.VK_ESCAPE){
 String[]files=new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 					.getLocation().getFile()
 					+ "saveFiles").list();
+if(files==null){
+	new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
+			.getLocation().getFile()
+			+ "saveFiles").mkdirs();
+	files=new String[0];
+}
 for(int c=0;c<files.length;c++){
 	if(files[c].substring(0,  files[c].lastIndexOf(".txt")).equals(s)){
 	int sel=	JOptionPane.showConfirmDialog(this, "This file already exists. Do you want to load?");
-	if(sel==JOptionPane.OK_OPTION){
+	if(sel==JOptionPane.YES_OPTION){
 		load(s);
+		
 	}
-		break;	
+		return;	
 	}
 }
 		if (s != null && !s.equals("")) {
@@ -207,7 +220,6 @@ for(int c=0;c<files.length;c++){
 		owner.setUserName(save);
 		address = "images/titleScreen/loading.png";
 		repaint();
-		owner.newGame();
-		
+		owner.loadSave();
 	}
 }

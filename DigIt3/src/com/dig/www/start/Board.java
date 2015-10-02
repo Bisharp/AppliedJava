@@ -12,12 +12,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -56,12 +60,12 @@ public class Board extends MPanel implements ActionListener {
 
 	private int deadTimer = 100;
 
-	private ArrayList<Block> world;
-	private ArrayList<Block> wallList;
-	private ArrayList<NPC> npcs;
+	private ArrayList<Block> world=new ArrayList<Block>();
+	private ArrayList<Block> wallList=new ArrayList<Block>();
+	private ArrayList<NPC> npcs=new ArrayList<NPC>();
 	private NPC current = null;
-	private ArrayList<Enemy> enemies;
-	private ArrayList<Portal> portals;
+	private ArrayList<Enemy> enemies=new ArrayList<Enemy>();
+	private ArrayList<Portal> portals=new ArrayList<Portal>();
 
 	private int scrollX = 0;
 	private int scrollY = 0;
@@ -115,8 +119,7 @@ this.userName=name;
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
-		level="hauntedTest";
-		changeArea();
+		
 		owner = dM;
 		timer = new Timer(15, this);
 
@@ -1017,7 +1020,7 @@ for (GameCharacter character : friends) {
 		//locFile.delete();
 		try{
 		BufferedWriter writer=new BufferedWriter(new FileWriter(location));
-		writer.write("level");
+		writer.write(level);
 		writer.newLine();
 		
 		writer.write(character.getSave());
@@ -1033,5 +1036,99 @@ for (GameCharacter character : friends) {
 	}else{
 		 JOptionPane.showMessageDialog(owner, "Could not save.");
 	}
+	}
+public void startGame(){
+	
+}
+	public void loadSave() {
+		// TODO Auto-generated method stub
+		level="hauntedTest";
+		try{
+			String location=
+					(GameStartBoard.class.getProtectionDomain().getCodeSource()
+							.getLocation().getFile().toString()
+							+ "saveFiles/" + userName+".txt");
+			File saveFile=new File(location);
+			if(saveFile.exists()){
+				BufferedReader reader =new BufferedReader(new FileReader(saveFile));
+				String line;
+				ArrayList<String>lines=new ArrayList<String>();
+				while((line=reader.readLine())!=null){
+					lines.add(line);
+				}
+				if(lines.size()>0){
+					ArrayList<String> stuff = new ArrayList<String>();// should
+					// have
+					// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < lines.get(0).length(); c2++) {
+
+						if (lines.get(0).charAt(c2) == ',') {
+							stuff.add(currentS);
+							currentS = "";
+
+						} else {
+							currentS += lines.get(0).charAt(c2);
+						}
+					}
+					if (currentS != "") {
+						stuff.add(currentS);
+					}
+					try {
+						String lev=stuff.get(0);
+						level=lev;
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				for(int c=1;c<lines.size();c++){
+					//int pos=-1;
+					String name="spade";
+					if(lines.get(c).startsWith("shovel"))
+						name="shovel";
+					else if(lines.get(c).startsWith("heart"))
+						name="heart";
+					else if(lines.get(c).startsWith("diamond"))
+						name="diamond";
+					else if(lines.get(c).startsWith("club"))
+						name="club";
+				
+						if(character.getType().toString().equals(name)){
+							character.load(lines.get(c).substring(name.length()+1));
+					
+					}else{
+						for(int cA=0;cA<friends.size();cA++){
+							if(friends.get(cA).getType().toString().equals(name)){
+								friends.get(cA).load(lines.get(c).substring(name.length()+1));
+							break;
+						}
+						}
+					}
+						
+					
+						
+				
+				}
+				reader.close();
+				
+				
+				
+				changeArea();
+			}else{
+				throw new FileNotFoundException(); 
+			}
+			
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+			newGame();
+		}
+		
+		
+	}
+	public void newGame(){
+		level="hauntedTest";
+		changeArea();
 	}
 }

@@ -57,16 +57,25 @@ public class DigIt extends JFrame {
 	public static void main(String[] args) {
 		new DigIt();
 	}
-
-	public void newGame() {
-
-		nullBoards();
+public void newBoard(){
+	nullBoards();
 activePanel=null;
 		activePanel = new Board(this, userName);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
+}
+	public void newGame() {
+newBoard();
+if(activePanel instanceof Board){
+	((Board) activePanel).newGame();
 	}
-
+	}
+public void loadSave(){
+	newBoard();
+	if(activePanel instanceof Board){
+		((Board) activePanel).loadSave();
+		}
+}
 	public void quit() {
 
 		nullBoards();

@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -802,5 +803,38 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 	public void setMaxHealth(int setter){
 		HP_MAX=setter;
+	}
+	public void load(String string){
+		ArrayList<String> stuff = new ArrayList<String>();// should
+		// have
+		// 5
+		String currentS = "";
+		for (int c2 = 0; c2 < string.length(); c2++) {
+
+			if (string.charAt(c2) == ',') {
+				stuff.add(currentS);
+				currentS = "";
+
+			} else {
+				currentS +=string.charAt(c2);
+			}
+		}
+		if (currentS != "") {
+			stuff.add(currentS);
+		}
+		try {
+			
+			int health=Integer.parseInt(stuff.get(0));
+			int energy=Integer.parseInt(stuff.get(1));
+			System.out.println(getType().toString()+" health: "+health);
+			System.out.println(getType().toString()+" energy: "+energy);
+			HP_MAX=health;
+			MAX_ENERGY=energy;
+			this.health=HP_MAX;
+			this.energy=MAX_ENERGY;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
