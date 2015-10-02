@@ -68,8 +68,11 @@ public final class Statics {
 //	public static final Color SAND_RED = new Color(155, 36, 36);
 	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
+	public static final Font NPC = new Font("Calibri", Font.PLAIN, 20);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
+
+	public static final int LINE = 100;
 
 	
 	public static double pointTowards(Point b, Point a) {

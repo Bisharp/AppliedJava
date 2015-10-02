@@ -96,6 +96,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		public abstract String charName();
 
 	}
+	
+	private boolean willTalk = false;
 
 	private int deltaX = 0;
 	private int deltaY = 0;
@@ -359,8 +361,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_Q:// Special
 		case KeyEvent.VK_V:
 			specialPress = true;
-
 			break;
+			
+		case KeyEvent.VK_T:
+		case KeyEvent.VK_X:
+			willTalk = true;
 		}
 	}
 
@@ -428,6 +433,26 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 			break;
 		}
+	}
+	
+	public Rectangle getTalkBounds() {
+		if (willTalk) {
+			willTalk = false;
+
+			switch (direction) {
+			case UP:
+				return new Rectangle(x, y - height, width, height);
+			case DOWN:
+				return new Rectangle(x, y + height, width, height);
+			case RIGHT:
+				return new Rectangle(x + width, y, width, height);
+			case LEFT:
+			default:
+				return new Rectangle(x - width, y, width, height);
+			}
+		}
+		
+		return null;
 	}
 
 	public void collision(int midX, int midY, boolean isPlayer) {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
+import com.dig.www.npc.*;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -218,6 +219,69 @@ public class StageBuilder {
 		}
 
 		return enemies;
+	}
+	
+	public ArrayList<NPC> loadNPC() {
+		
+		ArrayList<NPC> npcs = new ArrayList<NPC>();
+		try {
+			ArrayList<String> strings = new ArrayList<String>();
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
+					+ "N.txt");
+			if (saveFile.exists()) {
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					strings.add(line);
+				}
+				reader.close();
+				for (int c = 0; c < strings.size(); c++) {
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+
+						if (strings.get(c).charAt(c2) == ',') {
+							stuff.add(currentS);
+							currentS = "";
+
+						} else {
+							currentS += strings.get(c).charAt(c2);
+						}
+					}
+					if (currentS != "") {
+						stuff.add(currentS);
+					}
+					try {
+						int nX = Integer.parseInt(stuff.get(0));
+						int nY = Integer.parseInt(stuff.get(1));
+						String identity = stuff.get(2);
+						
+						switch (identity) {
+						case NPC.WIZARD:
+							npcs.add(new WizardGuy(nX, nY, "images/npcs/map/stationary/wizard.png", owner));
+							break;
+						case NPC.KEPLER:
+							npcs.add(new Kepler(nX, nY, "images/npcs/map/stationary/kepler.png", owner));
+							break;
+						case NPC.SIR_COBALT:
+							npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner));
+							break;
+						}
+						
+					} catch (IndexOutOfBoundsException ex) {
+						ex.printStackTrace();
+
+					}
+				}
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return npcs;
 	}
 
 	private int[][] createArray(String string) {

@@ -20,6 +20,7 @@ import javax.swing.Timer;
 
 import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
+import com.dig.www.npc.NPC;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
 import com.dig.www.enemies.*;
@@ -50,6 +51,8 @@ public class Board extends MPanel implements ActionListener {
 
 	private ArrayList<Block> world;
 	private ArrayList<Block> wallList;
+	private ArrayList<NPC> npcs;
+	private NPC current = null;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Portal> portals;
 
@@ -100,11 +103,11 @@ public class Board extends MPanel implements ActionListener {
 
 	public Board(DigIt dM, String name) {
 
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this,true);
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
-		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this,false));
-		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this,false));
-		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this,false));
+		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
+		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 		changeArea("hauntedTest");
 
 		owner = dM;
@@ -131,15 +134,16 @@ public class Board extends MPanel implements ActionListener {
 		world = sB.read();
 		enemies = sB.loadEn();
 		portals = sB.loadPortals();
-for(int c=0;c<friends.size();c++){
-	if(c>1){
-	friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);	
-	friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50-((c-1)*100));
-	}else{
-		friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50+(c*100));
-		friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
-	}
-}
+		npcs = sB.loadNPC();
+		for (int c = 0; c < friends.size(); c++) {
+			if (c > 1) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - ((c - 1) * 100));
+			} else {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + (c * 100));
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+			}
+		}
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
 		}
@@ -167,6 +171,9 @@ for(int c=0;c<friends.size();c++){
 			e.setAlive(true);
 			e.resetImage(this);
 		}
+
+		for (NPC n : npcs)
+			n.initialAnimate(spawnX, spawnY);
 
 		setBackground(getTextureBack());
 
@@ -249,8 +256,13 @@ for(int c=0;c<friends.size();c++){
 				if (p2.isOnScreen())
 					p2.draw(g2d);
 
+			// TODO npc draw
+			for (NPC npc : npcs)
+				if (npc.isOnScreen())
+					npc.draw(g2d);
+
 			character.draw(g2d);
-			for(GameCharacter character:friends){
+			for (GameCharacter character : friends) {
 				character.draw(g2d);
 			}
 
@@ -260,13 +272,27 @@ for(int c=0;c<friends.size();c++){
 			if (state == State.NPC) {
 
 				// TODO implement NPC draw code
+				g2d.setFont(Statics.NPC);
 				g2d.setColor(Color.LIGHT_GRAY);
 				g2d.fillRect(0, Statics.BOARD_HEIGHT - 150, Statics.BOARD_WIDTH, 150);
+				g2d.setColor(Color.BLACK);
+				g2d.fillRect(10, Statics.BOARD_HEIGHT - 130, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+				g2d.drawImage(current.getGif(), 10, Statics.BOARD_HEIGHT - 130, this);
+				g2d.setColor(Color.BLACK);
 
-				// getsNPC talking image, draws it at an appropriate spot.
-				// draws text.
+				String l = current.getLine();
+				if (l.length() < Statics.LINE)
+					g2d.drawString(l, 140, Statics.BOARD_HEIGHT - 100);
+				else if (l.length() < Statics.LINE * 2) {
+					g2d.drawString(l.substring(0, Statics.LINE), 140, Statics.BOARD_HEIGHT - 100);
+					g2d.drawString(l.substring(Statics.LINE, l.length()), 140, Statics.BOARD_HEIGHT - 75);
+				} else if (l.length() < Statics.LINE * 3) {
+					g2d.drawString(l.substring(0, Statics.LINE), 140, Statics.BOARD_HEIGHT - 100);
+					g2d.drawString(l.substring(Statics.LINE, Statics.LINE * 2), 140, Statics.BOARD_HEIGHT - 75);
+					g2d.drawString(l.substring(Statics.LINE * 2, l.length()), 140, Statics.BOARD_HEIGHT - 50);
+				} else
+					System.err.println("The quote is too long. Shorten it.");
 			}
-
 			break;
 
 		case PAUSED:
@@ -335,59 +361,61 @@ for(int c=0;c<friends.size();c++){
 			return;
 		}
 
-		if (!decision.equals(character.getType().charName())){
-			
-				GameCharacter current=character;
-				int friendNum= getFriend(decision);
-				character=friends.get(friendNum);
-				friends.set(friendNum, current);
-character.setPlayer(true);
-friends.get(friendNum).setPlayer(false);
-character.stop();
-System.out.println(Statics.BOARD_WIDTH / 2 - 50-character.getX());
-scroll(Statics.BOARD_WIDTH / 2 - 50-character.getX(),(int)Statics.BOARD_HEIGHT/2 - 50-character.getY()
-		);
-Collections.sort(friends);
-		}timer.restart();
+		if (!decision.equals(character.getType().charName())) {
+
+			GameCharacter current = character;
+			int friendNum = getFriend(decision);
+			character = friends.get(friendNum);
+			friends.set(friendNum, current);
+			character.setPlayer(true);
+			friends.get(friendNum).setPlayer(false);
+			character.stop();
+			System.out.println(Statics.BOARD_WIDTH / 2 - 50 - character.getX());
+			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+			Collections.sort(friends);
+		}
+		timer.restart();
 	}
 
 	private void scroll(int x, int y) {
-		// TODO Auto-generated method stub
-		
-			character.setX(character.getX()+x);
-			character.setY(character.getY()+y);
-		
-		for(Block b:world){
-			b.setX(b.getX()+x);
-			b.setY(b.getY()+y);
+
+		character.setX(character.getX() + x);
+		character.setY(character.getY() + y);
+
+		for (Block b : world) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
 		}
-		for(GameCharacter b:friends){
-			b.setX(b.getX()+x);
-			b.setY(b.getY()+y);
+		for (GameCharacter b : friends) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
 		}
-		for(Enemy b:enemies){
-			b.setX(b.getX()+x);
-			b.setY(b.getY()+y);
+		for (Enemy b : enemies) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
 		}
-		for(FProjectile b:fP){
-			b.setX(b.getX()+x);
-			b.setY(b.getY()+y);
+		for (FProjectile b : fP) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
 		}
-		for(Portal b:portals){
-			b.setX(b.getX()+x);
-			b.setY(b.getY()+y);
+		for (Portal b : portals) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
+		}
+
+		for (NPC b : npcs) {
+			b.setX(b.getX() + x);
+			b.setY(b.getY() + y);
 		}
 	}
 
 	public int getFriend(String decision) {
-		// TODO Auto-generated method stub
-	
-	for(int c=0;c<friends.size();c++){
-		if(friends.get(c).getType().charName().equals(decision)){
-			return c;
+		for (int c = 0; c < friends.size(); c++) {
+			if (friends.get(c).getType().charName().equals(decision)) {
+				return c;
+			}
 		}
-	}
-	return 0;
+		return 0;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -397,7 +425,7 @@ Collections.sort(friends);
 		case INGAME:
 
 			character.animate();
-			for(GameCharacter character:friends){
+			for (GameCharacter character : friends) {
 				character.animate();
 			}
 
@@ -447,21 +475,24 @@ Collections.sort(friends);
 				// /\
 				// || Nightmare Fuel
 			}
+
 			if (switching)
 				openSwitchDialogue();
 
-			checkCollisions();
+			setCharacterStates(character.getCollisionBounds());
 			repaint();
-			for(int c=0;c<friends.size();c++){
-				for(int c2=0;c2<friends.size();c2++){
-					if(c==c2){
-						
-					}else{
-					if(!friends.get(c).getWallBound()&&!friends.get(c2).getWallBound()){	
-					
-					if(friends.get(c).getBounds().intersects(friends.get(c2).getBounds())){
-					friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY(), true);	
-					}}}
+			for (int c = 0; c < friends.size(); c++) {
+				for (int c2 = 0; c2 < friends.size(); c2++) {
+					if (c == c2) {
+
+					} else {
+						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
+
+							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds())) {
+								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY(), true);
+							}
+						}
+					}
 				}
 			}
 			break;
@@ -479,13 +510,6 @@ Collections.sort(friends);
 	}
 
 	// Beginning of checkCollisions()-related code
-
-	public void checkCollisions() {
-
-		Rectangle r3 = character.getCollisionBounds();
-
-		setCharacterStates(r3);
-	}
 
 	public void setCharacterStates(Rectangle r3) {
 
@@ -523,9 +547,6 @@ Collections.sort(friends);
 				// End of line-of-sight
 			}
 
-			
-			
-			
 			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
 
 				switch (b.getType()) {
@@ -538,13 +559,11 @@ Collections.sort(friends);
 					break;
 
 				// Cases for raised obstructions
-				case SWITCH:
-					switching = true;
 				case PIT:
 				case WALL:
 				case CRYSTAL:
 				case LIQUID:
-					character.collision(b.getMidX(), b.getMidY(),false);
+					character.collision(b.getMidX(), b.getMidY(), false);
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -554,37 +573,37 @@ Collections.sort(friends);
 					character.endAction();
 				}
 			}
-for(GameCharacter character:friends){
-	Rectangle r2 = character.getCollisionBounds();
-	if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r2)) {
+			for (GameCharacter character : friends) {
+				Rectangle r2 = character.getCollisionBounds();
+				if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r2)) {
 
-		switch (b.getType()) {
+					switch (b.getType()) {
 
-		// Cases for the floor
-		case GROUND:
-		case ROCK:
-		case CARPET:
-		case DIRT:
-			break;
+					// Cases for the floor
+					case GROUND:
+					case ROCK:
+					case CARPET:
+					case DIRT:
+						break;
 
-		// Cases for raised obstructions
-		case SWITCH:
-			//switching = true;
-		case PIT:
-		case WALL:
-		case CRYSTAL:
-		case LIQUID:
-			character.collision(b.getMidX(), b.getMidY(),false);
-		}
-	} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-			|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-		if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+					// Cases for raised obstructions
+					case SWITCH:
+						// switching = true;
+					case PIT:
+					case WALL:
+					case CRYSTAL:
+					case LIQUID:
+						character.collision(b.getMidX(), b.getMidY(), false);
+					}
+				} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
-			b.interact();
-			character.endAction();
-		}
-	}
-}
+						b.interact();
+						character.endAction();
+					}
+				}
+			}
 
 			if (b.isOnScreen()) {
 				FProjectile p;
@@ -652,60 +671,60 @@ for(GameCharacter character:friends){
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
 						}
-						
-						
-					for(GameCharacter character:friends){
+
+						for (GameCharacter character : friends) {
 							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
 								character.takeDamage(e.getDamage());
 							}
-						}	
-					}
-					
-				}
-				// end of enemy loop
-if(character.getMove()==Moves.AURA){
-							
-							boolean healed=false;
-						
-						for(GameCharacter friend2:friends){
-						
-								if(character.getActBounds().intersects(friend2.getBounds())){
-									friend2.heal(3);
-									healed=true;
-								}
-							}
-						
-						if(healed){
-							character.heal(3);
-							character.setMelee(0);
 						}
 					}
-						for(GameCharacter friend:friends){
-							if(friend.getMove()==Moves.AURA){
-								
-								boolean healed=false;
-								if(friend.getActBounds().intersects(r3)){
-									character.heal(3);
-									healed=true;
-								}
-							for(GameCharacter friend2:friends){
-								if(friend==friend2){
-									
-								}else{
-									if(friend.getActBounds().intersects(friend2.getBounds())){
-										friend2.heal(3);
-										healed=true;
-									}
+
+				}
+				// end of enemy loop
+				if (character.getMove() == Moves.AURA) {
+
+					boolean healed = false;
+
+					for (GameCharacter friend2 : friends) {
+
+						if (character.getActBounds().intersects(friend2.getBounds())) {
+							friend2.heal(3);
+							healed = true;
+						}
+					}
+
+					if (healed) {
+						character.heal(3);
+						character.setMelee(0);
+					}
+				}
+				for (GameCharacter friend : friends) {
+					if (friend.getMove() == Moves.AURA) {
+
+						boolean healed = false;
+						if (friend.getActBounds().intersects(r3)) {
+							character.heal(3);
+							healed = true;
+						}
+						for (GameCharacter friend2 : friends) {
+							if (friend == friend2) {
+
+							} else {
+								if (friend.getActBounds().intersects(friend2.getBounds())) {
+									friend2.heal(3);
+									healed = true;
 								}
 							}
-							if(healed){
-							
-								friend.heal(3);
-								friend.setMelee(0);
-							}
-						} }
+						}
+						if (healed) {
+
+							friend.heal(3);
+							friend.setMelee(0);
+						}
+					}
+				}
 			}
 		}
 
@@ -722,6 +741,23 @@ if(character.getMove()==Moves.AURA){
 				timer.restart();
 			}
 		}
+
+		Rectangle bounds = character.getTalkBounds();
+		for (NPC n : npcs) {
+			n.animate();
+			n.setOnScreen(n.getBounds().intersects(getScreen()));
+
+			if (n.isOnScreen()) {
+				if (r3.intersects(n.getBounds()))
+					character.collision(n.getMidX(), n.getMidY(), false);
+				if (bounds != null && n.getBounds().intersects(bounds)) {
+					current = n;
+					current.setLine();
+					state = State.NPC;
+					bounds = null;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -735,7 +771,7 @@ if(character.getMove()==Moves.AURA){
 				state = State.NPC;
 		else if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R)
 			switching = true;
-		else if (key == KeyEvent.VK_ESCAPE) {
+		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
 			if (state != State.DEAD)
 				state = State.PAUSED;
@@ -743,6 +779,13 @@ if(character.getMove()==Moves.AURA){
 			Statics.exit(this);
 		}
 		switch (state) {
+
+		case NPC:
+			timer.stop();
+			state = State.INGAME;
+			current = null;
+			timer.restart();
+			break;
 
 		case PAUSED:
 			pausedHandler(key);
@@ -832,9 +875,12 @@ if(character.getMove()==Moves.AURA){
 
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
-		
+
 		for (i = 0; i < friends.size(); i++)
 			friends.get(i).basicAnimate();
+
+		for (i = 0; i < npcs.size(); i++)
+			npcs.get(i).basicAnimate();
 	}
 
 	public GameCharacter getCharacter() {
@@ -907,7 +953,8 @@ if(character.getMove()==Moves.AURA){
 			return Statics.OFF_GREEN;
 		}
 	}
-	public ArrayList<Enemy>getEnemies(){
+
+	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
 }
