@@ -268,6 +268,9 @@ public class StageBuilder {
 						case NPC.SIR_COBALT:
 							npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner));
 							break;
+						case NPC.SHOPKEEP:
+							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner));
+							break;
 						}
 						
 					} catch (IndexOutOfBoundsException ex) {

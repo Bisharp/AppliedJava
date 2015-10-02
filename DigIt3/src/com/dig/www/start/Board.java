@@ -20,7 +20,7 @@ import javax.swing.Timer;
 
 import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
-import com.dig.www.npc.NPC;
+import com.dig.www.npc.*;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
 import com.dig.www.enemies.*;
@@ -782,6 +782,8 @@ public class Board extends MPanel implements ActionListener {
 
 		case NPC:
 			timer.stop();
+			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER)
+				((ServiceNPC) current).service();
 			state = State.INGAME;
 			current = null;
 			timer.restart();

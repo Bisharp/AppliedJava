@@ -10,10 +10,11 @@ import java.awt.Window.Type;
 import java.awt.event.KeyEvent;
 
 import com.dig.www.start.Board;
+import com.dig.www.start.Board.State;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public abstract class GameCharacter extends Sprite implements Comparable<GameCharacter>{
+public abstract class GameCharacter extends Sprite implements Comparable<GameCharacter> {
 
 	/**
 	 * 
@@ -96,7 +97,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		public abstract String charName();
 
 	}
-	
+
 	private boolean willTalk = false;
 
 	private int deltaX = 0;
@@ -141,30 +142,22 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
 
-	public GameCharacter(int x, int y, Board owner, Types type,String charName, boolean player, 
-			int NEG_TIMER_MELEE,
-			int NEG_TIMER_RANGED,
-			int NEG_TIMER_SPECIAL, 
-			int TIMER_MELEE,
-			int TIMER_RANGED, int 
-			TIMER_SPECIAL, 
-			int HP_MAX,
-			int SPEED,
-			int MAX_ENERGY) {
+	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
+			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY) {
 		super(x, y, "n", owner);
 		this.player = player;
 		this.charName = charName;
 		this.type = type;
-		this. NEG_TIMER_MELEE=NEG_TIMER_MELEE;
-		this. NEG_TIMER_RANGED=NEG_TIMER_RANGED;
-		this. NEG_TIMER_SPECIAL= NEG_TIMER_SPECIAL;
-		this.TIMER_MELEE=TIMER_MELEE;
-		this. TIMER_RANGED=TIMER_RANGED;
-		this.TIMER_SPECIAL =TIMER_SPECIAL;
-		this. HP_MAX=HP_MAX;
-		this. SPEED=SPEED;
-		this. MAX_ENERGY=MAX_ENERGY;
-		health=HP_MAX;
+		this.NEG_TIMER_MELEE = NEG_TIMER_MELEE;
+		this.NEG_TIMER_RANGED = NEG_TIMER_RANGED;
+		this.NEG_TIMER_SPECIAL = NEG_TIMER_SPECIAL;
+		this.TIMER_MELEE = TIMER_MELEE;
+		this.TIMER_RANGED = TIMER_RANGED;
+		this.TIMER_SPECIAL = TIMER_SPECIAL;
+		this.HP_MAX = HP_MAX;
+		this.SPEED = SPEED;
+		this.MAX_ENERGY = MAX_ENERGY;
+		health = HP_MAX;
 	}
 
 	@Override
@@ -224,8 +217,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					moveY = false;
 				}
 			}
-			if (new Point(x, y).distance(new Point(owner.getBounds()
-					.getLocation())) > Statics.BOARD_WIDTH) {
+			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
 				x = owner.getCharacterX();
 				y = owner.getCharacterY();
 			}
@@ -284,13 +276,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				owner.reAnimate();
 			} else {
 				if (!isPlayerCollide) {
-					if (new Point(getMidX(), getMidY()).distance(new Point(
-							wallX, getMidY())) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
 					}
-					if (new Point(getMidX(), getMidY()).distance(new Point(
-							getMidX(), wallY)) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(getMidX(), wallY)) < 100) {
 						deltaY = -deltaY;
 						y += deltaY;
 					}
@@ -362,7 +352,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_V:
 			specialPress = true;
 			break;
-			
+
 		case KeyEvent.VK_T:
 		case KeyEvent.VK_X:
 			willTalk = true;
@@ -434,7 +424,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			break;
 		}
 	}
-	
+
 	public Rectangle getTalkBounds() {
 		if (willTalk) {
 			willTalk = false;
@@ -451,7 +441,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				return new Rectangle(x - width, y, width, height);
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -473,8 +463,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case DOWN:
 			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y
-					+ Statics.BLOCK_HEIGHT - 6, 6, 6);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
 		case LEFT:
 		default:
 			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
@@ -488,12 +477,12 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (meleePress) {
 			if (meleeTimer <= NEG_TIMER_MELEE// ||this instanceof Diamond
 			) {
-				meleeTimer = TIMER_MELEE ;
+				meleeTimer = TIMER_MELEE;
 			}
 		}
 
 		if (specialPress && !meleePress && !rangedPress) {
-			if (specialTimer <= NEG_TIMER_SPECIAL ) {
+			if (specialTimer <= NEG_TIMER_SPECIAL) {
 				specialTimer = TIMER_SPECIAL;
 			}
 		}
@@ -583,9 +572,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			if (p != null) {
 				g2d.setColor(Color.black);
-				g2d.drawLine(getMidX(), getMidY(), (int) p.getX()
-						+ Statics.BLOCK_HEIGHT / 2, (int) p.getY()
-						+ Statics.BLOCK_HEIGHT / 2);
+				g2d.drawLine(getMidX(), getMidY(), (int) p.getX() + Statics.BLOCK_HEIGHT / 2, (int) p.getY() + Statics.BLOCK_HEIGHT / 2);
 			}
 			if (direction == Direction.UP)
 				g2d.drawImage(image, x, y, owner);
@@ -598,8 +585,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
-				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED
-						: Color.DARK_GRAY);
+				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
 				g2d.fillRect(i * 30, 70, 20, 20);
 				g2d.setColor(Color.WHITE);
 				g2d.drawRect(i * 30, 70, 20, 20);
@@ -708,8 +694,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 		else
 			dir = "side";
-		return "images/characters/" + (charName != null ? charName : "spade")
-				+ "/" + dir + "/";
+		return "images/characters/" + (charName != null ? charName : "spade") + "/" + dir + "/";
 	}
 
 	public Rectangle getCollisionBounds() {
@@ -747,8 +732,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	protected void timersCount() {
-		if (meleeTimer > NEG_TIMER_MELEE
-				&& (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
+		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
 			meleeTimer--;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
@@ -804,10 +788,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// TODO Auto-generated method stub
 		return wallBound;
 	}
+
 	@Override
-	public int compareTo(GameCharacter g){
+	public int compareTo(GameCharacter g) {
 		return Integer.compare(this.SPEED, g.SPEED);
-		
+
 	}
-	
 }

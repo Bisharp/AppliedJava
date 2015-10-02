@@ -12,9 +12,11 @@ public class NPC extends Sprite{
 	public static final String WIZARD = "wizard";
 	public static final String SIR_COBALT = "sirCobalt";
 	public static final String KEPLER = "kepler";
-	private String[]dialogs;
-	private Image gif;
-	private int line;
+	public static final String SHOPKEEP = "shopkeep";
+	
+	protected String[]dialogs;
+	protected Image gif;
+	protected int line;
 	
 	public NPC(int x, int y, String loc, Board owner, String[]dialogs, String s) {
 		super(x, y, loc);
