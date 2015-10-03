@@ -334,7 +334,7 @@ public class StageBuilder {
 						if (val == 0)
 							npcs.add(new Objects(nX, nY, loc, wall, owner));
 						else
-							npcs.add(new Collectible(nX, nY, owner, val));
+							npcs.add(new Collectible(nX, nY, loc, owner, val));
 
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();

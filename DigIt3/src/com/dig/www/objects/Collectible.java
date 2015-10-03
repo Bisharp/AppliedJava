@@ -13,6 +13,12 @@ public class Collectible extends Objects {
 		
 		this.value = value;
 	}
+	
+	public Collectible(int x, int y, String loc, Board owner, int value) {
+		super(x, y, loc, false, owner);
+		
+		this.value = value;
+	}
 
 	public int getValue() {
 		return value;

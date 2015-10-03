@@ -1,4 +1,4 @@
 500,1500,images/objects/Leaves.png,false
-300,1500,n,n,10
-300,1600,n,n,10
-300,1700,n,n,10
+300,1500,images/objects/collectibles/coin0.png,n,10
+300,1600,images/objects/collectibles/coin1.png,n,10
+300,1700,images/objects/collectibles/coin0.png,n,10
