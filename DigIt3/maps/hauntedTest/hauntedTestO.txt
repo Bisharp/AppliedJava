@@ -1,3 +1,4 @@
-1435,2335,images/objects/Leaves.png,false
-1640,2540,images/objects/Wood.png,false
-600,1400,images/objects/PTree0.png,true
+500,1500,images/objects/Leaves.png,false
+300,1500,n,n,10
+300,1600,n,n,10
+300,1700,n,n,10
