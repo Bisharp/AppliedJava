@@ -36,9 +36,7 @@ public class DigIt extends JFrame {
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 
-		JOptionPane.showMessageDialog(this,
-				"Please plug in any game controllers", NAME,
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Please plug in any game controllers", NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		controllerThread = new Thread(new GameControllerRunnable(this));
 		controllerThread.start();
@@ -57,25 +55,29 @@ public class DigIt extends JFrame {
 	public static void main(String[] args) {
 		new DigIt();
 	}
-public void newBoard(){
-	nullBoards();
-activePanel=null;
+
+	public void newBoard() {
+		nullBoards();
+		activePanel = null;
 		activePanel = new Board(this, userName);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
-}
+	}
+
 	public void newGame() {
-newBoard();
-if(activePanel instanceof Board){
-	((Board) activePanel).newGame();
-	}
-	}
-public void loadSave(){
-	newBoard();
-	if(activePanel instanceof Board){
-		((Board) activePanel).loadSave();
+		newBoard();
+		if (activePanel instanceof Board) {
+			((Board) activePanel).newGame();
 		}
-}
+	}
+
+	public void loadSave() {
+		newBoard();
+		if (activePanel instanceof Board) {
+			((Board) activePanel).loadSave();
+		}
+	}
+
 	public void quit() {
 
 		nullBoards();

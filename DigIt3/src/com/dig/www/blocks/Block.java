@@ -540,7 +540,6 @@ public class Block extends Sprite {
 				return Color.LIGHT_GRAY;
 			case CARPET:
 				return Statics.BROWN;
-
 			case CRYSTAL:
 				return Statics.LIGHT_BLUE;
 
@@ -568,7 +567,6 @@ public class Block extends Sprite {
 				return Color.LIGHT_GRAY;
 			case CARPET:
 				return Statics.BROWN;
-
 			case CRYSTAL:
 				return Statics.LIGHT_BLUE;
 

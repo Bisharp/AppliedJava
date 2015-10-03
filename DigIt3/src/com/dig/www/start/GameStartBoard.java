@@ -45,16 +45,13 @@ public class GameStartBoard extends MPanel {
 
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
-	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>',
-			'|' };
+	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
 
 	public GameStartBoard(DigIt dM) {
 
 		setLayout(new BorderLayout());
 
-		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource()
-				.getLocation().getFile()
-				+ "saveFiles/";
+		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
 
 		owner = dM;
@@ -80,33 +77,30 @@ public class GameStartBoard extends MPanel {
 				newGame();
 			}
 		});
-loadGame.addActionListener(new ActionListener() {
-	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		String[]files=new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
-				.getLocation().getFile()
-				+ "saveFiles").list();
-		if(files==null){
-			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
-					.getLocation().getFile()
-					+ "saveFiles").mkdirs();
-			files=new String[0];
-		}
-		String[]options=new String[files.length+1];
-		
-		options[0]="Cancel";
-		for(int c=1;c<files.length+1;c++){
-			options[c]=files[c-1];
-		}
-	
-		int sel=JOptionPane.showOptionDialog(owner, "What game do you want to load?", "Load", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, 0);
-	if(sel!=0){
-		load(options[sel].substring(0, options[sel].lastIndexOf(".txt")));
-	}
-	}
-});
+		loadGame.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				String[] files = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").list();
+				if (files == null) {
+					new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").mkdirs();
+					files = new String[0];
+				}
+				String[] options = new String[files.length + 1];
+
+				options[0] = "Cancel";
+				for (int c = 1; c < files.length + 1; c++) {
+					options[c] = files[c - 1];
+				}
+
+				int sel = JOptionPane.showOptionDialog(owner, "What game do you want to load?", "Load", JOptionPane.OK_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, 0);
+				if (sel != 0) {
+					load(options[sel].substring(0, options[sel].lastIndexOf(".txt")));
+				}
+			}
+		});
 		add(buttonPanel, BorderLayout.SOUTH);
 		// setOpaque(false);
 		setBackground(Color.BLACK);
@@ -149,9 +143,9 @@ loadGame.addActionListener(new ActionListener() {
 	}
 
 	public void keyPress(int key) {
-if(key==KeyEvent.VK_ESCAPE){
-	System.exit(0);
-}
+		if (key == KeyEvent.VK_ESCAPE) {
+			System.exit(0);
+		}
 	}
 
 	public void keyRelease(int key) {
@@ -159,43 +153,47 @@ if(key==KeyEvent.VK_ESCAPE){
 
 	public void newGame() {
 
-		String s = (String) JOptionPane.showInputDialog(this,
-				"Please enter a name for your save file: ", DigIt.NAME,
-				JOptionPane.PLAIN_MESSAGE, Statics.ICON, null, null);
-String[]files=new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
-					.getLocation().getFile()
-					+ "saveFiles").list();
-if(files==null){
-	new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
-			.getLocation().getFile()
-			+ "saveFiles").mkdirs();
-	files=new String[0];
-}
-for(int c=0;c<files.length;c++){
-	if(files[c].substring(0,  files[c].lastIndexOf(".txt")).equals(s)){
-	int sel=	JOptionPane.showConfirmDialog(this, "This file already exists. Do you want to load?");
-	if(sel==JOptionPane.YES_OPTION){
-		load(s);
+		String s = (String) JOptionPane.showInputDialog(this, "Please enter a name for your save file: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
+				Statics.ICON, null, null);
+		String[] files = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").list();
+		if (files == null) {
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").mkdirs();
+			files = new String[0];
+		}
+		for (int c = 0; c < files.length; c++) {
+			if (files[c].substring(0, files[c].lastIndexOf(".txt")).equals(s)) {
+				int sel = JOptionPane.showConfirmDialog(this, "This file already exists. Do you want to load?");
+				if (sel == JOptionPane.YES_OPTION) {
+					load(s);
+				}
+				return;
+			}
+		}
 		
-	}
-		return;	
-	}
-}
+		for (char invalid : invalidChars) {
+			for (int i = 0; i < s.length(); i++) {
+				if (s.charAt(i) == invalid) {
+					Statics.showError("This username contains the invalid character " + invalid + ".", this);
+				}
+			}
+		}
+		
 		if (s != null && !s.equals("")) {
 
-//			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
-//					.getLocation().getFile()
-//					+ "saveFiles/" + s).mkdirs();
-			try{
-			BufferedWriter writer=new BufferedWriter(new FileWriter((GameStartBoard.class.getProtectionDomain().getCodeSource()
-					.getLocation().getFile()
-					+ "saveFiles/" + s+".txt")));
-			writer.write("");
-			writer.close();
-			}catch(Exception ex){
+			// new
+			// File(GameStartBoard.class.getProtectionDomain().getCodeSource()
+			// .getLocation().getFile()
+			// + "saveFiles/" + s).mkdirs();
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation()
+						.getFile()
+						+ "saveFiles/" + s + ".txt")));
+				writer.write("");
+				writer.close();
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			//System.out.println("Save name accepted");
+			// System.out.println("Save name accepted");
 			owner.setUserName(s);
 			address = "images/titleScreen/loading.png";
 			repaint();
@@ -215,8 +213,9 @@ for(int c=0;c<files.length;c++){
 		screenImage = null;
 		repaint();
 	}
-	public void load(String save){
-		
+
+	public void load(String save) {
+
 		owner.setUserName(save);
 		address = "images/titleScreen/loading.png";
 		repaint();

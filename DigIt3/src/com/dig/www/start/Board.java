@@ -28,7 +28,7 @@ import javax.swing.Timer;
 import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.npc.*;
-import com.dig.www.objects.Objects;
+import com.dig.www.objects.*;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
 import com.dig.www.enemies.*;
@@ -54,18 +54,18 @@ public class Board extends MPanel implements ActionListener {
 	private GameCharacter character;
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
-	protected ArrayList<Objects>objects=new ArrayList<Objects>();
+	protected ArrayList<Objects> objects = new ArrayList<Objects>();
 	private State state;
 	private boolean debug = false;
 
 	private int deadTimer = 100;
 
-	private ArrayList<Block> world=new ArrayList<Block>();
-	private ArrayList<Block> wallList=new ArrayList<Block>();
-	private ArrayList<NPC> npcs=new ArrayList<NPC>();
+	private ArrayList<Block> world = new ArrayList<Block>();
+	private ArrayList<Block> wallList = new ArrayList<Block>();
+	private ArrayList<NPC> npcs = new ArrayList<NPC>();
 	private NPC current = null;
-	private ArrayList<Enemy> enemies=new ArrayList<Enemy>();
-	private ArrayList<Portal> portals=new ArrayList<Portal>();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	private int scrollX = 0;
 	private int scrollY = 0;
@@ -113,12 +113,17 @@ public class Board extends MPanel implements ActionListener {
 	// * | Getters/setters for owner
 
 	public Board(DigIt dM, String name) {
-this.userName=name;
+		this.userName = name;
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
+
+		Wallet w = new Wallet();
+		for (GameCharacter f : friends)
+			f.setWallet(w);
+		character.setWallet(w);
 		
 		owner = dM;
 		timer = new Timer(15, this);
@@ -145,7 +150,7 @@ this.userName=name;
 		enemies = sB.loadEn();
 		portals = sB.loadPortals();
 		npcs = sB.loadNPC();
-		objects=sB.loadObjects();
+		objects = sB.loadObjects();
 		for (int c = 0; c < friends.size(); c++) {
 			if (c > 1) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -188,9 +193,9 @@ this.userName=name;
 
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
-		
+
 		setBackground(getTextureBack());
-save();
+		save();
 		System.gc();
 	}
 
@@ -268,7 +273,7 @@ save();
 			for (Objects npc : objects)
 				if (npc.isOnScreen())
 					npc.draw(g2d);
-			
+
 			for (Portal p2 : portals)
 				if (p2.isOnScreen())
 					p2.draw(g2d);
@@ -277,12 +282,11 @@ save();
 			for (NPC npc : npcs)
 				if (npc.isOnScreen())
 					npc.draw(g2d);
-			
-for (GameCharacter character : friends) {
+
+			for (GameCharacter character : friends) {
 				character.draw(g2d);
 			}
 			character.draw(g2d);
-			
 
 			if (!isDay)
 				g2d.drawImage(sky, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, this);
@@ -464,9 +468,7 @@ for (GameCharacter character : friends) {
 				// /\
 				// || Nightmare Fuel
 			}
-			
 
-	
 			for (int i = 0; i < fP.size(); i++) {
 
 				if (!fP.get(i).isOnScreen()) {
@@ -761,7 +763,7 @@ for (GameCharacter character : friends) {
 
 			if (r3.intersects(p.getBounds())) {
 				timer.stop();
-				level=p.getArea();
+				level = p.getArea();
 				changeArea();
 				timer.restart();
 			}
@@ -783,19 +785,29 @@ for (GameCharacter character : friends) {
 				}
 			}
 		}
-		for(Objects n:objects){
+
+		Objects n;
+		for (int u = 0; u < objects.size(); u++) {
+
+			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
-			if(n.getBounds().intersects(character.getCollisionBounds())){
+			if (n.getBounds().intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
+				if (n instanceof Collectible) {
+					Statics.playSound(this, "collectibles/marioCoin.wav");
+					character.getWallet().addMoney(((Collectible) n).getValue());
+					objects.remove(u);
+					u--;
+				}
 			}
-			for(int c=0;c<friends.size();c++){
-				
-				if(n.getBounds().intersects(friends.get(c).getCollisionBounds())){
-			n.collidePlayer(c);
-		}
+			for (int c = 0; c < friends.size(); c++) {
+
+				if (n.getBounds().intersects(friends.get(c).getCollisionBounds())) {
+					n.collidePlayer(c);
+				}
 			}
-		
+
 		}
 	}
 
@@ -805,10 +817,10 @@ for (GameCharacter character : friends) {
 
 		if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R && state != State.NPC)
 			switching = true;
-		else if(key==KeyEvent.VK_I){
+		else if (key == KeyEvent.VK_I) {
 			character.setMaxHealth(1000);
 		}
-		
+
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
 			if (state != State.DEAD)
@@ -931,7 +943,7 @@ for (GameCharacter character : friends) {
 
 		for (i = 0; i < npcs.size(); i++)
 			npcs.get(i).basicAnimate();
-		
+
 		for (i = 0; i < objects.size(); i++)
 			objects.get(i).basicAnimate();
 	}
@@ -1010,56 +1022,56 @@ for (GameCharacter character : friends) {
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
-	public void save(){
-	String location=
-		(GameStartBoard.class.getProtectionDomain().getCodeSource()
-				.getLocation().getFile().toString()
-				+ "saveFiles/" + userName+".txt");
-	File locFile=new File(location);
-	if(locFile.exists()){
-		//locFile.delete();
-		try{
-		BufferedWriter writer=new BufferedWriter(new FileWriter(location));
-		writer.write(level);
-		writer.newLine();
-		
-		writer.write(character.getSave());
-		for(int c=0;c<friends.size();c++){
-			writer.newLine();
-			writer.write(friends.get(c).getSave());
-		}
-		writer.close();
-		writer.close();}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}else{
-		 JOptionPane.showMessageDialog(owner, "Could not save.");
-	}
-	}
-public void startGame(){
-	
-}
-	public void loadSave() {
-		// TODO Auto-generated method stub
-		level="hauntedTest";
-		try{
-			String location=
-					(GameStartBoard.class.getProtectionDomain().getCodeSource()
-							.getLocation().getFile().toString()
-							+ "saveFiles/" + userName+".txt");
-			File saveFile=new File(location);
-			if(saveFile.exists()){
-				BufferedReader reader =new BufferedReader(new FileReader(saveFile));
-				String line;
-				ArrayList<String>lines=new ArrayList<String>();
-				while((line=reader.readLine())!=null){
-					lines.add(line);
+
+	public void save() {
+		String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/" + userName + ".txt");
+		File locFile = new File(location);
+		if (locFile.exists()) {
+			// locFile.delete();
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(location));
+				writer.write(level);
+				writer.newLine();
+
+				writer.write(character.getSave());
+				for (int c = 0; c < friends.size(); c++) {
+					writer.newLine();
+					writer.write(friends.get(c).getSave());
 				}
-				if(lines.size()>0){
-					ArrayList<String> stuff = new ArrayList<String>();// should
-					// have
-					// 5
+				writer.newLine();
+				writer.write(character != null ? "" + character.getWallet().getMoney() : "00");
+				writer.close();
+				//writer.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			JOptionPane.showMessageDialog(owner, "Could not save.");
+		}
+	}
+
+	public void startGame() {
+
+	}
+
+	public void loadSave() {
+		level = "hauntedTest";
+		try {
+			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+					+ userName + ".txt");
+			File saveFile = new File(location);
+			
+			if (saveFile.exists()) {
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+				String line;
+				ArrayList<String> lines = new ArrayList<String>();
+				
+				while ((line = reader.readLine()) != null)
+					lines.add(line);
+					
+				if (lines.size() > 0) {
+					ArrayList<String> stuff = new ArrayList<String>();
+					// should have 5
 					String currentS = "";
 					for (int c2 = 0; c2 < lines.get(0).length(); c2++) {
 
@@ -1075,60 +1087,60 @@ public void startGame(){
 						stuff.add(currentS);
 					}
 					try {
-						String lev=stuff.get(0);
-						level=lev;
-						
+						String lev = stuff.get(0);
+						level = lev;
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				for(int c=1;c<lines.size();c++){
-					//int pos=-1;
-					String name="spade";
-					if(lines.get(c).startsWith("shovel"))
-						name="shovel";
-					else if(lines.get(c).startsWith("heart"))
-						name="heart";
-					else if(lines.get(c).startsWith("diamond"))
-						name="diamond";
-					else if(lines.get(c).startsWith("club"))
-						name="club";
 				
-						if(character.getType().toString().equals(name)){
-							character.load(lines.get(c).substring(name.length()+1));
-					
-					}else{
-						for(int cA=0;cA<friends.size();cA++){
-							if(friends.get(cA).getType().toString().equals(name)){
-								friends.get(cA).load(lines.get(c).substring(name.length()+1));
-							break;
-						}
+				for (int c = 1; c < 5; c++) {
+					// int pos=-1;
+					String name = "spade";
+					if (lines.get(c).startsWith("shovel"))
+						name = "shovel";
+					else if (lines.get(c).startsWith("heart"))
+						name = "heart";
+					else if (lines.get(c).startsWith("diamond"))
+						name = "diamond";
+					else if (lines.get(c).startsWith("club"))
+						name = "club";
+
+					if (character.getType().toString().equals(name)) {
+						character.load(lines.get(c).substring(name.length() + 1));
+
+					} else {
+						for (int cA = 0; cA < friends.size(); cA++) {
+							if (friends.get(cA).getType().toString().equals(name)) {
+								friends.get(cA).load(lines.get(c).substring(name.length() + 1));
+								break;
+							}
 						}
 					}
-						
-					
-						
-				
 				}
+
+				Wallet w = new Wallet(Integer.parseInt(lines.get(5)));
+				for (GameCharacter f : friends)
+					f.setWallet(w);
+				character.setWallet(w);
+				
 				reader.close();
-				
-				
-				
+
 				changeArea();
-			}else{
-				throw new FileNotFoundException(); 
+			} else {
+				throw new FileNotFoundException();
 			}
-			
-		}
-		catch(Exception ex){
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			newGame();
 		}
-		
-		
+
 	}
-	public void newGame(){
-		level="hauntedTest";
+
+	public void newGame() {
+		level = "hauntedTest";
 		changeArea();
 	}
 }

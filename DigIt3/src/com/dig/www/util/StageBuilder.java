@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
-import com.dig.www.objects.Objects;
+import com.dig.www.objects.*;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -100,10 +100,11 @@ public class StageBuilder {
 										Block.Blocks.CRYSTAL));
 								break;
 
-//							case '>':
-//								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
-//										Block.Blocks.SWITCH));
-//								break;
+							// case '>':
+							// world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+							// Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+							// Block.Blocks.SWITCH));
+							// break;
 
 							}
 						}
@@ -221,9 +222,9 @@ public class StageBuilder {
 
 		return enemies;
 	}
-	
+
 	public ArrayList<NPC> loadNPC() {
-		
+
 		ArrayList<NPC> npcs = new ArrayList<NPC>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
@@ -258,7 +259,7 @@ public class StageBuilder {
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
 						String identity = stuff.get(2);
-						
+
 						switch (identity) {
 						case NPC.WIZARD:
 							npcs.add(new WizardGuy(nX, nY, "images/npcs/map/stationary/wizard.png", owner));
@@ -273,7 +274,7 @@ public class StageBuilder {
 							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner));
 							break;
 						}
-						
+
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
 
@@ -287,8 +288,9 @@ public class StageBuilder {
 
 		return npcs;
 	}
-public ArrayList<Objects> loadObjects() {
-		
+
+	public ArrayList<Objects> loadObjects() {
+
 		ArrayList<Objects> npcs = new ArrayList<Objects>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
@@ -320,14 +322,20 @@ public ArrayList<Objects> loadObjects() {
 						stuff.add(currentS);
 					}
 					try {
+
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
 						String loc = stuff.get(2);
-						boolean wall=false;
-						if(stuff.get(3).charAt(0)=='t')
-							wall=true;
-					npcs.add(new Objects(nX, nY, loc, wall,owner));
-						
+						boolean wall = false;
+						int val = stuff.size() > 4 ? Integer.parseInt(stuff.get(4)) : 0;
+						if (stuff.get(3).charAt(0) == 't')
+							wall = true;
+
+						if (val == 0)
+							npcs.add(new Objects(nX, nY, loc, wall, owner));
+						else
+							npcs.add(new Collectible(nX, nY, owner, val));
+
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
 
@@ -341,6 +349,7 @@ public ArrayList<Objects> loadObjects() {
 
 		return npcs;
 	}
+
 	private int[][] createArray(String string) {
 
 		String[] split = string.split("\'");
@@ -441,7 +450,7 @@ public ArrayList<Objects> loadObjects() {
 					String area = stuff.get(2);
 					int collectibleNum = Integer.parseInt(stuff.get(3));
 					String type = stuff.get(4);
-					
+
 					portals.add(new Portal(enX, enY, owner, area, collectibleNum, type));
 				}
 

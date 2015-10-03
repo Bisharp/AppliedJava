@@ -20,18 +20,20 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
-	int wallX;
-	int wallY;
-	Rectangle collideRect;
+	private int wallX;
+	private int wallY;
+	private Rectangle collideRect;
 	private Point getToPoint;
 	private static final long serialVersionUID = 1L;
-	int dir = 0;
-	boolean meleePress = false;
-	boolean rangedPress = false;
-	boolean specialPress = false;
-	int me = -1;
+	private int dir = 0;
+	private boolean meleePress = false;
+	private boolean rangedPress = false;
+	private boolean specialPress = false;
+	private int me = -1;
+	private Wallet wallet;
 
-	boolean player;
+	private boolean player;
+	
 
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
@@ -583,7 +585,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
+			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 170;
 			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
@@ -595,7 +597,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
-			g2d.drawString("HEALTH:", 30, 50);
+			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
 
 			drawCSHUD(g2d);
 		} else {
@@ -834,5 +836,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Wallet getWallet() {
+		return wallet;
+	}
+	
+	public void setWallet(Wallet w) {
+		wallet = w;
 	}
 }
