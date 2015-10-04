@@ -48,6 +48,9 @@ public class GameStartBoard extends MPanel {
 	private GameSavePanel game1;
 	private GameSavePanel game2;
 	private GameSavePanel game3;
+	private GameSavePanel game4;
+	private GameSavePanel game5;
+	//private GameSavePanel game6;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
 	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
@@ -67,17 +70,18 @@ public class GameStartBoard extends MPanel {
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
 
-		game1 = new GameSavePanel(1);
-		game2 = new GameSavePanel(2);
-		game3 = new GameSavePanel(3);
-
-		game1.setBackground(Color.RED);
-		game2.setBackground(Color.BLUE);
-		game3.setBackground(Color.YELLOW);
-
+		game1 = new GameSavePanel(1,Color.RED);
+		game2 = new GameSavePanel(2,Color.BLUE);
+		game3 = new GameSavePanel(3,Color.YELLOW);
+		game4 = new GameSavePanel(4,Color.GREEN);
+		game5 = new GameSavePanel(5,Color.CYAN);
+		//game6 = new GameSavePanel(6,Color.MAGENTA);
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
+		buttonPanel.add(game4);
+		buttonPanel.add(game5);
+		//buttonPanel.add(game6);
 		add(buttonPanel, BorderLayout.SOUTH);
 		// setOpaque(false);
 		setBackground(Color.BLACK);
@@ -220,9 +224,12 @@ public class GameStartBoard extends MPanel {
 		JButton load;
 		JButton create;
 		JButton delete;
-
-		public GameSavePanel(int saveNum) {
+Color color;
+		public GameSavePanel(int saveNum,Color color) {
+			this.color=color;
+			
 			this.setPreferredSize(new Dimension(200, 150));
+			this.setBackground(color);
 			this.saveNum = saveNum;
 			this.setLayout(new BorderLayout());
 			load = new JButton("Load Game");
@@ -258,6 +265,7 @@ public class GameStartBoard extends MPanel {
 			label.setPreferredSize(new Dimension(200, 20));
 			this.add(label, BorderLayout.NORTH);
 			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
 			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
 					.exists()) {
