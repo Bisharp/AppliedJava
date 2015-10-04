@@ -15,13 +15,16 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -60,6 +63,7 @@ public class Board extends MPanel implements ActionListener {
 
 	private int deadTimer = 100;
 
+	private CharData data;
 	private ArrayList<Block> world = new ArrayList<Block>();
 	private ArrayList<Block> wallList = new ArrayList<Block>();
 	private ArrayList<NPC> npcs = new ArrayList<NPC>();
@@ -124,7 +128,7 @@ public class Board extends MPanel implements ActionListener {
 		for (GameCharacter f : friends)
 			f.setWallet(w);
 		character.setWallet(w);
-		
+
 		owner = dM;
 		timer = new Timer(15, this);
 
@@ -151,6 +155,14 @@ public class Board extends MPanel implements ActionListener {
 		portals = sB.loadPortals();
 		npcs = sB.loadNPC();
 		objects = sB.loadObjects();
+
+		if (data != null)
+			data.enterLevel(level);
+		else
+			data = new CharData(level, this);
+
+		objects = data.filter(objects);
+
 		for (int c = 0; c < friends.size(); c++) {
 			if (c > 1) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -168,10 +180,6 @@ public class Board extends MPanel implements ActionListener {
 		for (Block b : world) {
 
 			b.initialAnimate(spawnX, spawnY);
-
-			// if (b instanceof EnemyBlock) {
-			// spawnEnemy(((EnemyBlock) b).getEnemyType(), b.getX(), b.getY());
-			// }
 
 			// Deals with line-of-sight
 			if (b.getType() == Block.Blocks.WALL)
@@ -195,6 +203,7 @@ public class Board extends MPanel implements ActionListener {
 			n.initialAnimate(spawnX, spawnY);
 
 		setBackground(getTextureBack());
+
 		save();
 		System.gc();
 	}
@@ -278,7 +287,6 @@ public class Board extends MPanel implements ActionListener {
 				if (p2.isOnScreen())
 					p2.draw(g2d);
 
-			// TODO npc draw
 			for (NPC npc : npcs)
 				if (npc.isOnScreen())
 					npc.draw(g2d);
@@ -293,7 +301,6 @@ public class Board extends MPanel implements ActionListener {
 
 			if (state == State.NPC) {
 
-				// TODO implement NPC draw code
 				g2d.setFont(Statics.NPC);
 				g2d.setColor(Color.LIGHT_GRAY);
 				g2d.fillRect(0, Statics.BOARD_HEIGHT - 150, Statics.BOARD_WIDTH, 150);
@@ -799,6 +806,11 @@ public class Board extends MPanel implements ActionListener {
 					character.getWallet().addMoney(((Collectible) n).getValue());
 					objects.remove(u);
 					u--;
+				} else if (n instanceof SpecialCollectible) {
+					Statics.playSound(this, "collectibles/marioCoin.wav");
+					data.collect(((SpecialCollectible) n).id);
+					objects.remove(u);
+					u--;
 				}
 			}
 			for (int c = 0; c < friends.size(); c++) {
@@ -831,8 +843,6 @@ public class Board extends MPanel implements ActionListener {
 		switch (state) {
 
 		case NPC:
-
-			// TODO npc
 			boolean exitNPC = false;
 			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER) {
 				((ServiceNPC) current).service();
@@ -1024,12 +1034,12 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void save() {
-		String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/" + userName + ".txt");
-		File locFile = new File(location);
-		if (locFile.exists()) {
-			// locFile.delete();
+		String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/" + userName + "/");
+		File loc = new File(location);
+		if (loc.exists()) {
+			File locFile = new File(location + userName + ".txt");
 			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(location));
+				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
 				writer.write(level);
 				writer.newLine();
 
@@ -1039,14 +1049,18 @@ public class Board extends MPanel implements ActionListener {
 					writer.write(friends.get(c).getSave());
 				}
 				writer.newLine();
-				writer.write(character != null ? "" + character.getWallet().getMoney() : "00");
+				writer.write(character != null ? "" + character.getWallet().getMoney() : "0");
 				writer.close();
-				//writer.close();
+
+				// TODO saving data
+				ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
+				os.writeObject(data);
+				os.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		} else {
-			JOptionPane.showMessageDialog(owner, "Could not save.");
+			JOptionPane.showMessageDialog(owner, "Could not save to " + location);
 		}
 	}
 
@@ -1058,17 +1072,17 @@ public class Board extends MPanel implements ActionListener {
 		level = "hauntedTest";
 		try {
 			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
-					+ userName + ".txt");
-			File saveFile = new File(location);
-			
+					+ userName + "/");
+			File saveFile = new File(location + userName + ".txt");
+
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				ArrayList<String> lines = new ArrayList<String>();
-				
+
 				while ((line = reader.readLine()) != null)
 					lines.add(line);
-					
+
 				if (lines.size() > 0) {
 					ArrayList<String> stuff = new ArrayList<String>();
 					// should have 5
@@ -1094,7 +1108,7 @@ public class Board extends MPanel implements ActionListener {
 						e.printStackTrace();
 					}
 				}
-				
+
 				for (int c = 1; c < 5; c++) {
 					// int pos=-1;
 					String name = "spade";
@@ -1124,9 +1138,18 @@ public class Board extends MPanel implements ActionListener {
 				for (GameCharacter f : friends)
 					f.setWallet(w);
 				character.setWallet(w);
-				
+
 				reader.close();
 
+				// TODO loading CharData
+				try {
+					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
+					data = ((CharData) is.readObject());
+					data.setOwner(this);
+					is.close();
+				} catch (Exception badThing) {
+					badThing.printStackTrace();
+				}
 				changeArea();
 			} else {
 				throw new FileNotFoundException();
@@ -1140,7 +1163,11 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "hauntedTest";
+		level = "LuigisMansion";
 		changeArea();
+	}
+
+	public ArrayList<Objects> getObjects() {
+		return objects;
 	}
 }

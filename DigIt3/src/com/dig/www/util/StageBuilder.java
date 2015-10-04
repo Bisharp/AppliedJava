@@ -292,6 +292,7 @@ public class StageBuilder {
 	public ArrayList<Objects> loadObjects() {
 
 		ArrayList<Objects> npcs = new ArrayList<Objects>();
+		int count = 0;
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
@@ -333,7 +334,10 @@ public class StageBuilder {
 
 						if (val == 0)
 							npcs.add(new Objects(nX, nY, loc, wall, owner));
-						else
+						else if (val == -1) {
+							npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
+							count++;
+						} else
 							npcs.add(new Collectible(nX, nY, loc, owner, val));
 
 					} catch (IndexOutOfBoundsException ex) {
