@@ -160,7 +160,6 @@ public class Board extends MPanel implements ActionListener {
 			data.enterLevel(level);
 		else
 			data = new CharData(level, this);
-
 		objects = data.filter(objects);
 
 		for (int c = 0; c < friends.size(); c++) {

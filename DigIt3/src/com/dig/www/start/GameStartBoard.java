@@ -70,6 +70,11 @@ public class GameStartBoard extends MPanel {
 		game1 = new GameSavePanel(1);
 		game2 = new GameSavePanel(2);
 		game3 = new GameSavePanel(3);
+
+		game1.setBackground(Color.RED);
+		game2.setBackground(Color.BLUE);
+		game3.setBackground(Color.YELLOW);
+
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
@@ -128,7 +133,8 @@ public class GameStartBoard extends MPanel {
 
 	public void newGame(String s) {
 
-		if (new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt").exists()) {
+		if (new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt")
+				.exists()) {
 			if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
 				return;
 		}
@@ -181,6 +187,29 @@ public class GameStartBoard extends MPanel {
 		owner.loadSave();
 	}
 
+	public void deleteGame(String s) {
+		// TODO deleteGame(String s)
+		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file?\n(Deleted data cannot be restored.)") == JOptionPane.YES_OPTION) {
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt").delete();
+
+			switch (s.charAt(s.length() - 1)) {
+			case '1':
+				game1.reset();
+				break;
+			case '2':
+				game2.reset();
+				break;
+			case '3':
+				game3.reset();
+				break;
+			}
+			
+			revalidate();
+			repaint();
+		} else
+			return;
+	}
+
 	public void loadGame(String file) {
 
 		load(file);
@@ -190,13 +219,15 @@ public class GameStartBoard extends MPanel {
 		int saveNum;
 		JButton load;
 		JButton create;
+		JButton delete;
 
 		public GameSavePanel(int saveNum) {
-			this.setPreferredSize(new Dimension(200, 100));
+			this.setPreferredSize(new Dimension(200, 150));
 			this.saveNum = saveNum;
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			this.setLayout(new BorderLayout());
 			load = new JButton("Load Game");
 			create = new JButton("New Game");
+			delete = new JButton("Delete Game");
 
 			load.addActionListener(new ActionListener() {
 
@@ -214,16 +245,43 @@ public class GameStartBoard extends MPanel {
 					newGame(fileS());
 				}
 			});
+			delete.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					deleteGame(fileS());
+				}
+			});
+
 			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
-			label.setPreferredSize(new Dimension(250, 20));
-			this.add(label);
+			label.setPreferredSize(new Dimension(200, 20));
+			this.add(label, BorderLayout.NORTH);
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.add(create);
-			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/"))
+			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
 					.exists()) {
 				buttonPanel.add(load);
+				buttonPanel.add(delete);
 			}
-			this.add(buttonPanel);
+			this.add(buttonPanel, BorderLayout.CENTER);
+		}
+
+		public void reset() {
+			
+			this.removeAll();
+
+			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
+			label.setPreferredSize(new Dimension(200, 20));
+			this.add(label, BorderLayout.NORTH);
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.add(create);
+			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
+					.exists()) {
+				buttonPanel.add(load);
+				buttonPanel.add(delete);
+			}
+			this.add(buttonPanel, BorderLayout.CENTER);
 		}
 
 		public String fileS() {

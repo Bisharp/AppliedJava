@@ -27,7 +27,6 @@ public class CharData implements Serializable {
 
 	public void enterLevel(String level) {
 
-		System.out.println("Entered " + level);
 		collectibles.putIfAbsent(level, new LevelData(owner.getObjects()));
 		currentKey = level;
 	}
