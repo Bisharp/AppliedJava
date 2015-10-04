@@ -20,10 +20,13 @@ import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.sql.Savepoint;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.dig.www.util.Statics;
 
@@ -38,11 +41,13 @@ public class GameStartBoard extends MPanel {
 
 	private Image screenImage;
 	private JPanel buttonPanel;
-	private JButton newGame;
-	private JButton loadGame;
+	//private JButton newGame;
+	//private JButton loadGame;
 
 	// private boolean knobMoved = false;
-
+private GameSavePanel game1;
+private GameSavePanel game2;
+private GameSavePanel game3;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
 	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
@@ -53,54 +58,22 @@ public class GameStartBoard extends MPanel {
 
 		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
-
+	File dir=	new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles");
+if(!dir.exists()
+		){
+	dir.mkdirs();
+}
 		owner = dM;
 		owner.setFocusable(false);
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
 
-		newGame = new JButton("New Game");
-		loadGame = new JButton("Load Game");
-
-		Dimension d = new Dimension(200, 75);
-		newGame.setPreferredSize(d);
-		loadGame.setPreferredSize(d);
-
-		buttonPanel.add(newGame);
-		buttonPanel.add(loadGame);
-
-		newGame.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				newGame();
-			}
-		});
-		loadGame.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				String[] files = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").list();
-				if (files == null) {
-					new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").mkdirs();
-					files = new String[0];
-				}
-				String[] options = new String[files.length + 1];
-
-				options[0] = "Cancel";
-				for (int c = 1; c < files.length + 1; c++) {
-					options[c] = files[c - 1];
-				}
-
-				int sel = JOptionPane.showOptionDialog(owner, "What game do you want to load?", "Load", JOptionPane.OK_OPTION,
-						JOptionPane.INFORMATION_MESSAGE, null, options, 0);
-				if (sel != 0) {
-					load(options[sel].substring(0, options[sel].lastIndexOf(".txt")));
-				}
-			}
-		});
+		game1=new GameSavePanel(1);
+		game2=new GameSavePanel(2);
+		game3=new GameSavePanel(3);
+		buttonPanel.add(game1);
+		buttonPanel.add(game2);
+		buttonPanel.add(game3);
 		add(buttonPanel, BorderLayout.SOUTH);
 		// setOpaque(false);
 		setBackground(Color.BLACK);
@@ -118,10 +91,12 @@ public class GameStartBoard extends MPanel {
 
 		super.paint(g);
 
-		// Graphics2D g2d = (Graphics2D) g;
-		//
-		// screenImage = newImage(address);
-		// g2d.drawImage(screenImage, 0, 0, this);
+		 Graphics2D g2d = (Graphics2D) g;
+		
+//		 screenImage = newImage("images/titleScreen/title.png");
+//		 
+//		 g2d.scale((double)this.getWidth()/(double)screenImage.getWidth(null), (double)screenImage.getHeight(null)/this.getHeight());
+//		 g2d.drawImage(screenImage, 0, 0, this);
 
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
@@ -151,31 +126,13 @@ public class GameStartBoard extends MPanel {
 	public void keyRelease(int key) {
 	}
 
-	public void newGame() {
+	public void newGame(String s) {
 
-		String s = (String) JOptionPane.showInputDialog(this, "Please enter a name for your save file: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
-				Statics.ICON, null, null);
-		String[] files = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").list();
-		if (files == null) {
-			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").mkdirs();
-			files = new String[0];
-		}
-		for (int c = 0; c < files.length; c++) {
-			if (files[c].substring(0, files[c].lastIndexOf(".txt")).equals(s)) {
-				int sel = JOptionPane.showConfirmDialog(this, "This file already exists. Do you want to load?");
-				if (sel == JOptionPane.YES_OPTION) {
-					load(s);
-				}
-				return;
-			}
-		}
-		
-		for (char invalid : invalidChars) {
-			for (int i = 0; i < s.length(); i++) {
-				if (s.charAt(i) == invalid) {
-					Statics.showError("This username contains the invalid character " + invalid + ".", this);
-				}
-			}
+		if(new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation()
+				.getFile()
+				+ "saveFiles/" + s + ".txt").exists()){
+					if(JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?")!=JOptionPane.YES_OPTION)
+return;
 		}
 		
 		if (s != null && !s.equals("")) {
@@ -195,7 +152,7 @@ public class GameStartBoard extends MPanel {
 			}
 			// System.out.println("Save name accepted");
 			owner.setUserName(s);
-			address = "images/titleScreen/loading.png";
+			//address = "images/titleScreen/loading.png";
 			repaint();
 			owner.newGame();
 
@@ -217,8 +174,74 @@ public class GameStartBoard extends MPanel {
 	public void load(String save) {
 
 		owner.setUserName(save);
-		address = "images/titleScreen/loading.png";
+		//address = "images/titleScreen/loading.png";
 		repaint();
 		owner.loadSave();
 	}
+	public void loadGame(String file){
+		
+//		String[] files = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").list();
+//		if (files == null) {
+//			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles").mkdirs();
+//			files = new String[0];
+//		}
+//		String[] options = new String[files.length + 1];
+//
+//		options[0] = "Cancel";
+//		for (int c = 1; c < files.length + 1; c++) {
+//			options[c] = files[c - 1];
+//		}
+//
+//		int sel = JOptionPane.showOptionDialog(owner, "What game do you want to load?", "Load", JOptionPane.OK_OPTION,
+//				JOptionPane.INFORMATION_MESSAGE, null, options, 0);
+//		
+//		if (sel != 0) {
+//			load(options[sel].substring(0, options[sel].lastIndexOf(".txt")));
+//		}
+		load(file);
+	}
+	public class GameSavePanel extends JPanel{
+		int saveNum;
+		JButton load;
+		JButton create;
+	public GameSavePanel(int saveNum){
+		this.setPreferredSize(new Dimension(200,100));
+		this.saveNum=saveNum;
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		load=new JButton("Load Game");
+		create=new JButton("New Game");
+		
+		load.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				loadGame(fileS());
+			}
+		});
+create.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				newGame(fileS());
+			}
+		});
+JLabel label=new JLabel(fileS(), SwingConstants.CENTER);
+label.setPreferredSize(new Dimension(250,20));
+		this.add(label);
+		JPanel buttonPanel=new JPanel();
+		buttonPanel.add(create);
+		if(new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation()
+				.getFile()
+				+ "saveFiles/" + fileS() + ".txt")).exists()){
+			buttonPanel.add(load);
+		}
+		this.add(buttonPanel);
+	}
+public String fileS(){
+	return "Game"+saveNum;
+}
+	}
+
 }
