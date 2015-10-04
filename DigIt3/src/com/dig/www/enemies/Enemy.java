@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
@@ -145,7 +146,7 @@ public abstract class Enemy extends Sprite {
 		// Destiny
 		case AURA:
 			harmTimer = STUN_MAX / 2;
-
+		
 			break;
 		case HAZE:
 			if(!playerHit){
@@ -182,9 +183,11 @@ public abstract class Enemy extends Sprite {
 
 		health -= i;
 		// owner.getCharacter().endAction();
-		if (health <= 0 && !invincible)
+		if (health <= 0 && !invincible){
 			alive = false;
-
+			GameCharacter.plusXP(4);
+		}
+		GameCharacter.plusXP(i);
 		return alive;
 	}
 

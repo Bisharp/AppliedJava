@@ -21,6 +21,9 @@ public abstract class GameCharacter extends Sprite implements
 	/**
 	 * 
 	 */
+	static protected int xp;
+	static protected int level;
+	protected int myLevel;
 	private int enTimer=0;
 	private int wallX;
 	private int wallY;
@@ -968,5 +971,7 @@ public abstract class GameCharacter extends Sprite implements
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
 
+	}public static void plusXP(int adder){
+		xp+=adder;
 	}
 }
