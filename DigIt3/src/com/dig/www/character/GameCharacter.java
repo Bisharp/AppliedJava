@@ -111,6 +111,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private boolean moveX = false;
 	private boolean moveY = false;
 
+	// TODO moveL moveD
+	private boolean moveL = false;
+	private boolean moveU = false;
+
 	private boolean wallBound = false;
 	// private int wallX = 0;
 	// private int wallY = 0;
@@ -265,6 +269,42 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			} else
 				animationTimer++;
 			if (player) {
+
+				if (moveX)
+					if (moveL) {
+						deltaX++;
+						if (deltaX > SPEED)
+							deltaX = SPEED;
+					} else {
+						deltaX--;
+						if (deltaX < -SPEED)
+							deltaX = -SPEED;
+					}
+				else {
+					if (deltaX > 0)
+						deltaX--;
+					else if (deltaX < 0)
+						deltaX++;
+				}
+
+				if (moveY)
+					if (!moveU) {
+						deltaY--;
+						if (deltaY < -SPEED)
+							deltaY = -SPEED;
+					} else {
+						deltaY++;
+						if (deltaY > SPEED)
+							deltaY = SPEED;
+					}
+				else {
+					if (deltaY > 0)
+						deltaY--;
+					else if (deltaY < 0)
+						deltaY++;
+				}
+				
+
 				owner.setScrollX(deltaX);
 				owner.setScrollY(deltaY);
 			} else {
@@ -312,34 +352,38 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_A:
 
-			deltaX = SPEED;
+			//deltaX = SPEED;
 			direction = Direction.LEFT;
 			moveX = true;
+			moveL = true;
 
 			break;
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_D:
 
-			deltaX = -SPEED;
+			//deltaX = -SPEED;
 			direction = Direction.RIGHT;
 			moveX = true;
+			moveL = false;
 
 			break;
 
 		case KeyEvent.VK_UP:
 		case KeyEvent.VK_W:
 
-			deltaY = SPEED;
+			//deltaY = SPEED;
 			direction = Direction.UP;
 			moveY = true;
+			moveU = true;
 
 			break;
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_S:
 
-			deltaY = -SPEED;
+			//deltaY = -SPEED;
 			direction = Direction.DOWN;
 			moveY = true;
+			moveU = false;
 
 			break;
 
