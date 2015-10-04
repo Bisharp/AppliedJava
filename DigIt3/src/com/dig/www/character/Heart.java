@@ -23,7 +23,7 @@ public class Heart extends GameCharacter {
 				10, 
 				75,
 				10,
-				80);
+				80,10,15,30);
 		// TODO Auto-generated constructor stub
 	}
 

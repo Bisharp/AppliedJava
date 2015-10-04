@@ -24,7 +24,7 @@ public class Club extends GameCharacter {
 				140, 
 				100,
 				10,
-				100);
+				100,15,25,70);
 		// TODO Auto-generated constructor stub
 	}
 

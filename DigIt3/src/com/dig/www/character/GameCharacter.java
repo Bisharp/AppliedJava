@@ -15,11 +15,13 @@ import com.dig.www.start.Board.State;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public abstract class GameCharacter extends Sprite implements Comparable<GameCharacter> {
+public abstract class GameCharacter extends Sprite implements
+		Comparable<GameCharacter> {
 
 	/**
 	 * 
 	 */
+	private int enTimer=0;
 	private int wallX;
 	private int wallY;
 	private Rectangle collideRect;
@@ -33,7 +35,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private Wallet wallet;
 
 	private boolean player;
-	
 
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
@@ -148,9 +149,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
-
-	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
-			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY) {
+	int MEnC;
+	int REnC;
+	int SEnC;
+	public GameCharacter(int x, int y, Board owner, Types type,
+			String charName, boolean player, int NEG_TIMER_MELEE,
+			int NEG_TIMER_RANGED, int NEG_TIMER_SPECIAL, int TIMER_MELEE,
+			int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED,
+			int MAX_ENERGY,int MEnC,int REnC,int SEnC) {
 		super(x, y, "n", owner);
 		this.player = player;
 		this.charName = charName;
@@ -164,8 +170,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.HP_MAX = HP_MAX;
 		this.SPEED = SPEED;
 		this.MAX_ENERGY = MAX_ENERGY;
-		energy=MAX_ENERGY;
+		energy = MAX_ENERGY;
 		health = HP_MAX;
+		this.MEnC=MEnC;
+		this.REnC=REnC;
+		this.SEnC=SEnC;
 	}
 
 	@Override
@@ -225,7 +234,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					moveY = false;
 				}
 			}
-			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
+			if (new Point(x, y).distance(new Point(owner.getBounds()
+					.getLocation())) > Statics.BOARD_WIDTH) {
 				x = owner.getCharacterX();
 				y = owner.getCharacterY();
 			}
@@ -243,14 +253,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (hpTimer > 0) {
 			hpTimer--;
 
-			
-		}if (hpTimer <= 0 && health < HP_MAX) {
-				health += 3;
-				if (health > HP_MAX) {
-					health = HP_MAX;
-				}
-				hpTimer = HP_TIMER_MAX;
+		}
+		if (hpTimer <= 0 && health < HP_MAX) {
+			health += 3;
+			if (health > HP_MAX) {
+				health = HP_MAX;
 			}
+			hpTimer = HP_TIMER_MAX;
+		}
 
 		if (!wallBound) {
 
@@ -303,7 +313,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					else if (deltaY < 0)
 						deltaY++;
 				}
-				
 
 				owner.setScrollX(deltaX);
 				owner.setScrollY(deltaY);
@@ -320,11 +329,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				owner.reAnimate();
 			} else {
 				if (!isPlayerCollide) {
-					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(
+							wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
 					}
-					if (new Point(getMidX(), getMidY()).distance(new Point(getMidX(), wallY)) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(
+							getMidX(), wallY)) < 100) {
 						deltaY = -deltaY;
 						y += deltaY;
 					}
@@ -352,7 +363,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_A:
 
-			//deltaX = SPEED;
+			// deltaX = SPEED;
 			direction = Direction.LEFT;
 			moveX = true;
 			moveL = true;
@@ -361,7 +372,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_D:
 
-			//deltaX = -SPEED;
+			// deltaX = -SPEED;
 			direction = Direction.RIGHT;
 			moveX = true;
 			moveL = false;
@@ -371,7 +382,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_UP:
 		case KeyEvent.VK_W:
 
-			//deltaY = SPEED;
+			// deltaY = SPEED;
 			direction = Direction.UP;
 			moveY = true;
 			moveU = true;
@@ -380,7 +391,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_S:
 
-			//deltaY = -SPEED;
+			// deltaY = -SPEED;
 			direction = Direction.DOWN;
 			moveY = true;
 			moveU = false;
@@ -511,7 +522,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		case DOWN:
 			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y
+					+ Statics.BLOCK_HEIGHT - 6, 6, 6);
 		case LEFT:
 		default:
 			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
@@ -523,31 +535,42 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private Point setAttacks() {
 		Point shieldPos = null;
 		if (meleePress) {
-			if (meleeTimer <= NEG_TIMER_MELEE// ||this instanceof Diamond
+			if (meleeTimer <= NEG_TIMER_MELEE && energy >= MEnC// ||this
+																// instanceof
+																// Diamond
 			) {
 				meleeTimer = TIMER_MELEE;
+				energy -= MEnC;
 			}
 		}
-
 		if (specialPress && !meleePress && !rangedPress) {
-			if (specialTimer <= NEG_TIMER_SPECIAL) {
+			if (specialTimer <= NEG_TIMER_SPECIAL&& energy >= SEnC) {
 				specialTimer = TIMER_SPECIAL;
+				energy -= SEnC;
 			}
 		}
 		if (rangedPress && !meleePress) {
-			if (rangedTimer <= NEG_TIMER_RANGED) {
+			if (rangedTimer <= NEG_TIMER_RANGED&& energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
+				energy -= REnC;
 				String s = "images/enemies/blasts/0.png";
 				if (type == Types.DIAMOND)
 					s = getPath() + "diamond.png";
-				owner.getfP().add(new FProjectile(dir, x, y, 25, this, s, owner, getRangedMove()));
+				owner.getfP().add(
+						new FProjectile(dir, x, y, 25, this, s, owner,
+								getRangedMove()));
 
+			
 			}
+			
 		}
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
 				String s = "images/enemies/blasts/0.png";
-				owner.getfP().add(new FProjectile(dir, x + (this.getWidth() / 2), y + (this.getHeight() / 2), 30, this, s, owner, Moves.MPITCH));
+				owner.getfP().add(
+						new FProjectile(dir, x + (this.getWidth() / 2), y
+								+ (this.getHeight() / 2), 30, this, s, owner,
+								Moves.MPITCH));
 
 			}
 		} else if (type == Types.DIAMOND) {
@@ -620,7 +643,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			if (p != null) {
 				g2d.setColor(Color.black);
-				g2d.drawLine(getMidX(), getMidY(), (int) p.getX() + Statics.BLOCK_HEIGHT / 2, (int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+				g2d.drawLine(getMidX(), getMidY(), (int) p.getX()
+						+ Statics.BLOCK_HEIGHT / 2, (int) p.getY()
+						+ Statics.BLOCK_HEIGHT / 2);
 			}
 			if (direction == Direction.UP)
 				g2d.drawImage(image, x, y, owner);
@@ -629,11 +654,15 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 170;
-			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 80);
+			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30
+					+ 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
+					+ 170;
+
+			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 100);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
-				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
+				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED
+						: Color.DARK_GRAY);
 				g2d.fillRect(i * 30, 70, 20, 20);
 				g2d.setColor(Color.WHITE);
 				g2d.drawRect(i * 30, 70, 20, 20);
@@ -641,11 +670,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
-			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
-
+			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30,
+					50);
+			drawTEnBar((double) energy / (double) MAX_ENERGY,
+					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
 			drawCSHUD(g2d);
+			drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
-			drawBar((double) health / (double) HP_MAX, g2d);
+			drawBar2((double) health / (double) HP_MAX, (double) energy
+					/ (double) MAX_ENERGY, g2d);
+
 		}
 	}
 
@@ -742,7 +776,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 		else
 			dir = "side";
-		return "images/characters/" + (charName != null ? charName : "spade") + "/" + dir + "/";
+		return "images/characters/" + (charName != null ? charName : "spade")
+				+ "/" + dir + "/";
 	}
 
 	public Rectangle getCollisionBounds() {
@@ -780,7 +815,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	protected void timersCount() {
-		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
+		if(enTimer==0){
+		energy+=1;
+		enTimer=5;}
+		else
+			enTimer--;
+		if(energy>MAX_ENERGY){
+			energy=MAX_ENERGY;
+		}
+		if (meleeTimer > NEG_TIMER_MELEE
+				&& (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
 			meleeTimer--;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
@@ -845,12 +889,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	public String getSave() {
 		// TODO Auto-generated method stub
-		return ""+getType()+","+HP_MAX+","+MAX_ENERGY;
+		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY;
 	}
-	public void setMaxHealth(int setter){
-		HP_MAX=setter;
+
+	public void setMaxHealth(int setter) {
+		HP_MAX = setter;
 	}
-	public void load(String string){
+
+	public void load(String string) {
 		ArrayList<String> stuff = new ArrayList<String>();// should
 		// have
 		// 5
@@ -862,21 +908,21 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				currentS = "";
 
 			} else {
-				currentS +=string.charAt(c2);
+				currentS += string.charAt(c2);
 			}
 		}
 		if (currentS != "") {
 			stuff.add(currentS);
 		}
 		try {
-			
-			int health=Integer.parseInt(stuff.get(0));
-			int energy=Integer.parseInt(stuff.get(1));
-			HP_MAX=health;
-			MAX_ENERGY=energy;
-			this.health=HP_MAX;
-			this.energy=MAX_ENERGY;
-			
+
+			int health = Integer.parseInt(stuff.get(0));
+			int energy = Integer.parseInt(stuff.get(1));
+			HP_MAX = health;
+			MAX_ENERGY = energy;
+			this.health = HP_MAX;
+			this.energy = MAX_ENERGY;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -885,8 +931,42 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public Wallet getWallet() {
 		return wallet;
 	}
-	
+
 	public void setWallet(Wallet w) {
 		wallet = w;
+	}
+
+	public void drawEnBar(double per, Graphics2D g2d) {
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(x, y - 10, width, 10);
+		g2d.setColor(Color.BLUE);
+		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(x - 1, y - 11, width + 1, 11);
+
+	}
+
+	public void drawBar2(double per, double per2, Graphics2D g2d) {
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(x, y - 10, width, 10);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
+
+		g2d.setColor(new Color(0, 0, 255, 150));
+		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(x - 1, y - 11, width + 1, 11);
+
+	}
+
+	public void drawTEnBar(double per, int total, Graphics2D g2d) {
+		total -= 10;
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(30, 100, total, 10);
+		g2d.setColor(Color.BLUE);
+		g2d.fillRect(30, 100, (int) ((double) total * (double) per), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
+
 	}
 }

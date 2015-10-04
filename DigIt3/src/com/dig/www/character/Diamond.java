@@ -23,7 +23,7 @@ public class Diamond extends GameCharacter {
 				10, 
 				80,
 				10,
-				100);
+				100,0,30,75);
 		// TODO Auto-generated constructor stub
 
 	}
