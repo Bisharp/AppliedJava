@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -433,6 +434,9 @@ public abstract class GameCharacter extends Sprite implements
 		case KeyEvent.VK_L:
 			OpenLevelUp();
 			break;
+		case KeyEvent.VK_O:
+			level++;
+			break;
 		}
 	}
 
@@ -677,10 +681,12 @@ public abstract class GameCharacter extends Sprite implements
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30
-					+ 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
-					+ 170;
-
+			int normWidth = 
+					 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
+					+ 340;
+if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
+	normWidth=(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30;
+}
 			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 130);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
@@ -1036,12 +1042,13 @@ public abstract class GameCharacter extends Sprite implements
 			
 			this.setFocusable(true);
 			owner.setFocusable(false);
-			this.setSize(300, 150);
+			this.setSize(400, 200);
 			this.setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2, Statics.BOARD_HEIGHT/2-this.getHeight()/2);
 			this.setAlwaysOnTop (true);
 		this.setLayout(new BorderLayout());
 		
-	levelLabel=new JLabel("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+	levelLabel=new JLabel("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10, SwingConstants.CENTER);
+	
 	this.add(levelLabel,BorderLayout.NORTH);	 
 	JPanel panel=new JPanel();
 	mHealth=new JButton("Health: "+HP_MAX);
