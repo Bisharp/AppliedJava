@@ -1039,7 +1039,11 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 		JButton mHealth;
 		JButton mEn;
 		public LevelUp(){
-			
+			deltaX=0;
+			deltaY=0;
+			moveX=false;
+			moveY=false;
+					
 			this.setFocusable(true);
 			owner.setFocusable(false);
 			this.setSize(400, 200);
