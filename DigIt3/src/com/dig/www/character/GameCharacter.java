@@ -1,5 +1,6 @@
 package com.dig.www.character;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -7,8 +8,18 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -21,8 +32,8 @@ public abstract class GameCharacter extends Sprite implements
 	/**
 	 * 
 	 */
-	static protected int xp;
-	static protected int level;
+	protected static int xp;
+	protected static int level;
 	protected int myLevel;
 	private int enTimer=0;
 	private int wallX;
@@ -35,7 +46,7 @@ public abstract class GameCharacter extends Sprite implements
 	private boolean rangedPress = false;
 	private boolean specialPress = false;
 	private int me = -1;
-	private Wallet wallet;
+	protected Wallet wallet;
 
 	private boolean player;
 
@@ -138,7 +149,7 @@ public abstract class GameCharacter extends Sprite implements
 	private static final int ANIMAX = 7;
 	private static final int MAX = 4;
 	private String charName;
-	private int HP_MAX;
+	protected int HP_MAX;
 	private int HP_TIMER_MAX = 50;
 	private int HITSTUN_MAX = 10;
 
@@ -418,7 +429,20 @@ public abstract class GameCharacter extends Sprite implements
 		case KeyEvent.VK_T:
 		case KeyEvent.VK_X:
 			willTalk = true;
+			break;
+		
+		case KeyEvent.VK_L:
+			OpenLevelUp();
+			break;
+		case KeyEvent.VK_O:
+			level++;
+			break;
 		}
+	}
+
+	private void OpenLevelUp() {
+		// TODO Auto-generated method stub
+		new LevelUp();
 	}
 
 	public abstract Moves getRangedMove();
@@ -657,11 +681,13 @@ public abstract class GameCharacter extends Sprite implements
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30
-					+ 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
-					+ 170;
-
-			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 100);
+			int normWidth = 
+					 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
+					+ 340;
+if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
+	normWidth=(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30;
+}
+			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 130);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
 				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED
@@ -676,6 +702,9 @@ public abstract class GameCharacter extends Sprite implements
 			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30,
 					50);
 			drawTEnBar((double) energy / (double) MAX_ENERGY,
+					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
+			
+			drawTLBar(
 					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
 			drawCSHUD(g2d);
 			drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
@@ -892,7 +921,7 @@ public abstract class GameCharacter extends Sprite implements
 
 	public String getSave() {
 		// TODO Auto-generated method stub
-		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY;
+		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY+ "," + myLevel;
 	}
 
 	public void setMaxHealth(int setter) {
@@ -921,6 +950,8 @@ public abstract class GameCharacter extends Sprite implements
 
 			int health = Integer.parseInt(stuff.get(0));
 			int energy = Integer.parseInt(stuff.get(1));
+			int myLevel = Integer.parseInt(stuff.get(2));
+			this.myLevel=myLevel;
 			HP_MAX = health;
 			MAX_ENERGY = energy;
 			this.health = HP_MAX;
@@ -971,7 +1002,131 @@ public abstract class GameCharacter extends Sprite implements
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
 
-	}public static void plusXP(int adder){
+	}
+	public void drawTLBar( int total, Graphics2D g2d) {
+		total -= 10;
+		double per=(double)xp/(double)(Math.pow(level+1, 2)*10);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(30, 120, total, 10);
+		g2d.setColor(Color.YELLOW);
+		g2d.fillRect(30, 120, (int) ((double) total * (double) per), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(30 - 1, 120 - 1, total + 1, 11);
+
+	}
+	
+	public static void plusXP(int adder){
 		xp+=adder;
+		if(xp>=(int)Math.pow(level+1, 2)*10){
+			xp-=(int)Math.pow(level+1, 2)*10;
+			level++;
+		}
+	}
+	public static void setLevel(int setter){
+		level=setter;
+	}
+	public static void setXP(int setter){
+		xp=setter;
+	}
+	public static int getLevel(){
+		return level;
+	}
+	public static int getXP(){
+		return xp;
+	}
+	public class LevelUp extends JFrame{
+		JLabel levelLabel;
+		JButton mHealth;
+		JButton mEn;
+		public LevelUp(){
+			
+			this.setFocusable(true);
+			owner.setFocusable(false);
+			this.setSize(400, 200);
+			this.setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2, Statics.BOARD_HEIGHT/2-this.getHeight()/2);
+			this.setAlwaysOnTop (true);
+		this.setLayout(new BorderLayout());
+		
+	levelLabel=new JLabel("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10, SwingConstants.CENTER);
+	
+	this.add(levelLabel,BorderLayout.NORTH);	 
+	JPanel panel=new JPanel();
+	mHealth=new JButton("Health: "+HP_MAX);
+	mEn=new JButton("Energy: "+MAX_ENERGY);
+	mHealth.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(myLevel<level){
+			HP_MAX+=5;
+			myLevel++;
+			mHealth.setText("Health: "+HP_MAX);
+			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+		}}
+	});
+	panel.add(mHealth);
+mEn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(myLevel<level){
+			MAX_ENERGY+=8;
+			myLevel++;
+			mEn.setText("Energy: "+MAX_ENERGY);
+			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+		}}
+	});
+	panel.add(mEn);
+	
+	this.add(panel,BorderLayout.CENTER);
+	this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				owner.setFocusable(true);
+				owner.requestFocus();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		this.setVisible(true);
+		this.requestFocus();}
 	}
 }
