@@ -1,5 +1,6 @@
 package com.dig.www.character;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -7,8 +8,17 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -428,7 +438,7 @@ public abstract class GameCharacter extends Sprite implements
 
 	private void OpenLevelUp() {
 		// TODO Auto-generated method stub
-		//new LevelUp(myLevel,level);
+		new LevelUp();
 	}
 
 	public abstract Moves getRangedMove();
@@ -989,20 +999,20 @@ public abstract class GameCharacter extends Sprite implements
 	}
 	public void drawTLBar( int total, Graphics2D g2d) {
 		total -= 10;
-		double per=(double)xp/(double)(Math.pow(level, 2)*10);
+		double per=(double)xp/(double)(Math.pow(level+1, 2)*10);
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(30, 120, total, 10);
 		g2d.setColor(Color.YELLOW);
 		g2d.fillRect(30, 120, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
+		g2d.drawRect(30 - 1, 120 - 1, total + 1, 11);
 
 	}
 	
 	public static void plusXP(int adder){
 		xp+=adder;
-		if(xp>=(int)Math.pow(level, 2)*10){
-			xp-=(int)Math.pow(level, 2)*10;
+		if(xp>=(int)Math.pow(level+1, 2)*10){
+			xp-=(int)Math.pow(level+1, 2)*10;
 			level++;
 		}
 	}
@@ -1017,5 +1027,99 @@ public abstract class GameCharacter extends Sprite implements
 	}
 	public static int getXP(){
 		return xp;
+	}
+	public class LevelUp extends JFrame{
+		JLabel levelLabel;
+		JButton mHealth;
+		JButton mEn;
+		public LevelUp(){
+			
+			this.setFocusable(true);
+			owner.setFocusable(false);
+			this.setSize(300, 150);
+			this.setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2, Statics.BOARD_HEIGHT/2-this.getHeight()/2);
+			this.setAlwaysOnTop (true);
+		this.setLayout(new BorderLayout());
+		
+	levelLabel=new JLabel("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+	this.add(levelLabel,BorderLayout.NORTH);	 
+	JPanel panel=new JPanel();
+	mHealth=new JButton("Health: "+HP_MAX);
+	mEn=new JButton("Energy: "+MAX_ENERGY);
+	mHealth.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(myLevel<level){
+			HP_MAX+=5;
+			myLevel++;
+			mHealth.setText("Health: "+HP_MAX);
+			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+		}}
+	});
+	panel.add(mHealth);
+mEn.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(myLevel<level){
+			MAX_ENERGY+=8;
+			myLevel++;
+			mEn.setText("Energy: "+MAX_ENERGY);
+			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
+		}}
+	});
+	panel.add(mEn);
+	
+	this.add(panel,BorderLayout.CENTER);
+	this.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				owner.setFocusable(true);
+				owner.requestFocus();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		this.setVisible(true);
+		this.requestFocus();}
 	}
 }
