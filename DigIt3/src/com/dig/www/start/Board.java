@@ -531,8 +531,11 @@ public class Board extends MPanel implements ActionListener {
 
 		case DEAD:
 			deadTimer--;
-			if (deadTimer == 0)
+			if (deadTimer == 0){
+				GameCharacter.setLevel(0);
+				GameCharacter.setXP(0);
 				owner.quit();
+				}
 			repaint();
 			break;
 
@@ -1039,13 +1042,16 @@ public class Board extends MPanel implements ActionListener {
 			File locFile = new File(location + userName + ".txt");
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-				writer.write(level);
+				writer.write(level+","+GameCharacter.getLevel()+","+GameCharacter.getXP());
 				writer.newLine();
-
+if(normalPlayer(character.getType()))
 				writer.write(character.getSave());
 				for (int c = 0; c < friends.size(); c++) {
+					if(normalPlayer(friends.get(c).getType())){
+					
+					
 					writer.newLine();
-					writer.write(friends.get(c).getSave());
+					writer.write(friends.get(c).getSave());}
 				}
 				writer.newLine();
 				writer.write(character != null ? "" + character.getWallet().getMoney() : "0");
@@ -1102,7 +1108,10 @@ public class Board extends MPanel implements ActionListener {
 					try {
 						String lev = stuff.get(0);
 						level = lev;
-
+int levUp=Integer.parseInt(stuff.get(1));
+GameCharacter.setLevel(levUp);
+int xp=Integer.parseInt(stuff.get(2));
+GameCharacter.setXP(xp);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1168,5 +1177,16 @@ public class Board extends MPanel implements ActionListener {
 
 	public ArrayList<Objects> getObjects() {
 		return objects;
+	}
+	public boolean normalPlayer(GameCharacter.Types type){
+		switch(type){
+		case SPADE:
+		case DIAMOND:
+		case HEART:
+		case CLUB:
+			return true;
+		default:
+			return false;
+		}
 	}
 }

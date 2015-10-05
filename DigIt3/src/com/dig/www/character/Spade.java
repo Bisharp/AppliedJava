@@ -32,11 +32,15 @@ public class Spade extends GameCharacter {
 	@Override
 	protected void drawCSHUD(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-
+		int normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30
+				+ 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
+				+ 170;
+		if(normWidth<170)
+			normWidth=170;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(10, 120, 150 + (20 * numOfDigits(dirt)), 50);
+		g2d.fillRect(normWidth, 20, 150 + (20 * numOfDigits(dirt)), 50);
 		g2d.setColor(Statics.BROWN);
-		g2d.drawString("DIRT: " + dirt, 20, 150);
+		g2d.drawString("DIRT: " + dirt, normWidth+20, 55);
 	}
 
 	public boolean canAct() {
