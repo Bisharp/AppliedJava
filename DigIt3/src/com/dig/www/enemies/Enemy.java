@@ -187,6 +187,7 @@ public abstract class Enemy extends Sprite {
 			alive = false;
 			GameCharacter.plusXP(4);
 		}
+		if(!invincible)
 		GameCharacter.plusXP(i);
 		return alive;
 	}
