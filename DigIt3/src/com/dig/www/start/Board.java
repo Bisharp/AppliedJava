@@ -107,6 +107,8 @@ public class Board extends MPanel implements ActionListener {
 	public DigIt getOwner() {
 		return owner;
 	}
+	
+	
 
 	public void setOwner(DigIt owner) {
 		this.owner = owner;
@@ -1188,5 +1190,8 @@ GameCharacter.setXP(xp);
 		default:
 			return false;
 		}
+	}
+	public CharData getData(){
+		return data;
 	}
 }
