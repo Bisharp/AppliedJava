@@ -1181,7 +1181,7 @@ GameCharacter.setXP(xp);
 	}
 
 	public void newGame() {
-		level = "LuigisMansion";
+		level = "hauntedTest";
 		changeArea();
 	}
 
