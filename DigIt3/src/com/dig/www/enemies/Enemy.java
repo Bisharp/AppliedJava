@@ -57,7 +57,7 @@ public abstract class Enemy extends Sprite {
 		this.alive = alive;
 	}
 
-	protected static final int BLOCK = 5;
+	protected static final int BLOCK = 10;
 
 	public void turnAround(int wallX, int wallY) {
 

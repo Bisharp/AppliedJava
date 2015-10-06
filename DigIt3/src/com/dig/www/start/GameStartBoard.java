@@ -278,11 +278,11 @@ Color color;
 		public void reset() {
 			
 			this.removeAll();
-
 			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(200, 20));
 			this.add(label, BorderLayout.NORTH);
 			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
 			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
 					.exists()) {
