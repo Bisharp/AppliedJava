@@ -32,6 +32,7 @@ public abstract class GameCharacter extends Sprite implements
 	/**
 	 * 
 	 */
+	protected PointPath path;
 	protected static int xp;
 	protected static int level;
 	protected int myLevel;
@@ -49,7 +50,7 @@ public abstract class GameCharacter extends Sprite implements
 	protected Wallet wallet;
 
 	private boolean player;
-
+private boolean onceNotCollidePlayer;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -209,8 +210,23 @@ public abstract class GameCharacter extends Sprite implements
 			}
 
 			if (!wallBound) {
+				//System.out.println(path);
+				if(path!=null){
+path.update();
+if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<35){
+	path.removeLast();
+}
+					if(path.getPoints().size()>0){
+					getToPoint=path.getCurrentFind();}else{
+						path=null;
+						getToPoint = owner.getCharacter().getBounds().getLocation();}
+					}
+				else
 				getToPoint = owner.getCharacter().getBounds().getLocation();
-				if (getToPoint.distance(x, y) > 125) {
+				
+				if (path!=null||getToPoint.distance(x, y) > 125) {
+					//if(path!=null)
+					//System.out.println("walking");
 					if (x > getToPoint.x + (SPEED * 2)) {
 						deltaX = -SPEED;
 						moveX = true;
@@ -363,9 +379,16 @@ public abstract class GameCharacter extends Sprite implements
 					moveY = false;
 					image = newImage("n");
 				}
-
-			}
-
+			if(onceNotCollidePlayer){
+				for(int c=0;c<owner.getFriends().size();c++){
+					if(owner.getFriends().get(c)==this){
+						me=c;
+						break;
+					}
+				}
+				path=new PointPath(me, owner);
+			}}
+onceNotCollidePlayer=false;
 			wallBound = false;
 		}
 
@@ -536,6 +559,9 @@ public abstract class GameCharacter extends Sprite implements
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
+			if(isPlayer==false){
+				onceNotCollidePlayer=true;
+			}
 			wallX = midX;
 			wallY = midY;
 		}
@@ -1132,5 +1158,9 @@ mEn.addActionListener(new ActionListener() {
 		});
 		this.setVisible(true);
 		this.requestFocus();}
+	}
+	public PointPath getPPath() {
+		// TODO Auto-generated method stub
+		return path;
 	}
 }

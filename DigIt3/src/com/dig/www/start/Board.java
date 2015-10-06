@@ -952,9 +952,17 @@ public class Board extends MPanel implements ActionListener {
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
 
-		for (i = 0; i < friends.size(); i++)
+		for (i = 0; i < friends.size(); i++){
 			friends.get(i).basicAnimate();
-
+		if(friends.get(i).getPPath()!=null)
+			for(int c=0;c<friends.get(i).getPPath().getPoints().size();c++){
+				friends.get(i).getPPath().getPoints().get(c).update(scrollX, scrollY);
+			}
+		}
+//		if(points!=null)
+//		for( i=0;i<points.size();i++){
+//			points.get(i).update(scrollX, scrollY);
+//		}
 		for (i = 0; i < npcs.size(); i++)
 			npcs.get(i).basicAnimate();
 
