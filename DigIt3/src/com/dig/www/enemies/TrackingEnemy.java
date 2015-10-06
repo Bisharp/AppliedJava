@@ -20,23 +20,12 @@ public class TrackingEnemy extends Enemy {
 		super(x, y, loc, b);
 	}
 
-	public void turnAround() {
-		d += 180;
-
-		if (d > 360)
-			d -= 360;
-
-		x += Math.cos((double) Math.toRadians((double) d)) * speed * 2;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed * 2;
-	}
-
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
 		basicAnimate();
 
 		if (stunTimer <= 0 && onScreen) {
-
 			d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
 			x += Math.cos((double) Math.toRadians((double) d)) * speed;
 			y += Math.sin((double) Math.toRadians((double) d)) * speed;

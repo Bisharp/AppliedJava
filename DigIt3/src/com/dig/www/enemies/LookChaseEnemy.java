@@ -13,7 +13,7 @@ public class LookChaseEnemy extends StandEnemy {
 
 	private GameCharacter chara;
 	private double d = 0;
-	private int speed = 10;
+	private int speed = 5;
 	private static transient Image cloud = Statics.newImage("images/effects/shadow.png");
 	private static transient Image corruption = Statics.newImage("images/effects/corruption.png");
 

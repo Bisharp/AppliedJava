@@ -26,14 +26,9 @@ public class ChargeEnemy extends TrackingEnemy {
 	}
 
 	@Override
-	public void turnAround() {
-		d += 180;
-
-		if (d > 360)
-			d -= 360;
-
-		x += Math.cos((double) Math.toRadians((double) d)) * speed * speedMult * 2;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed * speedMult * 2;
+	public void turnAround(int wallX, int wallY) {
+		super.turnAround(wallX, wallY);
+		super.turnAround(wallX, wallY);
 		chargeTimer = COOLDOWN;
 	}
 

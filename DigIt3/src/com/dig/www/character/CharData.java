@@ -17,6 +17,7 @@ public class CharData implements Serializable {
 	private Hashtable<String, LevelData> collectibles = new Hashtable<String, LevelData>();
 	private String currentKey;
 	private transient Board owner;
+	private int collectibleNum = 0;
 
 	public CharData(String key, Board owner) {
 		currentKey = key;
@@ -44,7 +45,12 @@ public class CharData implements Serializable {
 	}
 
 	public void collect(int id) {
-		collectibles.get(currentKey).collect(id);
+		if (collectibles.get(currentKey).collect(id))
+			collectibleNum++;
+	}
+
+	public int getCollectibleNum() {
+		return collectibleNum;
 	}
 
 	private class LevelData implements Serializable {
@@ -69,8 +75,13 @@ public class CharData implements Serializable {
 		}
 
 		// Sets the collectible specified by the address as collected
-		public void collect(int address) {
+		public boolean collect(int address) {
+
+			if (data.get(address) == true)
+				return false;
+
 			data.replace(address, true);
+			return true;
 		}
 
 		// Returns an ArrayList<Object> that has removed any already collected
