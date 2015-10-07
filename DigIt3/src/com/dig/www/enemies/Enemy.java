@@ -185,7 +185,7 @@ public abstract class Enemy extends Sprite {
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible){
 			alive = false;
-			GameCharacter.plusXP(4);
+			GameCharacter.plusXP(5);
 		}
 		if(!invincible)
 		GameCharacter.plusXP(i);
