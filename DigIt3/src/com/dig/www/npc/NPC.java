@@ -13,7 +13,7 @@ public class NPC extends Sprite{
 	public static final String SIR_COBALT = "sirCobalt";
 	public static final String KEPLER = "kepler";
 	public static final String SHOPKEEP = "shopkeep";
-	public static final String GATEKEEPER = "gateKeeper";
+	public static final String GATEKEEPER = "gatekeeper";
 	
 	protected String[]dialogs;
 	protected Image gif;
