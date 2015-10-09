@@ -27,9 +27,6 @@ public final class Statics {
 	public static final int BOARD_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(); 
 	public static final int BOARD_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();;
 
-	public static final String INF = "INF.";
-	public static final String LAMBDA = "/\\";
-
 	public static final Font SMALL = new Font("Chiller", Font.BOLD, 20);
 	public static final ImageIcon ICON = createImageIcon("/images/icon.png");
 
@@ -58,14 +55,6 @@ public final class Statics {
 	public static final Color SAND_BLUE = new Color(48, 65, 88);
 	public static final Color DARK_SAND_BLUE = new Color(32, 44, 60);
 	public static final Color SAND_RED = new Color(155, 36, 36);
-	
-// Commented-out lighter versions of the above colors
-//	public static final Color HAUNTED_GREEN = new Color(48, 118, 48);
-//	public static final Color DRAB_BROWN = new Color(104, 34, 23);
-//	public static final Color LIGHT_SAND_BLUE = new Color(85, 115, 155);
-//	public static final Color SAND_BLUE = new Color(63, 85, 116);
-//	public static final Color DARK_SAND_BLUE = new Color(48, 65, 88);
-//	public static final Color SAND_RED = new Color(155, 36, 36);
 	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font NPC = new Font("Calibri", Font.PLAIN, 20);

@@ -19,6 +19,7 @@ public class Portal extends Sprite {
 
 	protected int skin = 0;
 	protected int timer = TIMER_MAX;
+	protected boolean animated = true;
 
 	public Portal(int x, int y, Board owner, String area, int collectibles, String type) {
 		super(x, y, "images/portals/" + type + "/0.png", owner);
@@ -26,6 +27,9 @@ public class Portal extends Sprite {
 		this.area = area;
 		this.type = type;
 		collectibleNum = collectibles;
+
+		if (type.equals("default"))
+			animated = false;
 	}
 
 	public String getArea() {
@@ -36,16 +40,19 @@ public class Portal extends Sprite {
 	public void animate() {
 		basicAnimate();
 
-		timer--;
-		if (timer <= 0) {
+		if (animated) {
+			timer--;
+			if (timer <= 0) {
 
-			image = newImage("images/portals/" + type + "/" + skin + ".png");
-			skin++;
-			timer = TIMER_MAX;
-			
-			if (skin > SKIN_MAX)
-				skin = 0;
+				image = newImage("images/portals/" + type + "/" + skin + ".png");
+				skin++;
+				timer = TIMER_MAX;
+
+				if (skin > SKIN_MAX)
+					skin = 0;
+			}
 		}
+		
 	}
 
 	@Override

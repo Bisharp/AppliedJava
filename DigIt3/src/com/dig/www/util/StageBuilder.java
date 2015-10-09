@@ -29,12 +29,20 @@ public class StageBuilder {
 	}
 
 	public StageBuilder(String loc, Board owner) {
-		this.loc = loc;
+		setLoc(loc);
 		this.owner = owner;
 	}
 
 	public void changeState(String loc, Board owner) {
 		this.owner = owner;
+		setLoc(loc);
+	}
+
+	private void setLoc(String loc) {
+		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + ".txt";
+		File map = new File(tryLoc);
+		if (!map.exists())
+			loc = Board.DEFAULT;
 		this.loc = loc;
 	}
 
@@ -326,7 +334,6 @@ public class StageBuilder {
 						stuff.add(currentS);
 					}
 					try {
-
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
 						String loc = stuff.get(2);
@@ -340,7 +347,9 @@ public class StageBuilder {
 						else if (val == -1) {
 							npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
 							count++;
-						} else
+						} else if (val == -2)
+							npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
+						else
 							npcs.add(new Collectible(nX, nY, loc, owner, val));
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -403,6 +412,9 @@ public class StageBuilder {
 						break;
 					case 'H':
 						pack = TexturePack.HAUNTED;
+						break;
+					case 'L':
+						pack = TexturePack.LAB;
 						break;
 					case 'G':
 					default:

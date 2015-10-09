@@ -21,6 +21,13 @@ public class GameControllerRunnable implements Runnable {
 	private boolean[] buttonPressed;
 	private float data;
 	private int i;
+	
+	private static final int ATTACK = KeyEvent.VK_SPACE;
+	private static final int PROJECTILE = KeyEvent.VK_C;
+	private static final int SPECIAL = KeyEvent.VK_V;
+	private static final int LEVEL_UP_MENU = KeyEvent.VK_L;
+	private static final int PAUSE = KeyEvent.VK_SHIFT;
+	
 
 	private static final int Y_STICK = 0;
 	private static final int X_STICK = 1;
@@ -57,7 +64,6 @@ public class GameControllerRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while (controller != null) {
 			try {
 				Thread.sleep(15);
@@ -94,7 +100,7 @@ public class GameControllerRunnable implements Runnable {
 
 				// This code checks for the control stick's changes
 
-				// Code run if the control stick is pressed in the Y axis
+				// TODO Code run if the control stick is pressed in the Y axis
 				if (i == Y_STICK) {
 
 					// Walk
@@ -120,7 +126,7 @@ public class GameControllerRunnable implements Runnable {
 					}
 				}
 
-				// Code run if the control stick is pressed in the X axis
+				// TODO Code run if the control stick is pressed in the X axis
 				else if (i == X_STICK) {
 
 					// walk
@@ -146,35 +152,57 @@ public class GameControllerRunnable implements Runnable {
 					}
 				}
 
-				// Code run if the jump button is pressed
+				// TODO Attack
 				else if (i == A) {
 					if (data > 0) {
-						rOB.keyPress(KeyEvent.VK_SPACE);
+						rOB.keyPress(ATTACK);
 						buttonPressed[6] = true;
 					} else if (buttonPressed[6]) {
-						rOB.keyRelease(KeyEvent.VK_SPACE);
+						rOB.keyRelease(ATTACK);
 						buttonPressed[6] = false;
 					}
 				}
 
-				// Code run if B is pressed
-				else if (i == B) {
-					if (data > 0) {
-						rOB.keyPress(KeyEvent.VK_BACK_SPACE);
+				// TODO Projectile
+				else if (i == Z_AXIS) {
+					if (data < -Z_SENSITIVITY) {
+						rOB.keyPress(PROJECTILE);
 						buttonPressed[7] = true;
 					} else if (buttonPressed[7]) {
-						rOB.keyRelease(KeyEvent.VK_BACK_SPACE);
+						rOB.keyRelease(PROJECTILE);
+						buttonPressed[7] = false;
+					}
+				}
+				
+				// TODO Special
+				else if (i == B) {
+					if (data > 0) {
+						rOB.keyPress(SPECIAL);
+						buttonPressed[7] = true;
+					} else if (buttonPressed[7]) {
+						rOB.keyRelease(SPECIAL);
 						buttonPressed[7] = false;
 					}
 				}
 
-				// Code run if the pause button is pressed
+				// TODO Pause
 				else if (i == BACK) {
 					if (data > 0) {
-						rOB.keyPress(KeyEvent.VK_SHIFT);
+						rOB.keyPress(PAUSE);
 						buttonPressed[8] = true;
 					} else if (buttonPressed[8]) {
-						rOB.keyRelease(KeyEvent.VK_SHIFT);
+						rOB.keyRelease(PAUSE);
+						buttonPressed[8] = false;
+					}
+				}
+				
+				// TODO LevelUp menu
+				else if (i == START) {
+					if (data > 0) {
+						rOB.keyPress(LEVEL_UP_MENU);
+						buttonPressed[8] = true;
+					} else if (buttonPressed[8]) {
+						rOB.keyRelease(LEVEL_UP_MENU);
 						buttonPressed[8] = false;
 					}
 				}

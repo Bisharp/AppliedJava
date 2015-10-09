@@ -31,6 +31,7 @@ protected int speed=5;
 		for (int i = 0; i < 10; i++) {
 			x += 5 * scrollX;
 			y += 5 * scrollY;
+			animateTimer = 10;
 		}
 	}
 
@@ -47,7 +48,7 @@ protected int speed=5;
 
 				animateTimer--;
 			} else {
-				switch (Statics.RAND.nextInt(6)) {
+				switch (Statics.RAND.nextInt(9)) {
 
 				case 0:
 					scrollX = 1;

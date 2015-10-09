@@ -213,7 +213,6 @@ public abstract class Enemy extends Sprite {
 	}
 
 	public int getDamage() {
-		// TODO Auto-generated method stub
 		return damage;
 	}
 

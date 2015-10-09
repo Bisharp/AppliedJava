@@ -47,7 +47,7 @@ boolean found=false;
 	int adjNum=adj(new Point(round100(b.getX()),round100(b.getY())),new Point(round100((int) getCurrentFind().getX()),round100((int) getCurrentFind().getY())));
 		//int adjNum=adj(new Point((b.getX()),(b.getY())),new Point(((int) getCurrentFind().getX()),((int) getCurrentFind().getY())));
 		int notWall=1;
-if(b.getType()==Block.Blocks.CRYSTAL||b.getType()==Block.Blocks.WALL||b.getType()==Block.Blocks.PIT||b.getType()==Block.Blocks.SWITCH)
+if(b.getType()==Block.Blocks.CRYSTAL||b.getType()==Block.Blocks.WALL||b.getType()==Block.Blocks.PIT)
 	notWall=-1;
 //Rectangle bBo=b.getBounds();
 //		for(Enemy e:owner.getEnemies()){

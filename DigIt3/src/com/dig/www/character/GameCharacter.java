@@ -583,7 +583,7 @@ onceNotCollidePlayer=false;
 		}
 	}
 
-	private Font HUD = new Font("Broadway", Font.BOLD, 30);
+	private Font HUD = new Font("Calibri", Font.BOLD, 30);
 
 	private Point setAttacks() {
 		Point shieldPos = null;

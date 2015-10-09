@@ -49,9 +49,9 @@ public class Board extends MPanel implements ActionListener {
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
-
-	private Timer timer// = new Timer(15, this)
-	;
+	
+	public static final String DEFAULT = "LuigisMansion";
+	private Timer timer;
 	String userName;
 	String level;
 	private GameCharacter character;
@@ -622,10 +622,6 @@ public class Board extends MPanel implements ActionListener {
 					case CARPET:
 					case DIRT:
 						break;
-
-					// Cases for raised obstructions
-					case SWITCH:
-						// switching = true;
 					case PIT:
 					case WALL:
 					case CRYSTAL:
@@ -1067,7 +1063,6 @@ if(normalPlayer(character.getType()))
 				writer.write(character != null ? "" + character.getWallet().getMoney() : "0");
 				writer.close();
 
-				// TODO saving data
 				ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
 				os.writeObject(data);
 				os.close();
@@ -1084,7 +1079,7 @@ if(normalPlayer(character.getType()))
 	}
 
 	public void loadSave() {
-		level = "hauntedTest";
+		level = DEFAULT;
 		try {
 			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
 					+ userName + "/");
@@ -1159,7 +1154,6 @@ GameCharacter.setXP(xp);
 
 				reader.close();
 
-				// TODO loading CharData
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
 					data = ((CharData) is.readObject());
@@ -1177,11 +1171,10 @@ GameCharacter.setXP(xp);
 			ex.printStackTrace();
 			newGame();
 		}
-
 	}
 
 	public void newGame() {
-		level = "hauntedTest";
+		level = "Lab";
 		changeArea();
 	}
 
