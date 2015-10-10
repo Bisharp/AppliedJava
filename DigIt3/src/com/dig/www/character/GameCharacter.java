@@ -749,7 +749,7 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 			drawTLBar(
 					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
 			drawCSHUD(g2d);
-			drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
+			//drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
 			drawBar2((double) health / (double) HP_MAX, (double) energy
 					/ (double) MAX_ENERGY, g2d);
