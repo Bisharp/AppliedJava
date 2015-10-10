@@ -49,7 +49,7 @@ public class Board extends MPanel implements ActionListener {
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
-	
+
 	public static final String DEFAULT = "LuigisMansion";
 	private Timer timer;
 	String userName;
@@ -107,8 +107,6 @@ public class Board extends MPanel implements ActionListener {
 	public DigIt getOwner() {
 		return owner;
 	}
-	
-	
 
 	public void setOwner(DigIt owner) {
 		this.owner = owner;
@@ -227,23 +225,26 @@ public class Board extends MPanel implements ActionListener {
 			boolean tag = true;
 			int i;
 			Enemy e;
+			Polygon poly;
 
+			// World draw
 			for (i = 0; i < world.size(); i++) {
 				if (world.get(i).isOnScreen() && world.get(i).isVisible())
 					world.get(i).draw(g2d);
 			}
 
+			// Enemy draw
 			for (i = 0; i < enemies.size(); i++) {
-
 				if (enemies.get(i).isOnScreen()) {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
 					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
 					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
+					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -256,6 +257,8 @@ public class Board extends MPanel implements ActionListener {
 						enemies.get(i).draw(g2d);
 				}
 			}
+
+			// FProjectile draw
 			FProjectile p;
 			for (i = 0; i < fP.size(); i++) {
 
@@ -265,9 +268,10 @@ public class Board extends MPanel implements ActionListener {
 					// Line-of-sight mechanics
 					int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
 					int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
+					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -280,17 +284,72 @@ public class Board extends MPanel implements ActionListener {
 						fP.get(i).draw(g2d);
 				}
 			}
+
+			// Objects draw
 			for (Objects npc : objects)
-				if (npc.isOnScreen())
-					npc.draw(g2d);
 
+				if (npc.isOnScreen()) {
+					// Line-of-sight mechanics
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
+					poly = new Polygon(xs, ys, xs.length);
+
+					for (int x = 0; x < wallList.size(); x++) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
+							tag = false;
+							break;
+						}
+
+						tag = true;
+					}
+					// end of that code
+					if (tag)
+						npc.draw(g2d);
+				}
+
+			// Portal draw
 			for (Portal p2 : portals)
-				if (p2.isOnScreen())
-					p2.draw(g2d);
+				if (p2.isOnScreen()) {
+					// Line-of-sight mechanics
+					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p2.getMidX() + 10 };
+					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p2.getMidY() + 10 };
+					poly = new Polygon(xs, ys, xs.length);
 
+					for (int x = 0; x < wallList.size(); x++) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
+							tag = false;
+							break;
+						}
+
+						tag = true;
+					}
+					// end of that code
+
+					if (tag)
+						p2.draw(g2d);
+				}
+
+			// NPC draw
 			for (NPC npc : npcs)
-				if (npc.isOnScreen())
-					npc.draw(g2d);
+				if (npc.isOnScreen()) {
+					// Line-of-sight mechanics
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
+					poly = new Polygon(xs, ys, xs.length);
+
+					for (int x = 0; x < wallList.size(); x++) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
+							tag = false;
+							break;
+						}
+
+						tag = true;
+					}
+					// end of that code
+
+					if (tag)
+						npc.draw(g2d);
+				}
 
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
@@ -533,11 +592,11 @@ public class Board extends MPanel implements ActionListener {
 
 		case DEAD:
 			deadTimer--;
-			if (deadTimer == 0){
+			if (deadTimer == 0) {
 				GameCharacter.setLevel(0);
 				GameCharacter.setXP(0);
 				owner.quit();
-				}
+			}
 			repaint();
 			break;
 
@@ -948,17 +1007,17 @@ public class Board extends MPanel implements ActionListener {
 		for (i = 0; i < portals.size(); i++)
 			portals.get(i).basicAnimate();
 
-		for (i = 0; i < friends.size(); i++){
+		for (i = 0; i < friends.size(); i++) {
 			friends.get(i).basicAnimate();
-		if(friends.get(i).getPPath()!=null)
-			for(int c=0;c<friends.get(i).getPPath().getPoints().size();c++){
-				friends.get(i).getPPath().getPoints().get(c).update(scrollX, scrollY);
-			}
+			if (friends.get(i).getPPath() != null)
+				for (int c = 0; c < friends.get(i).getPPath().getPoints().size(); c++) {
+					friends.get(i).getPPath().getPoints().get(c).update(scrollX, scrollY);
+				}
 		}
-//		if(points!=null)
-//		for( i=0;i<points.size();i++){
-//			points.get(i).update(scrollX, scrollY);
-//		}
+		// if(points!=null)
+		// for( i=0;i<points.size();i++){
+		// points.get(i).update(scrollX, scrollY);
+		// }
 		for (i = 0; i < npcs.size(); i++)
 			npcs.get(i).basicAnimate();
 
@@ -1048,16 +1107,16 @@ public class Board extends MPanel implements ActionListener {
 			File locFile = new File(location + userName + ".txt");
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-				writer.write(level+","+GameCharacter.getLevel()+","+GameCharacter.getXP());
+				writer.write(level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP());
 				writer.newLine();
-if(normalPlayer(character.getType()))
-				writer.write(character.getSave());
+				if (normalPlayer(character.getType()))
+					writer.write(character.getSave());
 				for (int c = 0; c < friends.size(); c++) {
-					if(normalPlayer(friends.get(c).getType())){
-					
-					
-					writer.newLine();
-					writer.write(friends.get(c).getSave());}
+					if (normalPlayer(friends.get(c).getType())) {
+
+						writer.newLine();
+						writer.write(friends.get(c).getSave());
+					}
 				}
 				writer.newLine();
 				writer.write(character != null ? "" + character.getWallet().getMoney() : "0");
@@ -1113,10 +1172,10 @@ if(normalPlayer(character.getType()))
 					try {
 						String lev = stuff.get(0);
 						level = lev;
-int levUp=Integer.parseInt(stuff.get(1));
-GameCharacter.setLevel(levUp);
-int xp=Integer.parseInt(stuff.get(2));
-GameCharacter.setXP(xp);
+						int levUp = Integer.parseInt(stuff.get(1));
+						GameCharacter.setLevel(levUp);
+						int xp = Integer.parseInt(stuff.get(2));
+						GameCharacter.setXP(xp);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1181,8 +1240,9 @@ GameCharacter.setXP(xp);
 	public ArrayList<Objects> getObjects() {
 		return objects;
 	}
-	public boolean normalPlayer(GameCharacter.Types type){
-		switch(type){
+
+	public boolean normalPlayer(GameCharacter.Types type) {
+		switch (type) {
 		case SPADE:
 		case DIAMOND:
 		case HEART:
@@ -1192,7 +1252,8 @@ GameCharacter.setXP(xp);
 			return false;
 		}
 	}
-	public CharData getData(){
+
+	public CharData getData() {
 		return data;
 	}
 }
