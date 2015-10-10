@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.security.acl.Owner;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.dig.www.blocks.Block;
 import com.dig.www.enemies.Enemy;
@@ -36,9 +37,11 @@ public PointPath(int me,Board owner){
 }
 public void findPath() {
 	points.clear();
-	points.add(new PathPoint((player.getX()), (player.getY()), 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
+	points.add(new PathPoint(((int)(player.getX()/100))*100+(us.get(0).getX()%100), ((int)(player.getY()/100))*100-10-(us.get(0).getY()%100), 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
-boolean found=false;
+System.out.println(points.get(0).x+","+points.get(0).x);
+System.out.println(world.get(0).getX()+","+world.get(0).getY());
+	boolean found=false;
 	while(!found){
 	int[] adj={0,0,0,0};
 	for(int c=0;c<world.size();c++){
@@ -128,7 +131,7 @@ backwards=0;
 //			points.clear();
 //			updateTimer=25;
 //			playerPoint=new Point(owner.getFriends().get(me).getX(),owner.getFriends().get(me).getY());
-//			Statics.playSound(owner, "wait-a-minute.wav");
+			Statics.playSound(owner, "wait-a-minute.wav");
 //			break;
 //			
 				points.clear();
@@ -143,14 +146,14 @@ backwards=0;
 					
 		}
 	
-	if(getDistance(getCurrentFind())<=100){
-		//System.out.println("WORKED");
-	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
+	if(getDistance(getCurrentFind())<100){
+		System.out.println(us.get(me).getType().charName()+" WORKED AT:"+new Date());
+	Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
 		//System.out.println("Size before optimising: "+points.size());
 		
 		
 		optimise();
-		points.remove(0);
+	points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}
@@ -170,7 +173,7 @@ backwards=0;
 //		points.clear();
 //		updateTimer=25;
 //		playerPoint=new Point(owner.getFriends().get(me).getX(),owner.getFriends().get(me).getY());
-//		Statics.playSound(owner, "wait-a-minute.wav");
+		Statics.playSound(owner, "wait-a-minute.wav");
 		points.clear();
 		owner.getFriends().get(me).setX(player.getX());	
 		owner.getFriends().get(me).setY(player.getY());	

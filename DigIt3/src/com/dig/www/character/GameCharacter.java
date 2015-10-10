@@ -11,9 +11,11 @@ import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,6 +34,8 @@ public abstract class GameCharacter extends Sprite implements
 	/**
 	 * 
 	 */
+	LevelUp levMen;
+	boolean levUp=false;
 	protected PointPath path;
 	protected static int xp;
 	protected static int level;
@@ -210,10 +214,11 @@ private boolean onceNotCollidePlayer;
 			}
 			if(path!=null){
 path.update();
-if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<35){
+if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<20){
 	path.removeLast();
 }
 if(new Point(x, y).distance(owner.getCharPoint())<140){
+	System.out.println(getType().charName()+" CLOSE:"+new Date());
 	path=null;
 }
 }
@@ -232,12 +237,12 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 				if (path!=null||getToPoint.distance(x, y) > 125) {
 					//if(path!=null)
 					//System.out.println("walking");
-					if (x > getToPoint.x + (SPEED * 2)) {
+					if (x > getToPoint.x + (path==null?(SPEED * 2):0)) {
 						deltaX = -SPEED;
 						moveX = true;
 						direction = Direction.LEFT;
 
-					} else if (x < getToPoint.x - (SPEED * 2)) {
+					} else if (x < getToPoint.x - (path==null?(SPEED * 2):0)) {
 						deltaX = SPEED;
 						moveX = true;
 						direction = Direction.RIGHT;
@@ -246,13 +251,13 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 						deltaX = 0;
 						moveX = false;
 					}
-					if (y > getToPoint.y + (SPEED * 2)) {
+					if (y > getToPoint.y + (path==null?(SPEED * 2):0)) {
 						deltaY = -SPEED;
 						moveY = true;
 						if (y > getToPoint.y + 50)
 							direction = Direction.UP;
 
-					} else if (y < getToPoint.y - (SPEED * 2)) {
+					} else if (y < getToPoint.y - (path==null?(SPEED * 2):0)) {
 						deltaY = SPEED;
 						moveY = true;
 						if (y < getToPoint.y - 50)
@@ -384,7 +389,7 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					moveY = false;
 					image = newImage("n");
 				}
-			if(onceNotCollidePlayer){
+			if(onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
 				for(int c=0;c<owner.getFriends().size();c++){
 					if(owner.getFriends().get(c)==this){
 						me=c;
@@ -400,7 +405,15 @@ onceNotCollidePlayer=false;
 	}
 
 	public void keyPressed(int keyCode) {
-
+if(keyCode==KeyEvent.VK_L){
+	if(levMen==null)
+	OpenLevelUp();
+	else{
+		owner.setFocusable(true);
+		owner.requestFocus();
+		levMen.dispose();
+		levMen=null;}
+}else
 		switch (keyCode) {
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_A:
@@ -459,9 +472,7 @@ onceNotCollidePlayer=false;
 			willTalk = true;
 			break;
 		
-		case KeyEvent.VK_L:
-			OpenLevelUp();
-			break;
+		
 		case KeyEvent.VK_O:
 			level++;
 			break;
@@ -470,7 +481,7 @@ onceNotCollidePlayer=false;
 
 	private void OpenLevelUp() {
 		// TODO Auto-generated method stub
-		new LevelUp();
+	levMen=	new LevelUp();
 	}
 
 	public abstract Moves getRangedMove();
@@ -1069,12 +1080,13 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 		JLabel levelLabel;
 		JButton mHealth;
 		JButton mEn;
+		LevelUp l=this;
 		public LevelUp(){
 			deltaX=0;
 			deltaY=0;
 			moveX=false;
 			moveY=false;
-					
+			levUp=true;
 			this.setFocusable(true);
 			owner.setFocusable(false);
 			this.setSize(400, 200);
@@ -1099,6 +1111,33 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 			mHealth.setText("Health: "+HP_MAX);
 			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
 		}}
+	});
+	this.addKeyListener(new KeyListener() {
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+		if(e.getKeyCode()==KeyEvent.VK_L){
+			owner.setFocusable(true);
+			owner.requestFocus();
+			levUp=false;
+			l.dispose();
+		levMen=null;
+		}
+		
+		}
 	});
 	panel.add(mHealth);
 mEn.addActionListener(new ActionListener() {
@@ -1147,6 +1186,7 @@ mEn.addActionListener(new ActionListener() {
 				// TODO Auto-generated method stub
 				owner.setFocusable(true);
 				owner.requestFocus();
+				levUp=false;
 			}
 			
 			@Override

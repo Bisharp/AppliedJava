@@ -121,8 +121,8 @@ public class Board extends MPanel implements ActionListener {
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
-		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
+		//friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		//friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 
 		Wallet w = new Wallet();
 		for (GameCharacter f : friends)
@@ -353,10 +353,10 @@ public class Board extends MPanel implements ActionListener {
 
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
-				g2d.setColor(new Color(0,255,0,100));
+				g2d.setColor(new Color(255,255,0));
 				if(character.getPPath()!=null){
 					for(int c=0;c<character.getPPath().getPoints().size();c++){
-						g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
+						g2d.drawString(""+c,character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
 					}
 				}
 			}
@@ -1239,7 +1239,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "Lab";
+		level = "hauntedTest";
 		changeArea();
 	}
 
