@@ -208,14 +208,19 @@ private boolean onceNotCollidePlayer;
 					}
 				}
 			}
-
-			if (!wallBound) {
-				//System.out.println(path);
-				if(path!=null){
+			if(path!=null){
 path.update();
 if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<35){
 	path.removeLast();
 }
+if(new Point(x, y).distance(owner.getCharPoint())<140){
+	path=null;
+}
+}
+			if (!wallBound) {
+				//System.out.println(path);
+				if(path!=null){
+
 					if(path.getPoints().size()>0){
 					getToPoint=path.getCurrentFind();}else{
 						path=null;

@@ -353,6 +353,12 @@ public class Board extends MPanel implements ActionListener {
 
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
+				g2d.setColor(new Color(0,255,0,100));
+				if(character.getPPath()!=null){
+					for(int c=0;c<character.getPPath().getPoints().size();c++){
+						g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
+					}
+				}
 			}
 			character.draw(g2d);
 

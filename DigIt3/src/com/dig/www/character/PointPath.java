@@ -302,20 +302,20 @@ public void update(){
 	}
 	backwards=0;
 	
-	if((playerPoint!=null&&playerPoint.distance(player.getX(),player.getY())>=200)||(points.size()!=0&&getFirst().distance(player.getX(),player.getY())>300)||(playerPoint==null&&points.size()==0&&owner.getFriends().get(me).getBounds().getLocation().distance(owner.getCharacter().getBounds().getLocation())>300)){
-		if(updateTimer==0){
-			updateTimer=0;
-		points.clear();
-		findPath();}
-		
-			//System.out.println(getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation()));
-			
-			
-		
-//		if(points.size()>0&&getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation())<100){
-//				removeLast();
-//			}
-	}
+//	if((playerPoint!=null&&playerPoint.distance(player.getX(),player.getY())>=200)||(points.size()!=0&&getFirst().distance(player.getX(),player.getY())>300)||(playerPoint==null&&points.size()==0&&owner.getFriends().get(me).getBounds().getLocation().distance(owner.getCharacter().getBounds().getLocation())>300)){
+//		if(updateTimer==0){
+//			updateTimer=0;
+//		points.clear();
+//		findPath();}
+//		
+//			//System.out.println(getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation()));
+//			
+//			
+//		
+////		if(points.size()>0&&getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation())<100){
+////				removeLast();
+////			}
+//	}
 	if(updateTimer>0){
 			updateTimer--;}else{
 				//System.out.println("points size: "+points.size());
