@@ -39,7 +39,8 @@ public void findPath() {
 	points.clear();
 	points.add(new PathPoint(((int)(player.getX()/100))*100+(us.get(0).getX()%100), ((int)(player.getY()/100))*100-10-(us.get(0).getY()%100), 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
-System.out.println(points.get(0).x+","+points.get(0).x);
+Point pA=points.get(0);
+	System.out.println(points.get(0).x+","+points.get(0).x);
 System.out.println(world.get(0).getX()+","+world.get(0).getY());
 	boolean found=false;
 	while(!found){
@@ -153,7 +154,7 @@ backwards=0;
 		
 		
 		optimise();
-	points.remove(0);
+	//points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}

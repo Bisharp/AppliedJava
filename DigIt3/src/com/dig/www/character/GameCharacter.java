@@ -214,9 +214,9 @@ private boolean onceNotCollidePlayer;
 			}
 			if(path!=null){
 path.update();
-if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<20){
-	path.removeLast();
-}
+//if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<20){
+//	path.removeLast();
+//}
 if(new Point(x, y).distance(owner.getCharPoint())<140){
 	System.out.println(getType().charName()+" CLOSE:"+new Date());
 	path=null;
@@ -235,14 +235,22 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 				getToPoint = owner.getCharacter().getBounds().getLocation();
 				
 				if (path!=null||getToPoint.distance(x, y) > 125) {
+					int amount=2;
+				if(path!=null){
+					if(Math.abs(x-getToPoint.x)>Math.abs(y-getToPoint.y)){
+					amount=0;	
+					}else{
+						amount=1;
+					}
+				}
 					//if(path!=null)
 					//System.out.println("walking");
-					if (x > getToPoint.x + (path==null?(SPEED * 2):0)) {
+					if (amount!=1&&x > getToPoint.x + (path==null?(SPEED * 2):0)) {
 						deltaX = -SPEED;
 						moveX = true;
 						direction = Direction.LEFT;
 
-					} else if (x < getToPoint.x - (path==null?(SPEED * 2):0)) {
+					} else if (amount!=1&&x < getToPoint.x - (path==null?(SPEED * 2):0)) {
 						deltaX = SPEED;
 						moveX = true;
 						direction = Direction.RIGHT;
@@ -251,13 +259,13 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 						deltaX = 0;
 						moveX = false;
 					}
-					if (y > getToPoint.y + (path==null?(SPEED * 2):0)) {
+					if (amount!=0&&y > getToPoint.y + (path==null?(SPEED * 2):0)) {
 						deltaY = -SPEED;
 						moveY = true;
 						if (y > getToPoint.y + 50)
 							direction = Direction.UP;
 
-					} else if (y < getToPoint.y - (path==null?(SPEED * 2):0)) {
+					} else if (amount!=0&&y < getToPoint.y - (path==null?(SPEED * 2):0)) {
 						deltaY = SPEED;
 						moveY = true;
 						if (y < getToPoint.y - 50)
@@ -397,7 +405,8 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					}
 				}
 				path=new PointPath(me, owner);
-			}}
+			}
+			}
 onceNotCollidePlayer=false;
 			wallBound = false;
 		}
@@ -1022,19 +1031,32 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 
 	}
 
+//	public void drawBar2(double per, double per2, Graphics2D g2d) {
+//		g2d.setColor(Color.BLACK);
+//		g2d.fillRect(x, y - 10, width, 10);
+//		g2d.setColor(Color.RED);
+//		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
+//
+//		g2d.setColor(new Color(0, 0, 255, 150));
+//		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
+//		g2d.setColor(Color.WHITE);
+//		g2d.drawRect(x - 1, y - 11, width + 1, 11);
+//
+//	}
 	public void drawBar2(double per, double per2, Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(x, y - 10, width, 10);
+		g2d.fillRect(x, y - 22, width, 22);
 		g2d.setColor(Color.RED);
 		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
-
-		g2d.setColor(new Color(0, 0, 255, 150));
-		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
-		g2d.setColor(Color.WHITE);
+g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 11, width + 1, 11);
+	
+		g2d.setColor(Color.BLUE);
+		g2d.fillRect(x, y - 21, (int) ((double) width * (double) per2), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(x - 1, y - 22, width + 1, 11);
 
 	}
-
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
