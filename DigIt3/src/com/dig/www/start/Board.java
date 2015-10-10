@@ -121,8 +121,10 @@ public class Board extends MPanel implements ActionListener {
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
-		//friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		//friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
+		// friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
+		// Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		// friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT /
+		// 2 + 150, this, false));
 
 		Wallet w = new Wallet();
 		for (GameCharacter f : friends)
@@ -353,13 +355,14 @@ public class Board extends MPanel implements ActionListener {
 
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
-				g2d.setColor(new Color(255,255,0));
-				if(character.getPPath()!=null){
-					for(int c=0;c<character.getPPath().getPoints().size();c++){
-						if(c==0)
+				g2d.setColor(new Color(255, 255, 0));
+				if (character.getPPath() != null) {
+					for (int c = 0; c < character.getPPath().getPoints().size(); c++) {
+						if (c == 0)
 							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 100, 100);
 						else
-						g2d.drawString(""+(character.getPPath().getPoints().size()-c),character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
+							g2d.drawString("" + (character.getPPath().getPoints().size() - c), character.getPPath().getPoint(c).x, character
+									.getPPath().getPoint(c).y);
 					}
 				}
 			}
@@ -652,7 +655,7 @@ public class Board extends MPanel implements ActionListener {
 				// End of line-of-sight
 			}
 
-			if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r3)) {
+			if (!b.traversable() && b.getBounds().intersects(r3)) {
 
 				switch (b.getType()) {
 
@@ -669,6 +672,7 @@ public class Board extends MPanel implements ActionListener {
 				case CRYSTAL:
 				case LIQUID:
 					character.collision(b.getMidX(), b.getMidY(), false);
+					break;
 				}
 			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
 					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {

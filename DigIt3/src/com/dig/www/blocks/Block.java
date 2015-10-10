@@ -411,7 +411,7 @@ public class Block extends Sprite {
 					int i;
 					for (i = 0; i < 5; i++)
 						g2d.drawLine(x, y + (20 * i), x + width - 1, y + (20 * i));
-					
+
 					for (i = 0; i < 5; i++)
 						for (int c = 0; c < 5; c++)
 							g2d.fillRect(x + (20 * c) + 8, y + (20 * i) + 2, 2, 2);
@@ -722,5 +722,10 @@ public class Block extends Sprite {
 
 	public void setCanSee(boolean canSee) {
 		this.canSee = canSee;
+	}
+
+	public boolean traversable() {
+		// TODO Auto-generated method stub
+		return type == Blocks.GROUND || type == Blocks.CARPET || type == Blocks.DIRT || type == Blocks.ROCK;
 	}
 }
