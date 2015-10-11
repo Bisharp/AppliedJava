@@ -356,6 +356,13 @@ public class Board extends MPanel implements ActionListener {
 //g2d.fillRect(584, 249, 100, 100);
 //g2d.fillRect(584, 349, 100, 100);
 //g2d.fillRect(484, 349, 100, 100);
+			g2d.setColor(Color.ORANGE);
+			g2d.fillRect(((int)((character.getX())/100))*100+(world.get(0).getX()%100)+100
+					,
+					((int)((character.getY())/100))*100
+			+(world.get(0).getY()%100)+100-11
+			, 100, 100)
+			;
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
 				g2d.setColor(new Color(255, 255, 0));

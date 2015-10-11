@@ -397,15 +397,28 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					moveY = false;
 					image = newImage("n");
 				}
-			if(onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
-				for(int c=0;c<owner.getFriends().size();c++){
-					if(owner.getFriends().get(c)==this){
-						me=c;
-						break;
+				if(onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
+//					if (new Point(getMidX(), getMidY()).distance(new Point(
+//							wallX, getMidY())) < 100) {
+//						deltaX = -deltaX;
+//						x += deltaX;
+//					}
+//					if (new Point(getMidX(), getMidY()).distance(new Point(
+//							getMidX(), wallY)) < 100) {
+//						deltaY = -deltaY;
+//						y += deltaY;
+//					}
+					
+					for(int c=0;c<owner.getFriends().size();c++){
+						if(owner.getFriends().get(c)==this){
+							me=c;
+							break;
+						}
 					}
+					path=new PointPath(me, owner);
+					path.update();
 				}
-				path=new PointPath(me, owner);
-			}
+	
 			}
 onceNotCollidePlayer=false;
 			wallBound = false;

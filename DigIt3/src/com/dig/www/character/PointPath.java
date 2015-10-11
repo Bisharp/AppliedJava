@@ -37,9 +37,10 @@ public PointPath(int me,Board owner){
 }
 public void findPath() {
 	points.clear();
-	points.add(new PathPoint(((int)(player.getX()/100))*100+(world.get(0).getX()%100)
-			, ((int)(player.getY()/100))*100-12
-			+(world.get(0).getY()%100)
+	points.add(new PathPoint(((int)((player.getX())/100))*100+(world.get(0).getX()%100)+100
+			
+			, ((int)((player.getY())/100))*100
+			+(world.get(0).getY()%100)+100-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
 System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
@@ -160,7 +161,7 @@ backwards=0;
 		}
 		
 		optimise();
-	points.remove(0);
+	//points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}
