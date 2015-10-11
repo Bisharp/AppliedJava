@@ -352,17 +352,23 @@ public class Board extends MPanel implements ActionListener {
 					if (tag)
 						npc.draw(g2d);
 				}
-
+//			g2d.setColor(Color.WHITE);
+//g2d.fillRect(584, 249, 100, 100);
+//g2d.fillRect(584, 349, 100, 100);
+//g2d.fillRect(484, 349, 100, 100);
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
 				g2d.setColor(new Color(255, 255, 0));
 				if (character.getPPath() != null) {
-					for (int c = 0; c < character.getPPath().getPoints().size(); c++) {
+				
+						
+					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
+						
 						if (c == 0)
 							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 100, 100);
 						else
-							g2d.drawString("" + (character.getPPath().getPoints().size() - c), character.getPPath().getPoint(c).x, character
-									.getPPath().getPoint(c).y);
+							g2d.drawString("" +c, character.getPPath().getPoint(c).x,
+									character.getPPath().getPoint(c).y);
 					}
 				}
 			}

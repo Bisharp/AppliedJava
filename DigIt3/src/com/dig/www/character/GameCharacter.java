@@ -214,9 +214,9 @@ private boolean onceNotCollidePlayer;
 			}
 			if(path!=null){
 path.update();
-//if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<20){
-//	path.removeLast();
-//}
+if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<11){
+	path.removeLast();
+}
 if(new Point(x, y).distance(owner.getCharPoint())<140){
 	System.out.println(getType().charName()+" CLOSE:"+new Date());
 	path=null;
