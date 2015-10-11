@@ -121,10 +121,10 @@ public class Board extends MPanel implements ActionListener {
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
-		// friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
-		// Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		// friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT /
-		// 2 + 150, this, false));
+	 friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
+		 Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		 friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT /
+		 2 + 150, this, false));
 
 		Wallet w = new Wallet();
 		for (GameCharacter f : friends)
@@ -352,32 +352,29 @@ public class Board extends MPanel implements ActionListener {
 					if (tag)
 						npc.draw(g2d);
 				}
-//			g2d.setColor(Color.WHITE);
-//g2d.fillRect(584, 249, 100, 100);
-//g2d.fillRect(584, 349, 100, 100);
-//g2d.fillRect(484, 349, 100, 100);
-			g2d.setColor(Color.ORANGE);
-			g2d.fillRect(((int)((character.getX())/100))*100+(world.get(0).getX()%100)+100
-					,
-					((int)((character.getY())/100))*100
-			+(world.get(0).getY()%100)+100-11
-			, 100, 100)
-			;
+
+//			g2d.setColor(Color.ORANGE);
+//			g2d.fillRect(((int)((character.getX())/100))*100+(world.get(0).getX()%100)+100
+//					,
+//					((int)((character.getY())/100))*100
+//			+(world.get(0).getY()%100)+100-11
+//			, 100, 100)
+//			;
 			for (GameCharacter character : friends) {
 				character.draw(g2d);
-				g2d.setColor(new Color(255, 255, 0));
-				if (character.getPPath() != null) {
-				
-						
-					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
-						
-						if (c == 0)
-							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 100, 100);
-						else
-							g2d.drawString("" +c, character.getPPath().getPoint(c).x,
-									character.getPPath().getPoint(c).y);
-					}
-				}
+//				g2d.setColor(new Color(255, 255, 0));
+//				if (character.getPPath() != null) {
+//				
+//						
+//					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
+//						
+//						if (c == 0)
+//							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 100, 100);
+//						else
+//							g2d.drawString("" +c, character.getPPath().getPoint(c).x,
+//									character.getPPath().getPoint(c).y);
+//					}
+//				}
 			}
 			character.draw(g2d);
 

@@ -43,10 +43,10 @@ public void findPath() {
 			+(world.get(0).getY()%100)+100-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
-System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
-	//Point pA=points.get(0);
-	System.out.println("point: "+points.get(0).x+","+points.get(0).y);
-System.out.println("world: "+world.get(0).getX()+","+world.get(0).getY());
+//System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
+//	//Point pA=points.get(0);
+//	System.out.println("point: "+points.get(0).x+","+points.get(0).y);
+//System.out.println("world: "+world.get(0).getX()+","+world.get(0).getY());
 	boolean found=false;
 	while(!found){
 	int[] adj={0,0,0,0};
@@ -56,7 +56,7 @@ System.out.println("world: "+world.get(0).getX()+","+world.get(0).getY());
 	int adjNum=adj(new Point(round100(b.getX()),round100(b.getY())),new Point(round100((int) getCurrentFind().getX()),round100((int) getCurrentFind().getY())));
 		//int adjNum=adj(new Point((b.getX()),(b.getY())),new Point(((int) getCurrentFind().getX()),((int) getCurrentFind().getY())));
 		int notWall=1;
-if(b.getType()==Block.Blocks.CRYSTAL||b.getType()==Block.Blocks.WALL||b.getType()==Block.Blocks.PIT)
+if(!b.traversable())
 	notWall=-1;
 //Rectangle bBo=b.getBounds();
 //		for(Enemy e:owner.getEnemies()){
@@ -153,15 +153,15 @@ backwards=0;
 		}
 	
 	if(getDistance(getCurrentFind())<100){
-		System.out.println(us.get(me).getType().charName()+" WORKED AT:"+new Date());
-	Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
+		//System.out.println(us.get(me).getType().charName()+" WORKED AT:"+new Date());
+	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
 		//System.out.println("Size before optimising: "+points.size());
-		for(int c=0;c<points.size();c++){
-			System.out.println(points.get(c));
-		}
+//		for(int c=0;c<points.size();c++){
+//			System.out.println(points.get(c));
+//		}
 		
 		optimise();
-	//points.remove(0);
+	points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}
