@@ -89,4 +89,9 @@ normWidth=(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30;
 		// TODO Auto-generated method stub
 		return Moves.ARROW;
 	}
+
+	public void resetDirt() {
+		// TODO Auto-generated method stub
+		dirt=0;
+	}
 }

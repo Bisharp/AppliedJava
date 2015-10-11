@@ -34,6 +34,7 @@ import com.dig.www.npc.*;
 import com.dig.www.objects.*;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.*;
 
 public class Board extends MPanel implements ActionListener {
@@ -164,7 +165,15 @@ public class Board extends MPanel implements ActionListener {
 			data = new CharData(level, this);
 		objects = data.filter(objects);
 
+		if(character.getType()==Types.SPADE){
+			((Spade)character).resetDirt();
+		}
+		
 		for (int c = 0; c < friends.size(); c++) {
+			if(friends.get(c).getType()==Types.SPADE){
+				((Spade)friends.get(c)).resetDirt();
+			}
+			
 			if (c > 1) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - ((c - 1) * 100));
@@ -172,6 +181,7 @@ public class Board extends MPanel implements ActionListener {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + (c * 100));
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
 			}
+		
 		}
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);

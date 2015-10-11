@@ -1060,12 +1060,12 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x, y - 22, width, 22);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
+		g2d.fillRect(x, y - 21, (int) ((double) width * (double) per), 10);
 g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 11, width + 1, 11);
 	
 		g2d.setColor(Color.BLUE);
-		g2d.fillRect(x, y - 21, (int) ((double) width * (double) per2), 10);
+		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
 
