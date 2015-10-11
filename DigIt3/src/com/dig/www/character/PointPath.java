@@ -49,7 +49,8 @@ public void findPath() {
 			((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
 			
 			,((int)((player.getY()+30)/100))*100
-			+(world.get(0).getY()%100)+100-11
+			+(world.get(0).getY()%100)//+100
+			-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
 //System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
@@ -86,7 +87,7 @@ if(!b.traversable())
 	if(adjNum==-1)
 	continue;
 	else{
-		//System.out.println(" d: "+adjNum+" type: "+b.type);
+		//System.out.println(" d: "+adjNum+" type: "+b.getType());
  if(adjNum==0)
 	adj[0]=notWall;
 else if(adjNum==1)
@@ -110,6 +111,7 @@ else
 				sel=c;
 				value=pointPlusRDScore(c);
 			//System.out.println("added:"+c);
+				//System.out.println(" d: "+c+" type: "+adj[c]);
 			}
 			
 		}
@@ -128,6 +130,7 @@ else
 		Point p=getCurrentFind();
 		Point newP=new Point(p.x+addX,p.y+addY);
 		points.add(new PathPoint(newP.x, newP.y, 0, getDistance(newP),sel));
+		System.out.println("added: "+newP.x+","+newP.y);
 		//System.out.print("Options");
 //		for(int c: adj){
 //			System.out.print(", "+c);
@@ -149,6 +152,7 @@ backwards=0;
 	//		Statics.playSound(owner, "wait-a-minute.wav");
 //			break;
 //			
+			us.get(me).pathUpdateTimer=25;
 				points.clear();
 			//owner.getFriends().get(me).setX(player.getX());	
 			//owner.getFriends().get(me).setY(player.getY());
@@ -162,15 +166,16 @@ backwards=0;
 		}
 	
 	if(getDistance(getCurrentFind())<=100){
-		System.out.println(us.get(me).getType().charName()+" WORKED AT:"+new Date());
-	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
+		System.out.println(us.get(me).getType().charName()+","+us.get(me).getX()+","+us.get(me).getY()//+" WORKED AT:"+new Date()
+		);
+		System.out.println("player,"+player.getX()+","+player.getY());	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
 		//System.out.println("Size before optimising: "+points.size());
 //		for(int c=0;c<points.size();c++){
 //			System.out.println(points.get(c));
 //		}
 		
 		optimise();
-	//points.remove(0);
+	points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}
@@ -188,7 +193,7 @@ backwards=0;
 		//owner.showPoints(points);
 		//}
 //		points.clear();
-		updateTimer=25;
+		us.get(me).pathUpdateTimer=25;
 //		playerPoint=new Point(owner.getFriends().get(me).getX(),owner.getFriends().get(me).getY());
 		//Statics.playSound(owner, "wait-a-minute.wav");
 		points.clear();
@@ -322,29 +327,30 @@ public void update(){
 	}
 	backwards=0;
 	
-	if((playerPoint!=null&&playerPoint.distance(player.getX(),player.getY())>=200)||(points.size()!=0&&getFirst().distance(player.getX(),player.getY())>300)||(playerPoint==null&&points.size()==0&&owner.getFriends().get(me).getBounds().getLocation().distance(owner.getCharacter().getBounds().getLocation())>300)){
-		if(updateTimer==0){
-			updateTimer=0;
-		points.clear();
-		findPath();}
-		
-			//System.out.println(getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation()));
-			
-			
-		
-//		if(points.size()>0&&getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation())<100){
-//				removeLast();
-//			}
-	}
+//	if((playerPoint!=null&&playerPoint.distance(player.getX(),player.getY())>=200)||(points.size()!=0&&getFirst().distance(player.getX(),player.getY())>300)||(playerPoint==null&&points.size()==0&&owner.getFriends().get(me).getBounds().getLocation().distance(owner.getCharacter().getBounds().getLocation())>300)){
+//		if(updateTimer==0){
+//			updateTimer=0;
+//		points.clear();
+//		findPath();}
+//		
+//			//System.out.println(getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation()));
+//			
+//			
+//		
+////		if(points.size()>0&&getCurrentFind().distance(new Rectangle(us.get(me).getBounds()).getLocation())<100){
+////				removeLast();
+////			}
+//	}
 	if(updateTimer>0){
-			updateTimer--;}else{
-				//System.out.println("points size: "+points.size());
-				//System.out.println("playerPoint: "+playerPoint);
-//				if(playerPoint!=null){
-//				//System.out.println("playerPoint distance: "+	playerPoint.distance(player.getX(),player.getY()));
-//				}
-				
-			}
+			updateTimer--;}
+	//else{
+//				//System.out.println("points size: "+points.size());
+//				//System.out.println("playerPoint: "+playerPoint);
+////				if(playerPoint!=null){
+////				//System.out.println("playerPoint distance: "+	playerPoint.distance(player.getX(),player.getY()));
+////				}
+//				
+//			}
 	//System.out.println(updateTimer);
 }
 public void removeLast(){

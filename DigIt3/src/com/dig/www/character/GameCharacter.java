@@ -172,6 +172,7 @@ private boolean onceNotCollidePlayer;
 	int MEnC;
 	int REnC;
 	int SEnC;
+	int pathUpdateTimer;
 	public GameCharacter(int x, int y, Board owner, Types type,
 			String charName, boolean player, int NEG_TIMER_MELEE,
 			int NEG_TIMER_RANGED, int NEG_TIMER_SPECIAL, int TIMER_MELEE,
@@ -401,7 +402,9 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					moveY = false;
 					image = newImage("n");
 				}
-				if(onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
+				if(pathUpdateTimer>0)
+				pathUpdateTimer--;
+				if(pathUpdateTimer<=0&&onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
 //					if (new Point(getMidX(), getMidY()).distance(new Point(
 //							wallX, getMidY())) < 100) {
 //						deltaX = -deltaX;
@@ -434,6 +437,14 @@ onceNotCollidePlayer=false;
 		if(keyCode==KeyEvent.VK_9){
 		JOptionPane.showMessageDialog(owner, owner.getWorld().get(0).getX()+","+owner.getWorld().get(0).getY());
 		}
+		if(keyCode==KeyEvent.VK_0){
+			String s="";
+			for(int c=0;c<owner.getFriends().size();c++){
+			
+				s+=owner.getFriends().get(c).getType().charName()+","+(owner.getFriends().get(c).getToPoint.x-owner.getFriends().get(c).getX())+","+(owner.getFriends().get(c).getToPoint.y-owner.getFriends().get(c).getY())+"\n";
+			
+			}JOptionPane.showMessageDialog(owner, s);
+			}
 if(keyCode==KeyEvent.VK_L){
 	if(levMen==null)
 	OpenLevelUp();
