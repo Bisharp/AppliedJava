@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -194,6 +195,9 @@ private boolean onceNotCollidePlayer;
 		this.MEnC=MEnC;
 		this.REnC=REnC;
 		this.SEnC=SEnC;
+		
+		
+		
 	}
 
 	@Override
@@ -427,6 +431,9 @@ onceNotCollidePlayer=false;
 	}
 
 	public void keyPressed(int keyCode) {
+		if(keyCode==KeyEvent.VK_9){
+		JOptionPane.showMessageDialog(owner, owner.getWorld().get(0).getX()+","+owner.getWorld().get(0).getY());
+		}
 if(keyCode==KeyEvent.VK_L){
 	if(levMen==null)
 	OpenLevelUp();

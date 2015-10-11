@@ -36,7 +36,7 @@ public class DigIt extends JFrame {
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 
-		JOptionPane.showMessageDialog(this, "Please plug in any game controllers", NAME, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Please plug in any game controllers now.\nYou will not be able to later.", NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		controllerThread = new Thread(new GameControllerRunnable(this));
 		controllerThread.start();
