@@ -406,13 +406,16 @@ public class Board extends MPanel implements ActionListener {
 				character.draw(g2d);
 				if (character.getPPath() != null) {
 				
-						
+					
 					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
 						g2d.setColor(new Color(255, 255, 0));
 						if (c == character.getPPath().getPoints().size()-1)
 							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
-							g2d.setColor(new Color(255, 0, 0));
+						else
+							g2d.drawLine(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, character.getPPath().getPoint(c+1).x, character.getPPath().getPoint(c+1).y);
+						g2d.setColor(new Color(255, 0, 0));
 							g2d.drawString(""+c, character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
+							
 							//else
 							//g2d.drawString("" +c, character.getPPath().getPoint(c).x,
 							//		character.getPPath().getPoint(c).y);

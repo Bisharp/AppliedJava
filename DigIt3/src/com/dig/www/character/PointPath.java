@@ -49,9 +49,10 @@ public void findPath() {
 			((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
 			
 			,((int)((player.getY()+30)/100))*100
-			+(world.get(0).getY()%100)//+100
+			+(world.get(0).getY()%100)+100
 			-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
+	System.out.println("added: "+getCurrentFind().x+","+getCurrentFind().y);
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
 //System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
 //	//Point pA=points.get(0);
