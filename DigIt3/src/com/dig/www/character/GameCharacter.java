@@ -219,7 +219,7 @@ private boolean onceNotCollidePlayer;
 			}
 			if(path!=null){
 path.update();
-if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<11){
+if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<11&&JOptionPane.showConfirmDialog(owner, getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION){
 	path.removeLast();
 }
 if(new Point(x, y).distance(owner.getCharPoint())<140){

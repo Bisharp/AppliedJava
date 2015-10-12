@@ -34,7 +34,6 @@ import com.dig.www.npc.*;
 import com.dig.www.objects.*;
 import com.dig.www.util.*;
 import com.dig.www.character.*;
-import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.*;
 
