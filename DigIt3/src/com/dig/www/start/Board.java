@@ -363,23 +363,23 @@ public class Board extends MPanel implements ActionListener {
 						npc.draw(g2d);
 				}
 
-			g2d.setColor(Color.ORANGE);
-			//boolean back=false;
-			
-			int roundX=(int)Math.ceil((character.getX()+40)/100);
-	 int modX=Math.abs((int)((world.get(0).getX())%100));
-	if(modX<11&&(world.get(0).getX()<0)){
-		roundX--;
-	}
-			roundX*=100;
-			g2d.fillRect(roundX
-					+(world.get(0).getX()<0?100:0)+
-					((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
-					,
-					((int)((character.getY()+30)/100))*100
-			+(world.get(0).getY()%100)+100//-11
-			, 100, 100)
-			;
+//			g2d.setColor(Color.ORANGE);
+//			//boolean back=false;
+//			
+//			int roundX=(int)Math.ceil((character.getX()+40)/100);
+//	 int modX=Math.abs((int)((world.get(0).getX())%100));
+//	if(modX<11&&(world.get(0).getX()<0)){
+//		roundX--;
+//	}
+//			roundX*=100;
+//			g2d.fillRect(roundX
+//					+(world.get(0).getX()<0?100:0)+
+//					((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
+//					,
+//					((int)((character.getY()+30)/100))*100
+//			+(world.get(0).getY()%100)+100//-11
+//			, 100, 100)
+//			;
 			for (GameCharacter character : friends) {
 				
 //				g2d.setColor(Color.GREEN);
@@ -403,23 +403,23 @@ public class Board extends MPanel implements ActionListener {
 //						, 100, 100)
 //						;
 				character.draw(g2d);
-				if (character.getPPath() != null) {
-				
-					
-					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
-						g2d.setColor(new Color(255, 255, 0));
-						if (c == character.getPPath().getPoints().size()-1)
-							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
-						else
-							g2d.drawLine(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, character.getPPath().getPoint(c+1).x, character.getPPath().getPoint(c+1).y);
-						g2d.setColor(new Color(255, 0, 0));
-							g2d.drawString(""+c, character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
-							
-							//else
-							//g2d.drawString("" +c, character.getPPath().getPoint(c).x,
-							//		character.getPPath().getPoint(c).y);
-					}
-				}
+//				if (character.getPPath() != null) {
+//				
+//					
+//					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
+//						g2d.setColor(new Color(255, 255, 0));
+//						if (c == character.getPPath().getPoints().size()-1)
+//							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
+//						else
+//							g2d.drawLine(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, character.getPPath().getPoint(c+1).x, character.getPPath().getPoint(c+1).y);
+//						g2d.setColor(new Color(255, 0, 0));
+//							g2d.drawString(""+c, character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
+//							
+//							//else
+//							//g2d.drawString("" +c, character.getPPath().getPoint(c).x,
+//							//		character.getPPath().getPoint(c).y);
+//				}
+	//			}
 			}
 			
 			character.draw(g2d);

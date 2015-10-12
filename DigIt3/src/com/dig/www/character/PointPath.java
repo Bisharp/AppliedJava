@@ -52,7 +52,7 @@ public void findPath() {
 			+(world.get(0).getY()%100)+100
 			-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
-	System.out.println("added: "+getCurrentFind().x+","+getCurrentFind().y);
+//	System.out.println("added: "+getCurrentFind().x+","+getCurrentFind().y);
 	//points.add(new PathPoint(round100(player.getX()), round100(player.getY()), 0, getDistance(new Point(round100(player.getX()), round100(player.getY()))),-1));
 //System.out.println("Mod: "+(world.get(0).getX()%100)+","+(world.get(0).getY()%100));
 //	//Point pA=points.get(0);
@@ -131,7 +131,7 @@ else
 		Point p=getCurrentFind();
 		Point newP=new Point(p.x+addX,p.y+addY);
 		points.add(new PathPoint(newP.x, newP.y, 0, getDistance(newP),sel));
-		System.out.println("added: "+newP.x+","+newP.y);
+		//System.out.println("added: "+newP.x+","+newP.y);
 		//System.out.print("Options");
 //		for(int c: adj){
 //			System.out.print(", "+c);
@@ -167,9 +167,9 @@ backwards=0;
 		}
 	
 	if(getDistance(getCurrentFind())<=100){
-		System.out.println(us.get(me).getType().charName()+","+us.get(me).getX()+","+us.get(me).getY()//+" WORKED AT:"+new Date()
-		);
-		System.out.println("player,"+player.getX()+","+player.getY());	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
+		//System.out.println(us.get(me).getType().charName()+","+us.get(me).getX()+","+us.get(me).getY()//+" WORKED AT:"+new Date()
+		//);
+		//System.out.println("player,"+player.getX()+","+player.getY());	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
 		//System.out.println("Size before optimising: "+points.size());
 //		for(int c=0;c<points.size();c++){
 //			System.out.println(points.get(c));
