@@ -95,4 +95,6 @@ g2d.setFont(Statics.BOSS);
 g2d.drawString(name,(Statics.BOARD_WIDTH/2)-(name.length()*20/2)
 		, 150+30);
 }
+@Override
+public abstract int getKillXP();
 }

@@ -9,7 +9,7 @@ public class HeadBoss extends Boss{
 
 	public HeadBoss(int x, int y,Board owner) {
 		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom, I eat cake!", 5);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor st0ub
 	}
 
 	@Override
@@ -21,23 +21,25 @@ public class HeadBoss extends Boss{
 			if(actTimer<=0){
 				switch (sequence) {
 				case 0:
-					chargeAttack(50, 25);
+					chargeAttack(100, 40);
 					sequence++;
 					break;
 				case 1:
-				follow(200, 25);
+				follow(200, 40);
 					sequence++;
 					break;
 				case 2:
+				case 3:
+				case 4:
 					createProjectile("images/enemies/blasts/1.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), owner.getCharPoint()),true,25);
+							(int) y), owner.getCharPoint()),true,40);
 					sequence++;
 					break;
-				case 3:
+				case 5:
 					createTProjectile("images/enemies/blasts/0.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), owner.getCharPoint()),true,25);
+							(int) y), owner.getCharPoint()),true,40);
 					sequence++;
 					break;
 				default:
@@ -52,6 +54,9 @@ public class HeadBoss extends Boss{
 		}
 		if(!acted&&actTimer>0)
 			actTimer--;
+	}
+	public int getKillXP(){
+		return 25;
 	}
 
 }
