@@ -1303,7 +1303,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "birdTest";
+		level = "hauntedTest";
 		changeArea();
 	}
 

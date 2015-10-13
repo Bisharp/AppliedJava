@@ -4,7 +4,7 @@ import com.dig.www.start.Board;
 
 public class SideToPlayer extends Enemy{
 boolean xAxis=true;
-int speed=5;
+int speed=1;
 	public SideToPlayer(int x, int y, String loc, Board owner, boolean xAxis,int health) {
 		super(x, y, loc, owner, true, health);
 		this.xAxis=xAxis;
