@@ -8,7 +8,7 @@ int speed=5;
 	public SideToPlayer(int x, int y, String loc, Board owner, boolean xAxis,int health) {
 		super(x, y, loc, owner, true, health);
 		this.xAxis=xAxis;
-		this.damage=25;
+		this.damage=Integer.MAX_VALUE;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,6 +32,10 @@ int speed=5;
 				y+=speed;
 			}
 		}
+	}
+	@Override
+	public void turnAround(int wallX, int wallY){
+		
 	}
 
 }
