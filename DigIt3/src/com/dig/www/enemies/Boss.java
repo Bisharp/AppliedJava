@@ -90,8 +90,11 @@ public void draw(Graphics2D g2d){
 	if(isOnScreen())
 		active=true;
 	
+		
 	if(active){
-	
+	if(!alive&&DigIt.soundPlayer.playerThread!=null){
+		DigIt.soundPlayer.playerThread.stop();
+	}else
 		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
 			Statics.playSound(owner, musicLoc);
 		}

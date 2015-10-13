@@ -43,7 +43,7 @@ public class HeadBoss extends Boss{
 				
 					createProjectile("images/enemies/blasts/1.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), owner.getCharPoint()),true,40);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40);
 					sequence++;
 					break;
 				case 5:
@@ -67,6 +67,7 @@ public class HeadBoss extends Boss{
 			actTimer--;
 	}
 	public int getKillXP(){
+		
 		return 25;
 	}
 public Rectangle getOwnerPlusBounds(){
