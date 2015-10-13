@@ -218,8 +218,10 @@ public class StageBuilder {
 							break;
 						case 't':
 							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying,health));
+						break;
 						case 'B':
 							enemies.add(new HeadBoss(enX, enY, owner));
+						break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
