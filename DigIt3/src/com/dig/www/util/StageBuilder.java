@@ -217,7 +217,7 @@ public class StageBuilder {
 							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 't':
-							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying));
+							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying,health));
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
