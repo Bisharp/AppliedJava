@@ -8,7 +8,7 @@ import com.dig.www.util.Statics;
 public class HeadBoss extends Boss{
 
 	public HeadBoss(int x, int y,Board owner) {
-		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom, I eat cake!", 5);
+		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5);
 		// TODO Auto-generated constructor st0ub
 	}
 
@@ -21,7 +21,7 @@ public class HeadBoss extends Boss{
 			if(actTimer<=0){
 				switch (sequence) {
 				case 0:
-					chargeAttack(100, 40);
+					chargeAttack(150, 40,1.5);
 					sequence++;
 					break;
 				case 1:

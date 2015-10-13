@@ -13,19 +13,21 @@ public abstract class Boss extends Enemy{
 	protected int attackNum=-1;
 protected int actTimer;
 protected int speed;
+protected boolean active;
 protected boolean acting;
 protected int followTimer;
 protected int maxDis;
 protected int dir;
 protected int phase;
 protected int sequence;
-
+protected double speedMulti=1;
 	public Boss(int x, int y, String loc, Board owner, boolean flying,
 			int health,String name,int speed) {
 		super(x, y, loc, owner, flying, health);
 		// TODO Auto-generated constructor stub
 	this.name=name;
 	this.speed=speed;
+	onScreen=false;
 	}
 public void createProjectile(String loc,int speed,double dir,boolean flying,int timer){
 	owner.getEnemies().add(new Projectile(dir, x, y, speed, this, loc, owner, flying));
@@ -36,8 +38,10 @@ public void createTProjectile(String loc,int speed,double dir,boolean flying,int
 	owner.getEnemies().add(new HomingProjectile(dir, x, y, speed, this, loc, owner, flying));
 actTimer=timer;
 }
-public void chargeAttack(int max,int timer){
+public void chargeAttack(int max,int timer,double speedMulti){
 	acting=true;
+	dir = (int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
+this.speedMulti=speedMulti;
 	this.followTimer=max;
 	actTimer=timer;
 	attackNum=0;
@@ -50,8 +54,8 @@ public void follow(int time,int timer){
 }
 public void moveDForward(){
 	
-	x += Math.cos((double) Math.toRadians((double) dir)) * speed;
-	y += Math.sin((double) Math.toRadians((double) dir)) * speed;
+	x += Math.cos((double) Math.toRadians((double) dir)) * speed*speedMulti;
+	y += Math.sin((double) Math.toRadians((double) dir)) * speed*speedMulti;
 }
 public void pointAndMove(){
 	dir = (int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
@@ -63,6 +67,7 @@ public boolean sortAction(){
 		followTimer--;
 		if(followTimer==0){
 			attackNum=-1;
+			speedMulti=1;
 		}
 		return true;
 	}else if(attackNum==1){
@@ -77,9 +82,11 @@ public boolean sortAction(){
 }
 @Override
 public void draw(Graphics2D g2d){
+	if(isOnScreen())
+		active=true;
 	if(isOnScreen()){
 		super.draw(g2d);
-	}else{
+	}else if(active){
 		drawBar((double) health / (double) maxHealth, g2d);
 	}
 }
