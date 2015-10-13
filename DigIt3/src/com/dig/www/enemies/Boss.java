@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import com.dig.www.start.Board;
+import com.dig.www.start.DigIt;
+import com.dig.www.util.SoundPlayer;
 import com.dig.www.util.Statics;
 
 public abstract class Boss extends Enemy{
@@ -21,13 +23,15 @@ protected int dir;
 protected int phase;
 protected int sequence;
 protected double speedMulti=1;
+protected String musicLoc;
 	public Boss(int x, int y, String loc, Board owner, boolean flying,
-			int health,String name,int speed) {
+			int health,String name,int speed,String musicLoc) {
 		super(x, y, loc, owner, flying, health);
 		// TODO Auto-generated constructor stub
 	this.name=name;
 	this.speed=speed;
 	onScreen=false;
+	this.musicLoc=musicLoc;
 	}
 public void createProjectile(String loc,int speed,double dir,boolean flying,int timer){
 	owner.getEnemies().add(new Projectile(dir, x, y, speed, this, loc, owner, flying));
@@ -84,6 +88,13 @@ public boolean sortAction(){
 public void draw(Graphics2D g2d){
 	if(isOnScreen())
 		active=true;
+	
+	if(active){
+	
+		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
+			Statics.playSound(owner, musicLoc);
+		}
+	}
 	if(isOnScreen()){
 		super.draw(g2d);
 	}else if(active){
@@ -104,4 +115,9 @@ g2d.drawString(name,(Statics.BOARD_WIDTH/2)-(name.length()*20/2)
 }
 @Override
 public abstract int getKillXP();
+
+@Override
+public void turnAround(int wallX, int wallY){
+	
+}
 }

@@ -3,18 +3,20 @@ package com.dig.www.enemies;
 import java.awt.Point;
 
 import com.dig.www.start.Board;
+import com.dig.www.start.DigIt;
 import com.dig.www.util.Statics;
 
 public class HeadBoss extends Boss{
 
 	public HeadBoss(int x, int y,Board owner) {
-		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5);
+		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5,"music/zeldaCopyright.mp3");
 		// TODO Auto-generated constructor st0ub
 	}
 
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
+		
 		basicAnimate();
 		boolean acted=sortAction();
 		if(!acted){
