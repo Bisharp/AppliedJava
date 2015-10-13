@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
 
+import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 
 import net.java.games.input.Component;
@@ -22,11 +23,30 @@ public class GameControllerRunnable implements Runnable {
 	private float data;
 	private int i;
 	
-	private static final int ATTACK = KeyEvent.VK_SPACE;
-	private static final int PROJECTILE = KeyEvent.VK_C;
-	private static final int SPECIAL = KeyEvent.VK_V;
-	private static final int LEVEL_UP_MENU = KeyEvent.VK_L;
-	private static final int PAUSE = KeyEvent.VK_SHIFT;
+	private static int UP = Preferences.UP();
+	private static int DOWN = Preferences.DOWN();
+	private static int LEFT = Preferences.LEFT();
+	private static int RIGHT = Preferences.RIGHT();
+	private static int ATTACK = Preferences.ATTACK();
+	private static int PROJECTILE = Preferences.PROJECTILE();
+	private static int SPECIAL = Preferences.SPECIAL();
+	private static int LEVEL_UP_MENU = Preferences.LEVEL_UP();
+	private static int PAUSE = Preferences.PAUSE();
+	private static int NPC = Preferences.NPC();
+	
+	public static void renewKeys() {
+		
+		UP = Preferences.UP();
+		DOWN = Preferences.DOWN();
+		LEFT = Preferences.LEFT();
+		RIGHT = Preferences.RIGHT();
+		ATTACK = Preferences.ATTACK();
+		PROJECTILE = Preferences.PROJECTILE();
+		SPECIAL = Preferences.SPECIAL();
+		LEVEL_UP_MENU = Preferences.LEVEL_UP();
+		PAUSE = Preferences.PAUSE();
+		NPC = Preferences.NPC();
+	}
 	
 
 	private static final int Y_STICK = 0;
@@ -106,10 +126,10 @@ public class GameControllerRunnable implements Runnable {
 					// Walk
 
 					if (data > WALK_SENSITIVITY) {
-						rOB.keyPress(KeyEvent.VK_DOWN);
+						rOB.keyPress(DOWN);
 						buttonPressed[0] = true;
 					} else if (data < -WALK_SENSITIVITY) {
-						rOB.keyPress(KeyEvent.VK_UP);
+						rOB.keyPress(UP);
 						buttonPressed[1] = true;
 
 						// keyRelease
@@ -117,10 +137,10 @@ public class GameControllerRunnable implements Runnable {
 					} else if (data < WALK_SENSITIVITY
 							&& data > -WALK_SENSITIVITY) {
 						if (buttonPressed[0]) {
-							rOB.keyRelease(KeyEvent.VK_DOWN);
+							rOB.keyRelease(DOWN);
 							buttonPressed[0] = false;
 						} else if (buttonPressed[1]) {
-							rOB.keyRelease(KeyEvent.VK_UP);
+							rOB.keyRelease(UP);
 							buttonPressed[1] = false;
 						}
 					}
@@ -132,10 +152,10 @@ public class GameControllerRunnable implements Runnable {
 					// walk
 
 					if (data > WALK_SENSITIVITY) {
-						rOB.keyPress(KeyEvent.VK_RIGHT);
+						rOB.keyPress(RIGHT);
 						buttonPressed[2] = true;
 					} else if (data < -WALK_SENSITIVITY) {
-						rOB.keyPress(KeyEvent.VK_LEFT);
+						rOB.keyPress(LEFT);
 						buttonPressed[3] = true;
 
 						// keyRelease
@@ -143,10 +163,10 @@ public class GameControllerRunnable implements Runnable {
 					} else if (data < WALK_SENSITIVITY
 							&& data > -WALK_SENSITIVITY) {
 						if (buttonPressed[2]) {
-							rOB.keyRelease(KeyEvent.VK_RIGHT);
+							rOB.keyRelease(RIGHT);
 							buttonPressed[2] = false;
 						} else if (buttonPressed[3]) {
-							rOB.keyRelease(KeyEvent.VK_LEFT);
+							rOB.keyRelease(LEFT);
 							buttonPressed[3] = false;
 						}
 					}
@@ -203,6 +223,17 @@ public class GameControllerRunnable implements Runnable {
 						buttonPressed[8] = true;
 					} else if (buttonPressed[8]) {
 						rOB.keyRelease(LEVEL_UP_MENU);
+						buttonPressed[8] = false;
+					}
+				}
+				
+				// TODO Talk to NPC
+				else if (i == X) {
+					if (data > 0) {
+						rOB.keyPress(NPC);
+						buttonPressed[8] = true;
+					} else if (buttonPressed[8]) {
+						rOB.keyRelease(NPC);
 						buttonPressed[8] = false;
 					}
 				}

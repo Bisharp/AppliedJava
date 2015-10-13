@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import com.dig.www.util.ImageLibrary;
 import com.dig.www.util.GameControllerRunnable;
+import com.dig.www.util.Preferences;
 import com.dig.www.util.SoundPlayer;
 import com.dig.www.util.Statics;
 
@@ -75,12 +76,14 @@ public class DigIt extends JFrame {
 		newBoard();
 		if (activePanel instanceof Board) {
 			((Board) activePanel).loadSave();
+			GameControllerRunnable.renewKeys();
 		}
 	}
 
 	public void quit() {
 
 		nullBoards();
+		Board.preferences = new Preferences();
 
 		activePanel = new GameStartBoard(this);
 		add(activePanel);

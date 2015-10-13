@@ -51,10 +51,15 @@ public class Board extends MPanel implements ActionListener {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
 
+	public static Preferences preferences;
+	static {
+		preferences = new Preferences();
+	}
+
 	public static final String DEFAULT = "LuigisMansion";
 	private Timer timer;
-	String userName;
-	String level;
+	protected String userName;
+	protected String level;
 	private GameCharacter character;
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
@@ -956,11 +961,13 @@ public class Board extends MPanel implements ActionListener {
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
 
-		if (key == KeyEvent.VK_PERIOD || key == KeyEvent.VK_R && state != State.NPC)
+		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_I) {
 			character.setMaxHealth(1000);
-		}
+		} else if (key == KeyEvent.VK_EQUALS)
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
+					JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -976,7 +983,7 @@ public class Board extends MPanel implements ActionListener {
 			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER) {
 				((ServiceNPC) current).service();
 				exitNPC = true;
-			} else if (key == KeyEvent.VK_SPACE)
+			} else if (key == Preferences.NPC())
 				exitNPC = true;
 
 			if (exitNPC) {
@@ -994,7 +1001,7 @@ public class Board extends MPanel implements ActionListener {
 
 		case INGAME:
 
-			if (key == KeyEvent.VK_SHIFT) {
+			if (key == Preferences.PAUSE()) {
 				state = State.PAUSED;
 				repaint();
 				return;
@@ -1032,17 +1039,10 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	private void pausedHandler(int key) {
-		// if (key == KeyEvent.VK_SPACE) {
-		// state = State.QUIT;
-		// try {
-		// Thread.sleep(100);
-		// } catch (Exception ex) {
-		// ex.printStackTrace();
-		// }
-		// } else
-		if (key == KeyEvent.VK_BACK_SPACE || key == KeyEvent.VK_SHIFT) {
+		if (key == Preferences.PAUSE()) {
 			state = State.INGAME;
-		}
+		} else if (key == KeyEvent.VK_SPACE)
+			preferences.setValues(this);
 	}
 
 	public void setState(State state) {
@@ -1288,6 +1288,10 @@ public class Board extends MPanel implements ActionListener {
 					data = ((CharData) is.readObject());
 					data.setOwner(this);
 					is.close();
+					
+					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
+					preferences = ((Preferences) is.readObject());
+					is.close();
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
 				}
@@ -1304,6 +1308,7 @@ public class Board extends MPanel implements ActionListener {
 
 	public void newGame() {
 		level = "hauntedTest";
+		preferences = new Preferences();
 		changeArea();
 	}
 
@@ -1325,5 +1330,9 @@ public class Board extends MPanel implements ActionListener {
 
 	public CharData getData() {
 		return data;
+	}
+	
+	public String getUserName() {
+		return userName;
 	}
 }

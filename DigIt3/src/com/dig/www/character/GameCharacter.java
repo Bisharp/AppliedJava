@@ -26,22 +26,23 @@ import javax.swing.SwingConstants;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
+import com.dig.www.util.GameControllerRunnable;
+import com.dig.www.util.Preferences;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public abstract class GameCharacter extends Sprite implements
-		Comparable<GameCharacter> {
+public abstract class GameCharacter extends Sprite implements Comparable<GameCharacter> {
 
 	/**
 	 * 
 	 */
-	LevelUp levMen;
-	boolean levUp=false;
+	protected LevelUp levMen;
+	protected boolean levUp = false;
 	protected PointPath path;
 	protected static int xp;
 	protected static int level;
 	protected int myLevel;
-	private int enTimer=0;
+	private int enTimer = 0;
 	private int wallX;
 	private int wallY;
 	private Rectangle collideRect;
@@ -55,7 +56,8 @@ public abstract class GameCharacter extends Sprite implements
 	protected Wallet wallet;
 
 	private boolean player;
-private boolean onceNotCollidePlayer;
+	private boolean onceNotCollidePlayer;
+
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -169,15 +171,14 @@ private boolean onceNotCollidePlayer;
 	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
-	int MEnC;
-	int REnC;
-	int SEnC;
-	int pathUpdateTimer;
-	public GameCharacter(int x, int y, Board owner, Types type,
-			String charName, boolean player, int NEG_TIMER_MELEE,
-			int NEG_TIMER_RANGED, int NEG_TIMER_SPECIAL, int TIMER_MELEE,
-			int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED,
-			int MAX_ENERGY,int MEnC,int REnC,int SEnC) {
+	protected int MEnC;
+	protected int REnC;
+	protected int SEnC;
+	protected int pathUpdateTimer;
+
+	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
+			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY, int MEnC, int REnC,
+			int SEnC) {
 		super(x, y, "n", owner);
 		this.player = player;
 		this.charName = charName;
@@ -193,12 +194,10 @@ private boolean onceNotCollidePlayer;
 		this.MAX_ENERGY = MAX_ENERGY;
 		energy = MAX_ENERGY;
 		health = HP_MAX;
-		this.MEnC=MEnC;
-		this.REnC=REnC;
-		this.SEnC=SEnC;
-		
-		
-		
+		this.MEnC = MEnC;
+		this.REnC = REnC;
+		this.SEnC = SEnC;
+
 	}
 
 	@Override
@@ -217,46 +216,49 @@ private boolean onceNotCollidePlayer;
 					}
 				}
 			}
-			if(path!=null){
-path.update();
-if(path.getPoints().size()>0&&new Point(x,y).distance(path.getCurrentFind())<11//&&JOptionPane.showConfirmDialog(owner, getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION
-){
-	path.removeLast();
-}
-if(new Point(x, y).distance(owner.getCharPoint())<140){
-	//System.out.println(getType().charName()+" CLOSE:"+new Date());
-	path=null;
-}
-}
-			if (!wallBound) {
-				//System.out.println(path);
-				if(path!=null){
-
-					if(path.getPoints().size()>0){
-					getToPoint=path.getCurrentFind();}else{
-						path=null;
-						getToPoint = owner.getCharacter().getBounds().getLocation();}
-					}
-				else
-				getToPoint = owner.getCharacter().getBounds().getLocation();
-				
-				if (path!=null||getToPoint.distance(x, y) > 125) {
-					int amount=2;
-				if(path!=null){
-					if(Math.abs(x-getToPoint.x)>Math.abs(y-getToPoint.y)){
-					amount=0;	
-					}else{
-						amount=1;
-					}
+			if (path != null) {
+				path.update();
+				if (path.getPoints().size() > 0 && new Point(x, y).distance(path.getCurrentFind()) < 11// &&JOptionPane.showConfirmDialog(owner,
+																										// getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION
+				) {
+					path.removeLast();
 				}
-					//if(path!=null)
-					//System.out.println("walking");
-					if (amount!=1&&x > getToPoint.x + (path==null?(SPEED * 2):0)) {
+				if (new Point(x, y).distance(owner.getCharPoint()) < 140) {
+					// System.out.println(getType().charName()+" CLOSE:"+new
+					// Date());
+					path = null;
+				}
+			}
+			if (!wallBound) {
+				// System.out.println(path);
+				if (path != null) {
+
+					if (path.getPoints().size() > 0) {
+						getToPoint = path.getCurrentFind();
+					} else {
+						path = null;
+						getToPoint = owner.getCharacter().getBounds().getLocation();
+					}
+				} else
+					getToPoint = owner.getCharacter().getBounds().getLocation();
+
+				if (path != null || getToPoint.distance(x, y) > 125) {
+					int amount = 2;
+					if (path != null) {
+						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
+							amount = 0;
+						} else {
+							amount = 1;
+						}
+					}
+					// if(path!=null)
+					// System.out.println("walking");
+					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
 						deltaX = -SPEED;
 						moveX = true;
 						direction = Direction.LEFT;
 
-					} else if (amount!=1&&x < getToPoint.x - (path==null?(SPEED * 2):0)) {
+					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
 						deltaX = SPEED;
 						moveX = true;
 						direction = Direction.RIGHT;
@@ -265,13 +267,13 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 						deltaX = 0;
 						moveX = false;
 					}
-					if (amount!=0&&y > getToPoint.y + (path==null?(SPEED * 2):0)) {
+					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
 						deltaY = -SPEED;
 						moveY = true;
 						if (y > getToPoint.y + 50)
 							direction = Direction.UP;
 
-					} else if (amount!=0&&y < getToPoint.y - (path==null?(SPEED * 2):0)) {
+					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
 						deltaY = SPEED;
 						moveY = true;
 						if (y < getToPoint.y - 50)
@@ -288,8 +290,7 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					moveY = false;
 				}
 			}
-			if (new Point(x, y).distance(new Point(owner.getBounds()
-					.getLocation())) > Statics.BOARD_WIDTH) {
+			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
 				x = owner.getCharacterX();
 				y = owner.getCharacterY();
 			}
@@ -383,13 +384,11 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 				owner.reAnimate();
 			} else {
 				if (!isPlayerCollide) {
-					if (new Point(getMidX(), getMidY()).distance(new Point(
-							wallX, getMidY())) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
 					}
-					if (new Point(getMidX(), getMidY()).distance(new Point(
-							getMidX(), wallY)) < 100) {
+					if (new Point(getMidX(), getMidY()).distance(new Point(getMidX(), wallY)) < 100) {
 						deltaY = -deltaY;
 						y += deltaY;
 					}
@@ -403,126 +402,122 @@ if(new Point(x, y).distance(owner.getCharPoint())<140){
 					moveY = false;
 					image = newImage("n");
 				}
-				if(pathUpdateTimer>0)
-				pathUpdateTimer--;
-				if(pathUpdateTimer<=0&&onceNotCollidePlayer&&path==null&&new Point(x,y).distance(owner.getCharPoint())>140){
-//					if (new Point(getMidX(), getMidY()).distance(new Point(
-//							wallX, getMidY())) < 100) {
-//						deltaX = -deltaX;
-//						x += deltaX;
-//					}
-//					if (new Point(getMidX(), getMidY()).distance(new Point(
-//							getMidX(), wallY)) < 100) {
-//						deltaY = -deltaY;
-//						y += deltaY;
-//					}
-					
-					for(int c=0;c<owner.getFriends().size();c++){
-						if(owner.getFriends().get(c)==this){
-							me=c;
+				if (pathUpdateTimer > 0)
+					pathUpdateTimer--;
+				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 140) {
+					// if (new Point(getMidX(), getMidY()).distance(new Point(
+					// wallX, getMidY())) < 100) {
+					// deltaX = -deltaX;
+					// x += deltaX;
+					// }
+					// if (new Point(getMidX(), getMidY()).distance(new Point(
+					// getMidX(), wallY)) < 100) {
+					// deltaY = -deltaY;
+					// y += deltaY;
+					// }
+
+					for (int c = 0; c < owner.getFriends().size(); c++) {
+						if (owner.getFriends().get(c) == this) {
+							me = c;
 							break;
 						}
 					}
-					path=new PointPath(me, owner);
+					path = new PointPath(me, owner);
 					path.update();
 				}
-	
+
 			}
-onceNotCollidePlayer=false;
+			onceNotCollidePlayer = false;
 			wallBound = false;
 		}
 
 	}
 
 	public void keyPressed(int keyCode) {
-		if(keyCode==KeyEvent.VK_9){
-		JOptionPane.showMessageDialog(owner, owner.getWorld().get(0).getX()+","+owner.getWorld().get(0).getY());
+		if (keyCode == KeyEvent.VK_9) {
+			JOptionPane.showMessageDialog(owner, owner.getWorld().get(0).getX() + "," + owner.getWorld().get(0).getY());
 		}
-		if(keyCode==KeyEvent.VK_0){
-			String s="";
-			for(int c=0;c<owner.getFriends().size();c++){
-			
-				s+=owner.getFriends().get(c).getType().charName()+","+(owner.getFriends().get(c).getToPoint.x-owner.getFriends().get(c).getX())+","+(owner.getFriends().get(c).getToPoint.y-owner.getFriends().get(c).getY())+"\n";
-			
-			}JOptionPane.showMessageDialog(owner, s);
+		if (keyCode == KeyEvent.VK_0) {
+			String s = "";
+			for (int c = 0; c < owner.getFriends().size(); c++) {
+
+				s += owner.getFriends().get(c).getType().charName() + ","
+						+ (owner.getFriends().get(c).getToPoint.x - owner.getFriends().get(c).getX()) + ","
+						+ (owner.getFriends().get(c).getToPoint.y - owner.getFriends().get(c).getY()) + "\n";
+
 			}
-if(keyCode==KeyEvent.VK_L){
-	if(levMen==null)
-	OpenLevelUp();
-	else{
-		owner.setFocusable(true);
-		owner.requestFocus();
-		levMen.dispose();
-		levMen=null;}
-}else
-		switch (keyCode) {
-		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_A:
+			JOptionPane.showMessageDialog(owner, s);
+		}
 
-			// deltaX = SPEED;
-			direction = Direction.LEFT;
-			moveX = true;
-			moveL = true;
+		if (keyCode == Preferences.LEVEL_UP()) {
+			if (levMen == null)
+				OpenLevelUp();
+			else {
+				owner.setFocusable(true);
+				owner.requestFocus();
+				levMen.dispose();
+				levMen = null;
+			}
+		} else {
 
-			break;
-		case KeyEvent.VK_RIGHT:
-		case KeyEvent.VK_D:
+			// Left
+			if (keyCode == Preferences.LEFT()) {
+				direction = Direction.LEFT;
+				moveX = true;
+				moveL = true;
+			}
 
-			// deltaX = -SPEED;
-			direction = Direction.RIGHT;
-			moveX = true;
-			moveL = false;
+			// Right
+			else if (keyCode == Preferences.RIGHT()) {
+				direction = Direction.RIGHT;
+				moveX = true;
+				moveL = false;
+			}
 
-			break;
+			// Up
+			else if (keyCode == Preferences.UP()) {
+				direction = Direction.UP;
+				moveY = true;
+				moveU = true;
+			}
 
-		case KeyEvent.VK_UP:
-		case KeyEvent.VK_W:
+			// Down
+			else if (keyCode == Preferences.DOWN()) {
+				direction = Direction.DOWN;
+				moveY = true;
+				moveU = false;
+			}
 
-			// deltaY = SPEED;
-			direction = Direction.UP;
-			moveY = true;
-			moveU = true;
+			// Attack
+			else if (keyCode == Preferences.ATTACK()) {
+				meleePress = true;
+			}
 
-			break;
-		case KeyEvent.VK_DOWN:
-		case KeyEvent.VK_S:
+			// Projectile
+			else if (keyCode == Preferences.PROJECTILE()) {
+				rangedPress = true;
+			}
 
-			// deltaY = -SPEED;
-			direction = Direction.DOWN;
-			moveY = true;
-			moveU = false;
+			// Special
+			else if (keyCode == Preferences.SPECIAL()) {
+				specialPress = true;
+			}
 
-			break;
+			// Talk to NPCs
+			else if (keyCode == Preferences.NPC()) {
+				willTalk = true;
+			}
 
-		case KeyEvent.VK_SPACE:// Melee
-			meleePress = true;
-
-			break;
-		case KeyEvent.VK_E:// Ranged
-		case KeyEvent.VK_C:
-			rangedPress = true;
-
-			break;
-		case KeyEvent.VK_Q:// Special
-		case KeyEvent.VK_V:
-			specialPress = true;
-			break;
-
-		case KeyEvent.VK_T:
-		case KeyEvent.VK_X:
-			willTalk = true;
-			break;
-		
-		
-		case KeyEvent.VK_O:
-			level++;
-			break;
+			// Cheat Key; Levels you up
+			else if (keyCode == KeyEvent.VK_O) {
+				level++;
+			}
 		}
 	}
 
 	private void OpenLevelUp() {
 		// TODO Auto-generated method stub
-	levMen=	new LevelUp();
+		levMen = new LevelUp();
 	}
 
 	public abstract Moves getRangedMove();
@@ -534,11 +529,8 @@ if(keyCode==KeyEvent.VK_L){
 
 	public void keyReleased(int keyCode) {
 
-		switch (keyCode) {
-		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_A:
-		case KeyEvent.VK_RIGHT:
-		case KeyEvent.VK_D:
+		// Left/Right
+		if (keyCode == Preferences.LEFT() || keyCode == Preferences.RIGHT()) {
 
 			if (direction == Direction.LEFT || direction == Direction.RIGHT) {
 				if (deltaY > 0)
@@ -549,13 +541,10 @@ if(keyCode==KeyEvent.VK_L){
 
 			deltaX = 0;
 			moveX = false;
+		}
 
-			break;
-
-		case KeyEvent.VK_UP:
-		case KeyEvent.VK_W:
-		case KeyEvent.VK_DOWN:
-		case KeyEvent.VK_S:
+		// Up/Down
+		else if (keyCode == Preferences.DOWN() || keyCode == Preferences.UP()) {
 			// deltaY = 0;
 			if (direction == Direction.UP || direction == Direction.DOWN) {
 				if (deltaX > 0)
@@ -566,29 +555,32 @@ if(keyCode==KeyEvent.VK_L){
 
 			deltaY = 0;
 			moveY = false;
+		}
 
-			break;
-		case KeyEvent.VK_SPACE:// Melee
+		// Melee
+		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
 			if (meleeTimer > 0)
 				meleeTimer = 0;
-			break;
-		case KeyEvent.VK_E:// Ranged
-		case KeyEvent.VK_C:
+		}
+		// Ranged
+		else if (keyCode == Preferences.PROJECTILE()) {
 			rangedPress = false;
 			if (rangedTimer > 0)
 				rangedTimer = 0;
-			break;
-		case KeyEvent.VK_Q:// Special
-		case KeyEvent.VK_V:
+		}
+
+		// Special
+		else if (keyCode == Preferences.SPECIAL()) {
 			specialPress = false;
 			if (!(type == Types.CLUB)) {
 
 				if (specialTimer > 0)
 					specialTimer = 0;
 			}
-			break;
 		}
+		
+		// End
 	}
 
 	public Rectangle getTalkBounds() {
@@ -616,8 +608,8 @@ if(keyCode==KeyEvent.VK_L){
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
-			if(isPlayer==false){
-				onceNotCollidePlayer=true;
+			if (isPlayer == false) {
+				onceNotCollidePlayer = true;
 			}
 			wallX = midX;
 			wallY = midY;
@@ -632,8 +624,7 @@ if(keyCode==KeyEvent.VK_L){
 		case DOWN:
 			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y
-					+ Statics.BLOCK_HEIGHT - 6, 6, 6);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
 		case LEFT:
 		default:
 			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
@@ -654,33 +645,27 @@ if(keyCode==KeyEvent.VK_L){
 			}
 		}
 		if (specialPress && !meleePress && !rangedPress) {
-			if (specialTimer <= NEG_TIMER_SPECIAL&& energy >= SEnC) {
+			if (specialTimer <= NEG_TIMER_SPECIAL && energy >= SEnC) {
 				specialTimer = TIMER_SPECIAL;
 				energy -= SEnC;
 			}
 		}
 		if (rangedPress && !meleePress) {
-			if (rangedTimer <= NEG_TIMER_RANGED&& energy >= REnC) {
+			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
 				String s = "images/enemies/blasts/0.png";
 				if (type == Types.DIAMOND)
 					s = getPath() + "diamond.png";
-				owner.getfP().add(
-						new FProjectile(dir, x, y, 25, this, s, owner,
-								getRangedMove()));
+				owner.getfP().add(new FProjectile(dir, x, y, 25, this, s, owner, getRangedMove()));
 
-			
 			}
-			
+
 		}
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
 				String s = "images/enemies/blasts/0.png";
-				owner.getfP().add(
-						new FProjectile(dir, x + (this.getWidth() / 2), y
-								+ (this.getHeight() / 2), 30, this, s, owner,
-								Moves.MPITCH));
+				owner.getfP().add(new FProjectile(dir, x + (this.getWidth() / 2), y + (this.getHeight() / 2), 30, this, s, owner, Moves.MPITCH));
 
 			}
 		} else if (type == Types.DIAMOND) {
@@ -753,9 +738,7 @@ if(keyCode==KeyEvent.VK_L){
 
 			if (p != null) {
 				g2d.setColor(Color.black);
-				g2d.drawLine(getMidX(), getMidY(), (int) p.getX()
-						+ Statics.BLOCK_HEIGHT / 2, (int) p.getY()
-						+ Statics.BLOCK_HEIGHT / 2);
+				g2d.drawLine(getMidX(), getMidY(), (int) p.getX() + Statics.BLOCK_HEIGHT / 2, (int) p.getY() + Statics.BLOCK_HEIGHT / 2);
 			}
 			if (direction == Direction.UP)
 				g2d.drawImage(image, x, y, owner);
@@ -764,17 +747,14 @@ if(keyCode==KeyEvent.VK_L){
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = 
-					 30 + (int) Math.ceil((double) wallet.getDigits()) * 30
-					+ 340;
-if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
-	normWidth=(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30;
-}
+			int normWidth = 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
+			if (normWidth < (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30) {
+				normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
+			}
 			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 130);
 
 			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
-				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED
-						: Color.DARK_GRAY);
+				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
 				g2d.fillRect(i * 30, 70, 20, 20);
 				g2d.setColor(Color.WHITE);
 				g2d.drawRect(i * 30, 70, 20, 20);
@@ -782,18 +762,14 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
-			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30,
-					50);
-			drawTEnBar((double) energy / (double) MAX_ENERGY,
-					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
-			
-			drawTLBar(
-					(int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
+			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
+			drawTEnBar((double) energy / (double) MAX_ENERGY, (int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
+
+			drawTLBar((int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
 			drawCSHUD(g2d);
-			//drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
+			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
-			drawBar2((double) health / (double) HP_MAX, (double) energy
-					/ (double) MAX_ENERGY, g2d);
+			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
 	}
@@ -891,8 +867,7 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 			}
 		else
 			dir = "side";
-		return "images/characters/" + (charName != null ? charName : "spade")
-				+ "/" + dir + "/";
+		return "images/characters/" + (charName != null ? charName : "spade") + "/" + dir + "/";
 	}
 
 	public Rectangle getCollisionBounds() {
@@ -930,16 +905,15 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 	}
 
 	protected void timersCount() {
-		if(enTimer==0){
-		energy+=1;
-		enTimer=5;}
-		else
+		if (enTimer == 0) {
+			energy += 1;
+			enTimer = 5;
+		} else
 			enTimer--;
-		if(energy>MAX_ENERGY){
-			energy=MAX_ENERGY;
+		if (energy > MAX_ENERGY) {
+			energy = MAX_ENERGY;
 		}
-		if (meleeTimer > NEG_TIMER_MELEE
-				&& (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
+		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
 			meleeTimer--;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
@@ -1004,7 +978,7 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 
 	public String getSave() {
 		// TODO Auto-generated method stub
-		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY+ "," + myLevel;
+		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY + "," + myLevel;
 	}
 
 	public void setMaxHealth(int setter) {
@@ -1034,7 +1008,7 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 			int health = Integer.parseInt(stuff.get(0));
 			int energy = Integer.parseInt(stuff.get(1));
 			int myLevel = Integer.parseInt(stuff.get(2));
-			this.myLevel=myLevel;
+			this.myLevel = myLevel;
 			HP_MAX = health;
 			MAX_ENERGY = energy;
 			this.health = HP_MAX;
@@ -1063,32 +1037,33 @@ if(normWidth<(int) Math.ceil( (double) HP_MAX / (double) 10) * 30+30){
 
 	}
 
-//	public void drawBar2(double per, double per2, Graphics2D g2d) {
-//		g2d.setColor(Color.BLACK);
-//		g2d.fillRect(x, y - 10, width, 10);
-//		g2d.setColor(Color.RED);
-//		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
-//
-//		g2d.setColor(new Color(0, 0, 255, 150));
-//		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
-//		g2d.setColor(Color.WHITE);
-//		g2d.drawRect(x - 1, y - 11, width + 1, 11);
-//
-//	}
+	// public void drawBar2(double per, double per2, Graphics2D g2d) {
+	// g2d.setColor(Color.BLACK);
+	// g2d.fillRect(x, y - 10, width, 10);
+	// g2d.setColor(Color.RED);
+	// g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
+	//
+	// g2d.setColor(new Color(0, 0, 255, 150));
+	// g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
+	// g2d.setColor(Color.WHITE);
+	// g2d.drawRect(x - 1, y - 11, width + 1, 11);
+	//
+	// }
 	public void drawBar2(double per, double per2, Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x, y - 22, width, 22);
 		g2d.setColor(Color.RED);
 		g2d.fillRect(x, y - 21, (int) ((double) width * (double) per), 10);
-g2d.setColor(Color.WHITE);
+		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 11, width + 1, 11);
-	
+
 		g2d.setColor(Color.BLUE);
 		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
 
 	}
+
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
@@ -1099,9 +1074,10 @@ g2d.setColor(Color.WHITE);
 		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
 
 	}
-	public void drawTLBar( int total, Graphics2D g2d) {
+
+	public void drawTLBar(int total, Graphics2D g2d) {
 		total -= 10;
-		double per=(double)xp/(double)(Math.pow(level+1, 2)*10);
+		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(30, 120, total, 10);
 		g2d.setColor(Color.YELLOW);
@@ -1110,154 +1086,167 @@ g2d.setColor(Color.WHITE);
 		g2d.drawRect(30 - 1, 120 - 1, total + 1, 11);
 
 	}
-	
-	public static void plusXP(int adder){
-		xp+=adder;
-		if(xp>=(int)Math.pow(level+1, 2)*10){
-			xp-=(int)Math.pow(level+1, 2)*10;
+
+	public static void plusXP(int adder) {
+		xp += adder;
+		if (xp >= (int) Math.pow(level + 1, 2) * 10) {
+			xp -= (int) Math.pow(level + 1, 2) * 10;
 			level++;
 		}
 	}
-	public static void setLevel(int setter){
-		level=setter;
+
+	public static void setLevel(int setter) {
+		level = setter;
 	}
-	public static void setXP(int setter){
-		xp=setter;
+
+	public static void setXP(int setter) {
+		xp = setter;
 	}
-	public static int getLevel(){
+
+	public static int getLevel() {
 		return level;
 	}
-	public static int getXP(){
+
+	public static int getXP() {
 		return xp;
 	}
-	public class LevelUp extends JFrame{
+
+	public class LevelUp extends JFrame {
 		JLabel levelLabel;
 		JButton mHealth;
 		JButton mEn;
-		LevelUp l=this;
-		public LevelUp(){
-			deltaX=0;
-			deltaY=0;
-			moveX=false;
-			moveY=false;
-			levUp=true;
+		LevelUp l = this;
+
+		public LevelUp() {
+			deltaX = 0;
+			deltaY = 0;
+			moveX = false;
+			moveY = false;
+			levUp = true;
 			this.setFocusable(true);
 			owner.setFocusable(false);
 			this.setSize(400, 200);
-			this.setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2, Statics.BOARD_HEIGHT/2-this.getHeight()/2);
-			this.setAlwaysOnTop (true);
-		this.setLayout(new BorderLayout());
-		
-	levelLabel=new JLabel("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10, SwingConstants.CENTER);
-	
-	this.add(levelLabel,BorderLayout.NORTH);	 
-	JPanel panel=new JPanel();
-	mHealth=new JButton("Health: "+HP_MAX);
-	mEn=new JButton("Energy: "+MAX_ENERGY);
-	mHealth.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			if(myLevel<level){
-			HP_MAX+=5;
-			myLevel++;
-			mHealth.setText("Health: "+HP_MAX);
-			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
-		}}
-	});
-	this.addKeyListener(new KeyListener() {
-		
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
+			this.setLocation(Statics.BOARD_WIDTH / 2 - this.getWidth() / 2, Statics.BOARD_HEIGHT / 2 - this.getHeight() / 2);
+			this.setAlwaysOnTop(true);
+			this.setLayout(new BorderLayout());
+
+			levelLabel = new JLabel("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+					+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10, SwingConstants.CENTER);
+
+			this.add(levelLabel, BorderLayout.NORTH);
+			JPanel panel = new JPanel();
+			mHealth = new JButton("Health: " + HP_MAX);
+			mEn = new JButton("Energy: " + MAX_ENERGY);
+			mHealth.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if (myLevel < level) {
+						HP_MAX += 5;
+						myLevel++;
+						mHealth.setText("Health: " + HP_MAX);
+						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
+					}
+				}
+			});
+			this.addKeyListener(new KeyListener() {
+
+				@Override
+				public void keyTyped(KeyEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {
+					// TODO Auto-generated method stub
+					if (e.getKeyCode() == KeyEvent.VK_L) {
+						owner.setFocusable(true);
+						owner.requestFocus();
+						levUp = false;
+						l.dispose();
+						levMen = null;
+					}
+
+				}
+			});
+			panel.add(mHealth);
+			mEn.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if (myLevel < level) {
+						MAX_ENERGY += 8;
+						myLevel++;
+						mEn.setText("Energy: " + MAX_ENERGY);
+						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
+					}
+				}
+			});
+			panel.add(mEn);
+
+			this.add(panel, BorderLayout.CENTER);
+			this.addWindowListener(new WindowListener() {
+
+				@Override
+				public void windowOpened(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowIconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					// TODO Auto-generated method stub
+					owner.setFocusable(true);
+					owner.requestFocus();
+					levUp = false;
+				}
+
+				@Override
+				public void windowClosed(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowActivated(WindowEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			this.setVisible(true);
+			this.requestFocus();
 		}
-		
-		@Override
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-		if(e.getKeyCode()==KeyEvent.VK_L){
-			owner.setFocusable(true);
-			owner.requestFocus();
-			levUp=false;
-			l.dispose();
-		levMen=null;
-		}
-		
-		}
-	});
-	panel.add(mHealth);
-mEn.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			if(myLevel<level){
-			MAX_ENERGY+=8;
-			myLevel++;
-			mEn.setText("Energy: "+MAX_ENERGY);
-			levelLabel.setText("Skill Points: "+(level-myLevel)+"  |  "+"Level: "+level+"  |  "+"XP: "+xp+"  |  "+"XP needed: "+(int)Math.pow(level+1, 2)*10);
-		}}
-	});
-	panel.add(mEn);
-	
-	this.add(panel,BorderLayout.CENTER);
-	this.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				owner.setFocusable(true);
-				owner.requestFocus();
-				levUp=false;
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		this.setVisible(true);
-		this.requestFocus();}
 	}
+
 	public PointPath getPPath() {
 		// TODO Auto-generated method stub
 		return path;
