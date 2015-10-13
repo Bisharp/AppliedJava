@@ -50,11 +50,12 @@ this.speedMulti=speedMulti;
 	actTimer=timer;
 	attackNum=0;
 }
-public void follow(int time,int timer){
+public void follow(int time,int timer,double speedMulti){
 	acting=true;
 	this.followTimer=time;
 	actTimer=timer;
 	attackNum=1;
+	this.speedMulti=speedMulti;
 }
 public void moveDForward(){
 	
@@ -118,6 +119,22 @@ public abstract int getKillXP();
 
 @Override
 public void turnAround(int wallX, int wallY){
-	
-}
+	//if(!getBounds().intersects(owner.getCharacter().getBounds())){
+	//followTimer=0;
+//	int myX = round(x, 2);
+//	int myY = round(y, 2);
+//	wallX = round(wallX, 2);
+//	wallY = round(wallY, 2);
+//
+//	if (wallX > myX)
+//		x -= BLOCK;
+//	else if (wallX < myX)
+//		x += BLOCK;
+//
+//	if (wallY > myY)
+//		y -= BLOCK;
+//	else if (wallY < myY)
+//		y += BLOCK;
+	}
+//}
 }
