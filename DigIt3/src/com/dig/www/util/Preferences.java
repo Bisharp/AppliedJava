@@ -129,21 +129,7 @@ public class Preferences implements Serializable {
 		}
 	}
 
-	private void resetKeys() {
-		up = KeyEvent.VK_UP;
-		down = KeyEvent.VK_DOWN;
-		left = KeyEvent.VK_LEFT;
-		right = KeyEvent.VK_RIGHT;
-
-		attack = KeyEvent.VK_SPACE;
-		projectile = KeyEvent.VK_C;
-		special = KeyEvent.VK_V;
-		npc = KeyEvent.VK_X;
-
-		change = KeyEvent.VK_R;
-		pause = KeyEvent.VK_SHIFT;
-		levelUp = KeyEvent.VK_L;
-	}
+	
 
 	private class PreferenceFrame extends JDialog {
 
@@ -158,6 +144,7 @@ public class Preferences implements Serializable {
 		protected static final char ESCAPE = '#';
 
 		protected String[] movement = { "Arrow Keys", "WASD" };
+		protected String[] defualts = { "Arrow Keys tight","Arrow Keys stretched", "WASD 1" };
 		protected JButton move = new JButton("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
 		protected JButton attackB = new JButton("Attack: " + KeyEvent.getKeyText(attack));
 		protected JButton projectileB = new JButton("Projectile: " + KeyEvent.getKeyText(projectile));
@@ -167,7 +154,7 @@ public class Preferences implements Serializable {
 		protected JButton changeB = new JButton("Switch characters: " + KeyEvent.getKeyText(change));
 		protected JButton pauseB = new JButton("Pause: " + KeyEvent.getKeyText(pause));
 		protected JButton levelB = new JButton("Level Up Menu: " + KeyEvent.getKeyText(levelUp));
-		protected JButton resetB = new JButton("Reset to Defaults");
+		protected JButton resetB = new JButton("Reset to Control Scheme");
 
 		public PreferenceFrame(JComponent owner) {
 
@@ -327,7 +314,7 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					resetKeys();
+					setDefualt();
 
 					move.setText("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
 					attackB.setText("Attack: " + KeyEvent.getKeyText(attack));
@@ -485,7 +472,58 @@ public class Preferences implements Serializable {
 					right = KeyEvent.VK_D;
 				}
 		}
-	}
+		public void setDefualt() {
+			String val = (String) JOptionPane.showInputDialog(this,
+					"Please enter the character you want to be associated with the following action:\nMovement", DigIt.NAME,
+					JOptionPane.PLAIN_MESSAGE, Statics.ICON, defualts, null);
+
+			if (val != null){
+				if (val.equals(defualts[0])) {
+					up = KeyEvent.VK_UP;
+					down = KeyEvent.VK_DOWN;
+					left = KeyEvent.VK_LEFT;
+					right = KeyEvent.VK_RIGHT;
+
+					attack = KeyEvent.VK_SPACE;
+					projectile = KeyEvent.VK_C;
+					special = KeyEvent.VK_V;
+					npc = KeyEvent.VK_X;
+
+					change = KeyEvent.VK_R;
+					pause = KeyEvent.VK_SHIFT;
+					levelUp = KeyEvent.VK_L;
+				} else if(val.equals(defualts[1])){
+					up = KeyEvent.VK_UP;
+					down = KeyEvent.VK_DOWN;
+					left = KeyEvent.VK_LEFT;
+					right = KeyEvent.VK_RIGHT;
+
+					attack = KeyEvent.VK_SPACE;
+					projectile = KeyEvent.VK_E;
+					special = KeyEvent.VK_Q;
+					npc = KeyEvent.VK_X;
+
+					change = KeyEvent.VK_R;
+					pause = KeyEvent.VK_SHIFT;
+					levelUp = KeyEvent.VK_L;
+				}
+				else if(val.equals(defualts[2])){
+					up = KeyEvent.VK_W;
+					down = KeyEvent.VK_S;
+					left = KeyEvent.VK_A;
+					right = KeyEvent.VK_D;
+
+					attack = KeyEvent.VK_SPACE;
+					projectile = KeyEvent.VK_K;
+					special = KeyEvent.VK_J;
+					npc = KeyEvent.VK_X;
+
+					change = KeyEvent.VK_R;
+					pause = KeyEvent.VK_SHIFT;
+					levelUp = KeyEvent.VK_L;
+				}
+		}
+	}}
 
 	// ----------------------------------------------------------------------------------------
 	// TODO static cases used in GameCharacter
