@@ -507,7 +507,7 @@ public class Preferences implements Serializable {
 					pause = KeyEvent.VK_SHIFT;
 					levelUp = KeyEvent.VK_L;
 				}
-				else if(val.equals(defualts[2])){
+				else if(val.equals(defualts[3])){
 					up = KeyEvent.VK_W;
 					down = KeyEvent.VK_S;
 					left = KeyEvent.VK_A;
@@ -522,7 +522,7 @@ public class Preferences implements Serializable {
 					pause = KeyEvent.VK_SHIFT;
 					levelUp = KeyEvent.VK_L;
 				}
-				else if(val.equals(defualts[3])){
+				else if(val.equals(defualts[2])){
 					up = KeyEvent.VK_W;
 					down = KeyEvent.VK_S;
 					left = KeyEvent.VK_A;

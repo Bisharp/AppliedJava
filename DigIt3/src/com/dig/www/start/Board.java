@@ -963,9 +963,7 @@ public class Board extends MPanel implements ActionListener {
 
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
-		else if (key == KeyEvent.VK_I) {
-			character.setMaxHealth(1000);
-		} else if (key == KeyEvent.VK_EQUALS)
+		else if (key == KeyEvent.VK_EQUALS)
 			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
 					JOptionPane.INFORMATION_MESSAGE);
 
@@ -1307,7 +1305,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "bossTest";
+		level = "hauntedTest";
 		preferences = new Preferences();
 		changeArea();
 	}

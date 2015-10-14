@@ -434,20 +434,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void keyPressed(int keyCode) {
-		if (keyCode == KeyEvent.VK_9) {
-			JOptionPane.showMessageDialog(owner, owner.getWorld().get(0).getX() + "," + owner.getWorld().get(0).getY());
-		}
-		if (keyCode == KeyEvent.VK_0) {
-			String s = "";
-			for (int c = 0; c < owner.getFriends().size(); c++) {
 
-				s += owner.getFriends().get(c).getType().charName() + ","
-						+ (owner.getFriends().get(c).getToPoint.x - owner.getFriends().get(c).getX()) + ","
-						+ (owner.getFriends().get(c).getToPoint.y - owner.getFriends().get(c).getY()) + "\n";
-
-			}
-			JOptionPane.showMessageDialog(owner, s);
-		}
 
 		if (keyCode == Preferences.LEVEL_UP()) {
 			if (levMen == null)
@@ -508,10 +495,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				willTalk = true;
 			}
 
-			// Cheat Key; Levels you up
-			else if (keyCode == KeyEvent.VK_O) {
-				level++;
-			}
+			
 		}
 	}
 
