@@ -155,6 +155,7 @@ public class Preferences implements Serializable {
 		protected static final char SHIFT = '~';
 		protected static final char CTRL = '!';
 		protected static final char ALT = '@';
+		protected static final char ESCAPE = '#';
 
 		protected String[] movement = { "Arrow Keys", "WASD" };
 		protected JButton move = new JButton("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
@@ -170,10 +171,10 @@ public class Preferences implements Serializable {
 
 		public PreferenceFrame(JComponent owner) {
 
-			this.setSize(new Dimension(600, 200));
+			this.setSize(new Dimension(675, 200));
 			this.setLayout(new BorderLayout());
 
-			Dimension d = new Dimension(200, 200);
+			Dimension d = new Dimension(225, 200);
 
 			JPanel pane1 = new JPanel();
 			JPanel pane2 = new JPanel();
@@ -212,7 +213,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Attack", attack);
+					char c = getValue("Attack");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						attack = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -224,7 +229,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Projectile", projectile);
+					char c = getValue("Projectile");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						projectile = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -236,7 +245,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Special", special);
+					char c = getValue("Special");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						special = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -248,7 +261,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Switch characters", change);
+					char c = getValue("Switch characters");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						change = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -260,7 +277,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Pause", pause);
+					char c = getValue("Pause");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						pause = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -272,7 +293,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Level Up Menu", levelUp);
+					char c = getValue("Level Up Menu");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						levelUp = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -285,7 +310,11 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Special", special);
+					char c = getValue("Special");
+					
+					if (c == ESCAPE)
+						return;
+					
 					if (!special(c))
 						npc = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -336,6 +365,11 @@ public class Preferences implements Serializable {
 			return c == CTRL || c == ALT || c == SHIFT;
 		}
 
+		private boolean special(String s) {
+			return s.equalsIgnoreCase("shift") || s.equalsIgnoreCase("alt") || s.equalsIgnoreCase("ctrl") || s.equalsIgnoreCase("backspace")
+					|| s.equalsIgnoreCase("space") || s.equalsIgnoreCase("enter");
+		}
+
 		private int translateKey(char c) {
 
 			switch (c) {
@@ -343,12 +377,42 @@ public class Preferences implements Serializable {
 				return KeyEvent.VK_SHIFT;
 			case CTRL:
 				return KeyEvent.VK_CONTROL;
+			case '\n':
+				return KeyEvent.VK_ENTER;
+			case '\b':
+				return KeyEvent.VK_BACK_SPACE;
+			case ' ':
+				return KeyEvent.VK_SPACE;
 			default:
 				return KeyEvent.VK_ALT;
 			}
 		}
 
-		public char getValue(String action, int sender) {
+		public boolean verify(char ch, boolean isSpecial) {
+
+			boolean toReturn;
+
+			if (isSpecial) {
+				String s = KeyEvent.getKeyText(translateKey(ch));
+				System.out.println(s);
+				toReturn = !s.equalsIgnoreCase(KeyEvent.getKeyText(attack)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(projectile))
+						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(special)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(npc))
+						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(change)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(pause))
+						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(levelUp));
+			} else
+				toReturn = !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(attack)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(projectile))
+						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(special)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(npc))
+						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(change)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(pause))
+						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(levelUp));
+
+			System.out.println(KeyEvent.getKeyText(attack));
+
+			if (!toReturn)
+				Statics.showError("The key code is already taken.", owner);
+			return toReturn;
+		}
+
+		public char getValue(String action) {
 
 			String str = null;
 			int i = 0;
@@ -357,8 +421,10 @@ public class Preferences implements Serializable {
 			do {
 				str = (String) JOptionPane.showInputDialog(this, "Please select the type of key to continue.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
 						Statics.ICON, cases, null);
-				if (str == null)
+				if (str == null) {
+					s = null;
 					break;
+				}
 
 				for (i = 0; i < cases.length; i++)
 					if (str.equals(cases[i]))
@@ -366,7 +432,8 @@ public class Preferences implements Serializable {
 
 				s = (String) JOptionPane.showInputDialog(this, "Please select the key you want to be associated with the following action:\n"
 						+ action, DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, chars[i], null);
-				if (s == null)
+				
+				if (s == null || !verify(!special(s) ? s.charAt(0) : specialTrans(s), special(s)))
 					str = null;
 			} while (str == null);
 			// *_
@@ -379,14 +446,8 @@ public class Preferences implements Serializable {
 				else
 					return specialTrans(s);
 
-			else {
-				s = KeyEvent.getKeyText(sender);
-				if (s.length() == 1)
-					return s.charAt(0);
-				else {
-					return specialTrans(s);
-				}
-			}
+			else
+				return ESCAPE;
 		}
 
 		public char specialTrans(String s) {
@@ -478,8 +539,9 @@ public class Preferences implements Serializable {
 	// ----------------------------------------------------------------------------------------
 
 	public static String getControls() {
-		return "Controls:\nUp: " + KeyEvent.getKeyText(UP()) + " | Down: " + KeyEvent.getKeyText(DOWN()) + " | Left: " + KeyEvent.getKeyText(LEFT()) + " | Right: " + KeyEvent.getKeyText(RIGHT()) + "\nAttack: " + KeyEvent.getKeyText(ATTACK()) + " | Projectile: "
-				+ KeyEvent.getKeyText(PROJECTILE()) + "| Special: " + KeyEvent.getKeyText(SPECIAL()) + " | Talk to NPCs: " + KeyEvent.getKeyText(NPC()) + "\nPause: " + KeyEvent.getKeyText(PAUSE()) + " | Level Up Menu: " + KeyEvent.getKeyText(LEVEL_UP())
-				+ " | Switch characters: " + KeyEvent.getKeyText(CHAR_CHANGE());
+		return "Controls:\nMovement Scheme: " + (KeyEvent.getKeyText(UP()).equals("W")? "WASD" : "Arrow Keys") + "\nAttack: " + KeyEvent.getKeyText(ATTACK()) + "  |  Projectile: "
+				+ KeyEvent.getKeyText(PROJECTILE()) + "  |  Special: " + KeyEvent.getKeyText(SPECIAL()) + "  |  Talk to NPCs: "
+				+ KeyEvent.getKeyText(NPC()) + "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Level Up Menu: " + KeyEvent.getKeyText(LEVEL_UP())
+				+ "  |  Switch characters: " + KeyEvent.getKeyText(CHAR_CHANGE());
 	}
 }
