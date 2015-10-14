@@ -24,6 +24,7 @@ protected int phase;
 protected int sequence;
 protected double speedMulti=1;
 protected String musicLoc;
+
 	public Boss(int x, int y, String loc, Board owner, boolean flying,
 			int health,String name,int speed,String musicLoc) {
 		super(x, y, loc, owner, flying, health);
@@ -94,6 +95,7 @@ public void draw(Graphics2D g2d){
 	if(active){
 	if(!alive&&DigIt.soundPlayer.playerThread!=null){
 		DigIt.soundPlayer.playerThread.stop();
+		Statics.playSound(owner,"gunSFX/explosion-2.wav");
 	}else
 		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
 			Statics.playSound(owner, musicLoc);

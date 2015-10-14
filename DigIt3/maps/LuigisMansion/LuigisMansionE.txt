@@ -12,7 +12,6 @@ S,2800,2150,images/enemies/unique/fishbowl.png,f,10
 S,2800,2450,images/enemies/unique/fishbowl.png,f,10
 L,2700,3000,images/enemies/unique/machineLaunch.png,f,20,10
 S,1350,1300,images/enemies/unique/fishbowl.png,f,10
-T,550,400,images/enemies/unique/ghost.png,t,10
 T,4000,3700,images/enemies/unique/ghost.png,t,10
 T,4600,3700,images/enemies/unique/ghost.png,t,10
 T,3800,2400,images/enemies/unique/ghost.png,t,10

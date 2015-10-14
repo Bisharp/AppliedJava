@@ -17,7 +17,13 @@ public class HeadBoss extends Boss{
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
-		
+	if(health<(maxHealth/3)&&phase<2){
+		phase=2;
+		Statics.playSound(owner,"gunSFX/explosion-2.wav");
+	}if(health<(maxHealth/3)*2&&phase<1){
+			phase=1;
+			Statics.playSound(owner,"gunSFX/explosion-2.wav");
+		}
 		basicAnimate();
 		boolean acted=sortAction();
 		if(!acted){
@@ -26,43 +32,42 @@ public class HeadBoss extends Boss{
 				follow(5, 0, 5);
 			}
 			if(actTimer<=0){
-				switch (sequence) {
-				case 0:
+				if(sequence==0){
 				
+				if(phase>0){
 					chargeAttack(150, 40,1.5);
-					sequence++;
-					break;
-				case 1:
+					}
+			sequence++;
 					
+				}
+				else if(sequence==1){
 				follow(200, 40,1);
-					sequence++;
-					break;
-				case 2:
-				case 3:
-				case 4:
-				
+					sequence++;}
+					
+				else if(sequence>1&&sequence<5){
+				if(phase+2>=sequence){
 					createProjectile("images/enemies/blasts/1.png",10,
 							Statics.pointTowards(new Point((int) x,
 							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40);
-					sequence++;
-					break;
-				case 5:
-				
+				}	sequence++;
+					}
+				else if(sequence==5){
+				if(phase==2)
 					createTProjectile("images/enemies/blasts/0.png",10,
 							Statics.pointTowards(new Point((int) x,
 							(int) y), owner.getCharPoint()),true,40);
 					sequence++;
-					break;
-				default:
+					}
+				else
 					sequence=0;
-					break;
+					
 				}
 					
 				
 			}
 				
 			
-		}
+		
 		if(!acted&&actTimer>0)
 			actTimer--;
 	}
