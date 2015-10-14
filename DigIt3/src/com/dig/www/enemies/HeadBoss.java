@@ -10,7 +10,7 @@ import com.dig.www.util.Statics;
 public class HeadBoss extends Boss{
 
 	public HeadBoss(int x, int y,Board owner) {
-		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5,"music/zeldaCopyright.mp3");
+		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor st0ub
 	}
 //int realSeq;
@@ -19,11 +19,11 @@ public class HeadBoss extends Boss{
 		// TODO Auto-generated method stub
 	if(health<(maxHealth/3)&&phase<2){
 		phase=2;
-		Statics.playSound(owner,"gunSFX/explosion-2.wav");
+		Statics.playSound(owner,bossPhaseS);
 		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
 	}if(health<(maxHealth/3)*2&&phase<1){
 			phase=1;
-			Statics.playSound(owner,"gunSFX/explosion-2.wav");
+			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
 				
 	}

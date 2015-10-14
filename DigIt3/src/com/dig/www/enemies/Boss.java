@@ -24,15 +24,18 @@ protected int phase;
 protected int sequence;
 protected double speedMulti=1;
 protected String musicLoc;
-
+protected String bossKillS;
+protected String bossPhaseS;
 	public Boss(int x, int y, String loc, Board owner, boolean flying,
-			int health,String name,int speed,String musicLoc) {
+			int health,String name,int speed,String musicLoc,String bossKillS,String  bossPhaseS) {
 		super(x, y, loc, owner, flying, health);
 		// TODO Auto-generated constructor stub
 	this.name=name;
 	this.speed=speed;
 	onScreen=false;
 	this.musicLoc=musicLoc;
+	this.bossKillS=bossKillS;
+	this.bossPhaseS=bossPhaseS;
 	}
 public void createProjectile(String loc,int speed,double dir,boolean flying,int timer){
 	owner.getEnemies().add(new Projectile(dir, x, y, speed, this, loc, owner, flying));
@@ -95,7 +98,7 @@ public void draw(Graphics2D g2d){
 	if(active){
 	if(!alive&&DigIt.soundPlayer.playerThread!=null){
 		DigIt.soundPlayer.playerThread.stop();
-		Statics.playSound(owner,"gunSFX/explosion-2.wav");
+		Statics.playSound(owner,bossKillS);
 	}else
 		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
 			Statics.playSound(owner, musicLoc);
