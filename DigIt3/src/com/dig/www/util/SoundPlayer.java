@@ -14,7 +14,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
 public class SoundPlayer {
-	private Thread playerThread;
+	public Thread playerThread;
 	private Player player;
 	private JComponent component;
 

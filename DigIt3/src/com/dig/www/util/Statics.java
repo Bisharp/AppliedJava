@@ -58,6 +58,7 @@ public final class Statics {
 	
 	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
 	public static final Font NPC = new Font("Calibri", Font.PLAIN, 20);
+	public static final Font BOSS = new Font("Impact", Font.BOLD,40);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
 

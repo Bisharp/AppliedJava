@@ -218,6 +218,10 @@ public class StageBuilder {
 							break;
 						case 't':
 							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying,health));
+						break;
+						case 'B':
+							enemies.add(new HeadBoss(enX, enY, owner));
+						break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
@@ -344,6 +348,7 @@ public class StageBuilder {
 						if (stuff.get(3).charAt(0) == 't')
 							wall = true;
 
+						
 						if (val == 0)
 							npcs.add(new Objects(nX, nY, loc, wall, owner));
 						else if (val == -1) {
@@ -351,7 +356,12 @@ public class StageBuilder {
 							count++;
 						} else if (val == -2)
 							npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
-						else
+						else	if(val==-3){
+							owner.setSpawnX(-nX+ OFF);
+							owner.setSpawnY(-nY + OFF - 299);
+						}
+							
+							else
 							npcs.add(new Collectible(nX, nY, loc, owner, val));
 
 					} catch (IndexOutOfBoundsException ex) {

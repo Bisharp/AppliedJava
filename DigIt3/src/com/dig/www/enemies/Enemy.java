@@ -185,7 +185,7 @@ public abstract class Enemy extends Sprite {
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible){
 			alive = false;
-			GameCharacter.plusXP(5);
+			GameCharacter.plusXP(getKillXP());
 		}
 		if(!invincible)
 		GameCharacter.plusXP(i);
@@ -223,5 +223,8 @@ public abstract class Enemy extends Sprite {
 		Point b = new Point(x, y);
 		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
 		return d;
+	}
+	public int getKillXP(){
+		return 5;
 	}
 }
