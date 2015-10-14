@@ -97,8 +97,7 @@ public void draw(Graphics2D g2d){
 		
 	if(active){
 	if(!alive&&DigIt.soundPlayer.playerThread!=null){
-		DigIt.soundPlayer.playerThread.stop();
-		Statics.playSound(owner,bossKillS);
+		makeDeadExplosion();
 	}else
 		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
 			Statics.playSound(owner, musicLoc);
@@ -145,4 +144,8 @@ public void turnAround(int wallX, int wallY){
 //		y += BLOCK;
 	}
 //}
+public void makeDeadExplosion(){
+	DigIt.soundPlayer.playerThread.stop();
+	Statics.playSound(owner,bossKillS);
+}
 }

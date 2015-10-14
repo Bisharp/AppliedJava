@@ -14,6 +14,11 @@ public class HeadBoss extends Boss{
 		// TODO Auto-generated constructor st0ub
 	}
 //int realSeq;
+	public void  makeDeadExplosion(){
+		super.makeDeadExplosion();
+		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		
+	}
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
@@ -27,6 +32,7 @@ public class HeadBoss extends Boss{
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
 				
 	}
+	
 		basicAnimate();
 		boolean acted=sortAction();
 		if(!acted){
