@@ -220,7 +220,11 @@ public class StageBuilder {
 							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying,health));
 						break;
 						case 'B':
-							enemies.add(new HeadBoss(enX, enY, owner));
+							switch(enImg){
+							case "images/enemies/unique/Head.png":
+								enemies.add(new HeadBoss(enX, enY, owner));
+							}
+							
 						break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
