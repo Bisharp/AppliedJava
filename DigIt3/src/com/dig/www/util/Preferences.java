@@ -144,7 +144,7 @@ public class Preferences implements Serializable {
 		protected static final char ESCAPE = '#';
 
 		protected String[] movement = { "Arrow Keys", "WASD" };
-		protected String[] defualts = { "Arrow Keys tight","Arrow Keys stretched", "WASD 1" };
+		protected String[] defualts = { "Arrow Keys tight(defualt)","Arrow Keys stretched", "WASD 1" };
 		protected JButton move = new JButton("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
 		protected JButton attackB = new JButton("Attack: " + KeyEvent.getKeyText(attack));
 		protected JButton projectileB = new JButton("Projectile: " + KeyEvent.getKeyText(projectile));
