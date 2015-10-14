@@ -144,7 +144,7 @@ public class Preferences implements Serializable {
 		protected static final char ESCAPE = '#';
 
 		protected String[] movement = { "Arrow Keys", "WASD" };
-		protected String[] defualts = { "Arrow Keys tight(defualt)","Arrow Keys stretched", "WASD 1" };
+		protected String[] defualts = { "Arrow Keys tight(defualt)","Arrow Keys stretched", "WASD tight","WASD stretched" };
 		protected JButton move = new JButton("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
 		protected JButton attackB = new JButton("Attack: " + KeyEvent.getKeyText(attack));
 		protected JButton projectileB = new JButton("Projectile: " + KeyEvent.getKeyText(projectile));
@@ -508,6 +508,21 @@ public class Preferences implements Serializable {
 					levelUp = KeyEvent.VK_L;
 				}
 				else if(val.equals(defualts[2])){
+					up = KeyEvent.VK_W;
+					down = KeyEvent.VK_S;
+					left = KeyEvent.VK_A;
+					right = KeyEvent.VK_D;
+
+					attack = KeyEvent.VK_SPACE;
+					projectile = KeyEvent.VK_O;
+					special = KeyEvent.VK_I;
+					npc = KeyEvent.VK_X;
+
+					change = KeyEvent.VK_R;
+					pause = KeyEvent.VK_SHIFT;
+					levelUp = KeyEvent.VK_L;
+				}
+				else if(val.equals(defualts[3])){
 					up = KeyEvent.VK_W;
 					down = KeyEvent.VK_S;
 					left = KeyEvent.VK_A;
