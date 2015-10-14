@@ -20,10 +20,13 @@ public class HeadBoss extends Boss{
 	if(health<(maxHealth/3)&&phase<2){
 		phase=2;
 		Statics.playSound(owner,"gunSFX/explosion-2.wav");
+		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
 	}if(health<(maxHealth/3)*2&&phase<1){
 			phase=1;
 			Statics.playSound(owner,"gunSFX/explosion-2.wav");
-		}
+			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+				
+	}
 		basicAnimate();
 		boolean acted=sortAction();
 		if(!acted){
