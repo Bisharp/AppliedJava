@@ -252,7 +252,7 @@ public class Board extends MPanel implements ActionListener {
 
 			// Enemy draw
 			for (i = 0; i < enemies.size(); i++) {
-				if (enemies.get(i).isOnScreen()) {
+				if (enemies.get(i).isOnScreen()||enemies.get(i) instanceof Boss) {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
@@ -1307,7 +1307,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "hauntedTest";
+		level = "bossTest";
 		preferences = new Preferences();
 		changeArea();
 	}
