@@ -17,6 +17,7 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -175,10 +176,12 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int REnC;
 	protected int SEnC;
 	protected int pathUpdateTimer;
-
+	protected int meleeDamage;
+	protected int rangedDamage;
+	protected int specialDamage;
 	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
 			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY, int MEnC, int REnC,
-			int SEnC) {
+			int SEnC,int meleeDamage,int rangedDamage,int specialDamage) {
 		super(x, y, "n", owner);
 		this.player = player;
 		this.charName = charName;
@@ -197,7 +200,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.MEnC = MEnC;
 		this.REnC = REnC;
 		this.SEnC = SEnC;
-
+		this.meleeDamage=meleeDamage;
+		this.rangedDamage=rangedDamage;
+		this.specialDamage=specialDamage;
 	}
 
 	@Override
@@ -434,7 +439,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void keyPressed(int keyCode) {
-
+if(keyCode==KeyEvent.VK_MINUS){
+	level++;
+}
 
 		if (keyCode == Preferences.LEVEL_UP()) {
 			if (levMen == null)
@@ -1099,6 +1106,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		JLabel levelLabel;
 		JButton mHealth;
 		JButton mEn;
+		JButton melee;
+		JButton ranged;
+		JButton special;
 		LevelUp l = this;
 
 		public LevelUp() {
@@ -1118,9 +1128,57 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10, SwingConstants.CENTER);
 
 			this.add(levelLabel, BorderLayout.NORTH);
+			JPanel panels=new JPanel();
+			panels.setLayout(new BoxLayout(panels, BoxLayout.Y_AXIS));
+		panels.add(new JLabel(" "));
 			JPanel panel = new JPanel();
 			mHealth = new JButton("Health: " + HP_MAX);
 			mEn = new JButton("Energy: " + MAX_ENERGY);
+			melee = new JButton("Melee: " + meleeDamage);
+			ranged = new JButton("Ranged: " + rangedDamage);
+			special = new JButton("Special: " + specialDamage);
+			melee.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if (myLevel < level) {
+						meleeDamage++;
+						myLevel++;
+						melee.setText("Melee: " + meleeDamage);
+						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
+					}
+				}
+			});
+			ranged.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if (myLevel < level) {
+						rangedDamage++;
+						myLevel++;
+						ranged.setText("Ranged: " + rangedDamage);
+						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
+					}
+				}
+			});
+			special.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if (myLevel < level) {
+						specialDamage++;
+						myLevel++;
+						special.setText("Special: " +specialDamage);
+						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
+								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
+					}
+				}
+			});
 			mHealth.addActionListener(new ActionListener() {
 
 				@Override
@@ -1179,7 +1237,15 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			});
 			panel.add(mEn);
 
-			this.add(panel, BorderLayout.CENTER);
+		
+			JPanel panel2=new JPanel();
+			panel2.add(melee);
+			panel2.add(ranged);
+			panel2.add(special);
+			panels.add(panel);
+			panels.add(panel2);
+			this.add(panels, BorderLayout.CENTER);
+			
 			this.addWindowListener(new WindowListener() {
 
 				@Override
@@ -1234,5 +1300,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public PointPath getPPath() {
 		// TODO Auto-generated method stub
 		return path;
+	}
+	public int getMeleeDamage(){
+		return meleeDamage;
+	}
+	public int getRangedDamage(){
+		return rangedDamage;
+	}
+	public int getSpecialDamage(){
+		return specialDamage;
 	}
 }

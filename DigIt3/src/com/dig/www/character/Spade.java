@@ -25,7 +25,7 @@ public class Spade extends GameCharacter {
 				10, 
 				80,
 				10,
-				100,10,20,50);
+				100,10,20,50,1,3,0);
 		// TODO Auto-generated constructor stub
 	}
 

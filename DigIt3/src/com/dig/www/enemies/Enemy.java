@@ -113,20 +113,22 @@ public abstract class Enemy extends Sprite {
 
 		// Clark
 		case SPADE:
-			takeDamage(1);
+			takeDamage(owner.getCharacter().getMeleeDamage());
 			owner.getCharacter().endAction();
 			break;
 		case ARROW:
-			takeDamage(3);
+			takeDamage(owner.getCharacter().getRangedDamage());
 			owner.getCharacter().endAction();
 			break;
 		case PIT:
+		
+			GameCharacter.plusXP(owner.getCharacter().getSpecialDamage()/2);
 			break;
 
 		// Carl
 		case CLUB:
 			stunTimer = STUN_MAX / 10;
-			takeDamage(2);
+			takeDamage(owner.getCharacter().getMeleeDamage());
 			owner.getCharacter().endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
 			break;
@@ -135,26 +137,29 @@ public abstract class Enemy extends Sprite {
 				stunTimer = (int) ((double) STUN_MAX / (double) 1.5);
 				// owner.getCharacter().endAction();
 				Statics.playSound(owner, "weapons/whop.wav");
-				takeDamage(1);
+				takeDamage(owner.getCharacter().getSpecialDamage());
 			}
+			break;
 		case PITCH:
 			if (!playerHit) {
-				takeDamage(1);
+				
+				
+				takeDamage(owner.getCharacter().getRangedDamage());
 			}
 			break;
 
 		// Destiny
 		case AURA:
-			harmTimer = STUN_MAX / 2;
+			harmTimer = STUN_MAX /2* (owner.getCharacter().getMeleeDamage()/4);
 		
 			break;
 		case HAZE:
 			if(!playerHit){
-			takeDamage(1);}
+			takeDamage(owner.getCharacter().getRangedDamage());}
 			break;
 		case DISPENSER:
 			// TODO implement slow code
-
+break;
 			// Cain
 
 		case SHIELD:
@@ -163,10 +168,10 @@ public abstract class Enemy extends Sprite {
 				alive = false;
 			break;
 		case CHAIN:
-			takeDamage(2);
+			takeDamage(owner.getCharacter().getRangedDamage());
 			break;
 		case BASH:
-			takeDamage(5);
+			takeDamage(owner.getCharacter().getSpecialDamage());
 			stunTimer = STUN_MAX;
 			int d = (int) pointTowards(new Point(owner.getCharacter().getX(), owner.getCharacter().getY()));
 			d += 180;
