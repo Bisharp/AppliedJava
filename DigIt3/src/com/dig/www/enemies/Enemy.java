@@ -150,7 +150,8 @@ public abstract class Enemy extends Sprite {
 
 		// Destiny
 		case AURA:
-			harmTimer = STUN_MAX /2* (owner.getCharacter().getMeleeDamage()/4);
+			harmTimer = STUN_MAX /2//* (owner.getCharacter().getMeleeDamage()/4)
+			;
 		
 			break;
 		case HAZE:
