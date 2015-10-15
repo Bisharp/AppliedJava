@@ -857,13 +857,13 @@ public class Board extends MPanel implements ActionListener {
 					for (GameCharacter friend2 : friends) {
 
 						if (character.getActBounds().intersects(friend2.getBounds())) {
-							friend2.heal(character.getMeleeDamage()/10);
+							friend2.heal(character.getMeleeDamage()/3);
 							healed = true;
 						}
 					}
 
 					if (healed) {
-						character.heal(character.getMeleeDamage()/10);
+						character.heal(character.getMeleeDamage()/3);
 						character.setMelee(0);
 					}
 				}
@@ -872,7 +872,7 @@ public class Board extends MPanel implements ActionListener {
 
 						boolean healed = false;
 						if (friend.getActBounds().intersects(r3)) {
-							character.heal(friend.getMeleeDamage()/10);
+							character.heal(friend.getMeleeDamage()/3);
 							healed = true;
 						}
 						for (GameCharacter friend2 : friends) {
@@ -880,14 +880,14 @@ public class Board extends MPanel implements ActionListener {
 
 							} else {
 								if (friend.getActBounds().intersects(friend2.getBounds())) {
-									friend2.heal(friend.getMeleeDamage()/10);
+									friend2.heal(friend.getMeleeDamage()/3);
 									healed = true;
 								}
 							}
 						}
 						if (healed) {
 
-							friend.heal(friend.getMeleeDamage()/10);
+							friend.heal(friend.getMeleeDamage()/3);
 							friend.setMelee(0);
 						}
 					}

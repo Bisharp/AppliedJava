@@ -15,7 +15,8 @@ public class Heart extends GameCharacter {
 
 	public Heart(int x, int y, Board owner,boolean player) {
 		super(x, y, owner, Types.HEART, "heart",player
-				,-10, 
+				,-30, 
+				
 				-20,
 				-50,
 				20,
@@ -23,7 +24,10 @@ public class Heart extends GameCharacter {
 				10, 
 				75,
 				10,
-				80,10,15,30,20,1,0);
+				80,
+				
+				25,
+				15,30,20,1,0);
 		// TODO Auto-generated constructor stub
 	}
 
