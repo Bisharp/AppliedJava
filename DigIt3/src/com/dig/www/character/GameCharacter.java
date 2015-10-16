@@ -203,9 +203,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.meleeDamage = meleeDamage;
 		this.rangedDamage = rangedDamage;
 		this.specialDamage = specialDamage;
-		meleeTimer=-50;
-		rangedTimer=-50;
-		specialTimer=-50;
+		meleeTimer=this.NEG_TIMER_MELEE;
+		rangedTimer=this.NEG_TIMER_RANGED;
+		specialTimer=this.NEG_TIMER_SPECIAL;
 	}
 
 	@Override

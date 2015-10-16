@@ -83,7 +83,7 @@ public class Board extends MPanel implements ActionListener {
 	private int spawnY;
 	public static final int DEFAULT_X = 325;
 	public static final int DEFAULT_Y = 350;
-
+boolean levelChanged;
 	private DigIt owner;
 	private Image sky = Statics.newImage("images/sky.png");
 	private boolean isDay = true;
@@ -152,14 +152,14 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void changeArea() {
-
+if(levelChanged){
 		if (character instanceof Heart)
 			((Heart) character).end();
 		else
 			for (GameCharacter g : friends)
 				if (g instanceof Heart)
 					((Heart) g).end();
-
+}
 		StageBuilder sB = StageBuilder.getInstance(level, this);
 		sB.changeState(level, this);
 		setTexturePack(sB.readText());
