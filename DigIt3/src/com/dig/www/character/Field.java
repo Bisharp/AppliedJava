@@ -37,14 +37,20 @@ public class Field extends FProjectile {
 		g2d.setColor(getColor());
 		g2d.fillOval(x, y, SIDE, SIDE);
 
-		vars = new int[][] { { Statics.RAND.nextInt(SIDE - 10), Statics.RAND.nextInt(SIDE - 10) },
-				{ Statics.RAND.nextInt(SIDE - 10), Statics.RAND.nextInt(SIDE - 10) },
-				{ Statics.RAND.nextInt(SIDE - 10), Statics.RAND.nextInt(SIDE - 10) },
-				{ Statics.RAND.nextInt(SIDE - 10), Statics.RAND.nextInt(SIDE - 10) } };
+		vars = new int[4][2];
+		for (int i = 0; i < 4; i++) {
+			for (int c = 0; c < 2; c++) {
+				vars[i][c] = getVal(c == 0);
+			}
+		}
 
 		g2d.setColor(Color.WHITE);
 		for (int[] var : vars)
-			g2d.fillRect(x + var[0], y + var[1], 10, 10);
+			g2d.fillRect(var[0], var[1], 10, 10);
+	}
+
+	private int getVal(boolean x) {
+		return (x ? getMidX() : getMidY()) + (Statics.RAND.nextInt(width / 2) * (Statics.RAND.nextBoolean() ? 1 : -1));
 	}
 
 	private Color getColor() {
