@@ -51,8 +51,8 @@ public class PathEnemy extends Enemy {
 			y = startY;
 		}
 
-		scrollX = points[position][0] * 2;
-		scrollY = points[position][1] * 2;
+		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
+		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
 		moveTimer = MOVE_MAX;
 	}
 

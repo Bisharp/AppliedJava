@@ -19,10 +19,9 @@ public class StandEnemy extends Enemy {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
 		basicAnimate();
 	}
 }

@@ -9,7 +9,6 @@ import com.dig.www.util.Statics;
 public class PursuingLaunch extends Launch {
 
 	private double d = 0.0;
-	private static final int speed = 5;
 
 	public PursuingLaunch(int width, int height, String loc, Board owner, int delay, boolean flying,int health) {
 		super(width, height, loc, owner, delay, flying,health);
@@ -30,14 +29,14 @@ public class PursuingLaunch extends Launch {
 		wallY = round(wallY, 2);
 
 		if (wallX > myX)
-			x -= BLOCK * speed;
+			x -= BLOCK * getSpeed();
 		else if (wallX < myX)
-			x += BLOCK * speed;
+			x += BLOCK * getSpeed();
 
 		if (wallY > myY)
-			y -= BLOCK * speed;
+			y -= BLOCK * getSpeed();
 		else if (wallY < myY)
-			y += BLOCK * speed;
+			y += BLOCK * getSpeed();
 	}
 
 	public void animate() {
@@ -49,8 +48,8 @@ public class PursuingLaunch extends Launch {
 			if (stunTimer <= 0 && onScreen) {
 
 				d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-				x += Math.cos((double) Math.toRadians((double) d)) * speed;
-				y += Math.sin((double) Math.toRadians((double) d)) * speed;
+				x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
+				y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 			}
 		}
 	}

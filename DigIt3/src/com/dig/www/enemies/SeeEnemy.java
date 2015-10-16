@@ -30,8 +30,8 @@ public abstract class SeeEnemy extends WalkingEnemy {
 
 		if (onScreen && !hasTarget && stunTimer <= 0) {
 			if (animateTimer > 0) {
-				x += 5 * scrollX;
-				y += 5 * scrollY;
+				x += getSpeed() * scrollX;
+				y += getSpeed() * scrollY;
 
 				animateTimer--;
 			} else {
@@ -90,5 +90,10 @@ public abstract class SeeEnemy extends WalkingEnemy {
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
+	}
+	
+	@Override
+	public int getSpeed() {
+		return slowTimer <= 0? 5 : 2;
 	}
 }

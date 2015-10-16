@@ -13,7 +13,6 @@ public class LookChaseEnemy extends StandEnemy {
 
 	private GameCharacter chara;
 	private double d = 0;
-	private int speed = 5;
 	private static transient Image cloud = Statics.newImage("images/effects/shadow.png");
 	private static transient Image corruption = Statics.newImage("images/effects/corruption.png");
 
@@ -36,8 +35,8 @@ public class LookChaseEnemy extends StandEnemy {
 
 			basicAnimate();
 			d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-			x += Math.cos((double) Math.toRadians((double) d)) * speed;
-			y += Math.sin((double) Math.toRadians((double) d)) * speed;
+			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
+			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 		} else {
 			super.animate();
 		}
@@ -52,14 +51,14 @@ public class LookChaseEnemy extends StandEnemy {
 		wallY = round(wallY, 2);
 
 		if (wallX > myX)
-			x -= BLOCK * speed;
+			x -= BLOCK * getSpeed();
 		else if (wallX < myX)
-			x += BLOCK * speed;
+			x += BLOCK * getSpeed();
 
 		if (wallY > myY)
-			y -= BLOCK * speed;
+			y -= BLOCK * getSpeed();
 		else if (wallY < myY)
-			y += BLOCK * speed;
+			y += BLOCK * getSpeed();
 	}
 
 	@Override
@@ -70,5 +69,10 @@ public class LookChaseEnemy extends StandEnemy {
 			g2d.drawImage(cloud, owner.getCharacterX(), owner.getCharacterY(), owner);
 			g2d.drawImage(corruption, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
 		}
+	}
+	
+	@Override
+	public int getSpeed() {
+		return slowTimer <= 0? 5 : 2;
 	}
 }

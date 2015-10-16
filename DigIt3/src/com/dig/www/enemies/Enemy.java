@@ -29,6 +29,9 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 	protected int damage = 10;
+	
+	protected int slowTimer = 0;
+	protected int SLOW_MAX = 10;
 
 	protected boolean invincible = false;
 
@@ -98,6 +101,8 @@ public abstract class Enemy extends Sprite {
 
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+		else if (slowTimer > 0)
+			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
 
 		if (!(this instanceof Projectile) && !invincible) {
 			// g2d.setFont(enFont);
@@ -161,7 +166,7 @@ public abstract class Enemy extends Sprite {
 			break;
 		case DISPENSER:
 			// TODO implement slow code
-
+			slowTimer = SLOW_MAX;
 			break;
 		// Cain
 
@@ -206,6 +211,9 @@ public abstract class Enemy extends Sprite {
 
 	public void basicAnimate() {
 		super.basicAnimate();
+		
+		if (slowTimer > 0)
+			slowTimer--;
 
 		if (stunTimer > 0)
 			stunTimer--;
@@ -235,5 +243,9 @@ public abstract class Enemy extends Sprite {
 
 	public int getKillXP() {
 		return 5;
+	}
+	
+	public int getSpeed() {
+		return slowTimer <= 0? 5 : 2;
 	}
 }

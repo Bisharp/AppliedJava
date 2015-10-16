@@ -62,8 +62,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 			y = startY;
 		}
 		
-		scrollX = points[position][0] * 2;
-		scrollY = points[position][1] * 2;
+		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
+		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
 		moveTimer = MOVE_MAX;
 	}
 	
@@ -104,8 +104,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 		
 //Point p=new Point((int)owner.getCharacter().getBounds().getCenterX(),(int)owner.getCharacter().getBounds().getCenterY());
 double d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-x += Math.cos((double) Math.toRadians((double) d)) * speed;
-y += Math.sin((double) Math.toRadians((double) d)) * speed;
+x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
+y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 	}
 
 	@Override
