@@ -53,7 +53,7 @@ public class PathEnemy extends Enemy {
 
 		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
 		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
-		moveTimer = MOVE_MAX;
+		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
 	}
 
 	@Override

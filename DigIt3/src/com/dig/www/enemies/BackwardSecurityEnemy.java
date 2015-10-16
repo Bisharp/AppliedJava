@@ -24,8 +24,8 @@ public class BackwardSecurityEnemy extends PatrolSecurityEnemy {
 			position += 1;
 		}
 		
-		scrollX = points[position][0] * (backwards? -2 : 2);
-		scrollY = points[position][1] * (backwards? -2 : 2);
-		moveTimer = MOVE_MAX;
+		scrollX = points[position][0] * ((backwards? -2 : 2) / (slowTimer <= 0? 1 : 2));
+		scrollY = points[position][1] * ((backwards? -2 : 2) / (slowTimer <= 0? 1 : 2));
+		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
 	}
 }
