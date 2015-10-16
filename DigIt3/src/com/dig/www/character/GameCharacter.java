@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
+import com.dig.www.start.DigIt;
 import com.dig.www.util.GameControllerRunnable;
 import com.dig.www.util.Preferences;
 import com.dig.www.util.Sprite;
@@ -1166,6 +1167,9 @@ public void drawTHBar(double per, int total, Graphics2D g2d) {
 			levUp = true;
 			this.setFocusable(true);
 			owner.setFocusable(false);
+			this.setResizable(false);
+			
+			this.setTitle(DigIt.NAME);
 			this.setSize(400, 200);
 			this.setLocation(Statics.BOARD_WIDTH / 2 - this.getWidth() / 2, Statics.BOARD_HEIGHT / 2 - this.getHeight() / 2);
 			this.setAlwaysOnTop(true);
@@ -1286,6 +1290,12 @@ public void drawTHBar(double per, int total, Graphics2D g2d) {
 			panel2.add(melee);
 			panel2.add(ranged);
 			panel2.add(special);
+			panels.setBackground(Color.black);
+			panel.setBackground(Color.black);
+			panel2.setBackground(Color.black);
+			levelLabel.setForeground(Color.WHITE);
+			levelLabel.setOpaque(true);
+			levelLabel.setBackground(Color.black);
 			panels.add(panel);
 			panels.add(panel2);
 			this.add(panels, BorderLayout.CENTER);
