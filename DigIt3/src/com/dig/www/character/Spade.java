@@ -2,6 +2,7 @@ package com.dig.www.character;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.ObjectInputStream.GetField;
 
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -33,8 +34,9 @@ public class Spade extends GameCharacter {
 	protected void drawCSHUD(Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		int normWidth=300;
+		
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(normWidth, 20, 150 + (20 * numOfDigits(dirt)), 50);
+		g2d.fillRect(normWidth, 20, 150 + ( g2d.getFont().getSize()/2* numOfDigits(dirt)), 50);
 		g2d.setColor(Statics.BROWN);
 		g2d.drawString("DIRT: " + dirt, normWidth+20, 55);
 	}
