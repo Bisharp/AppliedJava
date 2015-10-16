@@ -1001,7 +1001,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	public String getSave() {
 
-		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY + "," + myLevel;
+		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY + "," + myLevel+ "," + meleeDamage+ "," + rangedDamage+ "," + specialDamage;
 	}
 
 	public void setMaxHealth(int setter) {
@@ -1031,11 +1031,17 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			int health = Integer.parseInt(stuff.get(0));
 			int energy = Integer.parseInt(stuff.get(1));
 			int myLevel = Integer.parseInt(stuff.get(2));
+			int melee = Integer.parseInt(stuff.get(3));
+			int ranged = Integer.parseInt(stuff.get(4));
+			int special = Integer.parseInt(stuff.get(5));
 			this.myLevel = myLevel;
 			HP_MAX = health;
 			MAX_ENERGY = energy;
 			this.health = HP_MAX;
 			this.energy = MAX_ENERGY;
+			this.meleeDamage=melee;
+			this.rangedDamage=ranged;
+			this.specialDamage=special;
 
 		} catch (Exception e) {
 			e.printStackTrace();
