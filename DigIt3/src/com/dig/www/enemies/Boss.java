@@ -112,14 +112,14 @@ public void draw(Graphics2D g2d){
 @Override
 public void drawBar(double per,Graphics2D g2d){
 	g2d.setColor(Color.BLACK);
-	g2d.fillRect(Statics.BOARD_WIDTH/4, 150, Statics.BOARD_WIDTH/2, 30);
+	g2d.fillRect(Statics.BOARD_WIDTH/4, 75, Statics.BOARD_WIDTH/2, 30);
 	g2d.setColor(Color.RED);
-	g2d.fillRect(Statics.BOARD_WIDTH/4, 150, (int) ((double)(per)*(double)(Statics.BOARD_WIDTH/2)), 30);
+	g2d.fillRect(Statics.BOARD_WIDTH/4, 75, (int) ((double)(per)*(double)(Statics.BOARD_WIDTH/2)), 30);
 	g2d.setColor(Color.WHITE);
-	g2d.drawRect(Statics.BOARD_WIDTH/4-1, 150-1, Statics.BOARD_WIDTH/2+2, 32);
+	g2d.drawRect(Statics.BOARD_WIDTH/4-1, 75-1, Statics.BOARD_WIDTH/2+2, 32);
 g2d.setFont(Statics.BOSS);
 g2d.drawString(name,(Statics.BOARD_WIDTH/2)-(name.length()*20/2)
-		, 150+30);
+		, 75+30);
 }
 @Override
 public abstract int getKillXP();

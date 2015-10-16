@@ -125,7 +125,7 @@ int bMove;
 				y=lastY;
 				moveDForward();
 				diagR=!diagR;
-				break;
+				
 				}
 					
 			}
@@ -161,10 +161,12 @@ int bMove;
 		attackNum=2;
 	}
 	public void moveTo(int moveX,int moveY,double multiSpeed,int timer){
+	
 		Point myPoint=new Point(x,y);
 		Point thePoint=new Point(moveX,moveY);
+	if((int)((int)myPoint.distance(thePoint)/(speed*multiSpeed))>speed*multiSpeed){
 		diagnalMove((int)Statics.pointTowards(myPoint, thePoint),(int) ((int)myPoint.distance(thePoint)/(speed*multiSpeed)),multiSpeed,timer);
 	
 	attackNum=3;
-	}
+	}}
 }
