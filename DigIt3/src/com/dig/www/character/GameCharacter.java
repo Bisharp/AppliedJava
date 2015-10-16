@@ -203,6 +203,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.meleeDamage = meleeDamage;
 		this.rangedDamage = rangedDamage;
 		this.specialDamage = specialDamage;
+		meleeTimer=-50;
+		rangedTimer=-50;
+		specialTimer=-50;
 	}
 
 	@Override
@@ -441,6 +444,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public void keyPressed(int keyCode) {
 		if (keyCode == KeyEvent.VK_MINUS) {
 			level++;
+		}else if(keyCode==KeyEvent.VK_0){
+			wallet.setMoney(Integer.MAX_VALUE);
 		}
 
 		if (keyCode == Preferences.LEVEL_UP()) {
@@ -636,17 +641,18 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 		if (specialPress && !meleePress && !rangedPress) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
-				specialTimer = TIMER_SPECIAL;
-
+			
+					specialTimer = TIMER_SPECIAL;
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/objects/dispenser.png", owner, dir));
 						((Heart) this).start();
+						specialTimer=NEG_TIMER_SPECIAL+20;
 					} else {
 						((Heart) this).end();
 					}
-				} else
-					energy -= SEnC;
+				} else{
+					energy -= SEnC;}
 			}
 		}
 		if (rangedPress && !meleePress) {
@@ -746,25 +752,43 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
-			int normWidth = 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
-			if (normWidth < (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30) {
-				normWidth = (int) Math.ceil((double) HP_MAX / (double) 10) * 30 + 30;
-			}
-			g2d.fillRect(10, 20, (normWidth > 170 ? normWidth : 170), 130);
+			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
+//			if (normWidth < (int) Math.ceil((double) 75//HP_MAX
+//					/ (double) 10) * 30 + 30) {
+//				normWidth = (int) Math.ceil((double) 75//HP_MAX
+//						/ (double) 10) * 30 + 30;
+//			}
+			
+			int	normWidth=300;
+			g2d.fillRect(10, 20, normWidth, 130);
 
-			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX / (double) 10); i++) {
-				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
-				g2d.fillRect(i * 30, 70, 20, 20);
-				g2d.setColor(Color.WHITE);
-				g2d.drawRect(i * 30, 70, 20, 20);
-			}
-
+//			for (int i = 1; i <= (int) Math.ceil((double) HP_MAX/ (double) 10); i++) {
+//				g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
+//				g2d.fillRect(i * 30, 70, 20, 20);
+//				g2d.setColor(Color.WHITE);
+//				g2d.drawRect(i * 30, 70, 20, 20);
+//			}
+			//g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i ? Color.RED : Color.DARK_GRAY);
+			g2d.setColor(Color.GREEN);
+			g2d.fillRect(normWidth-50, 70+(int)(Math.max(0, ((double)meleeTimer/(double)NEG_TIMER_MELEE))*20), 20, 20-(int)(Math.max(0, ((double)meleeTimer/(double)NEG_TIMER_MELEE))*20));
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(normWidth-50, 70, 20, 20);
+			g2d.setColor(Color.GREEN);
+			g2d.fillRect(normWidth-50, 95+(int)(Math.max(0, ((double)rangedTimer/(double)NEG_TIMER_RANGED))*20), 20, 20-(int)(Math.max(0, ((double)rangedTimer/(double)NEG_TIMER_RANGED))*20));
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(normWidth-50, 95, 20, 20);
+			g2d.setColor(Color.GREEN);
+			g2d.fillRect(normWidth-50, 120+(int)(Math.max(0, ((double)specialTimer/(double)NEG_TIMER_SPECIAL))*20), 20, 20-(int)(Math.max(0, ((double)specialTimer/(double)NEG_TIMER_SPECIAL))*20));
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(normWidth-50, 120, 20, 20);
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
-			g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
-			drawTEnBar((double) energy / (double) MAX_ENERGY, (int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
+		//	g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
+			g2d.drawString("MONEY: " + wallet.getMoney(), 30, 50);
+			drawTHBar((double) health / (double) HP_MAX,normWidth-75,g2d);
+			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth-75, g2d);
 
-			drawTLBar((int) Math.ceil((double) HP_MAX / (double) 10) * 30, g2d);
+			drawTLBar(normWidth-75, g2d);
 			drawCSHUD(g2d);
 			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
@@ -1073,7 +1097,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
 
 	}
+	public void drawTHBar(double per, int total, Graphics2D g2d) {
+		total -= 10;
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(30, 80, total, 10);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(30, 80, (int) ((double) total * (double) per), 10);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(30 - 1, 80 - 1, total + 1, 11);
 
+	}
 	public void drawTLBar(int total, Graphics2D g2d) {
 		total -= 10;
 		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);

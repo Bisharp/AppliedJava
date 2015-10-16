@@ -26,11 +26,14 @@ public class Heart extends GameCharacter {
 		enTimer = 5;
 		usingField = false;
 		owner.removeDispensers(this);
+specialTimer=0;
+		
 	}
 
 	public void start() {
 		enTimer = Integer.MAX_VALUE;
 		usingField = true;
+	
 	}
 
 	public void decrementEnergy(int amount) {
@@ -56,7 +59,7 @@ public class Heart extends GameCharacter {
 	public Heart(int x, int y, Board owner, boolean player) {
 		super(x, y, owner, Types.HEART, "heart", player, -30,
 
-		-20, -50, 20, 10, 10, 75, 10, 80,
+		-20, -1000, 20, 10, 10, 75, 10, 80,
 
 		25, 15, 80, 20, 1, 0);
 	}

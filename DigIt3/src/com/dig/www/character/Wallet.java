@@ -18,10 +18,16 @@ public class Wallet {
 
 	public void setMoney(int money) {
 		this.money = money;
+		if(getDigits()>9){
+			setMoney(999999999);
+		}
 	}
 	
 	public void addMoney(int money) {
 		this.money += money;
+		if(getDigits()>9){
+			setMoney(999999999);
+		}
 	}
 
 	public void spendMoney(int money) {
