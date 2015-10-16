@@ -1092,7 +1092,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
 
 	}
+public void drawTHBar(double per, int total, Graphics2D g2d) {
+		total -= 10;
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(30, 72, total, 16);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(30, 72, (int) ((double) total * (double) per), 16);
+		g2d.setColor(Color.WHITE);
+		g2d.drawRect(30 - 1, 72 - 1, total + 1, 17);
 
+	}
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
@@ -1103,25 +1112,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
 
 	}
-	public void drawTHBar(double per, int total, Graphics2D g2d) {
-		total -= 10;
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 80, total, 10);
-		g2d.setColor(Color.RED);
-		g2d.fillRect(30, 80, (int) ((double) total * (double) per), 10);
-		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 80 - 1, total + 1, 11);
-
-	}
+	
 	public void drawTLBar(int total, Graphics2D g2d) {
 		total -= 10;
 		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 120, total, 10);
+		g2d.fillRect(30, 125, total, 10);
 		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(30, 120, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(30, 125, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 120 - 1, total + 1, 11);
+		g2d.drawRect(30 - 1, 125 - 1, total + 1, 11);
 
 	}
 
