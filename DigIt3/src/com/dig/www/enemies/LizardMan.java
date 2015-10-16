@@ -29,23 +29,23 @@ int bMove;
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
-//		if(health<(maxHealth/3)&&phase<2){
-//			phase=2;
-//			followTimer=0;
-//			attackNum=-1;
-//			Statics.playSound(owner,bossPhaseS);
-//			owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
-//		phaseA=true;
-//		}if(health<(maxHealth/3)*2&&phase<1){
-//				phase=1;
-//
-//				followTimer=0;
-//				attackNum=-1;
-//				Statics.playSound(owner,bossPhaseS);
-//				owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
-//				phaseA=true;		
-//		}
-		if((health<(maxHealth/6)*5)&&phase==0&&phaseA){
+		if(health<(maxHealth/3)&&phase<2){
+			phase=2;
+			followTimer=0;
+			attackNum=-1;
+			Statics.playSound(owner,bossPhaseS);
+			owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
+		phaseA=true;
+		}if(health<(maxHealth/3)*2&&phase<1){
+				phase=1;
+
+				followTimer=0;
+				attackNum=-1;
+				Statics.playSound(owner,bossPhaseS);
+				owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
+				phaseA=true;		
+		}
+		if((health<(maxHealth/6)*(5-(2*phase)))&&phaseA){
 			phaseA=false;
 			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
@@ -53,6 +53,12 @@ int bMove;
 		}
 		 
 		basicAnimate();
+		if(x<owner.getWorld().get(0).getX()+(10*100)){
+			x=owner.getWorld().get(0).getX()+(10*100);
+		}
+		if(x>owner.getWorld().get(0).getX()+(21*100)){
+			x=owner.getWorld().get(0).getX()+(20*100);
+		}
 		boolean acted=sortAction();
 		
 		if(!acted){
@@ -80,17 +86,23 @@ int bMove;
 				if(actTimer<=0){
 					if(bMove==0){
 						int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
-						int yPoint=(int) Math.min(y, (int)(owner.getWorld().get(0).getY()+
+						int yPoint=(int) Math.max((int)(owner.getWorld().get(0).getY()+
+								((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
+								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY()))), Math.min(y, (int)(owner.getWorld().get(0).getY()+
 								((double)((double)health/(double)maxHealth)
-								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY()))));
+								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
 						moveTo(xPoint,yPoint, 1, 10);
 						bMove++;
 			
-						System.out.println("H: "+((double)health/(double)maxHealth));
-						System.out.println("Min: "+(int)(owner.getWorld().get(0).getY()));
-						System.out.println("Max: "+(int)(owner.getWorld().get(owner.getWorld().size()-1).getY()));
-						System.out.println("My: "+yPoint);
+//						System.out.println("H: "+((double)health/(double)maxHealth));
+//						System.out.println("Min: "+(int)(owner.getWorld().get(0).getY()));
+//						System.out.println("Max: "+(int)(owner.getWorld().get(owner.getWorld().size()-1).getY()));
+//						System.out.println("My: "+yPoint);
 						
+					}
+					else if(bMove==1){
+						diagnalMove((int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint()),125, 1.5,40);
+						bMove++;
 					}
 					else	if(bMove<3){
 					createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
@@ -111,6 +123,7 @@ int bMove;
 		
 	}
 	public boolean sortAction(){
+		
 		if(attackNum==2){
 			moveDForward();
 			for(Block b: owner.getWorld()){
