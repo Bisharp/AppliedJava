@@ -127,10 +127,8 @@ public class Board extends MPanel implements ActionListener {
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
-	 friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
-		 Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		 friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT /
-		 2 + 150, this, false));
+		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 
 		Wallet w = new Wallet();
 		for (GameCharacter f : friends)
@@ -155,6 +153,13 @@ public class Board extends MPanel implements ActionListener {
 
 	public void changeArea() {
 
+		if (character instanceof Heart)
+			((Heart) character).end();
+		else
+			for (GameCharacter g : friends)
+				if (g instanceof Heart)
+					((Heart) g).end();
+
 		StageBuilder sB = StageBuilder.getInstance(level, this);
 		sB.changeState(level, this);
 		setTexturePack(sB.readText());
@@ -170,15 +175,15 @@ public class Board extends MPanel implements ActionListener {
 			data = new CharData(level, this);
 		objects = data.filter(objects);
 
-		if(character.getType()==Types.SPADE){
-			((Spade)character).resetDirt();
+		if (character.getType() == Types.SPADE) {
+			((Spade) character).resetDirt();
 		}
-		
+
 		for (int c = 0; c < friends.size(); c++) {
-			if(friends.get(c).getType()==Types.SPADE){
-				((Spade)friends.get(c)).resetDirt();
+			if (friends.get(c).getType() == Types.SPADE) {
+				((Spade) friends.get(c)).resetDirt();
 			}
-			
+
 			if (c > 1) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - ((c - 1) * 100));
@@ -186,7 +191,7 @@ public class Board extends MPanel implements ActionListener {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + (c * 100));
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
 			}
-		
+
 		}
 		for (int c = 0; c < enemies.size(); c++) {
 			enemies.get(c).resetImage(this);
@@ -252,7 +257,7 @@ public class Board extends MPanel implements ActionListener {
 
 			// Enemy draw
 			for (i = 0; i < enemies.size(); i++) {
-				if (enemies.get(i).isOnScreen()||enemies.get(i) instanceof Boss) {
+				if (enemies.get(i).isOnScreen() || enemies.get(i) instanceof Boss) {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
@@ -281,21 +286,24 @@ public class Board extends MPanel implements ActionListener {
 
 				if (fP.get(i).isOnScreen()) {
 
-					p = fP.get(i);
-					// Line-of-sight mechanics
-					int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
-					int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
-					poly = new Polygon(xs, ys, xs.length);
+					if (!(fP.get(i) instanceof Field)) {
+						p = fP.get(i);
+						// Line-of-sight mechanics
+						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
+						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
+						poly = new Polygon(xs, ys, xs.length);
 
-					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
-							tag = false;
-							break;
+						for (int x = 0; x < wallList.size(); x++) {
+							if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
+								tag = false;
+								break;
+							}
+
+							tag = true;
 						}
-
+						// end of that code
+					} else
 						tag = true;
-					}
-					// end of that code
 
 					if (tag)
 						fP.get(i).draw(g2d);
@@ -368,68 +376,75 @@ public class Board extends MPanel implements ActionListener {
 						npc.draw(g2d);
 				}
 
-//			g2d.setColor(Color.ORANGE);
-//			//boolean back=false;
-//			
-//			int roundX=(int)Math.ceil((character.getX()+40)/100);
-//	 int modX=Math.abs((int)((world.get(0).getX())%100));
-//	if(modX<11&&(world.get(0).getX()<0)){
-//		roundX--;
-//	}
-//			roundX*=100;
-//			g2d.fillRect(roundX
-//					+(world.get(0).getX()<0?100:0)+
-//					((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
-//					,
-//					((int)((character.getY()+30)/100))*100
-//			+(world.get(0).getY()%100)+100//-11
-//			, 100, 100)
-//			;
+			// g2d.setColor(Color.ORANGE);
+			// //boolean back=false;
+			//
+			// int roundX=(int)Math.ceil((character.getX()+40)/100);
+			// int modX=Math.abs((int)((world.get(0).getX())%100));
+			// if(modX<11&&(world.get(0).getX()<0)){
+			// roundX--;
+			// }
+			// roundX*=100;
+			// g2d.fillRect(roundX
+			// +(world.get(0).getX()<0?100:0)+
+			// ((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
+			// ,
+			// ((int)((character.getY()+30)/100))*100
+			// +(world.get(0).getY()%100)+100//-11
+			// , 100, 100)
+			// ;
 			for (GameCharacter character : friends) {
-				
-//				g2d.setColor(Color.GREEN);
-////				g2d.fillRect(((int)Math.floor((character.getX())/100))*100+(world.get(0).getX()%100)+100
-////						,
-////						((int)((character.getY()+40)/100))*100
-////				+(world.get(0).getY()%100)+100-11
-////				, 100, 100)
-//				int roundX2=(int)Math.ceil((character.getX()+40)/100);
-//				 int modX2=Math.abs((int)((world.get(0).getX())%100));
-//				if(modX2<11&&(world.get(0).getX()<0)){
-//					roundX2--;
-//				}
-//						roundX2*=100;
-//						g2d.fillRect(roundX2
-//								+(world.get(0).getX()<0?100:0)+
-//								((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
-//								,
-//								((int)((character.getY()+30)/100))*100
-//						+(world.get(0).getY()%100)+100//-11
-//						, 100, 100)
-//						;
+
+				// g2d.setColor(Color.GREEN);
+				// //
+				// g2d.fillRect(((int)Math.floor((character.getX())/100))*100+(world.get(0).getX()%100)+100
+				// // ,
+				// // ((int)((character.getY()+40)/100))*100
+				// // +(world.get(0).getY()%100)+100-11
+				// // , 100, 100)
+				// int roundX2=(int)Math.ceil((character.getX()+40)/100);
+				// int modX2=Math.abs((int)((world.get(0).getX())%100));
+				// if(modX2<11&&(world.get(0).getX()<0)){
+				// roundX2--;
+				// }
+				// roundX2*=100;
+				// g2d.fillRect(roundX2
+				// +(world.get(0).getX()<0?100:0)+
+				// ((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
+				// ,
+				// ((int)((character.getY()+30)/100))*100
+				// +(world.get(0).getY()%100)+100//-11
+				// , 100, 100)
+				// ;
 				character.draw(g2d);
-//				if (character.getPPath() != null) {
-//				
-//					
-//					for (int c =character.getPPath().getPoints().size()-1 ; c >= 0; c--) {
-//						g2d.setColor(new Color(255, 255, 0));
-//						if (c == character.getPPath().getPoints().size()-1)
-//							g2d.fillRect(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, 10, 10);
-//						else
-//							g2d.drawLine(character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y, character.getPPath().getPoint(c+1).x, character.getPPath().getPoint(c+1).y);
-//						g2d.setColor(new Color(255, 0, 0));
-//							g2d.drawString(""+c, character.getPPath().getPoint(c).x, character.getPPath().getPoint(c).y);
-//							
-//							//else
-//							//g2d.drawString("" +c, character.getPPath().getPoint(c).x,
-//							//		character.getPPath().getPoint(c).y);
-//				}
-	//			}
+				// if (character.getPPath() != null) {
+				//
+				//
+				// for (int c =character.getPPath().getPoints().size()-1 ; c >=
+				// 0; c--) {
+				// g2d.setColor(new Color(255, 255, 0));
+				// if (c == character.getPPath().getPoints().size()-1)
+				// g2d.fillRect(character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y, 10, 10);
+				// else
+				// g2d.drawLine(character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y,
+				// character.getPPath().getPoint(c+1).x,
+				// character.getPPath().getPoint(c+1).y);
+				// g2d.setColor(new Color(255, 0, 0));
+				// g2d.drawString(""+c, character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y);
+				//
+				// //else
+				// //g2d.drawString("" +c, character.getPPath().getPoint(c).x,
+				// // character.getPPath().getPoint(c).y);
+				// }
+				// }
 			}
-			
+
 			character.draw(g2d);
-			//g2d.setColor(Color.BLUE);
-//g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
+			// g2d.setColor(Color.BLUE);
+			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 			if (!isDay)
 				g2d.drawImage(sky, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, this);
 
@@ -686,6 +701,7 @@ public class Board extends MPanel implements ActionListener {
 		Block b;
 
 		boolean tag = false;
+		boolean fieldUsed = false;
 
 		for (int i = 0; i < world.size(); i++) {
 
@@ -778,7 +794,7 @@ public class Board extends MPanel implements ActionListener {
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
-						if (p.getBounds().intersects(b.getBounds())) {
+						if (p.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -823,7 +839,7 @@ public class Board extends MPanel implements ActionListener {
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
 							if (character.getBounds().intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
-								if (!(e instanceof Projectile)) {
+								if (!(e instanceof Projectile) || (character instanceof Field)) {
 									e.interact(character.getMove(), false);
 									fP.get(c).setOnScreen(false);
 								}
@@ -857,22 +873,45 @@ public class Board extends MPanel implements ActionListener {
 					for (GameCharacter friend2 : friends) {
 
 						if (character.getActBounds().intersects(friend2.getBounds())) {
-							friend2.heal(character.getMeleeDamage()/3);
+							friend2.heal(character.getMeleeDamage() / 3);
 							healed = true;
 						}
 					}
 
 					if (healed) {
-						character.heal(character.getMeleeDamage()/3);
+						character.heal(character.getMeleeDamage() / 3);
 						character.setMelee(0);
 					}
+
+					// TODO dispenser
+				} else if (character instanceof Heart && ((Heart) character).usingField() && !fieldUsed) {
+
+					fieldUsed = true;
+					Rectangle rB = new Rectangle();
+
+					for (FProjectile f : fP)
+						if (f instanceof Field) {
+							rB = f.getBounds();
+							break;
+						}
+
+					for (GameCharacter friend2 : friends) {
+						if (rB.intersects(friend2.getBounds())) {
+							friend2.heal(Heart.FIELD_HEAL);
+						}
+					}
+
+					if (character.getBounds().intersects(rB))
+						character.heal(Heart.FIELD_HEAL);
 				}
+				// end
+
 				for (GameCharacter friend : friends) {
 					if (friend.getMove() == Moves.AURA) {
 
 						boolean healed = false;
 						if (friend.getActBounds().intersects(r3)) {
-							character.heal(friend.getMeleeDamage()/3);
+							character.heal(friend.getMeleeDamage() / 3);
 							healed = true;
 						}
 						for (GameCharacter friend2 : friends) {
@@ -880,14 +919,14 @@ public class Board extends MPanel implements ActionListener {
 
 							} else {
 								if (friend.getActBounds().intersects(friend2.getBounds())) {
-									friend2.heal(friend.getMeleeDamage()/3);
+									friend2.heal(friend.getMeleeDamage() / 3);
 									healed = true;
 								}
 							}
 						}
 						if (healed) {
 
-							friend.heal(friend.getMeleeDamage()/3);
+							friend.heal(friend.getMeleeDamage() / 3);
 							friend.setMelee(0);
 						}
 					}
@@ -964,8 +1003,7 @@ public class Board extends MPanel implements ActionListener {
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
-			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -1286,7 +1324,7 @@ public class Board extends MPanel implements ActionListener {
 					data = ((CharData) is.readObject());
 					data.setOwner(this);
 					is.close();
-					
+
 					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
 					preferences = ((Preferences) is.readObject());
 					is.close();
@@ -1308,6 +1346,8 @@ public class Board extends MPanel implements ActionListener {
 		level = "hauntedTest";
 		preferences = new Preferences();
 		changeArea();
+		preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+				+ owner.getUserName() + "/");
 	}
 
 	public ArrayList<Objects> getObjects() {
@@ -1329,8 +1369,24 @@ public class Board extends MPanel implements ActionListener {
 	public CharData getData() {
 		return data;
 	}
-	
+
 	public String getUserName() {
 		return userName;
+	}
+
+	public void removeDispensers(Heart ender) {
+
+		int i;
+		for (i = 0; i < objects.size(); i++)
+			if (objects.get(i) instanceof Dispenser) {
+				objects.remove(i);
+				i--;
+			}
+		for (i = 0; i < fP.size(); i++) {
+			if (fP.get(i) instanceof Field) {
+				fP.remove(i);
+				i--;
+			}
+		}
 	}
 }

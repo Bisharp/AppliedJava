@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
 import com.dig.www.util.GameControllerRunnable;
@@ -43,7 +44,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected static int xp;
 	protected static int level;
 	protected int myLevel;
-	private int enTimer = 0;
+	protected int enTimer = 0;
 	private int wallX;
 	private int wallY;
 	private Rectangle collideRect;
@@ -72,7 +73,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			@Override
 			public String charName() {
-				// TODO Auto-generated method stub
+
 				return "Carl";
 			}
 		},
@@ -83,7 +84,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			@Override
 			public String charName() {
-				// TODO Auto-generated method stub
+
 				return "Destiny";
 			}
 		},
@@ -94,7 +95,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			@Override
 			public String charName() {
-				// TODO Auto-generated method stub
+
 				return "Clark";
 			}
 		},
@@ -105,7 +106,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			@Override
 			public String charName() {
-				// TODO Auto-generated method stub
+
 				return "Cain";
 			}
 		},
@@ -116,7 +117,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			@Override
 			public String charName() {
-				// TODO Auto-generated method stub
+
 				return null;
 			}
 		};
@@ -134,8 +135,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	private boolean moveX = false;
 	private boolean moveY = false;
-
-	// TODO moveL moveD
 	private boolean moveL = false;
 	private boolean moveU = false;
 
@@ -168,7 +167,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int TIMER_MELEE;
 	protected int TIMER_RANGED;
 	protected int TIMER_SPECIAL;
-	private int health = HP_MAX;
+	protected int health = HP_MAX;
 	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
@@ -179,9 +178,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int meleeDamage;
 	protected int rangedDamage;
 	protected int specialDamage;
+
 	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
 			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY, int MEnC, int REnC,
-			int SEnC,int meleeDamage,int rangedDamage,int specialDamage) {
+			int SEnC, int meleeDamage, int rangedDamage, int specialDamage) {
 		super(x, y, "n", owner);
 		this.player = player;
 		this.charName = charName;
@@ -200,14 +200,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.MEnC = MEnC;
 		this.REnC = REnC;
 		this.SEnC = SEnC;
-		this.meleeDamage=meleeDamage;
-		this.rangedDamage=rangedDamage;
-		this.specialDamage=specialDamage;
+		this.meleeDamage = meleeDamage;
+		this.rangedDamage = rangedDamage;
+		this.specialDamage = specialDamage;
 	}
 
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
+
 		if (player) {
 
 		} else {
@@ -439,9 +439,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void keyPressed(int keyCode) {
-if(keyCode==KeyEvent.VK_MINUS){
-	level++;
-}
+		if (keyCode == KeyEvent.VK_MINUS) {
+			level++;
+		}
 
 		if (keyCode == Preferences.LEVEL_UP()) {
 			if (levMen == null)
@@ -502,12 +502,11 @@ if(keyCode==KeyEvent.VK_MINUS){
 				willTalk = true;
 			}
 
-			
 		}
 	}
 
 	private void OpenLevelUp() {
-		// TODO Auto-generated method stub
+
 		levMen = new LevelUp();
 	}
 
@@ -570,7 +569,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 					specialTimer = 0;
 			}
 		}
-		
+
 		// End
 	}
 
@@ -595,7 +594,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public void collision(int midX, int midY, boolean isPlayer) {
-		// TODO Auto-generated method stub
+
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
@@ -636,9 +635,18 @@ if(keyCode==KeyEvent.VK_MINUS){
 			}
 		}
 		if (specialPress && !meleePress && !rangedPress) {
-			if (specialTimer <= NEG_TIMER_SPECIAL && energy >= SEnC) {
+			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 				specialTimer = TIMER_SPECIAL;
-				energy -= SEnC;
+
+				if (type == Types.HEART) {
+					if (!((Heart) this).usingField()) {
+						owner.getObjects().add(new Dispenser(x, y, this, "images/objects/dispenser.png", owner, dir));
+						((Heart) this).start();
+					} else {
+						((Heart) this).end();
+					}
+				} else
+					energy -= SEnC;
 			}
 		}
 		if (rangedPress && !meleePress) {
@@ -685,7 +693,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		// TODO Auto-generated method stub
+
 		if (deltaX != 0 || deltaY != 0) {
 			dir = 0;
 			boolean changed = false;
@@ -825,7 +833,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 	// }
 
 	public void endAction() {
-		// TODO Auto-generated method stub
+
 		if (meleeTimer > 0)
 			meleeTimer = 0;
 		if (rangedTimer > 0)
@@ -862,7 +870,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public Rectangle getCollisionBounds() {
-		// TODO Auto-generated method stub
+
 		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
 	}
 
@@ -883,12 +891,12 @@ if(keyCode==KeyEvent.VK_MINUS){
 	public abstract void getsActor();
 
 	public Types getType() {
-		// TODO Auto-generated method stub
+
 		return type;
 	}
 
 	public void stop() {
-		// TODO Auto-generated method stub
+
 		moveX = false;
 		moveY = false;
 		deltaX = 0;
@@ -917,7 +925,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public int getActing() {
-		// TODO Auto-generated method stub
+
 		if (meleeTimer > 0)
 			return 1;
 		else if (rangedTimer > 0)
@@ -934,17 +942,17 @@ if(keyCode==KeyEvent.VK_MINUS){
 	public abstract String toMoveString();
 
 	public Direction getDirection() {
-		// TODO Auto-generated method stub
+
 		return direction;
 	}
 
 	public void setPlayer(boolean b) {
-		// TODO Auto-generated method stub
+
 		player = b;
 	}
 
 	public void heal(int i) {
-		// TODO Auto-generated method stub
+
 		health += i;
 		if (health > HP_MAX) {
 			health = HP_MAX;
@@ -952,12 +960,12 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public void setMelee(int i) {
-		// TODO Auto-generated method stub
+
 		meleeTimer = i;
 	}
 
 	public boolean getWallBound() {
-		// TODO Auto-generated method stub
+
 		return wallBound;
 	}
 
@@ -968,7 +976,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public String getSave() {
-		// TODO Auto-generated method stub
+
 		return "" + getType() + "," + HP_MAX + "," + MAX_ENERGY + "," + myLevel;
 	}
 
@@ -1128,9 +1136,9 @@ if(keyCode==KeyEvent.VK_MINUS){
 					+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10, SwingConstants.CENTER);
 
 			this.add(levelLabel, BorderLayout.NORTH);
-			JPanel panels=new JPanel();
+			JPanel panels = new JPanel();
 			panels.setLayout(new BoxLayout(panels, BoxLayout.Y_AXIS));
-		panels.add(new JLabel(" "));
+			panels.add(new JLabel(" "));
 			JPanel panel = new JPanel();
 			mHealth = new JButton("Health: " + HP_MAX);
 			mEn = new JButton("Energy: " + MAX_ENERGY);
@@ -1141,7 +1149,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+
 					if (myLevel < level) {
 						meleeDamage++;
 						myLevel++;
@@ -1155,7 +1163,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+
 					if (myLevel < level) {
 						rangedDamage++;
 						myLevel++;
@@ -1169,11 +1177,11 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+
 					if (myLevel < level) {
 						specialDamage++;
 						myLevel++;
-						special.setText("Special: " +specialDamage);
+						special.setText("Special: " + specialDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
 								+ "XP needed: " + (int) Math.pow(level + 1, 2) * 10);
 					}
@@ -1183,7 +1191,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+
 					if (myLevel < level) {
 						HP_MAX += 5;
 						myLevel++;
@@ -1197,19 +1205,17 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void keyTyped(KeyEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void keyReleased(KeyEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void keyPressed(KeyEvent e) {
-					// TODO Auto-generated method stub
+
 					if (e.getKeyCode() == KeyEvent.VK_L) {
 						owner.setFocusable(true);
 						owner.requestFocus();
@@ -1225,7 +1231,7 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+
 					if (myLevel < level) {
 						MAX_ENERGY += 8;
 						myLevel++;
@@ -1237,44 +1243,39 @@ if(keyCode==KeyEvent.VK_MINUS){
 			});
 			panel.add(mEn);
 
-		
-			JPanel panel2=new JPanel();
+			JPanel panel2 = new JPanel();
 			panel2.add(melee);
 			panel2.add(ranged);
 			panel2.add(special);
 			panels.add(panel);
 			panels.add(panel2);
 			this.add(panels, BorderLayout.CENTER);
-			
+
 			this.addWindowListener(new WindowListener() {
 
 				@Override
 				public void windowOpened(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowIconified(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowDeiconified(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowDeactivated(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowClosing(WindowEvent e) {
-					// TODO Auto-generated method stub
+
 					owner.setFocusable(true);
 					owner.requestFocus();
 					levUp = false;
@@ -1282,13 +1283,11 @@ if(keyCode==KeyEvent.VK_MINUS){
 
 				@Override
 				public void windowClosed(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowActivated(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 			});
@@ -1298,16 +1297,19 @@ if(keyCode==KeyEvent.VK_MINUS){
 	}
 
 	public PointPath getPPath() {
-		// TODO Auto-generated method stub
+
 		return path;
 	}
-	public int getMeleeDamage(){
+
+	public int getMeleeDamage() {
 		return meleeDamage;
 	}
-	public int getRangedDamage(){
+
+	public int getRangedDamage() {
 		return rangedDamage;
 	}
-	public int getSpecialDamage(){
+
+	public int getSpecialDamage() {
 		return specialDamage;
 	}
 }

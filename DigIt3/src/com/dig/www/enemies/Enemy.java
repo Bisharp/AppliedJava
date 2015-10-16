@@ -29,17 +29,17 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 	protected int damage = 10;
-	
+
 	protected boolean invincible = false;
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner);
 		this.maxHealth = health;
 		this.health = health;
-		
+
 		if (health < 0)
 			invincible = true;
-		
+
 		this.flying = flying;
 		alive = true;
 	}
@@ -121,8 +121,8 @@ public abstract class Enemy extends Sprite {
 			owner.getCharacter().endAction();
 			break;
 		case PIT:
-		
-			GameCharacter.plusXP(owner.getCharacter().getSpecialDamage()/2);
+
+			GameCharacter.plusXP(owner.getCharacter().getSpecialDamage() / 2);
 			break;
 
 		// Carl
@@ -142,26 +142,28 @@ public abstract class Enemy extends Sprite {
 			break;
 		case PITCH:
 			if (!playerHit) {
-				
-				
+
 				takeDamage(owner.getCharacter().getRangedDamage());
 			}
 			break;
 
 		// Destiny
 		case AURA:
-			harmTimer = STUN_MAX /2//* (owner.getCharacter().getMeleeDamage()/4)
+			harmTimer = STUN_MAX / 2// *
+									// (owner.getCharacter().getMeleeDamage()/4)
 			;
-		
+
 			break;
 		case HAZE:
-			if(!playerHit){
-			takeDamage(owner.getCharacter().getRangedDamage());}
+			if (!playerHit) {
+				takeDamage(owner.getCharacter().getRangedDamage());
+			}
 			break;
 		case DISPENSER:
 			// TODO implement slow code
-break;
-			// Cain
+
+			break;
+		// Cain
 
 		case SHIELD:
 
@@ -189,12 +191,12 @@ break;
 
 		health -= i;
 		// owner.getCharacter().endAction();
-		if (health <= 0 && !invincible){
+		if (health <= 0 && !invincible) {
 			alive = false;
 			GameCharacter.plusXP(getKillXP());
 		}
-		if(!invincible)
-		GameCharacter.plusXP(i);
+		if (!invincible)
+			GameCharacter.plusXP(i);
 		return alive;
 	}
 
@@ -230,7 +232,8 @@ break;
 		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
 		return d;
 	}
-	public int getKillXP(){
+
+	public int getKillXP() {
 		return 5;
 	}
 }
