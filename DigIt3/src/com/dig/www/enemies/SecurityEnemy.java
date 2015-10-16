@@ -34,7 +34,6 @@ public class SecurityEnemy extends SeeEnemy {
 
 	@Override
 	public void act() {
-		// TODO Auto-generated method stub
 		hasTarget = false;
 
 		if (e == null) {

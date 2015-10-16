@@ -65,9 +65,9 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 			y = startY;
 		}
 
-		scrollX = points[position][0] * 2;
-		scrollY = points[position][1] * 2;
-		moveTimer = MOVE_MAX;
+		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
+		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
+		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
 	}
 
 	@Override

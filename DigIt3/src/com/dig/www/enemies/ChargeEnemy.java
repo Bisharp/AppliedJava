@@ -34,12 +34,11 @@ public class ChargeEnemy extends TrackingEnemy {
 
 	@Override
 	public void animate() {
-		// TODO Auto-generated method stub
 		basicAnimate();
 
 		if (onScreen && stunTimer <= 0 && chargeTimer > COOLDOWN) {
-			x += Math.cos((double) Math.toRadians((double) d)) * speed * speedMult;
-			y += Math.sin((double) Math.toRadians((double) d)) * speed * speedMult;
+			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed() * speedMult;
+			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed() * speedMult;
 		}
 
 		if (chargeTimer > 0)
