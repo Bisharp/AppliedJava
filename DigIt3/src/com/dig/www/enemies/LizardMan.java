@@ -30,22 +30,43 @@ int bMove;
 	public void animate() {
 		// TODO Auto-generated method stub
 		if(health<(maxHealth/3)&&phase<2){
-			phase=2;
+			
 			followTimer=0;
 			attackNum=-1;
 			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
 		phaseA=true;
+		int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
+		int yPoint=(int) Math.max(
+				(owner.getWorld().get(0).getY()+
+				((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
+				*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
+				//((double)((double)health/(double)maxHealth)
+				//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
+		moveTo(xPoint,yPoint, 1.5, 10);
+		phase=2;
 		}if(health<(maxHealth/3)*2&&phase<1){
-				phase=1;
+				
 
 				followTimer=0;
 				attackNum=-1;
 				Statics.playSound(owner,bossPhaseS);
 				owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
 				phaseA=true;		
+				int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
+				int yPoint=(int) Math.max(
+						(owner.getWorld().get(0).getY()+
+						((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
+						*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
+						//((double)((double)health/(double)maxHealth)
+						//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
+				moveTo(xPoint,yPoint, 1.5, 10);
+				phase=1;
 		}
-		if((health<(maxHealth/6)*(5-(2*phase)))&&phaseA){
+		if(((health<(maxHealth/6)*(5-(2*phase)))||y<=(int) Math.max(
+				(owner.getWorld().get(0).getY()+
+				((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
+				*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4)))&&phaseA){
 			phaseA=false;
 			followTimer=0;
 			attackNum=-1;
@@ -94,7 +115,7 @@ int bMove;
 								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
 								//((double)((double)health/(double)maxHealth)
 								//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
-						moveTo(xPoint,yPoint, 1, 10);
+						moveTo(xPoint,yPoint, 1.5, 10);
 						bMove++;
 			
 //						System.out.println("H: "+((double)health/(double)maxHealth));
@@ -121,6 +142,12 @@ int bMove;
 		}
 		if(!acted&&actTimer>0)
 			actTimer--;}
+		if(x<owner.getWorld().get(0).getX()+(11*100)){
+			x=owner.getWorld().get(0).getX()+(11*100);
+		}
+		if(x>owner.getWorld().get(0).getX()+(20*100)){
+			x=owner.getWorld().get(0).getX()+(20*100);
+		}
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
