@@ -1,0 +1,1 @@
+1550,9700,images/dummy.png,false,-3
