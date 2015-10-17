@@ -43,7 +43,7 @@ int bMove;
 				*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
 				//((double)((double)health/(double)maxHealth)
 				//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
-		moveTo(xPoint,yPoint, 1.5, 10);
+		moveTo(xPoint,yPoint, 1.75, 10);
 		phase=2;
 		diagMove=1;
 		}if(health<(maxHealth/3)*2&&phase<1){
@@ -61,7 +61,7 @@ int bMove;
 						*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
 						//((double)((double)health/(double)maxHealth)
 						//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
-				moveTo(xPoint,yPoint, 1.5, 10);
+				moveTo(xPoint,yPoint, 1.75, 10);
 				phase=1;
 				diagMove=1;
 		}
@@ -117,7 +117,7 @@ int bMove;
 								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
 								//((double)((double)health/(double)maxHealth)
 								//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
-						moveTo(xPoint,yPoint, 1.5, 10);
+						moveTo(xPoint,yPoint,3, 10);
 						bMove++;
 			
 //						System.out.println("H: "+((double)health/(double)maxHealth));
@@ -134,9 +134,10 @@ int bMove;
 					}
 					else	if(bMove<3){
 					createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
-						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false, 20);
+						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false,3);
 					bMove++;
-					}else{
+					}
+					else{
 						bMove=0;
 					}
 				}
