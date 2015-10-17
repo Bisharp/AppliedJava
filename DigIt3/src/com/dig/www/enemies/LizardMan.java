@@ -15,7 +15,7 @@ int lastY;
 int bMove;
 	public LizardMan(int x, int y, Board owner) {
 		super(x, y, "images/enemies/unique/jello-O.png", owner, true, 99,
-				"Lizard-Man of Doom", 5, "music/zeldaCopyright2.mp3",
+				"Jell-O of Destruction", 5, "music/zeldaCopyright2.mp3",
 				"gunSFX/explosion-2.wav", "enemy/LizHurt.wav");
 		// TODO Auto-generated constructor stub
 	}
@@ -47,16 +47,18 @@ int bMove;
 		}
 		if((health<(maxHealth/6)*(5-(2*phase)))&&phaseA){
 			phaseA=false;
+			followTimer=0;
+			attackNum=-1;
 			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
-	
+	bMove=1;
 		}
 		 
 		basicAnimate();
-		if(x<owner.getWorld().get(0).getX()+(10*100)){
-			x=owner.getWorld().get(0).getX()+(10*100);
+		if(x<owner.getWorld().get(0).getX()+(11*100)){
+			x=owner.getWorld().get(0).getX()+(11*100);
 		}
-		if(x>owner.getWorld().get(0).getX()+(21*100)){
+		if(x>owner.getWorld().get(0).getX()+(20*100)){
 			x=owner.getWorld().get(0).getX()+(20*100);
 		}
 		boolean acted=sortAction();
@@ -86,11 +88,12 @@ int bMove;
 				if(actTimer<=0){
 					if(bMove==0){
 						int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
-						int yPoint=(int) Math.max((int)(owner.getWorld().get(0).getY()+
+						int yPoint=(int) Math.max(
+								(owner.getWorld().get(0).getY()+
 								((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
-								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY()))), Math.min(y, (int)(owner.getWorld().get(0).getY()+
-								((double)((double)health/(double)maxHealth)
-								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
+								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
+								//((double)((double)health/(double)maxHealth)
+								//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
 						moveTo(xPoint,yPoint, 1, 10);
 						bMove++;
 			
@@ -101,7 +104,9 @@ int bMove;
 						
 					}
 					else if(bMove==1){
-						diagnalMove((int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint()),125, 1.5,40);
+						float multiSpeed=1.5F;
+						diagnalMove((int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint()),(int)Math.max(125, (new Point(x,y).distance(owner.getCharPoint())+20)/(speed*multiSpeed))
+								, multiSpeed,40);
 						bMove++;
 					}
 					else	if(bMove<3){
@@ -138,7 +143,7 @@ int bMove;
 				y=lastY;
 				moveDForward();
 				diagR=!diagR;
-				
+				break;
 				}
 					
 			}
