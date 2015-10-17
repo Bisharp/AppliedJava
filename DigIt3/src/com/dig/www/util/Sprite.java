@@ -111,7 +111,7 @@ public abstract class Sprite implements Serializable {
 	}
 
 	public int getMidY() {
-		return y + Statics.BLOCK_HEIGHT / 2;
+		return y + height / 2;
 	}
 
 	public void flicker() {

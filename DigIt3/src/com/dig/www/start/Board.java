@@ -83,7 +83,7 @@ public class Board extends MPanel implements ActionListener {
 	private int spawnY;
 	public static final int DEFAULT_X = 325;
 	public static final int DEFAULT_Y = 350;
-boolean levelChanged;
+	boolean levelChanged;
 	private DigIt owner;
 	private Image sky = Statics.newImage("images/sky.png");
 	private boolean isDay = true;
@@ -152,14 +152,14 @@ boolean levelChanged;
 	}
 
 	public void changeArea() {
-if(levelChanged){
-		if (character instanceof Heart)
-			((Heart) character).end();
-		else
-			for (GameCharacter g : friends)
-				if (g instanceof Heart)
-					((Heart) g).end();
-}
+		if (levelChanged) {
+			if (character instanceof Heart)
+				((Heart) character).end();
+			else
+				for (GameCharacter g : friends)
+					if (g instanceof Heart)
+						((Heart) g).end();
+		}
 		StageBuilder sB = StageBuilder.getInstance(level, this);
 		sB.changeState(level, this);
 		setTexturePack(sB.readText());
@@ -699,6 +699,7 @@ if(levelChanged){
 	public void setCharacterStates(Rectangle r3) {
 
 		Block b;
+		Object o;
 
 		boolean tag = false;
 		boolean fieldUsed = false;
@@ -794,7 +795,8 @@ if(levelChanged){
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
-						if (p.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
+						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
+						if ((o instanceof Polygon? (Polygon) o : (Rectangle) o).getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -838,7 +840,13 @@ if(levelChanged){
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
-							if (character.getBounds().intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
+							o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
+
+							// This modification would allow us to make certain
+							// projectiles behave differently with their bounds;
+							// could be implemented with other objects.
+							if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(e.getBounds()) && character.isOnScreen()
+									&& character.getHarming()) {
 								if (!(e instanceof Projectile) || (character instanceof Field)) {
 									e.interact(character.getMove(), false);
 									fP.get(c).setOnScreen(false);
@@ -887,11 +895,11 @@ if(levelChanged){
 				} else if (character instanceof Heart && ((Heart) character).usingField() && !fieldUsed) {
 
 					fieldUsed = true;
-					Rectangle rB = new Rectangle();
+					Polygon rB = new Polygon();
 
 					for (FProjectile f : fP)
 						if (f instanceof Field) {
-							rB = f.getBounds();
+							rB = ((Field) f).getIrregularBounds();
 							break;
 						}
 
@@ -901,11 +909,12 @@ if(levelChanged){
 						}
 					}
 
-					if (character.getBounds().intersects(rB))
+					if (rB.intersects(character.getBounds()))
 						character.heal(Heart.FIELD_HEAL);
 				}
 				// end
 
+				// Uh... what is this code for?
 				for (GameCharacter friend : friends) {
 					if (friend.getMove() == Moves.AURA) {
 
@@ -972,7 +981,9 @@ if(levelChanged){
 			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
-			if (n.getBounds().intersects(character.getCollisionBounds())) {
+			o = n instanceof Irregular? ((Irregular) n).getIrregularBounds() : n.getBounds();
+			
+			if ((o instanceof Polygon? (Polygon) o : (Rectangle) o).intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
 				if (n instanceof Collectible) {
 					Statics.playSound(this, "collectibles/marioCoin.wav");
@@ -992,8 +1003,8 @@ if(levelChanged){
 					n.collidePlayer(c);
 				}
 			}
-
 		}
+		
 	}
 
 	@Override

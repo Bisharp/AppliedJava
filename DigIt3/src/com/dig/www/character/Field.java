@@ -6,10 +6,11 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
+import com.dig.www.util.Irregular;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public class Field extends FProjectile {
+public class Field extends FProjectile implements Irregular {
 
 	public static final int SIDE = Statics.BLOCK_HEIGHT * 3;
 	private Polygon field;
@@ -85,7 +86,7 @@ public class Field extends FProjectile {
 	}
 
 	private int getVal(boolean x) {
-		return (x ? getMidX() : getMidY()) + (Statics.RAND.nextInt((int) (SIDE / 2)) * (Statics.RAND.nextBoolean() ? 1 : -1)) - 5;
+		return (x ? getMidX() : getMidY()) + (Statics.RAND.nextInt((int) (SIDE / 2)) * (Statics.RAND.nextBoolean() ? 1 : -1));
 	}
 
 	private Color getColor() {
@@ -116,5 +117,9 @@ public class Field extends FProjectile {
 	public void animate() {
 		super.animate();
 		field();
+	}
+	
+	public Polygon getIrregularBounds() {
+		return field;
 	}
 }
