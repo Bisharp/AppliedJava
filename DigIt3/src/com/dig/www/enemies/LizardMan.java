@@ -19,6 +19,7 @@ int imNum;
 int imTimer;
 boolean moveActed;
 private static final int IM_TIMER_MAX=6;
+int roarTimer;
 	public LizardMan(int x, int y, Board owner) {
 		super(x, y, "n", owner, true, 1000,
 				"Jell-O of Destruction", 5, "music/zeldaCopyright2.mp3",
@@ -106,6 +107,7 @@ private static final int IM_TIMER_MAX=6;
 						diagnalMove(Adir,100/speed*5, 1, 10);
 						diagMove++;}
 					else if(diagMove==2){
+						roarTimer=20;
 						createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
 							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false, 20);
 					diagMove++;
@@ -137,12 +139,13 @@ private static final int IM_TIMER_MAX=6;
 					else if(bMove==1){
 						float multiSpeed=1.5F;
 						diagnalMove((int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint()),(int)Math.max(125, (new Point(x,y).distance(owner.getCharPoint())+20)/(speed*multiSpeed))
-								, multiSpeed,40);
+								, multiSpeed,20);
 						bMove++;
 					}
 					else	if(bMove<3){
+						roarTimer=20;
 					createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
-						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false,3);
+						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false,20);
 					bMove++;
 					}
 					else{
@@ -160,7 +163,12 @@ private static final int IM_TIMER_MAX=6;
 		}
 		if(x>owner.getWorld().get(0).getX()+(20*100)){
 			x=owner.getWorld().get(0).getX()+(20*100);
-		}if(!moveActed){
+		}
+		if(roarTimer>0){
+			image=newImage("r");
+			roarTimer--;
+		}else{
+		if(!moveActed){
 				
 					image=newImage("n");
 				}else{
@@ -175,7 +183,7 @@ private static final int IM_TIMER_MAX=6;
 				imTimer=IM_TIMER_MAX;
 			}else{
 				imTimer--;
-			}}
+			}}}
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
