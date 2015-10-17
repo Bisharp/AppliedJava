@@ -193,15 +193,18 @@ public abstract class Enemy extends Sprite {
 	}
 
 	private boolean takeDamage(int i) {
-
+if (!invincible){
+	int a=health;
+	if(i<a)
+		a=i;
+			GameCharacter.plusXP(a);}
 		health -= i;
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible) {
 			alive = false;
 			GameCharacter.plusXP(getKillXP());
 		}
-		if (!invincible)
-			GameCharacter.plusXP(i);
+		
 		return alive;
 	}
 
