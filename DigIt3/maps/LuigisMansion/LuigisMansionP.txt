@@ -1,2 +1,2 @@
 300,4600,islandTest,0,normal
-550,400,bossTest,0,normal
+550,400,bossTest,0,boss
