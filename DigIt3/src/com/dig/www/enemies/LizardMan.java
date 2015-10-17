@@ -14,7 +14,7 @@ int lastX;
 int lastY;
 int bMove;
 	public LizardMan(int x, int y, Board owner) {
-		super(x, y, "images/enemies/unique/jello-O.png", owner, true, 99,
+		super(x, y, "images/enemies/unique/jello-O.png", owner, true, 1000,
 				"Jell-O of Destruction", 5, "music/zeldaCopyright2.mp3",
 				"gunSFX/explosion-2.wav", "enemy/LizHurt.wav");
 		// TODO Auto-generated constructor stub
