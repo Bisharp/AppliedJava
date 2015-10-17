@@ -1,5 +1,7 @@
 package com.dig.www.enemies;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 
 import com.dig.www.blocks.Block;
@@ -13,8 +15,12 @@ int diagMove;
 int lastX;
 int lastY;
 int bMove;
+int imNum;
+int imTimer;
+boolean moveActed;
+private static final int IM_TIMER_MAX=6;
 	public LizardMan(int x, int y, Board owner) {
-		super(x, y, "images/enemies/unique/jello-O.png", owner, true, 1000,
+		super(x, y, "n", owner, true, 1000,
 				"Jell-O of Destruction", 5, "music/zeldaCopyright2.mp3",
 				"gunSFX/explosion-2.wav", "enemy/LizHurt.wav");
 		// TODO Auto-generated constructor stub
@@ -28,7 +34,9 @@ int bMove;
 
 	@Override
 	public void animate() {
+		moveActed=false;
 		// TODO Auto-generated method stub
+		
 		if(health<(maxHealth/3)&&phase<2){
 			
 			followTimer=0;
@@ -142,6 +150,8 @@ int bMove;
 					}
 				}
 			}
+				
+				
 		}
 		if(!acted&&actTimer>0)
 			actTimer--;}
@@ -150,7 +160,22 @@ int bMove;
 		}
 		if(x>owner.getWorld().get(0).getX()+(20*100)){
 			x=owner.getWorld().get(0).getX()+(20*100);
-		}
+		}if(!moveActed){
+				
+					image=newImage("n");
+				}else{
+					//System.out.println(imTimer+","+imNum);
+			if(imTimer<=0){
+				
+				image=newImage("w"+imNum);
+				imNum++;
+				if(imNum>3){
+					imNum=0;
+				}
+				imTimer=IM_TIMER_MAX;
+			}else{
+				imTimer--;
+			}}
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
@@ -160,6 +185,7 @@ int bMove;
 	public boolean sortAction(){
 		
 		if(attackNum==2){
+			moveActed=true;
 			moveDForward();
 			for(Block b: owner.getWorld()){
 				if(!b.traversable()&&b.getBounds().intersects(getBounds())){
@@ -186,6 +212,7 @@ int bMove;
 			}
 			return true;
 		}else if(attackNum==3){
+			moveActed=true;
 			moveDForward();
 			
 			followTimer--;
@@ -217,4 +244,45 @@ int bMove;
 	
 	attackNum=3;
 	}}
+	public Image newImage(String name) {
+		return super.newImage(getPath() + name + ".png");
+	}
+	private String getPath() {
+
+		String dire= "side";
+
+		if(Math.abs(dir-90)<40){
+			dire="front";
+		}else if(Math.abs(dir-270)<40){
+			dire="back";
+		}
+			
+			
+			
+		return "images/enemies/bosses/" + "LizardMan" + "/" + dire + "/";
+	}
+	public void myDraw(Graphics2D g2d){
+		if (stunTimer > 0) {
+			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
+			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
+		if(Math.abs(dir)<=50||Math.abs(dir)>=310){
+			g2d.drawImage(image, x + width, y, -width, height, owner);
+		}else
+			g2d.drawImage(image, x, y, owner);
+		} else{if(Math.abs(dir)<=50||Math.abs(dir)>=310){
+			g2d.drawImage(image, x + width, y, -width, height, owner);
+		}else
+			g2d.drawImage(image, x, y, owner);
+		}
+		if (harmTimer > 0)
+			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+		else if (slowTimer > 0)
+			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+
+			// g2d.setFont(enFont);
+			// g2d.setColor(Color.BLACK);
+			// g2d.drawString("" + health, x, y - 10);
+			drawBar((double) health / (double) maxHealth, g2d);
+		
+	}
 }
