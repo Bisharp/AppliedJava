@@ -45,6 +45,7 @@ int bMove;
 				//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
 		moveTo(xPoint,yPoint, 1.5, 10);
 		phase=2;
+		diagMove=1;
 		}if(health<(maxHealth/3)*2&&phase<1){
 				
 
@@ -62,6 +63,7 @@ int bMove;
 						//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
 				moveTo(xPoint,yPoint, 1.5, 10);
 				phase=1;
+				diagMove=1;
 		}
 		if(((health<(maxHealth/6)*(5-(2*phase)))||y<=(int) Math.max(
 				(owner.getWorld().get(0).getY()+
