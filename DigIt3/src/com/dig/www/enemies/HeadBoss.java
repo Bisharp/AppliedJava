@@ -10,7 +10,7 @@ import com.dig.www.util.Statics;
 public class HeadBoss extends Boss{
 
 	public HeadBoss(int x, int y,Board owner) {
-		super(x, y, "images/enemies/unique/Head.png", owner, true, 100, "Head of Doom", 5,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
+		super(x, y, "images/enemies/bosses/Head.png", owner, true, 1000, "Head of Doom", 5,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor st0ub
 	}
 //int realSeq;

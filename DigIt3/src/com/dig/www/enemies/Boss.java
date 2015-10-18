@@ -104,7 +104,7 @@ public void draw(Graphics2D g2d){
 		}
 	}
 	if(isOnScreen()){
-		super.draw(g2d);
+		myDraw(g2d);
 	}else if(active){
 		drawBar((double) health / (double) maxHealth, g2d);
 	}
@@ -147,5 +147,8 @@ public void turnAround(int wallX, int wallY){
 public void makeDeadExplosion(){
 	DigIt.soundPlayer.playerThread.stop();
 	Statics.playSound(owner,bossKillS);
+}
+public void myDraw(Graphics2D g2d){
+	super.draw(g2d);
 }
 }
