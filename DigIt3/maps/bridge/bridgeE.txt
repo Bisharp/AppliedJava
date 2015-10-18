@@ -28,4 +28,4 @@ t,2800,10200,images/enemies/unique/birdy.png,f,-10
 t,2900,10200,images/enemies/unique/birdy.png,f,-10
 t,3000,10200,images/enemies/unique/birdy.png,f,-10
 t,2600,10200,images/enemies/unique/birdy.png,f,-10
-B,1550,9150,images/enemies/unique/jello-O.png,t,10
+B,1550,9300,Lizard-Man,f,1000

@@ -221,10 +221,10 @@ public class StageBuilder {
 						break;
 						case 'B':
 							switch(enImg){
-							case "images/enemies/unique/Head.png":
+							case "Head":
 								enemies.add(new HeadBoss(enX, enY, owner));
 								break;
-							case "images/enemies/unique/jello-O.png":
+							case "Lizard-Man":
 								enemies.add(new LizardMan(enX, enY, owner));
 								break;
 							}
