@@ -274,8 +274,7 @@ public class Board extends MPanel implements ActionListener {
 						tag = true;
 					}
 					// end of that code
-
-					if (tag)
+					if (tag||e instanceof Boss)
 						enemies.get(i).draw(g2d);
 				}
 			}
