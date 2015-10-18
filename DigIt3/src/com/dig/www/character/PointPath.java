@@ -200,7 +200,7 @@ backwards=0;
 		 GameCharacter temp=player;
 		 player=us.get(me);
 		 us.set(me, temp);
-		JOptionPane.showMessageDialog(owner, player.getType().charName()+" alternate path");
+		//JOptionPane.showMessageDialog(owner, player.getType().charName()+" alternate path");
 		 findPath();
 		}else{
 		System.out.println(us.get(me).getType().charName()+" TOO BIG at "+new Date());
