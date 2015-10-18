@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import com.dig.www.blocks.Block;
 import com.dig.www.enemies.Enemy;
+import com.dig.www.objects.Objects;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -76,11 +77,11 @@ public void findPath() {
 		int notWall=1;
 if(!b.traversable())
 	notWall=-1;
-//Rectangle bBo=b.getBounds();
-//		for(Enemy e:owner.getEnemies()){
-//			if(bBo.intersects(e.getBounds()))
-//				notWall=-1;
-//		}
+Rectangle bBo=b.getBounds();
+		for(Objects e:owner.getObjects()){
+			if(e.isWall()&&bBo.intersects(e.getBounds()))
+				notWall=-1;
+		}
 
 		for(Point p:points){
 			if(p==getCurrentFind()){

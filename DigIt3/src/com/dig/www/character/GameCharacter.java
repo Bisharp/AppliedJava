@@ -456,7 +456,17 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void keyPressed(int keyCode) {
-		if (keyCode == KeyEvent.VK_MINUS) {
+		if(keyCode==KeyEvent.VK_H){
+			energy=0;
+			for(int c=0;c<owner.getFriends().size();c++){
+				if(new Point(x,y).distance(new Point(owner.getFriends().get(c).getX(),owner.getFriends().get(c).getY()))<50){
+				owner.getFriends().get(c).setX(x);	
+				owner.getFriends().get(c).setY(y);	
+				owner.getFriends().get(c).setEnergy(0);
+				}
+			}
+		}
+	else if (keyCode == KeyEvent.VK_MINUS) {
 			level++;
 		}else if(keyCode==KeyEvent.VK_0){
 			wallet.setMoney(Integer.MAX_VALUE);
@@ -1162,7 +1172,11 @@ public void drawTHBar(double per, int total, Graphics2D g2d) {
 	public static int getXP() {
 		return xp;
 	}
-
+public void setEnergy(int setter){
+	energy=setter;
+	if(energy>MAX_ENERGY)
+		energy=MAX_ENERGY;
+}
 	public class LevelUp extends JFrame {
 		JLabel levelLabel;
 		JButton mHealth;
