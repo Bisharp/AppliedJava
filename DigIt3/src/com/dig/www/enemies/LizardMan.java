@@ -200,12 +200,13 @@ int roarTimer;
 				followTimer=0;
 				attackNum=-1;
 				dir+=180;
-				speedMulti=1;
+				
 //				while(b.getBounds().intersects(getBounds()))
 //				moveDForward();
 				x=lastX;
 				y=lastY;
 				moveDForward();
+				speedMulti=1;
 				diagR=!diagR;
 				break;
 				}

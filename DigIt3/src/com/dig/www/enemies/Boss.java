@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import com.dig.www.blocks.Block;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.util.SoundPlayer;
@@ -73,6 +74,21 @@ public void pointAndMove(){
 public boolean sortAction(){
 	if(attackNum==0){
 		moveDForward();
+		for(Block b: owner.getWorld()){
+			if(!b.traversable()&&b.getBounds().intersects(getBounds())){
+			followTimer=0;
+			attackNum=-1;
+			dir+=180;
+			
+//			while(b.getBounds().intersects(getBounds()))
+//			moveDForward();
+			
+			moveDForward();
+			speedMulti=1;
+			break;
+			}
+				
+		}
 		followTimer--;
 		if(followTimer==0){
 			attackNum=-1;
