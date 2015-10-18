@@ -160,6 +160,12 @@ backwards=0;
 	//		Statics.playSound(owner, "wait-a-minute.wav");
 //			break;
 //			
+			if(!playerGo){
+				 GameCharacter temp=player;
+				 player=us.get(me);
+				 us.set(me, temp);
+			}
+			playerGo=true;
 			us.get(me).pathUpdateTimer=25;
 				points.clear();
 			//owner.getFriends().get(me).setX(player.getX());	
@@ -203,8 +209,13 @@ backwards=0;
 		//JOptionPane.showMessageDialog(owner, player.getType().charName()+" alternate path");
 		 findPath();
 		}else{
+			 GameCharacter temp=player;
+			 player=us.get(me);
+			 us.set(me, temp);
+			 playerGo=true;
 		System.out.println(us.get(me).getType().charName()+" TOO BIG at "+new Date());
 		us.get(me).pathUpdateTimer=25;
+		
 		}
 		//		for(PathPoint p:points){
 //			for(Block b:world){
