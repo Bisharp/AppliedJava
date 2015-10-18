@@ -229,7 +229,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			if (path != null) {
 				path.update();
 				if(pointTimer<=0&&path.getPoints().size()>0){
-					if(path.getPoints().size()<5){
+					if(path.getPoints().size()<4){
 					path.removeLast();}
 					else{
 						path.findPath();
@@ -311,10 +311,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					moveY = false;
 				}
 			}
-			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
-				x = owner.getCharacterX();
-				y = owner.getCharacterY();
-			}
+//			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
+//				x = owner.getCharacterX();
+//				y = owner.getCharacterY();
+//			}
 		}
 
 		if (hitstunTimer > 0) {
