@@ -197,7 +197,7 @@ if (!invincible){
 	int a=health;
 	if(i<a)
 		a=i;
-			GameCharacter.plusXP(a);}
+			GameCharacter.plusXP(a/10);}
 		health -= i;
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible) {
