@@ -7,6 +7,8 @@ import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import com.dig.www.blocks.Block;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.start.Board;
@@ -26,6 +28,7 @@ ArrayList<Block>world;
 Board owner;
 short updateTimer=0;
 Point playerPoint;
+boolean playerGo=true;
 public PointPath(int me,Board owner){
 	this.us=owner.getFriends();
 	this.player=owner.getCharacter();
@@ -43,12 +46,16 @@ public void findPath() {
 	if(modX<11){
 		roundX--;
 	}
+	int yWorld=0;
+	 if(world.get(0).getY()>0){
+		 yWorld=-100;
+	 }
 	roundX*=100;
 	points.add(new PathPoint(roundX
 			+(world.get(0).getX()<0?100:0)+
 			((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
 			
-			,((int)((player.getY()+30)/100))*100
+			,yWorld+((int)((player.getY()+30)/100))*100
 			+(world.get(0).getY()%100)+100
 			-11
 			, 0, getDistance(new Point((player.getX()), (player.getY()))),-1));
@@ -166,7 +173,7 @@ backwards=0;
 					
 		}
 	
-	if(getDistance(getCurrentFind())<=100){
+	if(getDistance(getCurrentFind())<100){
 		//System.out.println(us.get(me).getType().charName()+","+us.get(me).getX()+","+us.get(me).getY()//+" WORKED AT:"+new Date()
 		//);
 		//System.out.println("player,"+player.getX()+","+player.getY());	//Statics.playSound(owner, "gunSFX/cyberCrossbow.wav");
@@ -174,7 +181,12 @@ backwards=0;
 //		for(int c=0;c<points.size();c++){
 //			System.out.println(points.get(c));
 //		}
-		
+		if(!playerGo){
+			 GameCharacter temp=player;
+			 player=us.get(me);
+			 us.set(me, temp);
+		}
+		playerGo=true;
 		optimise();
 	points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
@@ -182,8 +194,19 @@ backwards=0;
 		break;}
 	else if(points.size()>50){
 		//System.out.println("WAIT");
+		points.clear();
+		if(playerGo){
+		 playerGo=false;
+		 GameCharacter temp=player;
+		 player=us.get(me);
+		 us.set(me, temp);
+		JOptionPane.showMessageDialog(owner, player.getType().charName()+" alternate path");
+		 findPath();
+		}else{
 		System.out.println(us.get(me).getType().charName()+" TOO BIG at "+new Date());
-//		for(PathPoint p:points){
+		us.get(me).pathUpdateTimer=25;
+		}
+		//		for(PathPoint p:points){
 //			for(Block b:world){
 //		if(b.getBounds().contains(p)){
 //			System.out.println(b.getType());
@@ -194,10 +217,10 @@ backwards=0;
 		//owner.showPoints(points);
 		//}
 //		points.clear();
-		us.get(me).pathUpdateTimer=25;
+	
 //		playerPoint=new Point(owner.getFriends().get(me).getX(),owner.getFriends().get(me).getY());
 		//Statics.playSound(owner, "wait-a-minute.wav");
-		points.clear();
+		
 		//owner.getFriends().get(me).setX(player.getX());	
 		//owner.getFriends().get(me).setY(player.getY());	
 		break;

@@ -52,6 +52,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private Point getToPoint;
 	private static final long serialVersionUID = 1L;
 	private int dir = 0;
+	private int pointTimer;
 	private boolean meleePress = false;
 	private boolean rangedPress = false;
 	private boolean specialPress = false;
@@ -227,9 +228,20 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 			if (path != null) {
 				path.update();
+				if(pointTimer<=0&&path.getPoints().size()>0){
+					if(path.getPoints().size()<5){
+					path.removeLast();}
+					else{
+						path.findPath();
+					}
+					pointTimer=18;
+				}else{
+					pointTimer--;
+				}
 				if (path.getPoints().size() > 0 && new Point(x, y).distance(path.getCurrentFind()) < 11// &&JOptionPane.showConfirmDialog(owner,
 																										// getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION
 				) {
+					pointTimer=18;
 					path.removeLast();
 				}
 				if (new Point(x, y).distance(owner.getCharPoint()) < 140) {
@@ -432,6 +444,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						}
 					}
 					path = new PointPath(me, owner);
+					pointTimer=18;
 					path.update();
 				}
 
