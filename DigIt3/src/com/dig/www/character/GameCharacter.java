@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.Projectile;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -258,13 +259,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				if(path==null&&owner.pointedPoint==null){
 					if(enPoint==null){
 					if(pathUpdateTimer<=0){
-						if(!(this instanceof Diamond)&&!(this instanceof Heart)&&new Point(x,y).distance(owner.getCharPoint())<500){
+						if(!(this instanceof Diamond)&&!(this instanceof Heart)&&new Point(x,y).distance(owner.getCharPoint())<500&&(double)health/(double)HP_MAX>0.5){
 						pathUpdateTimer=5;
 						int maxDis=250;
 						for(Enemy en:owner.getEnemies()){
 							int distance=(int) new Point(getMidX(),getMidY()).distance(new Point(en.getX(),en.getY()));
-							if(distance<maxDis){
+							if(!(en instanceof Projectile)&&!en.isInvincible()&&distance<maxDis){
 								enPoint=en;
+							maxDis=distance;
 							}
 						}
 						if(maxDis==250){
@@ -277,15 +279,17 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				}else{
 					enPoint=null;
 					pathUpdateTimer=5;
+					meleePress=false;
 				}
 				if(enPoint!=null){
-					if(!owner.getEnemies().contains(enPoint)){
+					if(new Point(x,y).distance(owner.getCharPoint())>=500||(double)health/(double)HP_MAX<0.5){
 						enPoint=null;
 						meleePress=false;
 						pathUpdateTimer=50;
-					}else if(new Point(x,y).distance(owner.getCharPoint())>500){
+					}if(!owner.getEnemies().contains(enPoint)){
 						enPoint=null;
 						meleePress=false;
+						
 						pathUpdateTimer=50;
 					}
 					else{
@@ -296,11 +300,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
+						enPoint=null;
+						meleePress=false;
+						pathUpdateTimer=25;
 					} else {
 						pathUpdateTimer=5;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
 					}
+					
+					
 				}
 				else if(owner.pointedPoint!=null){
 					getToPoint=owner.pointedPoint;
@@ -511,6 +520,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						}
 					}
 					path = new PointPath(me, owner);
+					pathUpdateTimer=50;
+					enPoint=null;
+					meleePress=false;
 					pointTimer=18;
 					path.update();
 				}

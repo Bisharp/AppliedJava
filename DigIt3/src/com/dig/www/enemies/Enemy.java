@@ -252,4 +252,7 @@ if (!invincible){
 	public int getSpeed() {
 		return slowTimer <= 0? 5 : 2;
 	}
+	public boolean isInvincible(){
+		return invincible;
+	}
 }
