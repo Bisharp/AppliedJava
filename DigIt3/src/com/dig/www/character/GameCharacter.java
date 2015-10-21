@@ -64,7 +64,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	private boolean player;
 	private boolean onceNotCollidePlayer;
-
+boolean goTo=true;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -259,7 +259,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				if(path==null&&owner.pointedPoint==null){
 					if(enPoint==null){
 					if(pathUpdateTimer<=0){
-						if(!(this instanceof Diamond)&&!(this instanceof Heart)&&new Point(x,y).distance(owner.getCharPoint())<500&&(double)health/(double)HP_MAX>0.5){
+						if(new Point(x,y).distance(owner.getCharPoint())<500){
 						pathUpdateTimer=5;
 						int maxDis=250;
 						for(Enemy en:owner.getEnemies()){
@@ -271,7 +271,19 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						}
 						if(maxDis==250){
 							meleePress=false;
-						}}
+						}
+						if(!(this instanceof Diamond)&&!(this instanceof Heart)&&(double)health/(double)HP_MAX>0.5)
+						{
+							goTo=true;
+							}
+						else{
+							//	goTo=false;
+							enPoint=null;
+							pathUpdateTimer=20;
+							meleePress=false;
+						}
+						}
+						
 					}else{
 						pathUpdateTimer--;
 					}
@@ -286,10 +298,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						enPoint=null;
 						meleePress=false;
 						pathUpdateTimer=50;
+						goTo=true;
 					}if(!owner.getEnemies().contains(enPoint)){
 						enPoint=null;
 						meleePress=false;
-						
+						goTo=true;
 						pathUpdateTimer=50;
 					}
 					else{
@@ -303,22 +316,26 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						enPoint=null;
 						meleePress=false;
 						pathUpdateTimer=25;
+						goTo=true;
 					} else {
 						pathUpdateTimer=5;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
-					}
+				
+						goTo=true;}
 					
 					
 				}
 				else if(owner.pointedPoint!=null){
 					getToPoint=owner.pointedPoint;
+					goTo=true;
 				}
 				else if(enPoint!=null){
 					getToPoint=new Point(enPoint.getMidX(),enPoint.getMidY());
 				}
 				else{
 					getToPoint = owner.getCharacter().getBounds().getLocation();
+					goTo=true;
 				}
 				if (path != null || getToPoint.distance(x, y) > 125) {
 					int amount = 2;
@@ -332,30 +349,45 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					// if(path!=null)
 					// System.out.println("walking");
 					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
-						deltaX = -SPEED;
+						int times=goTo?1:-1;
+						deltaX = -SPEED*times;
 						moveX = true;
+						if(goTo)
 						direction = Direction.LEFT;
-
+						else
+							direction=Direction.RIGHT;
 					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
-						deltaX = SPEED;
+						int times=goTo?1:-1;
+						deltaX = SPEED*times;
 						moveX = true;
-						direction = Direction.RIGHT;
+						if(goTo)
+							direction = Direction.RIGHT;
+							else
+								direction=Direction.LEFT;
 
 					} else {
 						deltaX = 0;
 						moveX = false;
 					}
 					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
-						deltaY = -SPEED;
+						int times=goTo?1:-1;
+						deltaY = -SPEED*times;
 						moveY = true;
-						if (y > getToPoint.y + 50)
+						//if (||y > getToPoint.y + 50)
+						if(goTo)
 							direction = Direction.UP;
+							else
+								direction=Direction.DOWN;
 
 					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
-						deltaY = SPEED;
+						int times=goTo?1:-1;
+						deltaY = SPEED*times;
 						moveY = true;
-						if (y < getToPoint.y - 50)
+						//if (y < getToPoint.y - 50)
+						if(goTo)
 							direction = Direction.DOWN;
+							else
+								direction=Direction.UP;
 
 					} else {
 						moveY = false;
