@@ -47,6 +47,7 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	public Point pointedPoint;
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
@@ -629,7 +630,7 @@ public class Board extends MPanel implements ActionListener {
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
-						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), 100, fP.get(i)
+						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), fP.get(i).getMaker(), fP.get(i)
 								.getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
 					}
 					fP.remove(i);
@@ -835,7 +836,7 @@ public class Board extends MPanel implements ActionListener {
 						}
 
 						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-							e.interact(character.getMove(), true);
+							e.interact(character.getMove(), character,false);
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
@@ -847,15 +848,17 @@ public class Board extends MPanel implements ActionListener {
 							if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(e.getBounds()) && character.isOnScreen()
 									&& character.getHarming()) {
 								if (!(e instanceof Projectile) || (character instanceof Field)) {
-									e.interact(character.getMove(), false);
+									e.interact(character.getMove(), character.getMaker(),true);
 									fP.get(c).setOnScreen(false);
 								}
 							}
 						}
+						
 						for (GameCharacter character : friends) {
 							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-								e.interact(character.getMove(), true);
+								e.interact(character.getMove(), character,false);
 							}
+							
 						}
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());

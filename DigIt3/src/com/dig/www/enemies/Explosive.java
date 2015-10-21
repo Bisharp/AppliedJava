@@ -1,5 +1,6 @@
 package com.dig.www.enemies;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -41,9 +42,9 @@ public class Explosive extends TrackingEnemy {
 	}
 	
 	@Override
-	public void interact(Moves move, boolean playerHit) {
+	public void interact(Moves move, GameCharacter chr,boolean fromP) {
 		
 		if (!exploded)
-			super.interact(move, playerHit);
+			super.interact(move, chr,fromP);
 	}
 }

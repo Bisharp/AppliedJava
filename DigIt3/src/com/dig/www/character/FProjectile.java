@@ -26,10 +26,10 @@ private Moves move;
 	// half height of image
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
-
-	public FProjectile(double dir, int x, int y, int speed, Sprite maker, String loc, Board owner,Moves move) {
+private GameCharacter maker;
+	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move) {
 		super(x, y, loc, owner);
-		
+		this.maker=maker;
 		this.setMove(move);
 		d = dir;
 		this.speed = speed;
@@ -46,8 +46,9 @@ private Moves move;
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 	}
-	public FProjectile(double dir, int x, int y, int speed, Sprite maker, String loc, Board owner,Moves move,int charHoming,boolean harming) {
+	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move,int charHoming,boolean harming) {
 		super(x, y, loc, owner);
+		this.maker=maker;
 	this.harming=harming;
 		this.charHoming=charHoming;
 		this.setMove(move);
@@ -66,24 +67,25 @@ private Moves move;
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 	}
-	public FProjectile(double dir, int x, int y, int speed, int maxImg, String loc,
-			Board owner, Moves move, int charHoming,boolean harming) {
-		super(x, y, loc, owner);
-		this.harming=harming;
-		this.charHoming=charHoming;
-		this.setMove(move);
-		d = dir;
-		this.speed = speed;
-
-		
-		int aSpeed=maxImg;
-		// Moves the ball away from center of launcher's image
-		
-		// This is the move
-		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
-		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-		// TODO Auto-generated constructor stub
-	}
+//	public FProjectile(double dir, int x, int y, int speed, int maxImg, String loc,
+//			Board owner, Moves move, int charHoming,boolean harming) {
+//		super(x, y, loc, owner);
+//		
+//		this.harming=harming;
+//		this.charHoming=charHoming;
+//		this.setMove(move);
+//		d = dir;
+//		this.speed = speed;
+//
+//		
+//		int aSpeed=maxImg;
+//		// Moves the ball away from center of launcher's image
+//		
+//		// This is the move
+//		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
+//		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+//		// TODO Auto-generated constructor stub
+//	}
 	public void animate() {
 
 		basicAnimate();
@@ -171,5 +173,8 @@ private Moves move;
 	}
 	public boolean getHarming(){
 		return harming;
+	}
+	public GameCharacter getMaker(){
+		return maker;
 	}
 }

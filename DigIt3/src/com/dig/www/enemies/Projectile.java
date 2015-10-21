@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 
@@ -62,7 +63,7 @@ public class Projectile extends Enemy {
 	}
 
 	@Override
-	public void interact(Moves type,boolean player) {
+	public void interact(Moves type, GameCharacter chr,boolean fromP){
 
 		if (type == Moves.SHIELD || type == Moves.DISPENSER)
 			alive = false;

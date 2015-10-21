@@ -26,7 +26,7 @@ public class Field extends FProjectile implements Irregular {
 
 	private int[][] vars;
 
-	public Field(double dir, int x, int y, Sprite maker, String loc, Board owner) {
+	public Field(double dir, int x, int y, GameCharacter maker, String loc, Board owner) {
 		super(dir, x, y, 0, maker, loc, owner, Moves.DISPENSER);
 
 		this.x = x - SIDE / 3;

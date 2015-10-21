@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.enemies.Enemy;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.State;
@@ -39,6 +40,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	Enemy enPoint;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
 	protected PointPath path;
@@ -216,6 +218,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (player) {
 
 		} else {
+			
 			x += owner.getScrollX();
 			y += owner.getScrollY();
 			if (me == -1) {
@@ -252,17 +255,62 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 			if (!wallBound) {
 				// System.out.println(path);
+				if(path==null&&owner.pointedPoint==null){
+					if(enPoint==null){
+					if(pathUpdateTimer<=0){
+						if(!(this instanceof Diamond)&&!(this instanceof Heart)&&new Point(x,y).distance(owner.getCharPoint())<500){
+						pathUpdateTimer=5;
+						int maxDis=250;
+						for(Enemy en:owner.getEnemies()){
+							int distance=(int) new Point(getMidX(),getMidY()).distance(new Point(en.getX(),en.getY()));
+							if(distance<maxDis){
+								enPoint=en;
+							}
+						}
+						if(maxDis==250){
+							meleePress=false;
+						}}
+					}else{
+						pathUpdateTimer--;
+					}
+					}
+				}else{
+					enPoint=null;
+					pathUpdateTimer=5;
+				}
+				if(enPoint!=null){
+					if(!owner.getEnemies().contains(enPoint)){
+						enPoint=null;
+						meleePress=false;
+						pathUpdateTimer=50;
+					}else if(new Point(x,y).distance(owner.getCharPoint())>500){
+						enPoint=null;
+						meleePress=false;
+						pathUpdateTimer=50;
+					}
+					else{
+						meleePress=true;
+					}
+				}
 				if (path != null) {
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
 					} else {
+						pathUpdateTimer=5;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
 					}
-				} else
+				}
+				else if(owner.pointedPoint!=null){
+					getToPoint=owner.pointedPoint;
+				}
+				else if(enPoint!=null){
+					getToPoint=new Point(enPoint.getMidX(),enPoint.getMidY());
+				}
+				else{
 					getToPoint = owner.getCharacter().getBounds().getLocation();
-
+				}
 				if (path != null || getToPoint.distance(x, y) > 125) {
 					int amount = 2;
 					if (path != null) {
@@ -309,6 +357,25 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
+				}
+				if(enPoint!=null){
+					boolean xway=false;
+					if(Math.abs(enPoint.getX()-x)>Math.abs(enPoint.getY()-y)){
+						xway=true;
+					}
+					if(xway){
+						if(x>enPoint.getX()){
+							direction=Direction.LEFT;
+						}else{
+							direction=Direction.RIGHT;
+						}
+					}else{
+						if(y>enPoint.getY()){
+							direction=Direction.UP;
+						}else{
+							direction=Direction.DOWN;
+						}
+					}
 				}
 			}
 //			if (new Point(x, y).distance(new Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
@@ -819,6 +886,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
+		timersCount();
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -852,7 +920,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
-		timersCount();
+		
 
 	}
 

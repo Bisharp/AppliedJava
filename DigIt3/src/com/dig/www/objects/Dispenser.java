@@ -38,7 +38,7 @@ public class Dispenser extends Objects {
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 
-		field = new Field(0, this.x, this.y, this, Statics.DUMMY, owner);
+		field = new Field(0, this.x, this.y, maker, Statics.DUMMY, owner);
 		owner.getfP().add(field);
 
 		this.maker = (Heart) maker;

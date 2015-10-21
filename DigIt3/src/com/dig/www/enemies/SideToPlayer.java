@@ -2,6 +2,7 @@ package com.dig.www.enemies;
 
 import java.awt.Graphics2D;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -56,7 +57,7 @@ public class SideToPlayer extends Enemy {
 	}
 
 	@Override
-	public void interact(Moves move, boolean player) {
+	public void interact(Moves move, GameCharacter chr,boolean fromP) {
 
 	}
 }

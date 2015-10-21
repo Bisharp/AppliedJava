@@ -112,18 +112,19 @@ public abstract class Enemy extends Sprite {
 		}
 	}
 
-	public void interact(Moves move, boolean playerHit) {
+	public void interact(Moves move, GameCharacter character,boolean fromP) {
+
 
 		switch (move) {
 
 		// Clark
 		case SPADE:
-			takeDamage(owner.getCharacter().getMeleeDamage());
-			owner.getCharacter().endAction();
+			takeDamage(character.getMeleeDamage());
+			character.endAction();
 			break;
 		case ARROW:
-			takeDamage(owner.getCharacter().getRangedDamage());
-			owner.getCharacter().endAction();
+			takeDamage(character.getRangedDamage());
+			character.endAction();
 			break;
 		case PIT:
 
@@ -133,22 +134,22 @@ public abstract class Enemy extends Sprite {
 		// Carl
 		case CLUB:
 			stunTimer = STUN_MAX / 10;
-			takeDamage(owner.getCharacter().getMeleeDamage());
-			owner.getCharacter().endAction();
+			takeDamage(character.getMeleeDamage());
+			character.endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
 			break;
 		case MPITCH:
-			if (!playerHit) {
+			if (fromP) {
 				stunTimer = (int) ((double) STUN_MAX / (double) 1.5);
 				// owner.getCharacter().endAction();
 				Statics.playSound(owner, "weapons/whop.wav");
-				takeDamage(owner.getCharacter().getSpecialDamage());
+				takeDamage(character.getSpecialDamage());
 			}
 			break;
 		case PITCH:
-			if (!playerHit) {
+			if (fromP) {
 
-				takeDamage(owner.getCharacter().getRangedDamage());
+				takeDamage(character.getRangedDamage());
 			}
 			break;
 
@@ -160,8 +161,8 @@ public abstract class Enemy extends Sprite {
 
 			break;
 		case HAZE:
-			if (!playerHit) {
-				takeDamage(owner.getCharacter().getRangedDamage());
+			if (fromP) {
+				takeDamage(character.getRangedDamage());
 			}
 			break;
 		case DISPENSER:
@@ -176,12 +177,12 @@ public abstract class Enemy extends Sprite {
 				alive = false;
 			break;
 		case CHAIN:
-			takeDamage(owner.getCharacter().getRangedDamage());
+			takeDamage(character.getRangedDamage());
 			break;
 		case BASH:
-			takeDamage(owner.getCharacter().getSpecialDamage());
+			takeDamage(character.getSpecialDamage());
 			stunTimer = STUN_MAX;
-			int d = (int) pointTowards(new Point(owner.getCharacter().getX(), owner.getCharacter().getY()));
+			int d = (int) pointTowards(new Point(character.getX(), character.getY()));
 			d += 180;
 			x += Math.cos((double) Math.toRadians((double) d)) * 100;
 			y += Math.sin((double) Math.toRadians((double) d)) * 100;
