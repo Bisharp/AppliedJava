@@ -24,7 +24,7 @@ public class Dispenser extends Objects {
 	private Heart maker;
 
 	public Dispenser(int x, int y, GameCharacter maker, String loc, Board owner, double dir) {
-		super(x, y, loc, true, owner);
+		super(x, y, loc, false, owner);
 
 		Image img = maker.getImage();
 		int aSpeed;
