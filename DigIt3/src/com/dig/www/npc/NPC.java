@@ -14,6 +14,7 @@ public class NPC extends Sprite{
 	public static final String KEPLER = "kepler";
 	public static final String SHOPKEEP = "shopkeep";
 	public static final String GATEKEEPER = "gatekeeper";
+	public static final String MACARONI = "macaroni";
 	
 	protected String[]dialogs;
 	protected Image gif;
