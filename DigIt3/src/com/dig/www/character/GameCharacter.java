@@ -42,6 +42,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	 * 
 	 */
 	Enemy enPoint;
+	int enUp;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
 	protected PointPath path;
@@ -258,9 +259,9 @@ boolean goTo=true;
 				// System.out.println(path);
 				if(path==null&&owner.pointedPoint==null){
 					if(enPoint==null){
-					if(pathUpdateTimer<=0){
+					if(enUp<=0){
 						if(new Point(x,y).distance(owner.getCharPoint())<500){
-						pathUpdateTimer=5;
+						enUp=5;
 						int maxDis=250;
 						for(Enemy en:owner.getEnemies()){
 							int distance=(int) new Point(getMidX(),getMidY()).distance(new Point(en.getX(),en.getY()));
@@ -277,36 +278,42 @@ boolean goTo=true;
 							goTo=true;
 							}
 						else{
-							//	goTo=false;
-							enPoint=null;
-							pathUpdateTimer=20;
-							meleePress=false;
+								goTo=false;
+							//enPoint=null;
+							//enUp=20;
+							//meleePress=false;
 						}
 						}
 						
 					}else{
-						pathUpdateTimer--;
+						enUp--;
 					}
 					}
 				}else{
 					enPoint=null;
-					pathUpdateTimer=5;
+					enUp=5;
 					meleePress=false;
 				}
 				if(enPoint!=null){
-					if(new Point(x,y).distance(owner.getCharPoint())>=500||(double)health/(double)HP_MAX<0.5){
+					if((double)health/(double)HP_MAX<0.5&&goTo){
 						enPoint=null;
 						meleePress=false;
-						pathUpdateTimer=50;
+						enUp=1;
+						goTo=true;
+					}
+					if(new Point(x,y).distance(owner.getCharPoint())>=500){
+						enPoint=null;
+						meleePress=false;
+						enUp=50;
 						goTo=true;
 					}if(!owner.getEnemies().contains(enPoint)){
 						enPoint=null;
 						meleePress=false;
 						goTo=true;
-						pathUpdateTimer=50;
+						enUp=50;
 					}
 					else{
-						meleePress=true;
+						//meleePress=true;
 					}
 				}
 				if (path != null) {
@@ -314,11 +321,13 @@ boolean goTo=true;
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
 						enPoint=null;
+						enUp=25;
 						meleePress=false;
-						pathUpdateTimer=25;
+						
 						goTo=true;
 					} else {
-						pathUpdateTimer=5;
+						pathUpdateTimer=25;
+						enUp=5;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
 				
@@ -337,7 +346,7 @@ boolean goTo=true;
 					getToPoint = owner.getCharacter().getBounds().getLocation();
 					goTo=true;
 				}
-				if (path != null || getToPoint.distance(x, y) > 125) {
+				if (path != null || getToPoint.distance(x, y) > (enPoint!=null?110:125)) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -415,7 +424,13 @@ boolean goTo=true;
 							direction=Direction.UP;
 						}else{
 							direction=Direction.DOWN;
+						
 						}
+					}
+					if(getActBounds().intersects(enPoint.getBounds())){
+						meleePress=true;
+					}else{
+						meleePress=false;
 					}
 				}
 			}
@@ -553,6 +568,7 @@ boolean goTo=true;
 					}
 					path = new PointPath(me, owner);
 					pathUpdateTimer=50;
+					enUp=50;
 					enPoint=null;
 					meleePress=false;
 					pointTimer=18;
@@ -563,7 +579,7 @@ boolean goTo=true;
 			onceNotCollidePlayer = false;
 			wallBound = false;
 		}
-
+setAttacks();
 	}
 
 	public void keyPressed(int keyCode) {
@@ -734,7 +750,11 @@ boolean goTo=true;
 	}
 
 	public void collision(int midX, int midY, boolean isPlayer) {
-
+if(isPlayer){
+	if((!goTo)&&(enPoint!=null)){
+		return;
+	}
+}
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
