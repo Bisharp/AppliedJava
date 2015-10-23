@@ -55,7 +55,7 @@ int roarTimer;
 		moveTo(xPoint,yPoint, 1.75, 10);
 		phase=2;
 		diagMove=1;
-		}if(health<(maxHealth/3)*2&&phase<1){
+		} else if(health<(maxHealth/3)*2&&phase<1){
 				
 
 				followTimer=0;
@@ -90,7 +90,7 @@ int roarTimer;
 		if(x<owner.getWorld().get(0).getX()+(11*100)){
 			x=owner.getWorld().get(0).getX()+(11*100);
 		}
-		if(x>owner.getWorld().get(0).getX()+(20*100)){
+		else if(x>owner.getWorld().get(0).getX()+(20*100)){
 			x=owner.getWorld().get(0).getX()+(20*100);
 		}
 		boolean acted=sortAction();
@@ -161,7 +161,7 @@ int roarTimer;
 		if(x<owner.getWorld().get(0).getX()+(11*100)){
 			x=owner.getWorld().get(0).getX()+(11*100);
 		}
-		if(x>owner.getWorld().get(0).getX()+(20*100)){
+		else	if(x>owner.getWorld().get(0).getX()+(20*100)){
 			x=owner.getWorld().get(0).getX()+(20*100);
 		}
 		if(roarTimer>0){
