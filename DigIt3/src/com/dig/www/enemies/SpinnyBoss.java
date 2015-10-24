@@ -15,14 +15,16 @@ import com.dig.www.util.Statics;
 public class SpinnyBoss extends Boss{
 Image image2;
 Image image3;
+int rotate1=0;
+int rotate2=0;
 	public SpinnyBoss(int x, int y, Board owner) {
-		super(x, y, "Head", owner, true, 1000,
-				"Head of Doom", 5,
+		super(x, y, "images/enemies/bosses/Head.png", owner, true, 1000,
+				"SpinnyBoss", 5,
 				"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav",
 				"gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor stub
-		image2=newImage("Head");
-		image3=newImage("Head");
+		image2=newImage("images/enemies/unique/potato.png");//bigger
+		image3=newImage("images/effects/shadow.png");//medium
 	}
 
 	@Override
@@ -34,6 +36,10 @@ Image image3;
 	@Override
 	public void animate() {
 		// TODO Auto-generated method stub
+		if(attackNum!=0){
+			dir = (int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
+
+		}
 		if(health<(maxHealth/3)&&phase<2){
 			phase=2;
 			Statics.playSound(owner,bossPhaseS);
@@ -74,9 +80,8 @@ Image image3;
 						}
 					else if(sequence==5){
 					if(phase==2)
-						createTProjectile("images/enemies/blasts/0.png",10,
-								Statics.pointTowards(new Point((int) x,
-								(int) y), owner.getCharPoint()),true,40);
+						fireAll("images/enemies/blasts/0.png",10,
+								8,true,40);
 						sequence++;
 						}
 					else
@@ -95,46 +100,68 @@ Image image3;
 	public Rectangle getOwnerPlusBounds(){
 		return new Rectangle(-100,-100,owner.getWidth()+200,owner.getHeight()+220);	
 		}
-	public Image newImage(String name) {
-		if(name.contains("/"))
-		return super.newImage(name);	
-		else
-		return super.newImage(getPath() + name + ".png");
-	}
-	private String getPath() {
-
-		
-			
-			
-			
-		return "images/enemies/bosses/"
-		//+ "pod" + "/"
-				;
-	}
+//	public Image newImage(String name) {
+//		if(name.contains("/"))
+//		return super.newImage(name);	
+//		else
+//		return super.newImage(getPath() + name + ".png");
+//	}
+//	private String getPath() {
+//
+//		
+//			
+//			
+//			
+//		return "images/enemies/bosses/"
+//		//+ "pod" + "/"
+//				;
+//	}
 	public void myDraw(Graphics2D g2d){
 		if (stunTimer > 0) {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 		
+			g2d.rotate(Math.toRadians(dir), x+(width/2), y+(height/2));
 			g2d.drawImage(image,x,y,owner);
+			g2d.rotate(-Math.toRadians(dir), x+(width/2), y+(height/2));	
+	
+			
 			if(phase<1){
+				g2d.rotate(Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));
 				g2d.drawImage(image2,x,y,owner);
+				g2d.rotate(-Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));	
 			}
 			if(phase<2){
+				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
 				g2d.drawImage(image3,x,y,owner);
+				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
 			}
 		
 		}
 		
 		else{
+			g2d.rotate(Math.toRadians(dir), x+(width/2), y+(height/2));
 			g2d.drawImage(image,x,y,owner);
+			g2d.rotate(-Math.toRadians(dir), x+(width/2), y+(height/2));	
+	
+			
 			if(phase<1){
+				g2d.rotate(Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));
 				g2d.drawImage(image2,x,y,owner);
+				g2d.rotate(-Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));	
 			}
 			if(phase<2){
+				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
 				g2d.drawImage(image3,x,y,owner);
+				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
 			}
 		}
+		rotate1+=5;
+		rotate2-=5;
+		rotate1%=360;
+		if(rotate2<0)
+			rotate2+=360;
+		
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 		else if (slowTimer > 0)
@@ -145,5 +172,27 @@ Image image3;
 			// g2d.drawString("" + health, x, y - 10);
 			drawBar((double) health / (double) maxHealth, g2d);
 		
+	}
+	@Override
+	public Rectangle getBounds(){
+		Rectangle rect;
+		if(phase<1){
+			rect=new Rectangle(x, y, image2.getWidth(owner), image2.getHeight(owner));
+		}
+		else if(phase<2){
+			rect=new Rectangle(x, y, image3.getWidth(owner), image3.getHeight(owner));
+		}else{
+		rect=	new Rectangle(x, y, width, height);
+		}
+		return rect;
+	}
+	public void fireAll(String loc,int speed,int times,boolean flying,int timer){
+		int dirAdder=360/times;
+		for(int c=0;c<times;c++){
+
+		owner.getEnemies().add(new Projectile((dir+(c*dirAdder))%360, x, y, speed, this, loc, owner, flying));
+		
+		}	actTimer=timer;
+
 	}
 }
