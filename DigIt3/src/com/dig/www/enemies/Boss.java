@@ -39,8 +39,8 @@ protected String bossPhaseS;
 	this.bossKillS=bossKillS;
 	this.bossPhaseS=bossPhaseS;
 	}
-public void createProjectile(String loc,int speed,double dir,boolean flying,int timer){
-	owner.getEnemies().add(new Projectile(dir, x, y, speed, this, loc, owner, flying));
+public void createProjectile(String loc,int speed,double dir,boolean flying,int timer,int addX,int addY){
+	owner.getEnemies().add(new Projectile(dir, x+addX, y+addY, speed, this, loc, owner, flying));
 actTimer=timer;
 
 }

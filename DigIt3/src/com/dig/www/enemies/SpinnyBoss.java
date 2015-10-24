@@ -18,13 +18,14 @@ Image image3;
 int rotate1=0;
 int rotate2=0;
 	public SpinnyBoss(int x, int y, Board owner) {
-		super(x, y, "images/enemies/bosses/Head.png", owner, true, 1000,
+		super(x, y, "images/enemies/bosses/pod/pod.png", owner, true, 1000,
 				"SpinnyBoss", 5,
 				"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav",
 				"gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor stub
-		image2=newImage("images/enemies/unique/potato.png");//bigger
-		image3=newImage("images/effects/shadow.png");//medium
+		image2=newImage("images/enemies/bosses/pod/ring1.png");//bigger
+		image3=newImage("images/enemies/bosses/pod/ring0.png");//medium
+	damage=0;
 	}
 
 	@Override
@@ -75,7 +76,7 @@ int rotate2=0;
 					if(phase+2>=sequence){
 						createProjectile("images/enemies/blasts/1.png",10,
 								Statics.pointTowards(new Point((int) x,
-								(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40);
+								(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25));
 					}	sequence++;
 						}
 					else if(sequence==5){
@@ -121,10 +122,6 @@ int rotate2=0;
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 		
-			g2d.rotate(Math.toRadians(dir), x+(width/2), y+(height/2));
-			g2d.drawImage(image,x,y,owner);
-			g2d.rotate(-Math.toRadians(dir), x+(width/2), y+(height/2));	
-	
 			
 			if(phase<1){
 				g2d.rotate(Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));
@@ -132,18 +129,19 @@ int rotate2=0;
 				g2d.rotate(-Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));	
 			}
 			if(phase<2){
-				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
-				g2d.drawImage(image3,x,y,owner);
-				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
-			}
+				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2)+((getBounds().getWidth()-image3.getWidth(owner))/2), y+(image3.getHeight(owner)/2)+((getBounds().getHeight()-image3.getHeight(owner))/2));
+				g2d.drawImage(image3,x+(int)((getBounds().getWidth()-image3.getWidth(owner))/2),y+(int)((getBounds().getHeight()-image3.getHeight(owner))/2),owner);
+				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2)+((getBounds().getWidth()-image3.getWidth(owner))/2), y+(image3.getHeight(owner)/2)+((getBounds().getHeight()-image3.getHeight(owner))/2));
+			}g2d.rotate(Math.toRadians(dir), x+(width/2)+((getBounds().getWidth()-width)/2), y+(height/2)+((getBounds().getHeight()-height)/2));
+			g2d.drawImage(image,(int) (x+((getBounds().getWidth()-width)/2)),(int) (y+((getBounds().getHeight()-height)/2)),owner);
+			g2d.rotate(-Math.toRadians(dir), x+(width/2)+((getBounds().getWidth()-width)/2), y+(height/2)+((getBounds().getHeight()-height)/2));	
+	
+			
 		
 		}
 		
 		else{
-			g2d.rotate(Math.toRadians(dir), x+(width/2), y+(height/2));
-			g2d.drawImage(image,x,y,owner);
-			g2d.rotate(-Math.toRadians(dir), x+(width/2), y+(height/2));	
-	
+			
 			
 			if(phase<1){
 				g2d.rotate(Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));
@@ -151,13 +149,16 @@ int rotate2=0;
 				g2d.rotate(-Math.toRadians(rotate1), x+(image2.getWidth(owner)/2), y+(image2.getHeight(owner)/2));	
 			}
 			if(phase<2){
-				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
-				g2d.drawImage(image3,x,y,owner);
-				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2), y+(image3.getHeight(owner)/2));
-			}
+				g2d.rotate(Math.toRadians(rotate2), x+(image3.getWidth(owner)/2)+((getBounds().getWidth()-image3.getWidth(owner))/2), y+(image3.getHeight(owner)/2)+((getBounds().getHeight()-image3.getHeight(owner))/2));
+				g2d.drawImage(image3,x+(int)((getBounds().getWidth()-image3.getWidth(owner))/2),y+(int)((getBounds().getHeight()-image3.getHeight(owner))/2),owner);
+				g2d.rotate(-Math.toRadians(rotate2), x+(image3.getWidth(owner)/2)+((getBounds().getWidth()-image3.getWidth(owner))/2), y+(image3.getHeight(owner)/2)+((getBounds().getHeight()-image3.getHeight(owner))/2));
+			}g2d.rotate(Math.toRadians(dir), x+(width/2)+((getBounds().getWidth()-width)/2), y+(height/2)+((getBounds().getHeight()-height)/2));
+			g2d.drawImage(image,(int) (x+((getBounds().getWidth()-width)/2)),(int) (y+((getBounds().getHeight()-height)/2)),owner);
+			g2d.rotate(-Math.toRadians(dir), x+(width/2)+((getBounds().getWidth()-width)/2), y+(height/2)+((getBounds().getHeight()-height)/2));	
+	
 		}
-		rotate1+=5;
-		rotate2-=5;
+		//rotate1+=5;
+		//rotate2-=5;
 		rotate1%=360;
 		if(rotate2<0)
 			rotate2+=360;
@@ -190,9 +191,17 @@ int rotate2=0;
 		int dirAdder=360/times;
 		for(int c=0;c<times;c++){
 
-		owner.getEnemies().add(new Projectile((dir+(c*dirAdder))%360, x, y, speed, this, loc, owner, flying));
+		owner.getEnemies().add(new Projectile((dir+(c*dirAdder))%360, x+(int)getBounds().getWidth()/2, y+(int)getBounds().getHeight()/2, speed, this, loc, owner, flying));
 		
 		}	actTimer=timer;
 
+	}
+	protected double pointTowards(Point a) {
+		double d;
+		// Point at something, This will be useful for enemies, also in
+		// ImportantLook class
+		Point b = new Point(x+(int)getBounds().getWidth()/2, y+(int)getBounds().getHeight()/2);
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
+		return d;
 	}
 }
