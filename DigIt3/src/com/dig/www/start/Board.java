@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,6 +26,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -48,6 +51,7 @@ public class Board extends MPanel implements ActionListener {
 	 * 
 	 */
 	public Point pointedPoint;
+
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
@@ -66,7 +70,7 @@ public class Board extends MPanel implements ActionListener {
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
 	protected ArrayList<Objects> objects = new ArrayList<Objects>();
 	private State state;
-	private boolean debug = false;
+	// private boolean debug = false;
 
 	private int deadTimer = 100;
 
@@ -77,6 +81,9 @@ public class Board extends MPanel implements ActionListener {
 	private NPC current = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Portal> portals = new ArrayList<Portal>();
+
+	// TODO inventory
+	private Inventory inventory = new Inventory(this);
 
 	private int scrollX = 0;
 	private int scrollY = 0;
@@ -90,6 +97,7 @@ public class Board extends MPanel implements ActionListener {
 	private boolean isDay = true;
 	private boolean switching = false;
 	private TexturePack texturePack = TexturePack.GRASSY;
+	private int startPoint = 0;
 
 	public ArrayList<Block> getWorld() {
 		return world;
@@ -131,10 +139,12 @@ public class Board extends MPanel implements ActionListener {
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 
-		Wallet w = new Wallet();
+		Inventory w = new Inventory(this);
 		for (GameCharacter f : friends)
-			f.setWallet(w);
-		character.setWallet(w);
+			f.setInventory(w);
+		character.setInventory(w);
+
+		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
 		timer = new Timer(15, this);
@@ -251,7 +261,7 @@ public class Board extends MPanel implements ActionListener {
 			Polygon poly;
 
 			// World draw
-			for (i = 0; i < world.size(); i++) {
+			for (i = startPoint; i < world.size(); i++) {
 				if (world.get(i).isOnScreen() && world.get(i).isVisible())
 					world.get(i).draw(g2d);
 			}
@@ -275,7 +285,7 @@ public class Board extends MPanel implements ActionListener {
 						tag = true;
 					}
 					// end of that code
-					if (tag||e instanceof Boss)
+					if (tag || e instanceof Boss)
 						enemies.get(i).draw(g2d);
 				}
 			}
@@ -474,12 +484,8 @@ public class Board extends MPanel implements ActionListener {
 			break;
 
 		case PAUSED:
-			g2d.setColor(Color.BLACK);
-			g2d.fill(getScreen());
 
-			g2d.setColor(Color.GREEN);
-			g2d.setFont(Statics.MENU);
-			g2d.drawString(state.toString(), getWidth() / 3, getHeight() / 3);
+			inventory.draw(g2d);
 			break;
 
 		case DEAD:
@@ -630,8 +636,8 @@ public class Board extends MPanel implements ActionListener {
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
-						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), fP.get(i).getMaker(), fP.get(i)
-								.getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
+						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(),
+								fP.get(i).getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
 					}
 					fP.remove(i);
 					i--;
@@ -702,6 +708,7 @@ public class Board extends MPanel implements ActionListener {
 		Object o;
 
 		boolean tag = false;
+		boolean started = false;
 		boolean fieldUsed = false;
 
 		for (int i = 0; i < world.size(); i++) {
@@ -710,6 +717,11 @@ public class Board extends MPanel implements ActionListener {
 
 			b.animate();
 			b.setOnScreen(b.getBounds().intersects(getScreen()));
+
+			if (!started && b.isOnScreen()) {
+				started = true;
+				startPoint = i;
+			}
 
 			if (b.isVisible()) {
 
@@ -796,7 +808,8 @@ public class Board extends MPanel implements ActionListener {
 					p = fP.get(u);
 					if (p.isOnScreen()) {
 						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
-						if ((o instanceof Polygon? (Polygon) o : (Rectangle) o).getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
+						if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).getBounds().intersects(b.getBounds())
+								&& p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -836,7 +849,7 @@ public class Board extends MPanel implements ActionListener {
 						}
 
 						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-							e.interact(character.getMove(), character,false);
+							e.interact(character.getMove(), character, false);
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
@@ -848,17 +861,17 @@ public class Board extends MPanel implements ActionListener {
 							if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(e.getBounds()) && character.isOnScreen()
 									&& character.getHarming()) {
 								if (!(e instanceof Projectile) || (character instanceof Field)) {
-									e.interact(character.getMove(), character.getMaker(),true);
+									e.interact(character.getMove(), character.getMaker(), true);
 									fP.get(c).setOnScreen(false);
 								}
 							}
 						}
-						
+
 						for (GameCharacter character : friends) {
 							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-								e.interact(character.getMove(), character,false);
+								e.interact(character.getMove(), character, false);
 							}
-							
+
 						}
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
@@ -893,7 +906,6 @@ public class Board extends MPanel implements ActionListener {
 						character.setMelee(0);
 					}
 
-					// TODO dispenser
 				} else if (character instanceof Heart && ((Heart) character).usingField() && !fieldUsed) {
 
 					fieldUsed = true;
@@ -983,13 +995,13 @@ public class Board extends MPanel implements ActionListener {
 			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
-			o = n instanceof Irregular? ((Irregular) n).getIrregularBounds() : n.getBounds();
-			
-			if ((o instanceof Polygon? (Polygon) o : (Rectangle) o).intersects(character.getCollisionBounds())) {
+			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
+
+			if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
 				if (n instanceof Collectible) {
 					Statics.playSound(this, "collectibles/marioCoin.wav");
-					character.getWallet().addMoney(((Collectible) n).getValue());
+					GameCharacter.getInventory().addMoney(((Collectible) n).getValue());
 					objects.remove(u);
 					u--;
 				} else if (n instanceof SpecialCollectible) {
@@ -1006,7 +1018,7 @@ public class Board extends MPanel implements ActionListener {
 				}
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -1237,12 +1249,17 @@ public class Board extends MPanel implements ActionListener {
 						writer.write(friends.get(c).getSave());
 					}
 				}
-				writer.newLine();
-				writer.write(character != null ? "" + character.getWallet().getMoney() : "0");
+//				writer.newLine();
+//				writer.write(character != null ? "" + character.getInventory().getMoney() : "0");
 				writer.close();
 
 				ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
 				os.writeObject(data);
+				os.close();
+				
+				// TODO working on inventory
+				os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
+				os.writeObject(GameCharacter.getInventory());
 				os.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -1324,14 +1341,9 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 				}
-
-				Wallet w = new Wallet(Integer.parseInt(lines.get(5)));
-				for (GameCharacter f : friends)
-					f.setWallet(w);
-				character.setWallet(w);
-
 				reader.close();
 
+				// TODO note
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
 					data = ((CharData) is.readObject());
@@ -1340,6 +1352,12 @@ public class Board extends MPanel implements ActionListener {
 
 					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
 					preferences = ((Preferences) is.readObject());
+					is.close();
+
+					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
+					Inventory w = (Inventory) is.readObject();
+					w.prepare(this);
+					GameCharacter.setInventory(w);
 					is.close();
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
@@ -1400,6 +1418,33 @@ public class Board extends MPanel implements ActionListener {
 				fP.remove(i);
 				i--;
 			}
+		}
+	}
+
+	// / TODO personalMouse
+	public class PersonalMouse implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			if (state == State.PAUSED)
+				inventory.mouseClick(arg0);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
 		}
 	}
 }

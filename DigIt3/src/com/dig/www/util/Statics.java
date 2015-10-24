@@ -26,8 +26,6 @@ public final class Statics {
 
 	public static final int BOARD_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(); 
 	public static final int BOARD_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();;
-
-	public static final Font SMALL = new Font("Chiller", Font.BOLD, 20);
 	public static final ImageIcon ICON = createImageIcon("/images/icon.png");
 
 	public static final Random RAND = new Random();

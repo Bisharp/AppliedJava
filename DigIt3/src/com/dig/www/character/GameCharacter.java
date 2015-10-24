@@ -41,8 +41,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
-	Enemy enPoint;
-	int enUp;
+	
+	// TODO Jonah, encapsulate your fields
+	// TODO Eclipse, learn your names.
+	protected Enemy enPoint;
+	protected int enUp;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
 	protected PointPath path;
@@ -61,11 +64,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private boolean rangedPress = false;
 	private boolean specialPress = false;
 	private int me = -1;
-	protected Wallet wallet;
+	protected static Inventory inventory;
 
 	private boolean player;
 	private boolean onceNotCollidePlayer;
-boolean goTo=true;
+	protected boolean goTo=true;
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 	}
@@ -596,7 +599,7 @@ setAttacks();
 	else if (keyCode == KeyEvent.VK_MINUS) {
 			level++;
 		}else if(keyCode==KeyEvent.VK_0){
-			wallet.setMoney(Integer.MAX_VALUE);
+			inventory.setMoney(Integer.MAX_VALUE);
 		}
 
 		if (keyCode == Preferences.LEVEL_UP()) {
@@ -661,7 +664,7 @@ setAttacks();
 		}
 	}
 
-	private void OpenLevelUp() {
+	void OpenLevelUp() {
 
 		levMen = new LevelUp();
 	}
@@ -939,7 +942,7 @@ if(isPlayer){
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
 		//	g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(), 30, 50);
-			g2d.drawString("MONEY: " + wallet.getMoney(), 30, 50);
+			g2d.drawString("MONEY: " + inventory.getMoney(), 30, 50);
 			drawTHBar((double) health / (double) HP_MAX,normWidth-75,g2d);
 			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth-75, g2d);
 
@@ -1204,12 +1207,12 @@ if(isPlayer){
 		}
 	}
 
-	public Wallet getWallet() {
-		return wallet;
+	public static Inventory getInventory() {
+		return inventory;
 	}
 
-	public void setWallet(Wallet w) {
-		wallet = w;
+	public static void setInventory(Inventory w) {
+		inventory = w;
 	}
 
 	public void drawEnBar(double per, Graphics2D g2d) {
