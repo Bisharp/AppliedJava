@@ -13,10 +13,10 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public class SpinnyBoss extends Boss{
-Image image2;
-Image image3;
-int rotate1=0;
-int rotate2=0;
+private Image image2;
+private Image image3;
+private int rotate1=0;
+private int rotate2=0;
 	public SpinnyBoss(int x, int y, Board owner) {
 		super(x, y, "images/enemies/bosses/pod/pod.png", owner, true, 1000,
 				"SpinnyBoss", 5,
@@ -25,7 +25,6 @@ int rotate2=0;
 		// TODO Auto-generated constructor stub
 		image2=newImage("images/enemies/bosses/pod/ring1.png");//bigger
 		image3=newImage("images/enemies/bosses/pod/ring0.png");//medium
-	damage=0;
 	}
 
 	@Override
@@ -38,6 +37,7 @@ int rotate2=0;
 	public void animate() {
 		// TODO Auto-generated method stub
 		if(attackNum!=0){
+			//dir = (int) pointTowards(owner.getCharPoint());
 			dir = (int) Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
 
 		}
@@ -157,8 +157,8 @@ int rotate2=0;
 			g2d.rotate(-Math.toRadians(dir), x+(width/2)+((getBounds().getWidth()-width)/2), y+(height/2)+((getBounds().getHeight()-height)/2));	
 	
 		}
-		//rotate1+=5;
-		//rotate2-=5;
+		rotate1+=5;
+		rotate2-=5;
 		rotate1%=360;
 		if(rotate2<0)
 			rotate2+=360;
@@ -196,12 +196,16 @@ int rotate2=0;
 		}	actTimer=timer;
 
 	}
+	@Override
 	protected double pointTowards(Point a) {
 		double d;
+		a.y+=(phase==0?100:0);
 		// Point at something, This will be useful for enemies, also in
 		// ImportantLook class
-		Point b = new Point(x+(int)getBounds().getWidth()/2, y+(int)getBounds().getHeight()/2);
-		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -a.getY(), b.getX() + -a.getX())) + 180);
+		Point b = new Point(x//+(int)getBounds().getWidth()/2
+				, y//+(int)getBounds().getHeight()/2
+				);
+		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -(a.getY()), b.getX() + -a.getX())) + 180);
 		return d;
 	}
 }

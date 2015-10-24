@@ -9,15 +9,15 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public class LizardMan extends Boss {
-boolean phaseA=true;
-boolean diagR=true;
-int diagMove;
-int lastX;
-int lastY;
-int bMove;
-int imNum;
-int imTimer;
-boolean moveActed;
+private boolean phaseA=true;
+private boolean diagR=true;
+private int diagMove;
+private int lastX;
+private int lastY;
+private int bMove;
+private int imNum;
+private int imTimer;
+private boolean moveActed;
 private static final int IM_TIMER_MAX=6;
 int roarTimer;
 	public LizardMan(int x, int y, Board owner) {
