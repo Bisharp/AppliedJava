@@ -227,6 +227,9 @@ public class StageBuilder {
 							case "Lizard-Man":
 								enemies.add(new LizardMan(enX, enY, owner));
 								break;
+							case "Pod":
+								enemies.add(new SpinnyBoss(enX, enY, owner));
+								break;
 							}
 							
 						break;
