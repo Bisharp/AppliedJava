@@ -27,6 +27,7 @@ protected double speedMulti=1;
 protected String musicLoc;
 protected String bossKillS;
 protected String bossPhaseS;
+
 	public Boss(int x, int y, String loc, Board owner, boolean flying,
 			int health,String name,int speed,String musicLoc,String bossKillS,String  bossPhaseS) {
 		super(x, y, loc, owner, flying, health);
