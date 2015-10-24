@@ -82,9 +82,6 @@ public class Board extends MPanel implements ActionListener {
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Portal> portals = new ArrayList<Portal>();
 
-	// TODO inventory
-	private Inventory inventory = new Inventory(this);
-
 	private int scrollX = 0;
 	private int scrollY = 0;
 	private int spawnX;
@@ -138,11 +135,6 @@ public class Board extends MPanel implements ActionListener {
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
-
-		Inventory w = new Inventory(this);
-		for (GameCharacter f : friends)
-			f.setInventory(w);
-		character.setInventory(w);
 
 		this.addMouseListener(new PersonalMouse());
 
@@ -485,7 +477,7 @@ public class Board extends MPanel implements ActionListener {
 
 		case PAUSED:
 
-			inventory.draw(g2d);
+			GameCharacter.getInventory().draw(g2d);
 			break;
 
 		case DEAD:
@@ -1258,9 +1250,7 @@ public class Board extends MPanel implements ActionListener {
 				os.close();
 				
 				// TODO working on inventory
-				os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
-				os.writeObject(GameCharacter.getInventory());
-				os.close();
+				GameCharacter.getInventory().writeStates();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -1354,11 +1344,9 @@ public class Board extends MPanel implements ActionListener {
 					preferences = ((Preferences) is.readObject());
 					is.close();
 
-					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
-					Inventory w = (Inventory) is.readObject();
-					w.prepare(this);
+					reader = new BufferedReader(new FileReader(location + "inventory.txt"));
+					Inventory w = new Inventory(this, reader);
 					GameCharacter.setInventory(w);
-					is.close();
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
 				}
@@ -1376,6 +1364,7 @@ public class Board extends MPanel implements ActionListener {
 	public void newGame() {
 		level = "hauntedTest";
 		preferences = new Preferences();
+		GameCharacter.setInventory(new Inventory(this));
 		changeArea();
 		preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
 				+ owner.getUserName() + "/");
@@ -1440,7 +1429,7 @@ public class Board extends MPanel implements ActionListener {
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			if (state == State.PAUSED)
-				inventory.mouseClick(arg0);
+				GameCharacter.getInventory().mouseClick(arg0);
 		}
 
 		@Override

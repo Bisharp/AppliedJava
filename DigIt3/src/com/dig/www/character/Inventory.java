@@ -10,6 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import javax.swing.ListModel;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.start.GameStartBoard;
 import com.dig.www.util.Statics;
 
 public class Inventory implements Serializable {
@@ -39,6 +41,12 @@ public class Inventory implements Serializable {
 	private enum Option {
 		ITEMS, GEAR, LEVEL;
 	}
+
+	private ArrayList<Items> items;
+	private HashMap<Items, Integer> itemNums;
+	private int index;
+
+	// -------------------------------------------------------------------------------------------
 
 	private static final int buttonWidth = 200;
 	private static final int buttonHeight = 100;
@@ -58,7 +66,7 @@ public class Inventory implements Serializable {
 	private static int levelY = 500;
 	private transient Rectangle level = new Rectangle(levelX, levelY, buttonWidth + 100, buttonHeight);
 
-	// TODO this used to be the Wallet
+	// TODO this used to be Wallet
 	// ------------------------------------------------------------------------------------------
 	private int money = 0;
 
@@ -88,6 +96,7 @@ public class Inventory implements Serializable {
 		return ("" + money).length();
 	}
 
+	// TODO end money
 	// ------------------------------------------------------------------------------------------
 
 	private transient Board owner;
@@ -97,16 +106,32 @@ public class Inventory implements Serializable {
 		items = new ArrayList<Items>();
 		itemNums = new HashMap<Items, Integer>();
 	}
-	
-	public void prepare(Board owner) {
-		this.owner = owner;
-		
-		for (String s : getKeys(itemNums, items))
-			System.out.println(s + " is in inventory");
-		System.out.println("End of recap.");
-	}
 
-	private Rectangle bound = new Rectangle(0, 0, 100, 100);
+	public Inventory(Board owner, BufferedReader reader) {
+		this.owner = owner;
+		items = new ArrayList<Items>();
+		itemNums = new HashMap<Items, Integer>();
+		String[] elements;
+		String line;
+		ArrayList<String> lines = new ArrayList<String>();
+
+		try {
+			while ((line = reader.readLine()) != null)
+				lines.add(line);
+			reader.close();
+
+			for (String line2 : lines) {
+				if (line2.startsWith("*"))
+					money = Integer.parseInt(line2.replace('*', '0'));
+				else {
+					elements = line2.split(",");
+					addItem(Items.translate(elements[0]), Integer.parseInt(elements[1]));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void draw(Graphics2D g2d) {
 
@@ -118,7 +143,6 @@ public class Inventory implements Serializable {
 		g2d.fill(options);
 		g2d.fill(view);
 		g2d.fill(level);
-		g2d.draw(bound);
 
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("Options", optionsX + buttonWidth / 4, optionsY + buttonHeight / 3);
@@ -136,8 +160,6 @@ public class Inventory implements Serializable {
 			showInventory(Option.ITEMS);
 		else if (r.intersects(level))
 			owner.getCharacter().OpenLevelUp();
-		else if (r.intersects(bound))
-			addItem(Items.TEST0, 5);
 	}
 
 	public void addItem(Items type, int num) {
@@ -160,7 +182,7 @@ public class Inventory implements Serializable {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private JScrollPane comBox;
+		private JScrollPane scrollPane;
 
 		public InventoryView(JFrame parent, Option which) {
 			super(parent);
@@ -174,34 +196,15 @@ public class Inventory implements Serializable {
 
 			default:
 			case ITEMS:
-				comBox = new JScrollPane(new JList<String>(getKeys(itemNums, items)));
+				scrollPane = new JScrollPane(new JList<String>(getKeys(itemNums, items)));
 			}
-			comBox.setSize(d);
-			add(comBox);
+			scrollPane.setSize(d);
+			add(scrollPane);
 			revalidate();
 			setVisible(true);
 		}
-
-		private String[] getKeys(HashMap<Items, Integer> itemNums, ArrayList<Items> items) {
-
-			ArrayList<String> toReturn = new ArrayList<String>();
-			Items w;
-			for (int i = 0; i < items.size(); i++) {
-				w = items.get(i);
-
-				if (itemNums.get(w) > 0)
-					toReturn.add(w.toString() + " x" + itemNums.get(w));
-			}
-
-			String[] s = new String[toReturn.size()];
-			for (int i = 0; i < toReturn.size(); i++)
-				s[i] = toReturn.get(i);
-
-			return s;
-		}
 	}
-	
-	// TODO delete
+
 	private String[] getKeys(HashMap<Items, Integer> itemNums, ArrayList<Items> items) {
 
 		ArrayList<String> toReturn = new ArrayList<String>();
@@ -223,37 +226,56 @@ public class Inventory implements Serializable {
 	// Important stuff; might be rearranged or changed later.
 	// -------------------------------------------------------------------------------------------
 
-	private ArrayList<Items> items;
-	private HashMap<Items, Integer> itemNums;
-	private int index;
-
 	public Items getItem() {
 		return items.get(index);
 	}
 
-	public void back() {
-		index--;
+	// public void back() {
+	// index--;
+	//
+	// if (index < 0)
+	// index = itemNums.size() - 1;
+	// }
+	//
+	// public void forward() {
+	// index++;
+	//
+	// if (index >= itemNums.size())
+	// index = 0;
+	// }
+	//
+	// public boolean useItem(Items type) {
+	//
+	// if (itemNums.get(type) > 0 && itemNums.get(type) < 100)
+	// itemNums.put(type, itemNums.get(type) - 1);
+	// else if (itemNums.get(type) >= 100)
+	// return true;
+	// else
+	// return false;
+	//
+	// return true;
+	// }
 
-		if (index < 0)
-			index = itemNums.size() - 1;
-	}
+	public void writeStates() {
+		String location = (Inventory.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+				+ owner.getUserName() + "/inventory.txt");
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(location));
+			String s;
+			Items w;
 
-	public void forward() {
-		index++;
+			for (int i = 0; i < items.size(); i++) {
+				w = items.get(i);
+				s = w.toString() + "," + itemNums.get(w);
+				writer.write(s);
+				System.out.println(s);
+				writer.newLine();
+			}
 
-		if (index >= itemNums.size())
-			index = 0;
-	}
-
-	public boolean useItem(Items type) {
-
-		if (itemNums.get(type) > 0 && itemNums.get(type) < 100)
-			itemNums.put(type, itemNums.get(type) - 1);
-		else if (itemNums.get(type) >= 100)
-			return true;
-		else
-			return false;
-
-		return true;
+			writer.write("*" + money);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
