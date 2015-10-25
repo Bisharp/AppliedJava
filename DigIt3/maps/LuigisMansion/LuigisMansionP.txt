@@ -1,3 +1,4 @@
 300,4600,islandTest,0,normal
 550,400,bossTest,0,boss
 3100,500,bridge,0,boss
+1600,5300,PodTest,0,boss
