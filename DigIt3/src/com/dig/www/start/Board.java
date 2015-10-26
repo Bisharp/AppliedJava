@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -697,7 +698,7 @@ public class Board extends MPanel implements ActionListener {
 	public void setCharacterStates(Rectangle r3) {
 
 		Block b;
-		Object o;
+		Shape o;
 
 		boolean tag = false;
 		boolean started = false;
@@ -799,9 +800,9 @@ public class Board extends MPanel implements ActionListener {
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
+						// TODO minor collision change
 						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
-						if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).getBounds().intersects(b.getBounds())
-								&& p.getMove() != Moves.DISPENSER) {
+						if (o.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -850,8 +851,9 @@ public class Board extends MPanel implements ActionListener {
 							// This modification would allow us to make certain
 							// projectiles behave differently with their bounds;
 							// could be implemented with other objects.
-							if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(e.getBounds()) && character.isOnScreen()
-									&& character.getHarming()) {
+
+							// TODO collision change
+							if (o.intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
 								if (!(e instanceof Projectile) || (character instanceof Field)) {
 									e.interact(character.getMove(), character.getMaker(), true);
 									fP.get(c).setOnScreen(false);
@@ -920,32 +922,35 @@ public class Board extends MPanel implements ActionListener {
 				}
 				// end
 
-				// Uh... what is this code for?
-				for (GameCharacter friend : friends) {
-					if (friend.getMove() == Moves.AURA) {
+				// TODO The following code appears to me to simply be a repeat
+				// of earlier code,
+				// but if it was important, un-comment it.
 
-						boolean healed = false;
-						if (friend.getActBounds().intersects(r3)) {
-							character.heal(friend.getMeleeDamage() / 3);
-							healed = true;
-						}
-						for (GameCharacter friend2 : friends) {
-							if (friend == friend2) {
-
-							} else {
-								if (friend.getActBounds().intersects(friend2.getBounds())) {
-									friend2.heal(friend.getMeleeDamage() / 3);
-									healed = true;
-								}
-							}
-						}
-						if (healed) {
-
-							friend.heal(friend.getMeleeDamage() / 3);
-							friend.setMelee(0);
-						}
-					}
-				}
+				// for (GameCharacter friend : friends) {
+				// if (friend.getMove() == Moves.AURA) {
+				//
+				// boolean healed = false;
+				// if (friend.getActBounds().intersects(r3)) {
+				// character.heal(friend.getMeleeDamage() / 3);
+				// healed = true;
+				// }
+				// for (GameCharacter friend2 : friends) {
+				// if (friend == friend2) {
+				//
+				// } else {
+				// if (friend.getActBounds().intersects(friend2.getBounds())) {
+				// friend2.heal(friend.getMeleeDamage() / 3);
+				// healed = true;
+				// }
+				// }
+				// }
+				// if (healed) {
+				//
+				// friend.heal(friend.getMeleeDamage() / 3);
+				// friend.setMelee(0);
+				// }
+				// }
+				// }
 			}
 		}
 
@@ -989,20 +994,28 @@ public class Board extends MPanel implements ActionListener {
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
 
-			if ((o instanceof Polygon ? (Polygon) o : (Rectangle) o).intersects(character.getCollisionBounds())) {
+			// TODO collectible
+			if (o.intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
-				if (n instanceof Collectible) {
-					Statics.playSound(this, "collectibles/marioCoin.wav");
-					GameCharacter.getInventory().addMoney(((Collectible) n).getValue());
-					objects.remove(u);
-					u--;
-				} else if (n instanceof SpecialCollectible) {
-					Statics.playSound(this, "collectibles/marioCoin.wav");
-					data.collect(((SpecialCollectible) n).id);
-					objects.remove(u);
-					u--;
-				}
+
+				if (n instanceof Collectible)
+					if (n instanceof MoneyObject) {
+						Statics.playSound(this, "collectibles/marioCoin.wav");
+						GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
+						objects.remove(u);
+						u--;
+					} else if (n instanceof SpecialCollectible) {
+						Statics.playSound(this, "collectibles/marioCoin.wav");
+						data.collect(((SpecialCollectible) n).id);
+						objects.remove(u);
+						u--;
+					} else if (n instanceof CollectibleObject) {
+						GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
+						objects.remove(u);
+						u--;
+					}
 			}
+
 			for (int c = 0; c < friends.size(); c++) {
 
 				if (n.getBounds().intersects(friends.get(c).getCollisionBounds())) {
@@ -1241,16 +1254,19 @@ public class Board extends MPanel implements ActionListener {
 						writer.write(friends.get(c).getSave());
 					}
 				}
-//				writer.newLine();
-//				writer.write(character != null ? "" + character.getInventory().getMoney() : "0");
+				// writer.newLine();
+				// writer.write(character != null ? "" +
+				// character.getInventory().getMoney() : "0");
 				writer.close();
 
 				ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
 				os.writeObject(data);
 				os.close();
-				
+
 				// TODO working on inventory
-				GameCharacter.getInventory().writeStates();
+				os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
+				os.writeObject(GameCharacter.getInventory());
+				os.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -1344,9 +1360,12 @@ public class Board extends MPanel implements ActionListener {
 					preferences = ((Preferences) is.readObject());
 					is.close();
 
-					reader = new BufferedReader(new FileReader(location + "inventory.txt"));
-					Inventory w = new Inventory(this, reader);
+					//reader = new BufferedReader(new FileReader(location + "inventory.txt"));
+					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
+					Inventory w = (Inventory) is.readObject();
+					is.close();
 					GameCharacter.setInventory(w);
+					GameCharacter.getInventory().setOwner(this);
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
 				}

@@ -1,10 +1,13 @@
 package com.dig.www.character;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -19,12 +22,15 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
@@ -54,17 +60,17 @@ public class Inventory implements Serializable {
 	// Options
 	private static int optionsX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2;
 	private static int optionsY = 100;
-	private transient Rectangle options = new Rectangle(optionsX, optionsY, buttonWidth, buttonHeight);
+	private static Rectangle options = new Rectangle(optionsX, optionsY, buttonWidth, buttonHeight);
 
 	// View Inventory
 	private static int viewX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2;
 	private static int viewY = 300;
-	private transient Rectangle view = new Rectangle(viewX, viewY, buttonWidth, buttonHeight);
+	private static Rectangle view = new Rectangle(viewX, viewY, buttonWidth, buttonHeight);
 
 	// Level Up Menu
 	private static int levelX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2 - 20;
 	private static int levelY = 500;
-	private transient Rectangle level = new Rectangle(levelX, levelY, buttonWidth + 100, buttonHeight);
+	private static Rectangle level = new Rectangle(levelX, levelY, buttonWidth + 100, buttonHeight);
 
 	// TODO this used to be Wallet
 	// ------------------------------------------------------------------------------------------
@@ -163,6 +169,12 @@ public class Inventory implements Serializable {
 	}
 
 	public void addItem(Items type, int num) {
+
+		// Items.NULL is the type given to items that should not go in the
+		// inventory. These are handled by the Board.
+		if (type == Items.NULL)
+			return;
+
 		if (!items.contains(type))
 			items.add(type);
 
@@ -183,6 +195,9 @@ public class Inventory implements Serializable {
 		 */
 		private static final long serialVersionUID = 1L;
 		private JScrollPane scrollPane;
+		private JList<String> jList;
+		private JButton b;
+		private static final int buttonHeight = 100;
 
 		public InventoryView(JFrame parent, Option which) {
 			super(parent);
@@ -193,15 +208,34 @@ public class Inventory implements Serializable {
 			setTitle(DigIt.NAME + " Inventory");
 
 			switch (which) {
-
 			default:
 			case ITEMS:
-				scrollPane = new JScrollPane(new JList<String>(getKeys(itemNums, items)));
+				jList = new JList<String>(getKeys(itemNums, items));
+				jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				jList.setSelectedIndex(0);
+				scrollPane = new JScrollPane(jList);
+				b = new JButton("Show item description");
+				b.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME + " Item Description", JOptionPane.INFORMATION_MESSAGE);
+					}
+				});
 			}
-			scrollPane.setSize(d);
-			add(scrollPane);
+			scrollPane.setSize(new Dimension((int) d.getWidth(), (int) d.getHeight() - buttonHeight));
+			b.setSize(new Dimension((int) d.getWidth(), buttonHeight));
+			
+			setLayout(new BorderLayout());
+			add(scrollPane, BorderLayout.CENTER);
+			add(b, BorderLayout.SOUTH);
+			
 			revalidate();
 			setVisible(true);
+		}
+		
+		private JDialog getMe() {
+			return this;
 		}
 	}
 
@@ -230,6 +264,7 @@ public class Inventory implements Serializable {
 		return items.get(index);
 	}
 
+	// TODO this code may be useful later. DO NOT DELETE.
 	// public void back() {
 	// index--;
 	//
@@ -256,26 +291,30 @@ public class Inventory implements Serializable {
 	// return true;
 	// }
 
-	public void writeStates() {
-		String location = (Inventory.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
-				+ owner.getUserName() + "/inventory.txt");
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(location));
-			String s;
-			Items w;
+//	public void writeStates() {
+//		String location = (Inventory.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+//				+ owner.getUserName() + "/inventory.txt");
+//		try {
+//			BufferedWriter writer = new BufferedWriter(new FileWriter(location));
+//			String s;
+//			Items w;
+//
+//			for (int i = 0; i < items.size(); i++) {
+//				w = items.get(i);
+//				s = w.toString() + "," + itemNums.get(w);
+//				writer.write(s);
+//				System.out.println(s);
+//				writer.newLine();
+//			}
+//
+//			writer.write("*" + money);
+//			writer.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
-			for (int i = 0; i < items.size(); i++) {
-				w = items.get(i);
-				s = w.toString() + "," + itemNums.get(w);
-				writer.write(s);
-				System.out.println(s);
-				writer.newLine();
-			}
-
-			writer.write("*" + money);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void setOwner(Board board) {
+		owner = board;
 	}
 }

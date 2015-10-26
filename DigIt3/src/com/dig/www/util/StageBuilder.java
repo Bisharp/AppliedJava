@@ -11,6 +11,7 @@ import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
 import com.dig.www.objects.*;
+import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -217,10 +218,10 @@ public class StageBuilder {
 							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case 't':
-							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying,health));
-						break;
+							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying, health));
+							break;
 						case 'B':
-							switch(enImg){
+							switch (enImg) {
 							case "Head":
 								enemies.add(new HeadBoss(enX, enY, owner));
 								break;
@@ -231,8 +232,8 @@ public class StageBuilder {
 								enemies.add(new SpinnyBoss(enX, enY, owner));
 								break;
 							}
-							
-						break;
+
+							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
@@ -359,21 +360,21 @@ public class StageBuilder {
 						if (stuff.get(3).charAt(0) == 't')
 							wall = true;
 
-						
-						if (val == 0)
-							npcs.add(new Objects(nX, nY, loc, wall, owner));
-						else if (val == -1) {
-							npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
-							count++;
-						} else if (val == -2)
-							npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
-						else	if(val==-3){
-							owner.setSpawnX(-nX+ OFF);
-							owner.setSpawnY(-nY + OFF - 299);
-						}
-							
-							else
-							npcs.add(new Collectible(nX, nY, loc, owner, val));
+						if (stuff.size() < 6)
+							if (val == 0)
+								npcs.add(new Objects(nX, nY, loc, wall, owner));
+							else if (val == -1) {
+								npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
+								count++;
+							} else if (val == -2)
+								npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
+							else if (val == -3) {
+								owner.setSpawnX(-nX + OFF);
+								owner.setSpawnY(-nY + OFF - 299);
+							} else
+								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
+						else
+							npcs.add(new CollectibleObject(nX, nY, loc, owner, Items.translate(stuff.get(5))));
 
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();

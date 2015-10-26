@@ -1,30 +1,23 @@
 package com.dig.www.objects;
 
+import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
-public class Collectible extends Objects {
+public abstract class Collectible extends Objects {
 	
-	private int value;
-	private static final String[] POS = {"coin0", "coin1"};
-
-	public Collectible(int x, int y, Board owner, int value) {
-		super(x, y, Collectible.createLoc(), false, owner);
-		
-		this.value = value;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Items type;
 	
-	public Collectible(int x, int y, String loc, Board owner, int value) {
+	public Collectible(int x, int y, String loc, Board owner, Items type) {
 		super(x, y, loc, false, owner);
-		
-		this.value = value;
+		this.type = type;
 	}
 
-	public int getValue() {
-		return value;
-	}
-	
-	public static String createLoc() {
-		return "images/objects/collectibles/" + POS[Statics.RAND.nextInt(POS.length)] + ".png";
+	public Items getType() {
+		return type;
 	}
 }
