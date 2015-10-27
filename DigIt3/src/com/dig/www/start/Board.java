@@ -533,7 +533,7 @@ public class Board extends MPanel implements ActionListener {
 		String decision;
 
 		decision = ((String) JOptionPane.showInputDialog(this, "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
-				new String[] { "Clark", "Carl", "Destiny", "Cain" }, null));
+				getCharacters(), null));
 
 		if (decision == null) {
 			timer.restart();
@@ -554,6 +554,23 @@ public class Board extends MPanel implements ActionListener {
 			Collections.sort(friends);
 		}
 		timer.restart();
+	}
+
+	private String[] getCharacters() {
+		int i = 0;
+
+		for (GameCharacter friend : friends)
+			if (friend.getType() != GameCharacter.Types.PROJECTILE)
+				i++;
+		
+		String[] s = new String[i];
+		i = 0;
+		for (GameCharacter friend : friends) {
+			s[i] = friend.getType().charName();
+			i++;
+		}
+		
+		return s;
 	}
 
 	private void scroll(int x, int y) {
@@ -704,7 +721,6 @@ public class Board extends MPanel implements ActionListener {
 
 		boolean tag = false;
 		boolean started = false;
-		boolean fieldUsed = false;
 
 		for (int i = 0; i < world.size(); i++) {
 
@@ -1028,6 +1044,14 @@ public class Board extends MPanel implements ActionListener {
 					} else if (n instanceof SpecialCollectible) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
 						data.collect(((SpecialCollectible) n).id);
+						objects.remove(u);
+						u--;
+
+						// This code would, once fully implemented, add an extra
+						// character following you. You would be able to switch
+						// to him.
+					} else if (n instanceof CollectibleCharacter) {
+						friends.add(((CollectibleCharacter) n).getCharacter());
 						objects.remove(u);
 						u--;
 					} else if (n instanceof CollectibleObject) {

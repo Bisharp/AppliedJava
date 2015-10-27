@@ -11,6 +11,7 @@ import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
 import com.dig.www.objects.*;
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 
@@ -373,6 +374,8 @@ public class StageBuilder {
 								owner.setSpawnY(-nY + OFF - 299);
 							} else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
+						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
+							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
 						else
 							npcs.add(new CollectibleObject(nX, nY, loc, owner, Items.translate(stuff.get(5))));
 

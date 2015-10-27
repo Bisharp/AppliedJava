@@ -133,6 +133,15 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 				return "Cain";
 			}
+		}, SIR_COBALT {
+			@Override
+			public String charName() {
+				return "Sir Cobalt";
+			}
+			
+			public String toString() {
+				return "sirCobalt";
+			}
 		},
 		PROJECTILE {
 			public String toString() {
@@ -147,6 +156,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		};
 
 		public abstract String charName();
+
+		public static Types translate(String string) {
+			for (Types i : Types.values())
+				if (i.toString().equals(string))
+					return i;
+
+			return PROJECTILE;
+		}
 
 	}
 
