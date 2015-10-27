@@ -61,7 +61,7 @@ public final class Statics {
 	public static final String DUMMY = "images/dummy.png";
 
 	public static final int LINE = 100;
-
+	public static final int STRENGTH = 20;
 	
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in

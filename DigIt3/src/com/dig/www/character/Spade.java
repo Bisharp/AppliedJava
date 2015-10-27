@@ -26,7 +26,7 @@ public class Spade extends GameCharacter {
 				10, 
 				80,
 				10,
-				100,10,20,50,10,30,0);
+				100,10,20,50,10,30,0, Statics.STRENGTH - 1);
 		// TODO Auto-generated constructor stub
 	}
 

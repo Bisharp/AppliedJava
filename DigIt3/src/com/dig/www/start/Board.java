@@ -1,6 +1,7 @@
 package com.dig.www.start;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -70,6 +71,7 @@ public class Board extends MPanel implements ActionListener {
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
 	protected ArrayList<FProjectile> fP = new ArrayList<FProjectile>();
 	protected ArrayList<Objects> objects = new ArrayList<Objects>();
+	private ArrayList<Objects> movingObjects = new ArrayList<Objects>();
 	private State state;
 	// private boolean debug = false;
 
@@ -880,47 +882,13 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 					}
-
 				}
 				// end of enemy loop
-				if (character.getMove() == Moves.AURA) {
 
-					boolean healed = false;
-
-					for (GameCharacter friend2 : friends) {
-
-						if (character.getActBounds().intersects(friend2.getBounds())) {
-							friend2.heal(character.getMeleeDamage() / 3);
-							healed = true;
-						}
-					}
-
-					if (healed) {
-						character.heal(character.getMeleeDamage() / 3);
-						character.setMelee(0);
-					}
-
-				} else if (character instanceof Heart && ((Heart) character).usingField() && !fieldUsed) {
-
-					fieldUsed = true;
-					Polygon rB = new Polygon();
-
-					for (FProjectile f : fP)
-						if (f instanceof Field) {
-							rB = ((Field) f).getIrregularBounds();
-							break;
-						}
-
-					for (GameCharacter friend2 : friends) {
-						if (rB.intersects(friend2.getBounds())) {
-							friend2.heal(Heart.FIELD_HEAL);
-						}
-					}
-
-					if (rB.intersects(character.getBounds()))
-						character.heal(Heart.FIELD_HEAL);
-				}
-				// end
+				if (movingObjects.size() > 0)
+					for (Objects o0 : movingObjects)
+						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
+							o0.collideWall();
 
 				// TODO The following code appears to me to simply be a repeat
 				// of earlier code,
@@ -953,6 +921,59 @@ public class Board extends MPanel implements ActionListener {
 				// }
 			}
 		}
+
+		if (character.getMove() == Moves.AURA) {
+
+			boolean healed = false;
+
+			for (GameCharacter friend2 : friends) {
+
+				if (character.getActBounds().intersects(friend2.getBounds())) {
+					friend2.heal(character.getMeleeDamage() / 3);
+					healed = true;
+				}
+			}
+
+			if (healed) {
+				character.heal(character.getMeleeDamage() / 3);
+				character.setMelee(0);
+			}
+
+		} else if (character instanceof Heart && ((Heart) character).usingField()) {
+			// fieldUsed = true;
+			Polygon rB = new Polygon();
+
+			for (FProjectile f : fP)
+				if (f instanceof Field) {
+					rB = ((Field) f).getIrregularBounds();
+					break;
+				}
+
+			for (GameCharacter friend2 : friends) {
+				if (rB.intersects(friend2.getBounds())) {
+					friend2.heal(Heart.FIELD_HEAL);
+				}
+			}
+
+			if (rB.intersects(character.getBounds()))
+				character.heal(Heart.FIELD_HEAL);
+		}
+		// end
+
+		// Moving objects colliding stuff
+		if (movingObjects.size() > 0)
+			for (Objects o0 : movingObjects) {
+				for (Objects o1 : objects)
+					if (o0.getBounds().intersects(o1.getBounds()) && o1.isWall() && o0 != o1)
+						o0.collideWall();
+				for (NPC n : npcs)
+					if (o0.getBounds().intersects(n.getBounds()))
+						o0.collideWall();
+				for (Portal n : portals)
+					if (o0.getBounds().intersects(n.getBounds()))
+						o0.collideWall();
+			}
+		// end
 
 		Portal p;
 		for (int i = 0; i < portals.size(); i++) {
@@ -998,7 +1019,7 @@ public class Board extends MPanel implements ActionListener {
 			if (o.intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
 
-				if (n instanceof Collectible)
+				if (n instanceof Collectible && ((Collectible) n).collectible())
 					if (n instanceof MoneyObject) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
 						GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
@@ -1105,10 +1126,8 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	private void pausedHandler(int key) {
-		if (key == Preferences.PAUSE()) {
+		if (key == Preferences.PAUSE())
 			state = State.INGAME;
-		} else if (key == KeyEvent.VK_SPACE)
-			preferences.setValues(this);
 	}
 
 	public void setState(State state) {
@@ -1360,7 +1379,8 @@ public class Board extends MPanel implements ActionListener {
 					preferences = ((Preferences) is.readObject());
 					is.close();
 
-					//reader = new BufferedReader(new FileReader(location + "inventory.txt"));
+					// reader = new BufferedReader(new FileReader(location +
+					// "inventory.txt"));
 					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
 					Inventory w = (Inventory) is.readObject();
 					is.close();
@@ -1454,5 +1474,17 @@ public class Board extends MPanel implements ActionListener {
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 		}
+	}
+
+	public void addItem(Items useItem) {
+		if (useItem != Items.NULL) {
+			ThrownObject o = new ThrownObject(character.getX(), character.getY(), useItem.getPath(), this, useItem);
+			objects.add(o);
+			movingObjects.add(o);
+		}
+	}
+
+	public ArrayList<Objects> getMovingObjects() {
+		return movingObjects;
 	}
 }

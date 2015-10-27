@@ -725,7 +725,6 @@ public class Block extends Sprite {
 	}
 
 	public boolean traversable() {
-		// TODO Auto-generated method stub
 		return type == Blocks.GROUND || type == Blocks.CARPET || type == Blocks.DIRT || type == Blocks.ROCK;
 	}
 }

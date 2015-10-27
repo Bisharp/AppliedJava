@@ -30,7 +30,7 @@ public class GameControllerRunnable implements Runnable {
 	private static int ATTACK = Preferences.ATTACK();
 	private static int PROJECTILE = Preferences.PROJECTILE();
 	private static int SPECIAL = Preferences.SPECIAL();
-	private static int LEVEL_UP_MENU = Preferences.LEVEL_UP();
+	private static int LEVEL_UP_MENU = Preferences.ITEM();
 	private static int PAUSE = Preferences.PAUSE();
 	private static int NPC = Preferences.NPC();
 	
@@ -43,7 +43,7 @@ public class GameControllerRunnable implements Runnable {
 		ATTACK = Preferences.ATTACK();
 		PROJECTILE = Preferences.PROJECTILE();
 		SPECIAL = Preferences.SPECIAL();
-		LEVEL_UP_MENU = Preferences.LEVEL_UP();
+		LEVEL_UP_MENU = Preferences.ITEM();
 		PAUSE = Preferences.PAUSE();
 		NPC = Preferences.NPC();
 	}

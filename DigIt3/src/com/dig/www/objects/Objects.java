@@ -50,4 +50,6 @@ protected boolean wall;
 				
 		}
 	}
+	public void collideWall() {
+	}
 }

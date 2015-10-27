@@ -50,27 +50,32 @@ public class Inventory implements Serializable {
 
 	private ArrayList<Items> items;
 	private HashMap<Items, Integer> itemNums;
-	private int index;
+	private int index = items != null && items.size() >= 0 ? 0 : -1;
 
 	// -------------------------------------------------------------------------------------------
 
 	private static final int buttonWidth = 200;
 	private static final int buttonHeight = 100;
 
-	// Options
-	private static int optionsX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2;
-	private static int optionsY = 100;
-	private static Rectangle options = new Rectangle(optionsX, optionsY, buttonWidth, buttonHeight);
+	private static final int margin = buttonWidth + 100;
+	private static final int row0 = 200;
+	private static final int row1 = 400;
 
-	// View Inventory
-	private static int viewX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2;
-	private static int viewY = 300;
-	private static Rectangle view = new Rectangle(viewX, viewY, buttonWidth, buttonHeight);
+	// Options
+	private static int optionsX = margin;
+	private static Rectangle options = new Rectangle(optionsX, row0, buttonWidth, buttonHeight);
 
 	// Level Up Menu
-	private static int levelX = Statics.BOARD_WIDTH / 2 - buttonWidth / 2 - 20;
-	private static int levelY = 500;
-	private static Rectangle level = new Rectangle(levelX, levelY, buttonWidth + 100, buttonHeight);
+	private static int levelX = Statics.BOARD_WIDTH - ((margin * 2) + 100);
+	private static Rectangle level = new Rectangle(levelX, row0, buttonWidth + 100, buttonHeight);
+
+	// View Inventory
+	private static int viewX = margin;
+	private static Rectangle view = new Rectangle(viewX, row1, buttonWidth, buttonHeight);
+
+	// Set Item Menu
+	private static int itemX = Statics.BOARD_WIDTH - ((margin * 2) + 50);
+	private static Rectangle item = new Rectangle(itemX, row1, buttonWidth + 75, buttonHeight);
 
 	// TODO this used to be Wallet
 	// ------------------------------------------------------------------------------------------
@@ -147,13 +152,15 @@ public class Inventory implements Serializable {
 
 		g2d.setColor(Color.RED);
 		g2d.fill(options);
-		g2d.fill(view);
 		g2d.fill(level);
+		g2d.fill(view);
+		g2d.fill(item);
 
 		g2d.setColor(Color.WHITE);
-		g2d.drawString("Options", optionsX + buttonWidth / 4, optionsY + buttonHeight / 3);
-		g2d.drawString("View Inventory", viewX + buttonWidth / 4, viewY + buttonHeight / 3);
-		g2d.drawString("View Level-Up Menu", levelX + buttonWidth / 4, levelY + buttonHeight / 3);
+		g2d.drawString("Options", optionsX + buttonWidth / 4, row0 + buttonHeight / 3);
+		g2d.drawString("View Level-Up Menu", levelX + buttonWidth / 4, row0 + buttonHeight / 3);
+		g2d.drawString("View Inventory", viewX + buttonWidth / 4, row1 + buttonHeight / 3);
+		g2d.drawString("Select Current Item", itemX + buttonWidth / 4, row1 + buttonHeight / 3);
 	}
 
 	public void mouseClick(MouseEvent m) {
@@ -166,6 +173,8 @@ public class Inventory implements Serializable {
 			showInventory(Option.ITEMS);
 		else if (r.intersects(level))
 			owner.getCharacter().OpenLevelUp();
+		else if (r.intersects(item))
+			selectItem();
 	}
 
 	public void addItem(Items type, int num) {
@@ -182,6 +191,20 @@ public class Inventory implements Serializable {
 			itemNums.replace(type, itemNums.get(type) + num);
 		} else
 			itemNums.put(type, num);
+	}
+
+	public void selectItem() {
+
+		if (items.size() == 0) {
+			Statics.showError("You have no equipable items", owner);
+		}
+
+		String s = (String) JOptionPane.showInputDialog(owner, "Select the item you want to have equipped:", DigIt.NAME,
+				JOptionPane.INFORMATION_MESSAGE, Statics.ICON, getKeys(itemNums, items, false, true), null);
+
+		for (int i = 0; i < items.size(); i++)
+			if (s.equals(items.get(i).toString()))
+				index = i;
 	}
 
 	public void showInventory(Option o) {
@@ -206,11 +229,13 @@ public class Inventory implements Serializable {
 
 			setSize(d);
 			setTitle(DigIt.NAME + " Inventory");
+			this.setLocation(Statics.BOARD_WIDTH / 2 - this.getWidth() / 2, Statics.BOARD_HEIGHT / 2 - this.getHeight() / 2);
+			setBackground(Color.black);
 
 			switch (which) {
 			default:
 			case ITEMS:
-				jList = new JList<String>(getKeys(itemNums, items));
+				jList = new JList<String>(getKeys(itemNums, items, true, false));
 				jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				jList.setSelectedIndex(0);
 				scrollPane = new JScrollPane(jList);
@@ -219,35 +244,40 @@ public class Inventory implements Serializable {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME + " Item Description", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
+								+ " Item Description", JOptionPane.INFORMATION_MESSAGE);
 					}
 				});
 			}
 			scrollPane.setSize(new Dimension((int) d.getWidth(), (int) d.getHeight() - buttonHeight));
 			b.setSize(new Dimension((int) d.getWidth(), buttonHeight));
-			
+
 			setLayout(new BorderLayout());
 			add(scrollPane, BorderLayout.CENTER);
 			add(b, BorderLayout.SOUTH);
-			
+
+			scrollPane.setForeground(Color.WHITE);
+			scrollPane.setOpaque(true);
+			scrollPane.setBackground(Color.black);
+
 			revalidate();
 			setVisible(true);
 		}
-		
+
 		private JDialog getMe() {
 			return this;
 		}
 	}
 
-	private String[] getKeys(HashMap<Items, Integer> itemNums, ArrayList<Items> items) {
+	private String[] getKeys(HashMap<Items, Integer> itemNums, ArrayList<Items> items, boolean showVals, boolean showOnlyThrowable) {
 
 		ArrayList<String> toReturn = new ArrayList<String>();
 		Items w;
 		for (int i = 0; i < items.size(); i++) {
 			w = items.get(i);
 
-			if (itemNums.get(w) > 0)
-				toReturn.add(w.toString() + " x" + itemNums.get(w));
+			if (itemNums.get(w) > 0 && (!showOnlyThrowable || w.isThrowable()))
+				toReturn.add(w.toString() + (showVals ? " x" + itemNums.get(w) : ""));
 		}
 
 		String[] s = new String[toReturn.size()];
@@ -265,54 +295,58 @@ public class Inventory implements Serializable {
 	}
 
 	// TODO this code may be useful later. DO NOT DELETE.
-	// public void back() {
-	// index--;
-	//
-	// if (index < 0)
-	// index = itemNums.size() - 1;
-	// }
-	//
-	// public void forward() {
-	// index++;
-	//
-	// if (index >= itemNums.size())
-	// index = 0;
-	// }
-	//
-	// public boolean useItem(Items type) {
-	//
-	// if (itemNums.get(type) > 0 && itemNums.get(type) < 100)
-	// itemNums.put(type, itemNums.get(type) - 1);
-	// else if (itemNums.get(type) >= 100)
-	// return true;
-	// else
-	// return false;
-	//
-	// return true;
-	// }
+	public void back() {
+		index--;
 
-//	public void writeStates() {
-//		String location = (Inventory.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
-//				+ owner.getUserName() + "/inventory.txt");
-//		try {
-//			BufferedWriter writer = new BufferedWriter(new FileWriter(location));
-//			String s;
-//			Items w;
-//
-//			for (int i = 0; i < items.size(); i++) {
-//				w = items.get(i);
-//				s = w.toString() + "," + itemNums.get(w);
-//				writer.write(s);
-//				System.out.println(s);
-//				writer.newLine();
-//			}
-//
-//			writer.write("*" + money);
-//			writer.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+		if (index < 0)
+			index = itemNums.size() - 1;
+	}
+
+	public void forward() {
+		index++;
+
+		if (index >= itemNums.size())
+			index = 0;
+	}
+
+	public Items useItem() {
+
+		if (index == -1 || items.size() < 1)
+			return Items.NULL;
+
+		Items type = items.get(index);
+
+		if (itemNums.get(type) > 0) {
+			itemNums.put(type, itemNums.get(type) - 1);
+			return type;
+		} else
+			return Items.NULL;
+	}
+
+	// public void writeStates() {
+	// String location =
+	// (Inventory.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString()
+	// + "saveFiles/"
+	// + owner.getUserName() + "/inventory.txt");
+	// try {
+	// BufferedWriter writer = new BufferedWriter(new FileWriter(location));
+	// String s;
+	// Items w;
+	//
+	// for (int i = 0; i < items.size(); i++) {
+	// w = items.get(i);
+	// s = w.toString() + "," + itemNums.get(w);
+	// writer.write(s);
+	// System.out.println(s);
+	// writer.newLine();
+	// }
+	//
+	// writer.write("*" + money);
+	// writer.close();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void setOwner(Board board) {
 		owner = board;

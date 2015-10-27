@@ -6,7 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -133,5 +135,19 @@ public class DigIt extends JFrame {
 
 	public void keyRelease(int key) {
 		activePanel.keyRelease(key);
+	}
+
+	// Incomplete and broken.
+	public static void showMessageDialog(DigIt owner, String message, String name, int informationMessage) {
+		JDialog dialogue = new JDialog(owner, message);
+		JLabel label = new JLabel(message);
+		label.setForeground(Color.WHITE);
+		label.setOpaque(true);
+		label.setBackground(Color.black);
+		
+		dialogue.add(label);
+		dialogue.setIconImage(Statics.ICON.getImage());
+		dialogue.revalidate();
+		dialogue.setVisible(true);
 	}
 }

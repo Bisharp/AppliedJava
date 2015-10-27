@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import com.dig.www.start.Board;
+import com.dig.www.util.Statics;
 
 public class Diamond extends GameCharacter {
 
@@ -23,7 +24,7 @@ public class Diamond extends GameCharacter {
 				10, 
 				80,
 				10,
-				100,0,30,75,0,20,50);
+				100,0,30,75,0,20,50, Statics.STRENGTH);
 		// TODO Auto-generated constructor stub
 
 	}

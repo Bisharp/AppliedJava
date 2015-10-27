@@ -89,7 +89,7 @@ public class Preferences implements Serializable {
 	// TODO Menus
 	private int change = KeyEvent.VK_R;
 	private int pause = KeyEvent.VK_SHIFT;
-	private int levelUp = KeyEvent.VK_L;
+	private int item = KeyEvent.VK_Z;
 
 	public int change() {
 		return change;
@@ -99,8 +99,8 @@ public class Preferences implements Serializable {
 		return pause;
 	}
 
-	public int levelUp() {
-		return levelUp;
+	public int item() {
+		return item;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -129,8 +129,6 @@ public class Preferences implements Serializable {
 		}
 	}
 
-	
-
 	private class PreferenceFrame extends JDialog {
 
 		/**
@@ -144,7 +142,7 @@ public class Preferences implements Serializable {
 		protected static final char ESCAPE = '#';
 
 		protected String[] movement = { "Arrow Keys", "WASD" };
-		protected String[] defualts = { "Arrow Keys tight(defualt)","Arrow Keys stretched", "WASD tight","WASD stretched" };
+		protected String[] defualts = { "Arrow Keys tight(defualt)", "Arrow Keys stretched", "WASD tight", "WASD stretched" };
 		protected JButton move = new JButton("Movement: " + movement[up == KeyEvent.VK_W ? 1 : 0]);
 		protected JButton attackB = new JButton("Attack: " + KeyEvent.getKeyText(attack));
 		protected JButton projectileB = new JButton("Projectile: " + KeyEvent.getKeyText(projectile));
@@ -153,7 +151,7 @@ public class Preferences implements Serializable {
 
 		protected JButton changeB = new JButton("Switch characters: " + KeyEvent.getKeyText(change));
 		protected JButton pauseB = new JButton("Pause: " + KeyEvent.getKeyText(pause));
-		protected JButton levelB = new JButton("Level Up Menu: " + KeyEvent.getKeyText(levelUp));
+		protected JButton levelB = new JButton("Use Items: " + KeyEvent.getKeyText(item));
 		protected JButton resetB = new JButton("Reset to Control Scheme");
 
 		public PreferenceFrame(JComponent owner) {
@@ -201,10 +199,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Attack");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						attack = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -217,10 +215,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Projectile");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						projectile = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -233,10 +231,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Special");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						special = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -249,10 +247,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Switch characters");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						change = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -265,10 +263,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Pause");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						pause = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -280,17 +278,17 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Level Up Menu");
-					
+					char c = getValue("Use Items");
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
-						levelUp = KeyEvent.getExtendedKeyCodeForChar(c);
+						item = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
-						levelUp = translateKey(c);
+						item = translateKey(c);
 					;
-					levelB.setText("Level Up Menu: " + KeyEvent.getKeyText(levelUp));
+					levelB.setText("Use Items: " + KeyEvent.getKeyText(item));
 				}
 			});
 			npcB.addActionListener(new ActionListener() {
@@ -298,10 +296,10 @@ public class Preferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					char c = getValue("Special");
-					
+
 					if (c == ESCAPE)
 						return;
-					
+
 					if (!special(c))
 						npc = KeyEvent.getExtendedKeyCodeForChar(c);
 					else
@@ -322,7 +320,7 @@ public class Preferences implements Serializable {
 					specialB.setText("Special: " + KeyEvent.getKeyText(special));
 					changeB.setText("Switch characters: " + KeyEvent.getKeyText(change));
 					pauseB.setText("Pause: " + KeyEvent.getKeyText(pause));
-					levelB.setText("Level Up Menu: " + KeyEvent.getKeyText(levelUp));
+					levelB.setText("Use Items: " + KeyEvent.getKeyText(item));
 					npcB.setText("Talk to NPCs: " + KeyEvent.getKeyText(npc));
 				}
 			});
@@ -385,12 +383,12 @@ public class Preferences implements Serializable {
 				toReturn = !s.equalsIgnoreCase(KeyEvent.getKeyText(attack)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(projectile))
 						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(special)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(npc))
 						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(change)) && !s.equalsIgnoreCase(KeyEvent.getKeyText(pause))
-						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(levelUp));
+						&& !s.equalsIgnoreCase(KeyEvent.getKeyText(item));
 			} else
 				toReturn = !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(attack)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(projectile))
 						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(special)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(npc))
 						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(change)) && !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(pause))
-						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(levelUp));
+						&& !(ch + "").equalsIgnoreCase(KeyEvent.getKeyText(item));
 
 			System.out.println(KeyEvent.getKeyText(attack));
 
@@ -419,7 +417,7 @@ public class Preferences implements Serializable {
 
 				s = (String) JOptionPane.showInputDialog(this, "Please select the key you want to be associated with the following action:\n"
 						+ action, DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, chars[i], null);
-				
+
 				if (s == null || !verify(!special(s) ? s.charAt(0) : specialTrans(s), special(s)))
 					str = null;
 			} while (str == null);
@@ -472,12 +470,13 @@ public class Preferences implements Serializable {
 					right = KeyEvent.VK_D;
 				}
 		}
+
 		public void setDefualt() {
 			String val = (String) JOptionPane.showInputDialog(this,
 					"Please enter the character you want to be associated with the following action:\nMovement", DigIt.NAME,
 					JOptionPane.PLAIN_MESSAGE, Statics.ICON, defualts, null);
 
-			if (val != null){
+			if (val != null) {
 				if (val.equals(defualts[0])) {
 					up = KeyEvent.VK_UP;
 					down = KeyEvent.VK_DOWN;
@@ -491,8 +490,8 @@ public class Preferences implements Serializable {
 
 					change = KeyEvent.VK_R;
 					pause = KeyEvent.VK_SHIFT;
-					levelUp = KeyEvent.VK_L;
-				} else if(val.equals(defualts[1])){
+					item = KeyEvent.VK_X;
+				} else if (val.equals(defualts[1])) {
 					up = KeyEvent.VK_UP;
 					down = KeyEvent.VK_DOWN;
 					left = KeyEvent.VK_LEFT;
@@ -505,9 +504,8 @@ public class Preferences implements Serializable {
 
 					change = KeyEvent.VK_R;
 					pause = KeyEvent.VK_SHIFT;
-					levelUp = KeyEvent.VK_L;
-				}
-				else if(val.equals(defualts[3])){
+					item = KeyEvent.VK_Z;
+				} else if (val.equals(defualts[3])) {
 					up = KeyEvent.VK_W;
 					down = KeyEvent.VK_S;
 					left = KeyEvent.VK_A;
@@ -520,9 +518,8 @@ public class Preferences implements Serializable {
 
 					change = KeyEvent.VK_R;
 					pause = KeyEvent.VK_SHIFT;
-					levelUp = KeyEvent.VK_L;
-				}
-				else if(val.equals(defualts[2])){
+					item = KeyEvent.VK_Z;
+				} else if (val.equals(defualts[2])) {
 					up = KeyEvent.VK_W;
 					down = KeyEvent.VK_S;
 					left = KeyEvent.VK_A;
@@ -535,66 +532,68 @@ public class Preferences implements Serializable {
 
 					change = KeyEvent.VK_R;
 					pause = KeyEvent.VK_SHIFT;
-					levelUp = KeyEvent.VK_L;
+					item = KeyEvent.VK_Z;
 				}
+			}
 		}
-	}}
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// TODO static cases used in GameCharacter
 
-	public static int UP() {
+	public static final int UP() {
 		return Board.preferences.up();
 	}
 
-	public static int DOWN() {
+	public static final int DOWN() {
 		return Board.preferences.down();
 	}
 
-	public static int LEFT() {
+	public static final int LEFT() {
 		return Board.preferences.left();
 	}
 
-	public static int RIGHT() {
+	public static final int RIGHT() {
 		return Board.preferences.right();
 	}
 
 	// ----------------------------------------------------------------------------------------
-	public static int ATTACK() {
+	public static final int ATTACK() {
 		return Board.preferences.attack();
 	}
 
-	public static int PROJECTILE() {
+	public static final int PROJECTILE() {
 		return Board.preferences.projectile();
 	}
 
-	public static int SPECIAL() {
+	public static final int SPECIAL() {
 		return Board.preferences.special();
 	}
 
-	public static int NPC() {
+	public static final int NPC() {
 		return Board.preferences.npc();
 	}
 
 	// ----------------------------------------------------------------------------------------
-	public static int PAUSE() {
+	public static final int PAUSE() {
 		return Board.preferences.pause();
 	}
 
-	public static int LEVEL_UP() {
-		return Board.preferences.levelUp();
+	public static final int ITEM() {
+		return Board.preferences.item();
 	}
 
-	public static int CHAR_CHANGE() {
+	public static final int CHAR_CHANGE() {
 		return Board.preferences.change();
 	}
 
 	// ----------------------------------------------------------------------------------------
 
 	public static String getControls() {
-		return "Controls:\nMovement Scheme: " + (KeyEvent.getKeyText(UP()).equals("W")? "WASD" : "Arrow Keys") + "\nAttack: " + KeyEvent.getKeyText(ATTACK()) + "  |  Projectile: "
-				+ KeyEvent.getKeyText(PROJECTILE()) + "  |  Special: " + KeyEvent.getKeyText(SPECIAL()) + "  |  Talk to NPCs: "
-				+ KeyEvent.getKeyText(NPC()) + "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Level Up Menu: " + KeyEvent.getKeyText(LEVEL_UP())
-				+ "  |  Switch characters: " + KeyEvent.getKeyText(CHAR_CHANGE());
+		return "Controls:\nMovement Scheme: " + (KeyEvent.getKeyText(UP()).equals("W") ? "WASD" : "Arrow Keys") + "\nAttack: "
+				+ KeyEvent.getKeyText(ATTACK()) + "  |  Projectile: " + KeyEvent.getKeyText(PROJECTILE()) + "  |  Special: "
+				+ KeyEvent.getKeyText(SPECIAL()) + "  |  Talk to NPCs: " + "  |  Use Items: " + KeyEvent.getKeyText(ITEM())
+				+ KeyEvent.getKeyText(NPC()) + "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Switch characters: "
+				+ KeyEvent.getKeyText(CHAR_CHANGE());
 	}
 }

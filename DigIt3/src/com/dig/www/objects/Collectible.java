@@ -20,4 +20,8 @@ public abstract class Collectible extends Objects {
 	public Items getType() {
 		return type;
 	}
+
+	public boolean collectible() {
+		return true;
+	}
 }
