@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import com.dig.www.blocks.Block;
+import com.dig.www.objects.BossBlock;
+import com.dig.www.objects.Objects;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.util.SoundPlayer;
@@ -115,6 +117,7 @@ public void draw(Graphics2D g2d){
 	if(active){
 	if(!alive&&DigIt.soundPlayer.playerThread!=null){
 		makeDeadExplosion();
+		removeSpecWalls();
 	}else
 		if(DigIt.soundPlayer.playerThread==null||!DigIt.soundPlayer.isPlaying()){
 			Statics.playSound(owner, musicLoc);
@@ -167,5 +170,12 @@ public void makeDeadExplosion(){
 }
 public void myDraw(Graphics2D g2d){
 	super.draw(g2d);
+}
+public void removeSpecWalls(){
+	for(Objects block:owner.getObjects()){
+		if(block instanceof BossBlock){
+			((BossBlock) block).remove();
+		}
+	}
 }
 }

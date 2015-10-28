@@ -371,7 +371,11 @@ public class StageBuilder {
 							else if (val == -3) {
 								owner.setSpawnX(-nX + OFF);
 								owner.setSpawnY(-nY + OFF - 299);
-							} else
+							}
+							else if(val==-4){
+								npcs.add(new BossBlock(nX, nY, owner));
+							}
+							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else
 							npcs.add(new CollectibleObject(nX, nY, loc, owner, Items.translate(stuff.get(5))));
