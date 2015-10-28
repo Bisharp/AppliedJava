@@ -19,7 +19,7 @@ private int rotate1=0;
 private int rotate2=0;
 	public SpinnyBoss(int x, int y, Board owner) {
 		super(x, y, "images/enemies/bosses/pod/pod.png", owner, true, 1000,
-				"SpinnyBoss", 5,
+				"SpinnyBoss", 6,
 				"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav",
 				"gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor stub
@@ -45,11 +45,12 @@ private int rotate2=0;
 			phase=2;
 			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		speed++;
 		}if(health<(maxHealth/3)*2&&phase<1){
 				phase=1;
 				Statics.playSound(owner,bossPhaseS);
 				owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
-					
+				speed++;	
 		}
 		
 			basicAnimate();
@@ -62,25 +63,32 @@ private int rotate2=0;
 				if(actTimer<=0){
 					if(sequence==0){
 					
-					if(phase>0){
+					//if(phase>0){
 						chargeAttack(150, 40,1.5);
-						}
+						//}
 				sequence++;
 						
 					}
 					else if(sequence==1){
+						
+							createProjectile("images/enemies/blasts/1.png",10,
+									Statics.pointTowards(new Point((int) x,
+									(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25));
+							sequence++;
+							}
+					else if(sequence==2){
 					follow(200, 40,1);
 						sequence++;}
 						
-					else if(sequence>1&&sequence<5){
-					if(phase+2>=sequence){
+					else if(sequence>2&&sequence<6){
+					if(phase+3>=sequence){
 						createProjectile("images/enemies/blasts/1.png",10,
 								Statics.pointTowards(new Point((int) x,
 								(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25));
 					}	sequence++;
 						}
-					else if(sequence==5){
-					if(phase==2)
+					else if(sequence==6){
+					if(phase>0)
 						fireAll("images/enemies/blasts/0.png",10,
 								8,true,40);
 						sequence++;
