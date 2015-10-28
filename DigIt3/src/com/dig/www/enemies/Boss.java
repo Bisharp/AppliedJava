@@ -172,9 +172,10 @@ public void myDraw(Graphics2D g2d){
 	super.draw(g2d);
 }
 public void removeSpecWalls(){
-	for(Objects block:owner.getObjects()){
-		if(block instanceof BossBlock){
-			((BossBlock) block).remove();
+	for(int c=0;c<owner.getObjects().size();c++){
+		if(owner.getObjects().get(c) instanceof BossBlock){
+			((BossBlock) owner.getObjects().get(c)).remove();
+			c--;
 		}
 	}
 }
