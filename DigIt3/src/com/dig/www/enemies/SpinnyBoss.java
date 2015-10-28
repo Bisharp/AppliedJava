@@ -208,4 +208,10 @@ private int rotate2=0;
 		d = (double) (Math.toDegrees(Math.atan2(b.getY() + -(a.getY()), b.getX() + -a.getX())) + 180);
 		return d;
 	}
+	@Override
+	public void  makeDeadExplosion(){
+		super.makeDeadExplosion();
+		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		
+	}
 }
