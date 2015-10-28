@@ -263,9 +263,9 @@ int roarTimer;
 
 		String dire= "side";
 
-		if(Math.abs(dir-90)<40){
+		if(Math.abs(dir-90)<45){
 			dire="front";
-		}else if(Math.abs(dir-270)<40){
+		}else if(Math.abs(dir-270)<45){
 			dire="back";
 		}
 			
