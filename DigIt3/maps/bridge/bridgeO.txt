@@ -1,4 +1,3 @@
-1550,9700,images/dummy.png,false,-3
 1100,500,images/objects/Wood.png,true,-4
 1200,500,images/objects/Wood.png,true,-4
 1300,500,images/objects/Wood.png,true,-4
@@ -13,3 +12,4 @@
 1000,500,images/objects/Wood.png,true,-4
 125,625,images/objects/collectibles/coin1.png,false,5
 2825,325,images/objects/collectibles/coin0.png,false,1
+1550,10200,images/dummy.png,false,-3
