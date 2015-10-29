@@ -181,7 +181,6 @@ public abstract class Enemy extends Sprite {
 			break;
 		case BASH:
 			takeDamage(character.getSpecialDamage());
-			System.out.println("hi");
 			stunTimer = STUN_MAX;
 			if(!invincible&&! (this instanceof PathEnemy)){
 			int d = (int) pointTowards(new Point(character.getX(), character.getY()));
