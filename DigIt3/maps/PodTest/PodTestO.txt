@@ -1,1 +1,15 @@
 1650,2750,images/dummy.png,false,-3
+1500,800,images/objects/Wood.png,true,-4
+1600,800,images/objects/Wood.png,true,-4
+1700,800,images/objects/Wood.png,true,-4
+1800,800,images/objects/Wood.png,true,-4
+2125,725,images/objects/collectibles/coin1.png,false,5
+2125,325,images/objects/collectibles/coin1.png,false,5
+1225,325,images/objects/collectibles/coin1.png,false,5
+1225,725,images/objects/collectibles/coin1.png,false,5
+1225,525,images/objects/collectibles/coin0.png,false,1
+2125,525,images/objects/collectibles/coin0.png,false,1
+1675,2375,images/objects/collectibles/coin1.png,false,5
+2425,1075,images/objects/collectibles/coin0.png,false,1
+975,1475,images/objects/collectibles/coin0.png,false,1
+2725,2625,images/objects/collectibles/coin0.png,false,1

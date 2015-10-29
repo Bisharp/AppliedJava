@@ -124,7 +124,7 @@ int roarTimer;
 						int yPoint=(int) Math.max(
 								(owner.getWorld().get(0).getY()+
 								((double)((double)((maxHealth/3)*(2-phase))/(double)maxHealth)
-								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*4));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
+								*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY() ))),owner.getWorld().get(0).getY()+(100*6));//, Math.min(y, (int)(owner.getWorld().get(0).getY()+
 								//((double)((double)health/(double)maxHealth)
 								//*(-owner.getWorld().get(0).getY()+owner.getWorld().get(owner.getWorld().size()-1).getY())))));
 						moveTo(xPoint,yPoint,3, 10);
@@ -263,9 +263,9 @@ int roarTimer;
 
 		String dire= "side";
 
-		if(Math.abs(dir-90)<40){
+		if(Math.abs(dir-90)<45){
 			dire="front";
-		}else if(Math.abs(dir-270)<40){
+		}else if(Math.abs(dir-270)<45){
 			dire="back";
 		}
 			
