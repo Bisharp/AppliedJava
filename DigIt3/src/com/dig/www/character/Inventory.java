@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -197,14 +199,16 @@ public class Inventory implements Serializable {
 
 		if (items.size() == 0) {
 			Statics.showError("You have no equipable items", owner);
+			return;
 		}
 
 		String s = (String) JOptionPane.showInputDialog(owner, "Select the item you want to have equipped:", DigIt.NAME,
 				JOptionPane.INFORMATION_MESSAGE, Statics.ICON, getKeys(itemNums, items, false, true), null);
 
-		for (int i = 0; i < items.size(); i++)
-			if (s.equals(items.get(i).toString()))
-				index = i;
+		if (s != null)
+			for (int i = 0; i < items.size(); i++)
+				if (s.equals(items.get(i).toString()))
+					index = i;
 	}
 
 	public void showInventory(Option o) {
@@ -245,7 +249,8 @@ public class Inventory implements Serializable {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
-								+ " Item Description", JOptionPane.INFORMATION_MESSAGE);
+								+ " Item Description", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Items.translate(jList.getSelectedValue())
+								.getPath()));
 					}
 				});
 			}
@@ -292,21 +297,6 @@ public class Inventory implements Serializable {
 
 	public Items getItem() {
 		return items.get(index);
-	}
-
-	// TODO this code may be useful later. DO NOT DELETE.
-	public void back() {
-		index--;
-
-		if (index < 0)
-			index = itemNums.size() - 1;
-	}
-
-	public void forward() {
-		index++;
-
-		if (index >= itemNums.size())
-			index = 0;
 	}
 
 	public Items useItem() {

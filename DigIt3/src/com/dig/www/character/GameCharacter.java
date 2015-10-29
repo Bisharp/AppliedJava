@@ -133,12 +133,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 				return "Cain";
 			}
-		}, SIR_COBALT {
+		},
+		SIR_COBALT {
 			@Override
 			public String charName() {
 				return "Sir Cobalt";
 			}
-			
+
 			public String toString() {
 				return "sirCobalt";
 			}
@@ -692,12 +693,20 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			if (itemTimer <= 0) {
 				itemTimer = ITEM_MAX;
-				owner.addItem(inventory.useItem());
+				Items i = inventory.useItem();
+
+				if (!i.isWeapon() && i != Items.FOOD_NORMAL)
+					owner.addItem(inventory.useItem());
+				else if (i == Items.FOOD_NORMAL) {
+					// Add food code here
+				} else {
+					owner.getfP().add(new FProjectile(dir, x, y, 25, this, i.getPath(), owner, Moves.ITEM));
+				}
 
 				// TODO More strength stuff; this code would be removed if we
 				// don't allow characters to get stronger. Currently removed
 				// until I actually present the idea.
-				
+
 				// strengthIncrementer++;
 				// if (strengthIncrementer == 5 * timesIncremented) {
 				// strength++;

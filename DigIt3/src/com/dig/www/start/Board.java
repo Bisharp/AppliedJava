@@ -1043,6 +1043,7 @@ public class Board extends MPanel implements ActionListener {
 						u--;
 					} else if (n instanceof SpecialCollectible) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
+						GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
 						data.collect(((SpecialCollectible) n).id);
 						objects.remove(u);
 						u--;

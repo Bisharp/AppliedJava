@@ -6,10 +6,10 @@ import com.dig.www.util.Statics;
 
 public enum Items implements Serializable {
 
-	TEST0 {
+	NULL {
 		@Override
-		String getPersonalDesc() {
-			return "A test object.";
+		protected String getPersonalDesc() {
+			return "<html>A value for items which do not go in the inventory. If you are reading this (and not looking in the code), <i>do not</i> use this item, as it may cause undefined behavior.";
 		}
 
 		@Override
@@ -21,20 +21,35 @@ public enum Items implements Serializable {
 		public boolean isThrowable() {
 			return false;
 		}
-	},
-	NULL {
+
 		@Override
-		String getPersonalDesc() {
-			return "<html>A value for items which do not go in the inventory. If you are reading this and <i>not</i> snooping in the code, <i>do not</i> use this item, as it may cause undefined behavior.";
+		public boolean isWeapon() {
+			return false;
+		}
+	},
+	SPECIAL_COLLECTIBLE {
+		@Override
+		protected String getPersonalDesc() {
+			return "<html>An item required to progress through the game;<br>full decription to be written.";
+		}
+
+		@Override
+		public String getPath() {
+			return "images/objects/collectibles/special.png";
 		}
 		
 		@Override
-		public String getPath() {
-			return Statics.DUMMY;
+		public String toString() {
+			return "Golden Troll Face";
 		}
 
 		@Override
 		public boolean isThrowable() {
+			return false;
+		}
+
+		@Override
+		public boolean isWeapon() {
 			return false;
 		}
 	},
@@ -44,18 +59,43 @@ public enum Items implements Serializable {
 		}
 
 		@Override
-		String getPersonalDesc() {
-			return "<html>A bright blue cloak found in The Wizard's tower. What's this? The tag says \"Invisible Cloak.\"<br>Well, <i>that</i> can't be true; I can see it just fine.";
+		protected String getPersonalDesc() {
+			return "<html>A bright blue cloak found in The Wizard's tower. What's this? The tag says \"Invisible Cloak.\"<br>Well, <i>that</i> can't be true; I can see it just fine!";
 		}
-		
+
 		@Override
 		public String getPath() {
 			return "images/objects/notSoInvisibleCloak.png";
+		}
+		
+		@Override
+		public boolean isThrowable() {
+			return true;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			return false;
+		}
+	}, FOOD_NORMAL {
+		@Override
+		protected String getPersonalDesc() {
+			return null;
+		}
+
+		@Override
+		public String getPath() {
+			return "images/objects/food/" + Statics.RAND.nextInt(Statics.getFolderCont("images/objects/food/")) + ".png";
 		}
 
 		@Override
 		public boolean isThrowable() {
 			return true;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			return false;
 		}
 	};
 
@@ -75,8 +115,11 @@ public enum Items implements Serializable {
 		return NULL.getPersonalDesc();
 	}
 
-	abstract String getPersonalDesc();
+	protected abstract String getPersonalDesc();
+
 	public abstract String getPath();
 
 	public abstract boolean isThrowable() ;
+
+	public abstract boolean isWeapon() ;
 }

@@ -2,6 +2,7 @@ package com.dig.www.npc;
 
 import java.awt.Rectangle;
 
+import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 
 public abstract class BlockerNPC extends ServiceNPC {
@@ -9,7 +10,7 @@ public abstract class BlockerNPC extends ServiceNPC {
 	protected final int value;
 	protected boolean isWall = true;
 
-	public static final String COLLECTIBLE = "Golden Troll Face";
+	public static final String COLLECTIBLE = Items.SPECIAL_COLLECTIBLE.toString();
 
 	public BlockerNPC(int x, int y, String loc, Board owner, String[] dialogs, String s, int value, String rebuffLine) {
 		super(x, y, loc, owner, dialogs, s, rebuffLine);

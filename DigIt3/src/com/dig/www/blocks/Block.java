@@ -371,17 +371,12 @@ public class Block extends Sprite {
 
 					g2d.setColor(Color.WHITE);
 					g2d.fillRect(x + 85, y + 85, 5, 10);
+					g2d.fillRect(x + 75, y + 35, 5, 10);
+					g2d.fillRect(x + 45, y + 45, 5, 10);
+					
 					g2d.setColor(Color.RED);
 					g2d.fillOval(x + 80, y + 80, 15, 10);
-
-					g2d.setColor(Color.WHITE);
-					g2d.fillRect(x + 75, y + 35, 5, 10);
-					g2d.setColor(Color.RED);
 					g2d.fillOval(x + 70, y + 30, 15, 10);
-
-					g2d.setColor(Color.WHITE);
-					g2d.fillRect(x + 45, y + 45, 5, 10);
-					g2d.setColor(Color.RED);
 					g2d.fillOval(x + 40, y + 40, 15, 10);
 					break;
 
@@ -725,6 +720,7 @@ public class Block extends Sprite {
 	}
 
 	public boolean traversable() {
+		// TODO Auto-generated method stub
 		return type == Blocks.GROUND || type == Blocks.CARPET || type == Blocks.DIRT || type == Blocks.ROCK;
 	}
 }

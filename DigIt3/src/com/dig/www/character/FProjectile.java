@@ -156,19 +156,15 @@ private GameCharacter maker;
 		return d;
 	}
 	public int getSpeed() {
-		// TODO Auto-generated method stub
 		return speed;
 	}
 	public String getLoc() {
-		// TODO Auto-generated method stub
 		return loc;
 	}
 	public Board getOwner() {
-		// TODO Auto-generated method stub
 		return owner;
 	}
 	public int getCharNum() {
-		// TODO Auto-generated method stub
 		return charHoming;
 	}
 	public boolean getHarming(){
