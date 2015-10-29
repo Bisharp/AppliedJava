@@ -375,6 +375,9 @@ public class StageBuilder {
 							else if(val==-4){
 								npcs.add(new BossBlock(nX, nY, owner));
 							}
+							else if(val==-5){
+								npcs.add(new HookObject(nX, nY, owner));
+							}
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else
