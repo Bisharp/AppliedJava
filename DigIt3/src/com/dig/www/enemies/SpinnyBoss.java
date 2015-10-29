@@ -58,7 +58,7 @@ private int rotate2=0;
 			if(!acted){
 				if(!getBounds().intersects(getOwnerPlusBounds())){
 					//realSeq=sequence;
-					follow(5, 0, 5);
+					follow(3, 0, 5);
 				}
 				if(actTimer<=0){
 					if(sequence==0){
