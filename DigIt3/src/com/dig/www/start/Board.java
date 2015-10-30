@@ -557,19 +557,41 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	private String[] getCharacters() {
-		int i = 0;
 
-		for (GameCharacter friend : friends)
-			if (friend.getType() != GameCharacter.Types.PROJECTILE)
-				i++;
-		
-		String[] s = new String[i];
-		i = 0;
+		ArrayList<String> s0 = new ArrayList<String>();
+
 		for (GameCharacter friend : friends) {
-			s[i] = friend.getType().charName();
-			i++;
+			s0.add(friend.getType().charName());
 		}
-		
+
+		String[] s = new String[friends.size()];
+
+		if (!s0.contains(GameCharacter.Types.SPADE.charName())) {
+			s[0] = GameCharacter.Types.CLUB.charName();
+			s[1] = GameCharacter.Types.HEART.charName();
+			s[2] = GameCharacter.Types.DIAMOND.charName();
+		} else if (!s0.contains(GameCharacter.Types.CLUB.charName())) {
+			s[0] = GameCharacter.Types.SPADE.charName();
+			s[1] = GameCharacter.Types.HEART.charName();
+			s[2] = GameCharacter.Types.DIAMOND.charName();
+		} else if (!s0.contains(GameCharacter.Types.HEART.charName())) {
+			s[0] = GameCharacter.Types.SPADE.charName();
+			s[1] = GameCharacter.Types.CLUB.charName();
+			s[2] = GameCharacter.Types.DIAMOND.charName();
+		} else {
+			s[0] = GameCharacter.Types.SPADE.charName();
+			s[1] = GameCharacter.Types.CLUB.charName();
+			s[2] = GameCharacter.Types.HEART.charName();
+		}
+
+		int i = 3;
+		if (s0.size() > i)
+			for (String s1 : s0)
+				if (!normalPlayer(GameCharacter.Types.translate(s1))) {
+					s[i] = s1;
+					i++;
+				}
+
 		return s;
 	}
 
@@ -1503,6 +1525,7 @@ public class Board extends MPanel implements ActionListener {
 
 	public void addItem(Items useItem) {
 		if (useItem != Items.NULL) {
+			System.out.println("Use item");
 			ThrownObject o = new ThrownObject(character.getX(), character.getY(), useItem.getPath(), this, useItem);
 			objects.add(o);
 			movingObjects.add(o);

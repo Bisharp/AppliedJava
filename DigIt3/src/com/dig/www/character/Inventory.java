@@ -248,9 +248,10 @@ public class Inventory implements Serializable {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
-								+ " Item Description", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Items.translate(jList.getSelectedValue())
-								.getPath()));
+						if (jList.getSelectedValue() != null)
+							JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
+									+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
+									new ImageIcon(Items.translate(jList.getSelectedValue().split(" x")[0]).getPath()));
 					}
 				});
 			}
@@ -301,7 +302,7 @@ public class Inventory implements Serializable {
 
 	public Items useItem() {
 
-		if (index == -1 || items.size() < 1)
+		if (index == -1 || getKeys(itemNums, items, false, true).length < 1)
 			return Items.NULL;
 
 		Items type = items.get(index);
