@@ -303,6 +303,12 @@ public class StageBuilder {
 						case NPC.GATEKEEPER:
 							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, Integer.parseInt(stuff.get(3))));
 							break;
+						case NPC.MACARONI:
+							npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner));
+							break;
+						case NPC.PLATO:
+							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
+							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
