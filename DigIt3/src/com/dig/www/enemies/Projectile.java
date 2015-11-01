@@ -21,7 +21,7 @@ public class Projectile extends Enemy {
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
 
-	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying) {
+	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying,int damage) {
 		super(x, y, loc, owner, flying,1);
 		
 		
@@ -39,6 +39,7 @@ public class Projectile extends Enemy {
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		this.damage=damage;
 	}
 
 	public void animate() {

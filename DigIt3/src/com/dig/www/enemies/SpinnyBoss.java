@@ -73,7 +73,7 @@ private int rotate2=0;
 						
 							createProjectile("images/enemies/blasts/1.png",10,
 									Statics.pointTowards(new Point((int) x,
-									(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25));
+									(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25),10);
 							sequence++;
 							}
 					else if(sequence==2){
@@ -84,7 +84,7 @@ private int rotate2=0;
 					if(phase+3>=sequence){
 						createProjectile("images/enemies/blasts/1.png",10,
 								Statics.pointTowards(new Point((int) x,
-								(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25));
+								(int) y), new Point(owner.getCharacterX(),owner.getCharacterY())),true,40,(int)getBounds().getWidth()/2,(int)getBounds().getHeight()/2-((2-phase)*25),10);
 					}	sequence++;
 						}
 					else if(sequence==6){
@@ -199,7 +199,7 @@ private int rotate2=0;
 		int dirAdder=360/times;
 		for(int c=0;c<times;c++){
 
-		owner.getEnemies().add(new Projectile((dir+(c*dirAdder))%360, x+(int)getBounds().getWidth()/2, y+(int)getBounds().getHeight()/2, speed, this, loc, owner, flying));
+		owner.getEnemies().add(new Projectile((dir+(c*dirAdder))%360, x+(int)getBounds().getWidth()/2, y+(int)getBounds().getHeight()/2, speed, this, loc, owner, flying,10));
 		
 		}	actTimer=timer;
 

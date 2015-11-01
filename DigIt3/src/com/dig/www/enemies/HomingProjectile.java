@@ -8,8 +8,8 @@ import com.dig.www.util.Statics;
 public class HomingProjectile extends Projectile{
 
 	public HomingProjectile(double dir, int x, int y, int speed, Enemy maker,
-			String loc, Board owner, boolean flying) {
-		super(dir, x, y, speed, maker, loc, owner, flying);
+			String loc, Board owner, boolean flying,int damage) {
+		super(dir, x, y, speed, maker, loc, owner, flying,damage);
 		// TODO Auto-generated constructor stub
 	}
 	

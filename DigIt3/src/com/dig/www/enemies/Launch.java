@@ -59,7 +59,7 @@ public class Launch extends Enemy {
 	public void addBall() {
 		owner.addEnemy(new Projectile(pointTowards( new Point(
 				owner.getCharacterX()+(owner.getCharacter().getWidth()/2), owner.getCharacterY()+(owner.getCharacter().getHeight()/2))), x, y, SPEED,
-				this, "images/enemies/blasts/" + identity + ".png", owner, true));
+				this, "images/enemies/blasts/" + identity + ".png", owner, true,10));
 	}
 
 	
