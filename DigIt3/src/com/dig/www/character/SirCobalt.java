@@ -25,6 +25,7 @@ public class SirCobalt extends GameCharacter {
 				100,
 				10,
 				100,15,25,70,30,20,10, Statics.STRENGTH + 10);
+		height=109;
 		// TODO Auto-generated constructor stub
 	}
 
