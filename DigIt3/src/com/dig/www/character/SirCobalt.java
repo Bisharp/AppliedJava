@@ -2,6 +2,7 @@ package com.dig.www.character;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
@@ -43,12 +44,12 @@ if(specialTimer>0)
 	energy=0;
 		switch (direction) {
 		case UP:
-			dX = x - 20;
-			dY = y - Statics.BLOCK_HEIGHT + 70;
+			dX = x;
+			dY = y - Statics.BLOCK_HEIGHT + 30;
 			break;
 
 		case DOWN:
-			dX = x + 20;
+			dX = x;
 			dY = y + Statics.BLOCK_HEIGHT - 50;
 			break;
 
@@ -58,14 +59,19 @@ if(specialTimer>0)
 			break;
 
 		case LEFT:
-			dX = x - 100;
+			dX = x+50;
 			dY = y;
 			break;
 		}
 		if(toMoveString()!=null){
 	
-		
+		if(direction==Direction.LEFT){
+			Image anImg=newImage(toMoveString());
+			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
+		}else
 			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+			
+			
 	}
 
 		if (direction == Direction.UP)
@@ -91,9 +97,9 @@ if(specialTimer>0)
 
 		switch (direction) {
 		case UP:
-			return new Rectangle(x + 40, y - 30 - 18, 20, 80);
+			return new Rectangle(x + 40, y - 50 - 18, 20, 100);
 		case DOWN:
-			return new Rectangle(x + 40, y + Statics.BLOCK_HEIGHT, 20, 80);
+			return new Rectangle(x + 40, y-15 + Statics.BLOCK_HEIGHT, 20, 80);
 		case RIGHT:
 			return new Rectangle(x + Statics.BLOCK_HEIGHT + 10, y + 15, 20, 80);
 		case LEFT:
