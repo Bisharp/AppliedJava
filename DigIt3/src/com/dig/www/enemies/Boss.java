@@ -41,13 +41,13 @@ protected String bossPhaseS;
 	this.bossKillS=bossKillS;
 	this.bossPhaseS=bossPhaseS;
 	}
-public void createProjectile(String loc,int speed,double dir,boolean flying,int timer,int addX,int addY){
-	owner.getEnemies().add(new Projectile(dir, x+addX, y+addY, speed, this, loc, owner, flying));
+public void createProjectile(String loc,int speed,double dir,boolean flying,int timer,int addX,int addY,int damage){
+	owner.getEnemies().add(new Projectile(dir, x+addX, y+addY, speed, this, loc, owner, flying,damage));
 actTimer=timer;
 
 }
-public void createTProjectile(String loc,int speed,double dir,boolean flying,int timer){
-	owner.getEnemies().add(new HomingProjectile(dir, x, y, speed, this, loc, owner, flying));
+public void createTProjectile(String loc,int speed,double dir,boolean flying,int timer,int damage){
+	owner.getEnemies().add(new HomingProjectile(dir, x, y, speed, this, loc, owner, flying,damage));
 actTimer=timer;
 }
 public void chargeAttack(int max,int timer,double speedMulti){

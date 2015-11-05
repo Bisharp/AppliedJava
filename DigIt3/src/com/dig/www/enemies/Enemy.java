@@ -191,6 +191,28 @@ public abstract class Enemy extends Sprite {
 			break;
 		default:
 			break;
+		case ITEM:
+			//I need some of the changes pushed, then this will be better
+			takeDamage(100);
+			break;
+		case STAB:
+			takeDamage(character.getMeleeDamage());
+			character.endAction();
+			break;
+		case DIMENSION:
+			if (fromP)
+			takeDamage(character.getRangedDamage());
+			break;
+		case WARP:
+			if(this instanceof Boss)
+			takeDamage(character.getSpecialDamage());
+			
+			else if(!invincible){
+				owner.getEnemies().add(new Explosion(x, y, "images/portals/normal/0.png", owner, 0));
+			alive=false;}
+			
+			character.endAction();	
+			break;
 		}
 	}
 

@@ -57,14 +57,14 @@ public class HeadBoss extends Boss{
 				if(phase+2>=sequence){
 					createProjectile("images/enemies/blasts/1.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4,10);
 				}	sequence++;
 					}
 				else if(sequence==5){
 				if(phase==2)
 					createTProjectile("images/enemies/blasts/0.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), owner.getCharPoint()),true,40);
+							(int) y), owner.getCharPoint()),true,40,10);
 					sequence++;
 					}
 				else

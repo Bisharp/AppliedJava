@@ -13,6 +13,7 @@ import com.dig.www.npc.*;
 import com.dig.www.objects.*;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -297,7 +298,20 @@ public class StageBuilder {
 							npcs.add(new Kepler(nX, nY, "images/npcs/map/stationary/kepler.png", owner));
 							break;
 						case NPC.SIR_COBALT:
-							npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner));
+							boolean has=false;
+							if(owner.getCharacter().getType()==Types.SIR_COBALT)
+								has=true;
+							if(!has)
+							for(GameCharacter chara:owner.getFriends()){
+								if(chara.getType()==Types.SIR_COBALT){
+									has=true;
+									break;
+									}
+								
+									
+							}
+							if(!has)
+							npcs.add(new SirCobalt2(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner));
 							break;
 						case NPC.SHOPKEEP:
 							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner));
@@ -306,6 +320,17 @@ public class StageBuilder {
 							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, Integer.parseInt(stuff.get(3))));
 							break;
 						case NPC.MACARONI:
+							 has=false;
+							 if(owner.getCharacter().getType()==Types.SIR_COBALT)
+									has=true;
+								if(!has)
+							for(GameCharacter chara:owner.getFriends()){
+								if(chara.getType()==Types.SIR_COBALT){
+									has=true;
+									break;
+									}
+							}
+							if(!has)
 							npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner));
 							break;
 						case "reyzu":

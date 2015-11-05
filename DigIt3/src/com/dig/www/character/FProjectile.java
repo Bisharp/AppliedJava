@@ -3,11 +3,13 @@ package com.dig.www.character;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.util.ArrayList;
 
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Launch;
+import com.dig.www.objects.HookObject;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -18,14 +20,16 @@ protected boolean onScreen=true;
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	double d;
-	int speed;
-	int charHoming=-2;
-	boolean harming=true;
+private 	double d;
+	private int speed;
+	private int charHoming=-2;
+	private boolean harming=true;
+	private ArrayList<HookObject>hooks=new ArrayList<HookObject>();
+	private boolean collideHook;
 private Moves move;
 	// half height of image
-	int hImgX = image.getWidth(null) / 2;
-	int hImgY = image.getHeight(null) / 2;
+	private int hImgX = image.getWidth(null) / 2;
+	private int hImgY = image.getHeight(null) / 2;
 private GameCharacter maker;
 	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move) {
 		super(x, y, loc, owner);
@@ -45,6 +49,10 @@ private GameCharacter maker;
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		for(int c=0;c<owner.getObjects().size();c++){
+			if(owner.getObjects().get(c) instanceof HookObject)
+				hooks.add((HookObject) owner.getObjects().get(c));
+		}
 	}
 	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move,int charHoming,boolean harming) {
 		super(x, y, loc, owner);
@@ -66,34 +74,15 @@ private GameCharacter maker;
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		for(int c=0;c<owner.getObjects().size();c++){
+			if(owner.getObjects().get(c) instanceof HookObject)
+				hooks.add((HookObject) owner.getObjects().get(c));
+		}
 	}
-//	public FProjectile(double dir, int x, int y, int speed, int maxImg, String loc,
-//			Board owner, Moves move, int charHoming,boolean harming) {
-//		super(x, y, loc, owner);
-//		
-//		this.harming=harming;
-//		this.charHoming=charHoming;
-//		this.setMove(move);
-//		d = dir;
-//		this.speed = speed;
-//
-//		
-//		int aSpeed=maxImg;
-//		// Moves the ball away from center of launcher's image
-//		
-//		// This is the move
-//		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
-//		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-//		// TODO Auto-generated constructor stub
-//	}
+
 	public void animate() {
 
 		basicAnimate();
-		// Move, This is the code Micah it is also in the ImportantLook class
-
-		
-//		if (!onScreen)
-//			owner.getfP().remove(owner.getfP().indexOf(this));
 	}
 	public boolean isOnScreen() {
 		return onScreen;
@@ -103,26 +92,39 @@ private GameCharacter maker;
 		this.onScreen = onScreen;
 		
 	}
-//	@Override
-//	public void turnAround() {
-//		// TODO Auto-generated method stub
-//		owner.getfP().remove(owner.getfP().indexOf(this));
-//	}
 
 	@Override
 	public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-		if(charHoming==-2){
+		
+			
+			
+		
+		if(!collideHook){
+			if(move==Moves.CHAIN)
+			for(HookObject hook:hooks){
+				if(hook.getBounds().intersects(getBounds())){
+					collideHook=true;
+					charHoming=-1;
+					x=hook.getX();
+					y=hook.getY();
+					break;
+				}
+			}
+			if(move!=Moves.CHAIN||!collideHook){
+				if(charHoming==-2){
 			
 		}else if(charHoming==-1){
 			d=Statics.pointTowards(new Point(x, y), new Point(owner.getCharacter().getX(),owner.getCharacter().getY()));
 		}else{
 			d=Statics.pointTowards(new Point(x, y), new Point(owner.getFriends().get(charHoming).getX(),owner.getFriends().get(charHoming).getY()));
 		}
+			x += Math.cos((double) Math.toRadians((double) d)) * speed;
+		y += Math.sin((double) Math.toRadians((double) d)) * speed;}
+		}
 			
 			
-		x += Math.cos((double) Math.toRadians((double) d)) * speed;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed;
+			
 		g2d.drawImage(image, x, y, owner);
 	}
 
@@ -136,21 +138,7 @@ private GameCharacter maker;
 
 	
 
-	/* 
-	 * TODO The below method will be deprecated upon Jonah's finishing of adding
-	 * extra move code. If this is still present in the second semester, delete
-	 * without mercy
-	 */
 	
-	//TODO delete without mercy
-//	@Override
-//	public void interact(Types type) {
-//
-////		if (type != Types.CLUB)
-////			super.interact(type);
-////		else
-////			alive = false;
-//	}
 
 	public double getD(){
 		return d;
@@ -173,4 +161,8 @@ private GameCharacter maker;
 	public GameCharacter getMaker(){
 		return maker;
 	}
+	public boolean collideWithHook(){
+		return collideHook;
+	}
+	
 }
