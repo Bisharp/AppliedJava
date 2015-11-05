@@ -16,11 +16,29 @@ public class Quest implements Serializable {
 
 	public enum Quests {
 
-		FETCH {
+		THEFT {
 
 			@Override
 			public String getQuestLine(String[] vals) {
 				return "Help! My " + vals[0] + " was stolen and taken to " + vals[1] + "!";
+			}
+
+			@Override
+			public int numOfSpecifics() {
+				return 2;
+			}
+
+			@Override
+			public Types[] getTypes() {
+				return new Types[] { Types.THING, Types.PLACE };
+			}
+		},
+		
+		FETCH {
+
+			@Override
+			public String getQuestLine(String[] vals) {
+				return "I know you're busy, but do you think you could get me a " + vals[0] + "?\n I've heard they have one in " + vals[1] + ".";
 			}
 
 			@Override
@@ -132,5 +150,14 @@ public class Quest implements Serializable {
 	}
 
 	public void setState(SimpleQuest state) {
+	}
+
+	public void setPlace(String place2) {
+		place = place2;
+	}
+
+	public void setItem(Items i) {
+		item = i;
+		
 	}
 }

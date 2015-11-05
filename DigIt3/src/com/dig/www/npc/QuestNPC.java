@@ -35,6 +35,19 @@ public class QuestNPC extends ServiceNPC {
 		this.id = id;
 	}
 
+	protected void specify(Items i, String place) {
+
+		if (i != Items.NULL) {
+			item = i;
+			quest.setItem(i);
+		}
+
+		if (place != null) {
+			this.place = place;
+			quest.setPlace(place);
+		}
+	}
+
 	@Override
 	public void service() {
 
@@ -74,11 +87,11 @@ public class QuestNPC extends ServiceNPC {
 		questCompleted = state.isCompleted();
 
 		quest = new Quest(state);
-		
+
 		place = quest.getPlace();
 		item = quest.getItem();
 	}
-	
+
 	public String getPlace() {
 		return place;
 	}
