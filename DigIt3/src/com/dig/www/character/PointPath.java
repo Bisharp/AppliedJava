@@ -167,7 +167,7 @@ backwards=0;
 				 us.set(me, temp);
 			}
 			playerGo=true;
-			us.get(me).pathUpdateTimer=25;
+			us.get(me).pathUpdateTimer=50;
 				points.clear();
 			//owner.getFriends().get(me).setX(player.getX());	
 			//owner.getFriends().get(me).setY(player.getY());

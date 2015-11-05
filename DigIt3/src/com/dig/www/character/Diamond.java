@@ -1,6 +1,7 @@
 package com.dig.www.character;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
@@ -13,7 +14,7 @@ public class Diamond extends GameCharacter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private FProjectile shield;
 	public Diamond(int x, int y, Board owner, boolean player) {
 		super(x, y, owner, Types.DIAMOND, "diamond", player,
 				-50, 
@@ -40,7 +41,65 @@ public class Diamond extends GameCharacter {
 		// TODO Auto-generated method stub
 		return true;
 	}
+@Override
+public void animate(){
+	if(shield==null||!shield.collideWithHook())
+	super.animate();
+	else{
+		if(owner.getCharacter()!=this)
+		basicAnimate();
+	}
+	if(shield==null){
+		for(int c=0;c<owner.getfP().size();c++){
+			if(owner.getfP().get(c).getMove()==Moves.CHAIN){
+				shield=owner.getfP().get(c);
+				break;
+			}
+		}
+	}
+	if(shield!=null){
+		if(!owner.getfP().contains(shield)){
+			shield=null;
+		}else
+		if(shield.collideWithHook()){
+			
+			
 
+			int xP=0;
+			int yP=0;
+			if(x+12<shield.getX()){
+		
+				xP=-15;
+			}else if(x-12>shield.getX()){
+			
+				xP=15;
+			}
+			if(y+12<shield.getY()){
+				
+				yP=-15;
+			}else if(y-12>shield.getY()){
+			
+				yP=15;
+			}
+			//TODO make player variable protected and switch this with player
+			if(owner.getCharacter()==this){
+				owner.setScrollX(xP);
+				owner.setScrollY(yP);
+//				x-=xP;
+//				y-=yP;
+			}
+			else{
+				x-=xP;
+				y-=yP;
+			}
+		}}
+		//}
+	}
+		
+		
+		
+		
+//}
 	@Override
 	public void getsActor() {
 		// TODO Auto-generated method stub
