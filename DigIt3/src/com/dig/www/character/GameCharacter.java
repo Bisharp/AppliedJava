@@ -696,7 +696,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				Items i = inventory.useItem();
 
 				if (!i.isWeapon() && i != Items.FOOD_NORMAL)
-					owner.addItem(inventory.useItem());
+					owner.addItem(i);
 				else if (i == Items.FOOD_NORMAL) {
 					// Add food code here
 				} else {
@@ -856,7 +856,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				specialTimer = TIMER_SPECIAL;
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
-						owner.getObjects().add(new Dispenser(x, y, this, "images/objects/dispenser.png", owner, dir));
+						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
 						((Heart) this).start();
 						specialTimer = NEG_TIMER_SPECIAL + 20;
 					} else {

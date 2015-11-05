@@ -148,4 +148,8 @@ public abstract class Sprite implements Serializable {
 	public void setOnScreen(boolean onScreen) {
 		this.onScreen = onScreen;
 	}
+	
+	public Board getOwner() {
+		return owner;
+	}
 }

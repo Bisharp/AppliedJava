@@ -14,7 +14,7 @@ public enum Items implements Serializable {
 
 		@Override
 		public String getPath() {
-			return Statics.DUMMY;
+			return "images/icon.png";
 		}
 
 		@Override
@@ -37,7 +37,7 @@ public enum Items implements Serializable {
 		public String getPath() {
 			return "images/objects/collectibles/special.png";
 		}
-		
+
 		@Override
 		public String toString() {
 			return "Golden Troll Face";
@@ -67,7 +67,7 @@ public enum Items implements Serializable {
 		public String getPath() {
 			return "images/objects/notSoInvisibleCloak.png";
 		}
-		
+
 		@Override
 		public boolean isThrowable() {
 			return true;
@@ -77,7 +77,8 @@ public enum Items implements Serializable {
 		public boolean isWeapon() {
 			return false;
 		}
-	}, FOOD_NORMAL {
+	},
+	FOOD_NORMAL {
 		@Override
 		protected String getPersonalDesc() {
 			return null;
@@ -90,7 +91,28 @@ public enum Items implements Serializable {
 
 		@Override
 		public boolean isThrowable() {
-			return true;
+			return false;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			return false;
+		}
+	},
+	PROJECTILE {
+		@Override
+		protected String getPersonalDesc() {
+			return null;
+		}
+
+		@Override
+		public String getPath() {
+			return "images/objects/food/" + Statics.RAND.nextInt(Statics.getFolderCont("images/objects/food/")) + ".png";
+		}
+
+		@Override
+		public boolean isThrowable() {
+			return false;
 		}
 
 		@Override
@@ -119,7 +141,22 @@ public enum Items implements Serializable {
 
 	public abstract String getPath();
 
-	public abstract boolean isThrowable() ;
+	public abstract boolean isThrowable();
 
-	public abstract boolean isWeapon() ;
+	public abstract boolean isWeapon();
+
+	public int getDamage() {
+		return 0;
+	}
+
+	public static Items getRandItem() {
+
+		Items i;
+
+		do {
+			i = values()[Statics.RAND.nextInt(values().length)];
+		} while (i == Items.SPECIAL_COLLECTIBLE || i == Items.NULL || i == Items.PROJECTILE);
+
+		return i;
+	}
 }
