@@ -144,8 +144,19 @@ public enum Items implements Serializable {
 	public abstract boolean isThrowable();
 
 	public abstract boolean isWeapon();
-	
-	public int getDamage()  {
+
+	public int getDamage() {
 		return 0;
+	}
+
+	public static Items getRandItem() {
+
+		Items i;
+
+		do {
+			i = values()[Statics.RAND.nextInt(values().length)];
+		} while (i == Items.SPECIAL_COLLECTIBLE || i == Items.NULL || i == Items.PROJECTILE);
+
+		return i;
 	}
 }

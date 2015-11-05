@@ -253,6 +253,8 @@ public class StageBuilder {
 	public ArrayList<NPC> loadNPC() {
 
 		ArrayList<NPC> npcs = new ArrayList<NPC>();
+		int questCount = 0;
+		
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
@@ -306,9 +308,14 @@ public class StageBuilder {
 						case NPC.MACARONI:
 							npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner));
 							break;
-						case NPC.PLATO:
-							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
+						case "reyzu":
+							npcs.add(new QuestNPC(nX, nY, "images/npcs/map/stationary/reyzu.png", owner, questCount));
+							questCount++;
 							break;
+							// TODO put PLATO back in
+//						case NPC.PLATO:
+//							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
+//							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -384,6 +391,8 @@ public class StageBuilder {
 							}
 							else if(val==-5){
 								npcs.add(new HookObject(nX, nY, owner));
+							} else if (val == -6) {
+								npcs.add(new DropPoint(nX, nY, owner));
 							}
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));

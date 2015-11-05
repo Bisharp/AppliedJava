@@ -342,4 +342,12 @@ public class Inventory implements Serializable {
 	public void setOwner(Board board) {
 		owner = board;
 	}
+
+	public boolean contains(Items item2) {
+		return itemNums.get(item2) != null && itemNums.get(item2) > 0;
+	}
+	
+	public void decrementItem(Items key) {
+		itemNums.replace(key, itemNums.get(key) - 1);
+	}
 }

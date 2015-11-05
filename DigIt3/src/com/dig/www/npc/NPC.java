@@ -17,7 +17,7 @@ public class NPC extends Sprite{
 	public static final String MACARONI = "macaroni";
 	
 	protected String[]dialogs;
-	protected Image gif;
+	protected transient Image gif;
 	protected int line;
 	
 	public NPC(int x, int y, String loc, Board owner, String[]dialogs, String s) {

@@ -158,6 +158,9 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void changeArea() {
+		
+		scrollX = 0;
+		scrollY = 0;
 		if (levelChanged) {
 			if (character instanceof Heart)
 				((Heart) character).end();
@@ -166,6 +169,7 @@ public class Board extends MPanel implements ActionListener {
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
+
 		StageBuilder sB = StageBuilder.getInstance(level, this);
 		sB.changeState(level, this);
 		setTexturePack(sB.readText());
@@ -179,7 +183,16 @@ public class Board extends MPanel implements ActionListener {
 			data.enterLevel(level);
 		else
 			data = new CharData(level, this);
+		
+		// TODO quest
 		objects = data.filter(objects);
+		npcs = data.filterNPC(npcs);
+
+		for (Objects o : objects)
+			if (o instanceof DropPoint)
+				if (((DropPoint) o).hasDrop()) {
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, ((DropPoint) o).type()));
+				}
 
 		if (character.getType() == Types.SPADE) {
 			((Spade) character).resetDirt();
@@ -1525,7 +1538,6 @@ public class Board extends MPanel implements ActionListener {
 
 	public void addItem(Items useItem) {
 		if (useItem != Items.NULL) {
-			System.out.println("Use item");
 			ThrownObject o = new ThrownObject(character.getX(), character.getY(), useItem.getPath(), this, useItem);
 			objects.add(o);
 			movingObjects.add(o);
@@ -1534,5 +1546,10 @@ public class Board extends MPanel implements ActionListener {
 
 	public ArrayList<Objects> getMovingObjects() {
 		return movingObjects;
+	}
+
+	public ArrayList<NPC> getNPCs() {
+		// TODO Auto-generated method stub
+		return npcs;
 	}
 }
