@@ -11,7 +11,10 @@ public class Explosion extends Enemy {
 	public Explosion(int x, int y, String loc, Board owner) {
 		super(x, y, loc, owner, true, -10);
 	}
-
+	public Explosion(int x, int y, String loc, Board owner,int damage) {
+		super(x, y, loc, owner, true, -10);
+		this.damage=damage;
+	}
 	@Override
 	public void animate() {
 		basicAnimate();

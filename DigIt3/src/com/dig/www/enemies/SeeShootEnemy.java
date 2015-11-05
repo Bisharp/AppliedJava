@@ -35,7 +35,7 @@ public class SeeShootEnemy extends SeeEnemy {
 	public void addBall() {
 		owner.addEnemy(new Projectile(Statics.pointTowards(new Point(x, y), new Point(
 				owner.getCharacterX(), owner.getCharacterY())), x, y, Launch.SPEED,
-				this, "images/enemies/blasts/" + identity + ".png", owner, true));
+				this, "images/enemies/blasts/" + identity + ".png", owner, true,10));
 	}
 	
 	@Override
