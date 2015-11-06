@@ -168,4 +168,8 @@ specialTimer=0;
 	public Moves getRangedMove() {
 		return Moves.HAZE;
 	}
+	@Override
+	public String getRangedString(){
+		return "haze.png";
+	}
 }

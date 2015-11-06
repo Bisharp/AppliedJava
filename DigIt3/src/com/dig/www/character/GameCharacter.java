@@ -838,7 +838,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	private Font HUD = new Font("Calibri", Font.BOLD, 30);
-
+public abstract String getRangedString();
 	private Point setAttacks() {
 		Point shieldPos = null;
 		if (meleePress) {
@@ -871,17 +871,19 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
-				String s = "images/enemies/blasts/0.png";
-				if (type == Types.DIAMOND)
-					s = getPath() + "diamond.png";
+				String s = "images/characters/projectiles"+"/"+getRangedString();
+				
+				
+					
 				owner.getfP().add(new FProjectile(dir, x, y, 25, this, s, owner, getRangedMove()));
-
+if(this instanceof Spade||this instanceof SirCobalt)
+	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			}
 
 		}
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
-				String s = "images/enemies/blasts/0.png";
+				String s = "images/characters/projectiles"+"/"+getRangedString();
 				owner.getfP().add(new FProjectile(dir, x + (this.getWidth() / 2), y + (this.getHeight() / 2), 30, this, s, owner, Moves.MPITCH));
 
 			}

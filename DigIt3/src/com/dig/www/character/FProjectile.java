@@ -31,13 +31,13 @@ private Moves move;
 	private int hImgX = image.getWidth(null) / 2;
 	private int hImgY = image.getHeight(null) / 2;
 private GameCharacter maker;
+private boolean isTurning;
 	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move) {
 		super(x, y, loc, owner);
 		this.maker=maker;
 		this.setMove(move);
 		d = dir;
 		this.speed = speed;
-
 		Image img = maker.getImage();
 		int aSpeed;
 		// Moves the ball away from center of launcher's image
@@ -54,6 +54,7 @@ private GameCharacter maker;
 				hooks.add((HookObject) owner.getObjects().get(c));
 		}
 	}
+	
 	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner,Moves move,int charHoming,boolean harming) {
 		super(x, y, loc, owner);
 		this.maker=maker;
@@ -79,7 +80,9 @@ private GameCharacter maker;
 				hooks.add((HookObject) owner.getObjects().get(c));
 		}
 	}
-
+	public void setTurning(boolean b){
+isTurning=b;
+	}
 	public void animate() {
 
 		basicAnimate();
@@ -124,8 +127,11 @@ private GameCharacter maker;
 		}
 			
 			
-			
+			if(isTurning)
+				g2d.rotate(Math.toRadians(d), x+width/2, y+height/2);
 		g2d.drawImage(image, x, y, owner);
+		if(isTurning)
+			g2d.rotate(-Math.toRadians(d), x+width/2, y+height/2);
 	}
 
 	public Moves getMove() {

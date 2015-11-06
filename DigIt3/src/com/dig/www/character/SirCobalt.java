@@ -123,21 +123,19 @@ if(specialTimer>0)
 	}
 	@Override
 	public String toMoveString(){
-		switch(getActing()){
-		case 1:
-		return "rapier";
-		
-		
-		case 3:
-		return "rapier";
-		default:
-			case 2:
+		if(getMove()==Moves.NONE)
 			return null;
-		}
+		else
+		return "rapier";
+		
 	}
 	@Override
 	public Moves getRangedMove() {
 		// TODO Auto-generated method stub
 		return Moves.DIMENSION;
+	}
+	@Override
+	public String getRangedString(){
+		return "portal.gif";
 	}
 }

@@ -137,4 +137,8 @@ public class Club extends GameCharacter {
 		// TODO Auto-generated method stub
 		return Moves.PITCH;
 	}
+	@Override
+	public String getRangedString(){
+		return "baseball.png";
+	}
 }
