@@ -592,8 +592,8 @@ public class Preferences implements Serializable {
 	public static String getControls() {
 		return "Controls:\nMovement Scheme: " + (KeyEvent.getKeyText(UP()).equals("W") ? "WASD" : "Arrow Keys") + "\nAttack: "
 				+ KeyEvent.getKeyText(ATTACK()) + "  |  Projectile: " + KeyEvent.getKeyText(PROJECTILE()) + "  |  Special: "
-				+ KeyEvent.getKeyText(SPECIAL()) + "  |  Talk to NPCs: " + "  |  Use Items: " + KeyEvent.getKeyText(ITEM())
-				+ KeyEvent.getKeyText(NPC()) + "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Switch characters: "
+				+ KeyEvent.getKeyText(SPECIAL()) + "  |  Talk to NPCs: " + KeyEvent.getKeyText(NPC()) + "  |  Use Items: " + KeyEvent.getKeyText(ITEM())
+				+ "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Switch characters: "
 				+ KeyEvent.getKeyText(CHAR_CHANGE());
 	}
 }

@@ -63,7 +63,7 @@ public void animate(){
 		}else
 		if(shield.collideWithHook()){
 			
-			
+			image = newImage("g");
 
 			int xP=0;
 			int yP=0;

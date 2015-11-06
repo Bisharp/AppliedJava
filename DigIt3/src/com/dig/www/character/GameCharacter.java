@@ -41,9 +41,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
-
-	// TODO Jonah, encapsulate your fields
-	// TODO Eclipse, learn your names.
+	
 	protected Enemy enPoint;
 	protected int enUp;
 	protected LevelUp levMen;
@@ -955,7 +953,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			if (p != null) {
 				g2d.setColor(Color.black);
-				g2d.drawLine(getMidX(), getMidY(), (int) p.getX() + Statics.BLOCK_HEIGHT / 2, (int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+
+				if (direction == Direction.LEFT || direction == Direction.RIGHT)
+					g2d.drawLine(direction == Direction.LEFT ? x + 39 : x + width - 65, y + 55, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
+							(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+				else
+					g2d.drawLine(direction == Direction.DOWN ? x + 34 : x + width - 34, y + 59, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
+							(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+
 			}
 			if (direction == Direction.UP)
 				g2d.drawImage(image, x, y, owner);
