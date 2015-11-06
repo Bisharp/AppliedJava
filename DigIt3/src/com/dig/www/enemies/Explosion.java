@@ -6,7 +6,7 @@ import com.dig.www.start.Board;
 
 public class Explosion extends Enemy {
 	
-	private int boomTimer = 25;
+	protected int boomTimer = 25;
 
 	public Explosion(int x, int y, String loc, Board owner) {
 		super(x, y, loc, owner, true, -10);
