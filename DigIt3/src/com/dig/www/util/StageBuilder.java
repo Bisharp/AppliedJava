@@ -337,10 +337,9 @@ public class StageBuilder {
 							npcs.add(new QuestNPC(nX, nY, "images/npcs/map/stationary/reyzu.png", owner, questCount));
 							questCount++;
 							break;
-							// TODO put PLATO back in
-//						case NPC.PLATO:
-//							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
-//							break;
+						case NPC.PLATO:
+							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
+							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {

@@ -208,8 +208,9 @@ public abstract class Enemy extends Sprite {
 			takeDamage(character.getSpecialDamage());
 			
 			else if(!invincible){
-				owner.getEnemies().add(new Explosion(x, y, "images/portals/normal/0.png", owner, 0));
-			alive=false;}
+				owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0,4,100));
+			alive=false;
+			}
 			
 			character.endAction();	
 			break;

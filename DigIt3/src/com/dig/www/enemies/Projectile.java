@@ -16,11 +16,13 @@ public class Projectile extends Enemy {
 	private static final long serialVersionUID = 1L;
 	double d;
 	int speed;
-
+public void setTurning(boolean b){
+	isTurning=b;
+}
 	// half height of image
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
-
+protected boolean isTurning;
 	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying,int damage) {
 		super(x, y, loc, owner, flying,1);
 		
@@ -41,7 +43,14 @@ public class Projectile extends Enemy {
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 		this.damage=damage;
 	}
-
+	@Override
+public void draw(Graphics2D g2d){
+		if(isTurning)
+			g2d.rotate(Math.toRadians(d), x+width/2, y+height/2);
+		g2d.drawImage(image, x, y, owner);
+		if(isTurning)
+			g2d.rotate(-Math.toRadians(d), x+width/2, y+height/2);
+}
 	public void animate() {
 
 		basicAnimate();

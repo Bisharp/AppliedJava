@@ -182,4 +182,8 @@ public void animate(){
 		// TODO Auto-generated method stub
 		return Moves.CHAIN;
 	}
+	@Override
+	public String getRangedString(){
+		return "diamond.png";
+	}
 }

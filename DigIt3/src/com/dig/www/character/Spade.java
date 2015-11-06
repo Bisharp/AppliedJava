@@ -91,4 +91,8 @@ public class Spade extends GameCharacter {
 		// TODO Auto-generated method stub
 		dirt=0;
 	}
+	@Override
+	public String getRangedString(){
+		return "arrow.png";
+	}
 }
