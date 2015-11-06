@@ -158,7 +158,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void changeArea() {
-		
+
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -183,7 +183,7 @@ public class Board extends MPanel implements ActionListener {
 			data.enterLevel(level);
 		else
 			data = new CharData(level, this);
-		
+
 		// TODO quest
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
@@ -573,9 +573,8 @@ public class Board extends MPanel implements ActionListener {
 
 		ArrayList<String> s0 = new ArrayList<String>();
 
-		for (GameCharacter friend : friends) {
+		for (GameCharacter friend : friends)
 			s0.add(friend.getType().charName());
-		}
 
 		String[] s = new String[friends.size()];
 
@@ -591,16 +590,21 @@ public class Board extends MPanel implements ActionListener {
 			s[0] = GameCharacter.Types.SPADE.charName();
 			s[1] = GameCharacter.Types.CLUB.charName();
 			s[2] = GameCharacter.Types.DIAMOND.charName();
+		} else if (!s0.contains(GameCharacter.Types.DIAMOND.charName())) {
+			s[0] = GameCharacter.Types.SPADE.charName();
+			s[1] = GameCharacter.Types.CLUB.charName();
+			s[2] = GameCharacter.Types.HEART.charName();
 		} else {
 			s[0] = GameCharacter.Types.SPADE.charName();
 			s[1] = GameCharacter.Types.CLUB.charName();
 			s[2] = GameCharacter.Types.HEART.charName();
+			s[3] = GameCharacter.Types.DIAMOND.charName();
 		}
 
 		int i = 3;
 		if (s0.size() > i)
 			for (String s1 : s0)
-				if (!normalPlayer(GameCharacter.Types.translate(s1))) {
+				if (!normalPlayer(GameCharacter.Types.translateCharName(s1))) {
 					s[i] = s1;
 					i++;
 				}

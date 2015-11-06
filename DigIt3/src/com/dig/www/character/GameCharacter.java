@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
 import com.dig.www.objects.Dispenser;
@@ -159,6 +160,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		public static Types translate(String string) {
 			for (Types i : Types.values())
 				if (i.toString().equals(string))
+					return i;
+
+			return PROJECTILE;
+		}
+
+		public static Types translateCharName(String string) {
+			for (Types i : Types.values())
+				if (i.charName().equals(string))
 					return i;
 
 			return PROJECTILE;

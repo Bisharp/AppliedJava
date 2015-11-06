@@ -15,13 +15,13 @@ public class Chest extends ServiceNPC {
 
 	private boolean opened = false;
 	private String[] dialogs2 = new String[] { "It appears to be empty.", "It's empty. Can I break it, then?", "Oh; it's empty. How depressing.",
-			"... *It's empty*" };
+			"... *It's empty*", "Nothing to see in here." };
 	private Items type;
 
 	public Chest(int x, int y, String loc, Board owner, Items type) {
 		super(x, y, loc, owner, new String[] { "This chest holds: " + type.toString() + ".", "This hunk of junk holds: " + type.toString() + ".",
 				"Oh, uh, this chest appears to hold a/an " + type.toString() + ".",
-				"... *Chest contains a/an " + type.toString() + "*" }, "shovel", "I guess we don't need " + type.toString() + " yet.");
+				"... *Chest contains a/an " + type.toString() + "*", "It's got a/an " + type.toString() + " in it." }, "shovel", "I guess we don't need " + type.toString() + " yet.");
 		this.type = type;
 	}
 
@@ -45,6 +45,8 @@ public class Chest extends ServiceNPC {
 				return dialogs2[2];
 			case DIAMOND:
 				return dialogs2[3];
+			case SIR_COBALT:
+				return dialogs2[4];
 			default:
 				return dialogs2[0];
 			}
@@ -56,6 +58,8 @@ public class Chest extends ServiceNPC {
 				return dialogs[2];
 			case DIAMOND:
 				return dialogs[3];
+			case SIR_COBALT:
+				return dialogs[4];
 			default:
 				return dialogs[0];
 			}
