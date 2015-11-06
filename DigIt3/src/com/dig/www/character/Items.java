@@ -65,7 +65,7 @@ public enum Items implements Serializable {
 
 		@Override
 		public String getPath() {
-			return "images/objects/inventoryObjects/notSoInvisibleCloak.png";
+			return "images/objects/inventoryCollectibles/notSoInvisibleCloak.png";
 		}
 
 		@Override
