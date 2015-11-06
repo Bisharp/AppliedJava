@@ -207,10 +207,10 @@ public abstract class Enemy extends Sprite {
 			if(this instanceof Boss)
 			takeDamage(character.getSpecialDamage());
 			
-			//else if(!invincible){
-				owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0,4));
+			else if(!invincible){
+				owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0,4,100));
 			alive=false;
-			//}
+			}
 			
 			character.endAction();	
 			break;
