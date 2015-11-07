@@ -104,10 +104,10 @@ if(specialTimer>0)
 		case DOWN:
 			return new Rectangle(x + 40, y-15 + Statics.BLOCK_HEIGHT, 20, 80);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 10, y + 15, 20, 80);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT - 35, y + height/2-22, 100, 20);
 		case LEFT:
 		default:
-			return new Rectangle(x - 40, y + 15, 20, 80);
+			return new Rectangle(x - Statics.BLOCK_HEIGHT + 35, y + height/2-22, 100, 20);
 		}
 	}
 	@Override

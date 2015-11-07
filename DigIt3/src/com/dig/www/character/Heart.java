@@ -1,5 +1,6 @@
 package com.dig.www.character;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -91,14 +92,14 @@ specialTimer=0;
 
 		switch (direction) {
 		case UP:
-			return new Rectangle(x, y - Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y - Statics.BLOCK_HEIGHT+30, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case DOWN:
-			return new Rectangle(x, y + Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y + Statics.BLOCK_HEIGHT-50, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT-50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case LEFT:
 		default:
-			return new Rectangle(x - Statics.BLOCK_HEIGHT, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x - Statics.BLOCK_HEIGHT+50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		}
 	}
 
@@ -107,6 +108,7 @@ specialTimer=0;
 	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
+		
 		int dX = 0;
 		int dY = 0;
 if(specialTimer>0)
@@ -147,6 +149,7 @@ if(specialTimer>0)
 			g2d.drawImage(image, x, y, owner);
 
 		timersCount();
+		
 	}
 
 	@Override

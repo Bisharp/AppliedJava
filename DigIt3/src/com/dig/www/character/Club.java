@@ -47,7 +47,7 @@ if(specialTimer>0)
 		switch (direction) {
 		case UP:
 			dX = x;
-			dY = y - Statics.BLOCK_HEIGHT + 30;
+			dY = y - Statics.BLOCK_HEIGHT + 50;
 			break;
 
 		case DOWN:
@@ -93,6 +93,8 @@ if(specialTimer>0)
 			g2d.drawImage(image, x, y, owner);
 
 		timersCount();
+//		g2d.setColor(Color.orange);
+//		g2d.fill(getActBounds());
 	}
 
 	@Override
@@ -112,7 +114,7 @@ if(specialTimer>0)
 
 		switch (direction) {
 		case UP:
-			return new Rectangle(x + 40, y - 30 - 18, 20, 80);
+			return new Rectangle(x + 42, y - 25 - 18, 25, 80);
 		case DOWN:
 			return new Rectangle(x + 40, y + Statics.BLOCK_HEIGHT, 20, 80);
 		case RIGHT:
