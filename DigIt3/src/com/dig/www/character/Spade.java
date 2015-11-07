@@ -131,7 +131,10 @@ if(specialTimer>0)
 		// TODO Auto-generated method stub
 		return Moves.ARROW;
 	}
-
+@Override
+public int rangedAddX(){
+	return 3;
+}
 	public void resetDirt() {
 		// TODO Auto-generated method stub
 		dirt=0;

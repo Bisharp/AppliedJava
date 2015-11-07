@@ -102,7 +102,9 @@ specialTimer=0;
 		}
 	}
 
-	
+	public int rangedAddY(){
+		return height/2-20;
+	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		int dX = 0;

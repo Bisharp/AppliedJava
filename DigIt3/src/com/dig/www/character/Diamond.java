@@ -116,7 +116,14 @@ public class Diamond extends GameCharacter {
 		timersCount();
 
 	}
-
+	@Override
+	public int rangedAddX(){
+		return 0;
+	}
+	@Override
+	public int rangedAddY(){
+		return 0;
+	}
 	@Override
 	public Moves getMove() {
 		

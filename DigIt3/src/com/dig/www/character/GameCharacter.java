@@ -882,7 +882,7 @@ public abstract String getRangedString();
 				
 				
 					
-				owner.getfP().add(new FProjectile(dir, x, y, 25, this, s, owner, getRangedMove()));
+				owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, s, owner, getRangedMove()));
 if(this instanceof Spade||this instanceof SirCobalt)
 	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			}
@@ -917,7 +917,12 @@ if(this instanceof Spade||this instanceof SirCobalt)
 		}
 		return shieldPos;
 	}
-
+public int rangedAddX(){
+	return 25;
+}
+public int rangedAddY(){
+	return height/2-16;
+}
 	@Override
 	public void draw(Graphics2D g2d) {
 

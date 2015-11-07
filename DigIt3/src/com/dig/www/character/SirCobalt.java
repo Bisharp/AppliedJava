@@ -79,7 +79,10 @@ if(specialTimer>0)
 
 		timersCount();
 	}
-
+	@Override
+	public int rangedAddY(){
+		return height/2-24;
+	}
 	@Override
 	public boolean canAct() {
 		// TODO Auto-generated method stub

@@ -35,7 +35,9 @@ public class Club extends GameCharacter {
 		// TODO Auto-generated method stub
 		//g2d.draw(getActBounds());
 	}
-	
+	public int rangedAddX(){
+		return 38;
+	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		int dX = 0;
