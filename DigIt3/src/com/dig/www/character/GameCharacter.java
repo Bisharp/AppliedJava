@@ -769,8 +769,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-//			if (meleeTimer > 0)
-//				meleeTimer = 0;
+			if (getType()==Types.DIAMOND&&meleeTimer > 0)
+				meleeTimer = 0;
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
