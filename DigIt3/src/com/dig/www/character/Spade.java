@@ -24,7 +24,7 @@ public class Spade extends GameCharacter {
 				-25,
 				-50,
 				15,
-				15,
+				55,
 				10, 
 				80,
 				10,
@@ -75,7 +75,10 @@ public class Spade extends GameCharacter {
 		case 1:
 		return getType().toString();
 		case 2:
+			if(rangedTimer>=30)
 		return "bowD";
+			else
+				return "bowN";
 		case 3:
 		return getType().toString();
 		default:

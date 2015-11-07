@@ -769,24 +769,24 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-			if (meleeTimer > 0)
-				meleeTimer = 0;
+//			if (meleeTimer > 0)
+//				meleeTimer = 0;
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
 			rangedPress = false;
-			if (rangedTimer > 0)
-				rangedTimer = 0;
+//			if (rangedTimer > 0)
+//				rangedTimer = 0;
 		}
 
 		// Special
 		else if (keyCode == Preferences.SPECIAL()) {
 			specialPress = false;
-			if (!(type == Types.CLUB)) {
-
-				if (specialTimer > 0)
-					specialTimer = 0;
-			}
+//			if (!(type == Types.CLUB)) {
+//
+////				if (specialTimer > 0)
+////					specialTimer = 0;
+//			}
 		}
 
 		// End
@@ -881,13 +881,14 @@ public abstract String getRangedString();
 				String s = "images/characters/projectiles"+"/"+getRangedString();
 				
 				
-					
+					if(getType()!=Types.SPADE)
 				owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, s, owner, getRangedMove()));
-if(this instanceof Spade||this instanceof SirCobalt)
+if(this instanceof SirCobalt)
 	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			}
 
 		}
+		
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
 				String s = "images/characters/projectiles"+"/"+getRangedString();
@@ -1188,6 +1189,10 @@ public int rangedAddY(){
 		}
 		if (itemTimer > 0)
 			itemTimer--;
+		if(getType()==Types.SPADE&&rangedTimer==30){
+			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
+			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
+		}
 	}
 
 	public int getActing() {
