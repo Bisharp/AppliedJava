@@ -1,9 +1,11 @@
 package com.dig.www.character;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
@@ -100,36 +102,44 @@ specialTimer=0;
 		}
 	}
 
+	
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		int dX = 0;
 		int dY = 0;
-
+if(specialTimer>0)
+	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
-			dY = y - Statics.BLOCK_HEIGHT;
+			dY = y - Statics.BLOCK_HEIGHT + 30;
 			break;
 
 		case DOWN:
 			dX = x;
-			dY = y + Statics.BLOCK_HEIGHT;
+			dY = y + Statics.BLOCK_HEIGHT - 50;
 			break;
 
 		case RIGHT:
-			dX = x + Statics.BLOCK_HEIGHT;
+			dX = x + Statics.BLOCK_HEIGHT - 50;
 			dY = y;
 			break;
 
 		case LEFT:
-			dX = x - Statics.BLOCK_HEIGHT;
+			dX = x+50;
 			dY = y;
 			break;
 		}
-
-		if (toMoveString() != null) {
+		if(toMoveString()!=null){
+	
+		if(direction==Direction.LEFT){
+			Image anImg=newImage(toMoveString());
+			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
+		}else
 			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-		}
+			
+			
+	}
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);

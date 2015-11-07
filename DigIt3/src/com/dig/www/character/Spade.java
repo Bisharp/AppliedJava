@@ -2,8 +2,10 @@ package com.dig.www.character;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.io.ObjectInputStream.GetField;
 
+import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -72,14 +74,57 @@ public class Spade extends GameCharacter {
 		switch(getActing()){
 		case 1:
 		return getType().toString();
-		
-		
+		case 2:
+		return "bowD";
 		case 3:
 		return getType().toString();
 		default:
-			case 2:
+			
 			return null;
 		}
+	}
+	@Override
+	public void drawTool(Graphics2D g2d) {
+		int dX = 0;
+		int dY = 0;
+if(specialTimer>0)
+	energy=0;
+		switch (direction) {
+		case UP:
+			dX = x;
+			dY = y - Statics.BLOCK_HEIGHT + 30;
+			break;
+
+		case DOWN:
+			dX = x;
+			dY = y + Statics.BLOCK_HEIGHT - 50;
+			break;
+
+		case RIGHT:
+			dX = x + Statics.BLOCK_HEIGHT - 50;
+			dY = y;
+			break;
+
+		case LEFT:
+			dX = x+50;
+			dY = y;
+			break;
+		}
+		if(toMoveString()!=null){
+	
+		if(direction==Direction.LEFT){
+			Image anImg=newImage(toMoveString());
+			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
+		}else
+			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+			
+			
+	}
+
+		if (direction == Direction.UP)
+			g2d.drawImage(image, x, y, owner);
+
+		timersCount();
 	}
 	@Override
 	public Moves getRangedMove() {
