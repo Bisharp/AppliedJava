@@ -22,46 +22,46 @@ public class ThrownObject extends CollectibleObject {
 		// This allows characters to throw with different force
 		SPEED = owner.getCharacter().getStrength();
 		
-		int scrollX = owner.getScrollX();
-		int scrollY = owner.getScrollY();
-
-		double dir;
-		if (scrollX != 0 || scrollY != 0) {
-			dir = 0;
-			boolean changed = false;
-			if (scrollX < 0) {
-				dir = 0;
-				changed = true;
-			} else if (scrollX > 0) {
-				dir = 180;
-				changed = true;
-			}
-			if (scrollY < 0) {
-				if (changed) {
-
-					if (dir == 180) {
-						dir -= 45;
-					} else {
-						dir += 45;
-					}
-				} else {
-					dir = 90;
-				}
-			} else if (scrollY > 0) {
-				if (changed) {
-					if (dir == 180) {
-						dir += 45;
-					} else {
-						dir -= 45;
-					}
-				} else {
-					dir = 270;
-				}
-			}
-		} else {
-			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
-		}
-
+//		int scrollX = owner.getScrollX();
+//		int scrollY = owner.getScrollY();
+//
+//		double dir;
+//		if (scrollX != 0 || scrollY != 0) {
+//			dir = 0;
+//			boolean changed = false;
+//			if (scrollX < 0) {
+//				dir = 0;
+//				changed = true;
+//			} else if (scrollX > 0) {
+//				dir = 180;
+//				changed = true;
+//			}
+//			if (scrollY < 0) {
+//				if (changed) {
+//
+//					if (dir == 180) {
+//						dir -= 45;
+//					} else {
+//						dir += 45;
+//					}
+//				} else {
+//					dir = 90;
+//				}
+//			} else if (scrollY > 0) {
+//				if (changed) {
+//					if (dir == 180) {
+//						dir += 45;
+//					} else {
+//						dir -= 45;
+//					}
+//				} else {
+//					dir = 270;
+//				}
+//			}
+//		} else {
+//			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
+//		}
+int dir=owner.getCharacter().getCurrentDir();
 		Image img = owner.getCharacter().getImage();
 		int aSpeed;
 		// Moves the ball away from center of launcher's image

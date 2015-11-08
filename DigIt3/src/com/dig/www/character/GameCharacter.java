@@ -72,7 +72,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 
-		public static double getDir(Direction dir) {
+		public static int getDir(Direction dir) {
 			switch (dir) {
 			case UP:
 				return 270;
@@ -724,7 +724,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 	}
 
-	void OpenLevelUp() {
+protected	void OpenLevelUp() {
 
 		levMen = new LevelUp();
 	}
@@ -960,6 +960,8 @@ public int rangedAddY(){
 				}
 			}
 		}
+		if(player)
+			dir=getCurrentDir();
 		Point p = setAttacks();
 		if (visible) {
 
@@ -1594,5 +1596,47 @@ public int rangedAddY(){
 
 	public int getStrength() {
 		return strength;
+	}
+	public int getCurrentDir(){
+		int scrollX = owner.getScrollX();
+		int scrollY = owner.getScrollY();
+
+		int dir;
+		if (scrollX != 0 || scrollY != 0) {
+			dir = 0;
+			boolean changed = false;
+			if (scrollX < 0) {
+				dir = 0;
+				changed = true;
+			} else if (scrollX > 0) {
+				dir = 180;
+				changed = true;
+			}
+			if (scrollY < 0) {
+				if (changed) {
+
+					if (dir == 180) {
+						dir -= 45;
+					} else {
+						dir += 45;
+					}
+				} else {
+					dir = 90;
+				}
+			} else if (scrollY > 0) {
+				if (changed) {
+					if (dir == 180) {
+						dir += 45;
+					} else {
+						dir -= 45;
+					}
+				} else {
+					dir = 270;
+				}
+			}
+		} else {
+			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
+		}
+		return dir;
 	}
 }
