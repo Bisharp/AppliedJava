@@ -829,20 +829,7 @@ protected	void OpenLevelUp() {
 		}
 	}
 
-	public Rectangle getActBounds() {
-
-		switch (direction) {
-		case UP:
-			return new Rectangle(x + 47, y - 30, 6, 6);
-		case DOWN:
-			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
-		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-		case LEFT:
-		default:
-			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-		}
-	}
+	public abstract Rectangle getActBounds();
 
 	private Font HUD = new Font("Calibri", Font.BOLD, 30);
 public abstract String getRangedString();

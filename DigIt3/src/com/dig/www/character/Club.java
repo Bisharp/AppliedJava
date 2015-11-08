@@ -40,6 +40,7 @@ public class Club extends GameCharacter {
 	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
+		
 		int dX = 0;
 		int dY = 0;
 if(specialTimer>0)
@@ -52,7 +53,7 @@ if(specialTimer>0)
 
 		case DOWN:
 			dX = x;
-			dY = y + Statics.BLOCK_HEIGHT - 50;
+			dY = y + Statics.BLOCK_HEIGHT - 25;
 			break;
 
 		case RIGHT:
@@ -113,12 +114,12 @@ if(specialTimer>0)
 		case UP:
 			return new Rectangle(x + 42, y - 25 - 18, 25, 80);
 		case DOWN:
-			return new Rectangle(x + 40, y + Statics.BLOCK_HEIGHT, 20, 80);
+			return new Rectangle(x + 33, y + Statics.BLOCK_HEIGHT-13, 25, 80);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 10, y + 15, 20, 80);
+			return new Rectangle(x +  62, y + 43, 80, 25);
 		case LEFT:
 		default:
-			return new Rectangle(x - 40, y + 15, 20, 80);
+			return new Rectangle(x - 40, y + 43, 80, 25);
 		}
 	}
 	@Override

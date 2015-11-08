@@ -3,6 +3,7 @@ package com.dig.www.character;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.ObjectInputStream.GetField;
 
 import com.dig.www.character.GameCharacter.Direction;
@@ -88,6 +89,7 @@ public class Spade extends GameCharacter {
 	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
+		
 		int dX = 0;
 		int dY = 0;
 if(specialTimer>0)
@@ -95,7 +97,7 @@ if(specialTimer>0)
 		switch (direction) {
 		case UP:
 			dX = x;
-			dY = y - Statics.BLOCK_HEIGHT + 30;
+			dY = y - Statics.BLOCK_HEIGHT + 50;
 			break;
 
 		case DOWN:
@@ -104,12 +106,12 @@ if(specialTimer>0)
 			break;
 
 		case RIGHT:
-			dX = x + Statics.BLOCK_HEIGHT - 50;
+			dX = x + Statics.BLOCK_HEIGHT - 70;
 			dY = y;
 			break;
 
 		case LEFT:
-			dX = x+50;
+			dX = x+70;
 			dY = y;
 			break;
 		}
@@ -144,5 +146,31 @@ public int rangedAddX(){
 	@Override
 	public String getRangedString(){
 		return "arrow.png";
+	}
+	public Rectangle getActBounds() {
+if(1==getActing()){
+	switch (direction) {
+	case UP:
+		return new Rectangle(x + 45, y - 50, 19, 60);
+	case DOWN:
+		return new Rectangle(x + 35, y + Statics.BLOCK_HEIGHT - 10, 19, 60);
+	case RIGHT:
+		return new Rectangle(x + 70, y + 45, 60, 19);
+	case LEFT:
+	default:
+		return new Rectangle(x - 30, y + 45, 60, 19);
+	}
+}else
+		switch (direction) {
+		case UP:
+			return new Rectangle(x + 47, y - 30, 6, 6);
+		case DOWN:
+			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
+		case RIGHT:
+			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
+		case LEFT:
+		default:
+			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
+		}
 	}
 }
