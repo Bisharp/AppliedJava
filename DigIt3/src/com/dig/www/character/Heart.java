@@ -148,8 +148,6 @@ if(specialTimer>0)
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 
-		timersCount();
-		
 	}
 
 	@Override

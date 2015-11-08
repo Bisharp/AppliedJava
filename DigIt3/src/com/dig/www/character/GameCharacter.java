@@ -1036,7 +1036,8 @@ public int rangedAddY(){
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
-		timersCount();
+		if(owner.getState()==State.INGAME){
+		timersCount();}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -1178,18 +1179,18 @@ public int rangedAddY(){
 			energy = MAX_ENERGY;
 		}
 		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
-			meleeTimer--;
+			meleeTimer-=2;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
-				rangedTimer--;
+				rangedTimer-=2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
-			specialTimer--;
+			specialTimer-=2;
 		}
 		if (itemTimer > 0)
 			itemTimer--;
-		if(getType()==Types.SPADE&&rangedTimer==30){
+		if(getType()==Types.SPADE&&rangedTimer==30-(TIMER_RANGED%2)){
 			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
 			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 		}

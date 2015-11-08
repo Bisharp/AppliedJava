@@ -21,7 +21,7 @@ public class Spade extends GameCharacter {
 	public Spade(int x, int y, Board owner,boolean player) {
 		super(x, y,  owner, Types.SPADE, "spade",player
 				,-20, 
-				-25,
+				-20,
 				-50,
 				15,
 				55,
@@ -127,7 +127,6 @@ if(specialTimer>0)
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 
-		timersCount();
 	}
 	@Override
 	public Moves getRangedMove() {

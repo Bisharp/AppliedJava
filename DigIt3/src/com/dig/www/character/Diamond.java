@@ -113,7 +113,6 @@ public class Diamond extends GameCharacter {
 			g2d.drawImage(newImage(toMoveString()), x, y, owner);
 		}
 
-		timersCount();
 
 	}
 	@Override
