@@ -145,12 +145,7 @@ public enum Items implements Serializable {
 
 		@Override
 		public boolean isWeapon() {
-			return true;
-		}
-		
-		@Override
-		public int getDamage() {
-			return 20;
+			return false;
 		}
 	};
 
