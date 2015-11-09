@@ -265,6 +265,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		specialTimer = this.NEG_TIMER_SPECIAL;
 
 		this.strength = strength;
+		direction=Direction.DOWN;
+		image = newImage("n");
 	}
 
 	@Override

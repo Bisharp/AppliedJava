@@ -1,6 +1,9 @@
 package com.dig.www.npc;
 
+import java.awt.Image;
 import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
 
 import com.dig.www.character.SirCobalt;
 import com.dig.www.start.Board;
@@ -16,8 +19,9 @@ private boolean isThere=true;
 	@Override
 	public void service() {
 		// TODO Auto-generated method stub
-		owner.getFriends().add(new SirCobalt(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2, owner, false));
+		owner.getFriends().add(new SirCobalt(x, y, owner, false));
 isThere =false;
+image=new ImageIcon().getImage();
 	}
 	@Override
 	public Rectangle getBounds() {

@@ -22,7 +22,7 @@ public class Spade extends GameCharacter {
 	public Spade(int x, int y, Board owner,boolean player) {
 		super(x, y,  owner, Types.SPADE, "spade",player
 				,-20, 
-				-20,
+				-25,
 				-50,
 				15,
 				55,
