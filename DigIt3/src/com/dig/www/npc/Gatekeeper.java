@@ -13,7 +13,7 @@ public class Gatekeeper extends BlockerNPC {
 				new NPCOption[] { new NPCOption("Challenge!", "Ha! What a joke!", new String[] {
 						"Uh... this isn't wise, guys, but OK. Mr. Ham-fisted-dude, I challenge you to a fight.", "Put up your dukes!", "...",
 						"Wait, I'm supposed to challenge *HIM!?|", "Engarde!" }, true, owner) }, value);
-		
+
 		line = greetingDialogs[0];
 	}
 
@@ -30,7 +30,7 @@ public class Gatekeeper extends BlockerNPC {
 
 	@Override
 	public String exitLine() {
-			return "Come back when you are ready to surrender to the superior might of Drusk!";
+		return "Come back when you are ready to surrender to the superior might of Drusk!";
 	}
 
 	@Override

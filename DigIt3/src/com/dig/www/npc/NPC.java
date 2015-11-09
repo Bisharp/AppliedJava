@@ -268,6 +268,7 @@ public abstract class NPC extends Sprite {
 		wait = true;
 		iTalk = false;
 		inDialogue = true;
+		index = -1;
 	}
 
 	public void setLine(NPCOption option) {
