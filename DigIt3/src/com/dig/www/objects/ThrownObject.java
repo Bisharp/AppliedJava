@@ -94,17 +94,7 @@ public class ThrownObject extends CollectibleObject {
 		super.animate();
 
 		if (x < 0 || y < 0 || x > Statics.BOARD_WIDTH - width || y > Statics.BOARD_HEIGHT - height) {
-			
 			collectTrue();
-			if (x < 0)
-				x = 0;
-			else if (x > Statics.BOARD_WIDTH)
-				x = Statics.BOARD_WIDTH - width;
-			
-			if (y < 0)
-				y = 0;
-			else if (y > Statics.BOARD_HEIGHT)
-				y = Statics.BOARD_HEIGHT - height;
 		}
 		
 		if (!collectible) {

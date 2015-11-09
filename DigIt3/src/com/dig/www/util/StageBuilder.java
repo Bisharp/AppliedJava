@@ -311,7 +311,7 @@ public class StageBuilder {
 										break;
 									}
 								}
-							if (!has || !stuff.get(3).startsWith("t"))
+							if (!has)
 								npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner, loc, stuff.get(3).startsWith("t")));
 							break;
 						case NPC.SHOPKEEP:
