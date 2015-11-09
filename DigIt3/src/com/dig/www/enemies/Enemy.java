@@ -217,7 +217,7 @@ public abstract class Enemy extends Sprite {
 		}
 	}
 
-	private boolean takeDamage(int i) {
+	protected boolean takeDamage(int i) {
 if (!invincible){
 	int a=health;
 	if(i<a)

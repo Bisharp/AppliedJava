@@ -119,6 +119,39 @@ public enum Items implements Serializable {
 		public boolean isWeapon() {
 			return false;
 		}
+	},
+	BANANA {
+		
+		@Override
+		public String toString() {
+			return "Banana";
+		}
+		
+		@Override
+		protected String getPersonalDesc() {
+			// TODO Auto-generated method stub
+			return "<html>A banana, supposedly created by The Wizard using magic.<br>It <i>does</i> appear to have a Sunny Farm Fruits sticker on it, though...";
+		}
+
+		@Override
+		public String getPath() {
+			return "images/objects/food/banana.png";
+		}
+
+		@Override
+		public boolean isThrowable() {
+			return false;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			return true;
+		}
+		
+		@Override
+		public int getDamage() {
+			return 20;
+		}
 	};
 
 	public static Items translate(String string) {

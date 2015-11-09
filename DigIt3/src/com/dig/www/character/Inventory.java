@@ -150,7 +150,7 @@ public class Inventory implements Serializable {
 
 		g2d.setColor(Color.BLACK);
 		g2d.fill(owner.getScreen());
-		g2d.setFont(Statics.NPC);
+		g2d.setFont(Statics.PAUSE);
 
 		g2d.setColor(Color.RED);
 		g2d.fill(options);

@@ -21,14 +21,11 @@ public class WalkingEnemy extends Enemy {
 
 	@Override
 	public void turnAround(int wallX, int wallY) {
+
+		super.turnAround(wallX, wallY);
 		scrollX *= -1;
 		scrollY *= -1;
-
-		for (int i = 0; i < 10; i++) {
-			x += getSpeed() * scrollX;
-			y += getSpeed() * scrollY;
-			animateTimer = 10;
-		}
+		animateTimer = 10;
 	}
 
 	@Override

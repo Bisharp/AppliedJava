@@ -17,12 +17,25 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 
+
+
+
+
+import com.dig.www.npc.NPC;
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
 
 public final class Statics {
 
 	public static final int BLOCK_HEIGHT = 100;
+	public static final String FONT = "Trebuchet MS";
+	
+//	static {
+//		if (System.getProperty("os.name").startsWith("Windows"))
+//			FONT = "Trebuchet MS";
+//		else if (System.getProperty("os.name").startsWith("Mac"))
+//			FONT = 
+//	}
 
 	public static final int BOARD_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(); 
 	public static final int BOARD_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();;
@@ -54,13 +67,12 @@ public final class Statics {
 	public static final Color DARK_SAND_BLUE = new Color(32, 44, 60);
 	public static final Color SAND_RED = new Color(155, 36, 36);
 	
-	public static final Font BLOCK = new Font("Calibri", Font.PLAIN, 80);
-	public static final Font NPC = new Font("Calibri", Font.PLAIN, 20);
+	public static final Font PAUSE = NPC.NPC_NORMAL;
 	public static final Font BOSS = new Font("Impact", Font.BOLD,40);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);
 	public static final String DUMMY = "images/dummy.png";
 
-	public static final int LINE = 100;
+	public static final int LINE = 300;
 	public static final int STRENGTH = 20;
 	
 	public static double pointTowards(Point b, Point a) {

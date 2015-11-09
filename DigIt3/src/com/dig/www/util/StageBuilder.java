@@ -192,6 +192,9 @@ public class StageBuilder {
 						case 'E':
 							enemies.add(new ExplosivesSpawner(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
+						case '~':
+							enemies.add(new ChainEnemy(enX, enY, enImg, owner, flying, health, Integer.parseInt(stuff.get(6))));
+							break;
 
 						// Lowercase denotes an enemy that must see you before
 						// attacking.
@@ -255,7 +258,7 @@ public class StageBuilder {
 
 		ArrayList<NPC> npcs = new ArrayList<NPC>();
 		int questCount = 0;
-		
+
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc
@@ -292,53 +295,51 @@ public class StageBuilder {
 
 						switch (identity) {
 						case NPC.WIZARD:
-							npcs.add(new WizardGuy(nX, nY, "images/npcs/map/stationary/wizard.png", owner));
+							npcs.add(new WizardGuy(nX, nY, "images/npcs/map/stationary/wizard.png", owner, loc));
 							break;
 						case NPC.KEPLER:
-							npcs.add(new Kepler(nX, nY, "images/npcs/map/stationary/kepler.png", owner));
+							npcs.add(new Kepler(nX, nY, "images/npcs/map/stationary/kepler.png", owner, loc));
 							break;
 						case NPC.SIR_COBALT:
-							boolean has=false;
-							if(owner.getCharacter().getType()==Types.SIR_COBALT)
-								has=true;
-							if(!has)
-							for(GameCharacter chara:owner.getFriends()){
-								if(chara.getType()==Types.SIR_COBALT){
-									has=true;
-									break;
+							boolean has = false;
+							if (owner.getCharacter().getType() == Types.SIR_COBALT)
+								has = true;
+							if (!has)
+								for (GameCharacter chara : owner.getFriends()) {
+									if (chara.getType() == Types.SIR_COBALT) {
+										has = true;
+										break;
 									}
-								
-									
-							}
-							if(!has)
-							npcs.add(new SirCobalt2(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner));
+								}
+							if (!has || !stuff.get(3).startsWith("t"))
+								npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner, loc, stuff.get(3).startsWith("t")));
 							break;
 						case NPC.SHOPKEEP:
-							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner));
+							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner, loc));
 							break;
 						case NPC.GATEKEEPER:
-							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, Integer.parseInt(stuff.get(3))));
+							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3))));
 							break;
 						case NPC.MACARONI:
-							 has=false;
-							 if(owner.getCharacter().getType()==Types.SIR_COBALT)
-									has=true;
-								if(!has)
-							for(GameCharacter chara:owner.getFriends()){
-								if(chara.getType()==Types.SIR_COBALT){
-									has=true;
-									break;
+							has = false;
+							if (owner.getCharacter().getType() == Types.SIR_COBALT)
+								has = true;
+							if (!has)
+								for (GameCharacter chara : owner.getFriends()) {
+									if (chara.getType() == Types.SIR_COBALT) {
+										has = true;
+										break;
 									}
-							}
-							if(!has)
-							npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner));
+								}
+							if (!has)
+								npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner, loc));
 							break;
-						case "reyzu":
-							npcs.add(new QuestNPC(nX, nY, "images/npcs/map/stationary/reyzu.png", owner, questCount));
+						case NPC.QUEST:
+							npcs.add(new QuestNPC(nX, nY, "images/npcs/map/stationary/reyzu.png", owner, loc, questCount));
 							questCount++;
 							break;
 						case NPC.PLATO:
-							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner));
+							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner, loc));
 							break;
 						}
 
@@ -409,16 +410,13 @@ public class StageBuilder {
 							else if (val == -3) {
 								owner.setSpawnX(-nX + OFF);
 								owner.setSpawnY(-nY + OFF - 299);
-							}
-							else if(val==-4){
+							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
-							}
-							else if(val==-5){
+							} else if (val == -5) {
 								npcs.add(new HookObject(nX, nY, owner));
 							} else if (val == -6) {
 								npcs.add(new DropPoint(nX, nY, owner));
-							}
-							else
+							} else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));

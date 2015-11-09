@@ -33,7 +33,7 @@ public class Quest implements Serializable {
 				return new Types[] { Types.THING, Types.PLACE };
 			}
 		},
-		
+
 		FETCH {
 
 			@Override
@@ -97,7 +97,7 @@ public class Quest implements Serializable {
 		String[] s = issuer.getOwner().getData().getAreas();
 		place = s[Statics.RAND.nextInt(s.length)];
 		item = Items.getRandItem();
-		
+
 		System.out.println(place);
 
 		// Creates the specifics. Note: DO NOT use Types.PLACE if it is not the
@@ -116,11 +116,11 @@ public class Quest implements Serializable {
 			else
 				specifics[i] = item.toString();
 	}
-	
+
 	public Quest(SimpleQuest state) {
 		place = state.place;
 		item = state.item;
-		
+
 		Types[] t = questType.getTypes();
 		specifics = new String[questType.numOfSpecifics()];
 
@@ -158,6 +158,13 @@ public class Quest implements Serializable {
 
 	public void setItem(Items i) {
 		item = i;
-		
+	}
+
+	public String getIncompleteLine() {
+
+		if (questType == Quests.THEFT)
+			return getLine().split("!")[1] + ". I guess you haven't seen it.";
+		else
+			return "I guess you haven't seen a/an " + item.toString() + " yet. I've heard they have them in " + place + ".";
 	}
 }

@@ -184,14 +184,13 @@ public class Board extends MPanel implements ActionListener {
 		else
 			data = new CharData(level, this);
 
-		// TODO quest
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
 
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, ((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
 				}
 
 		if (character.getType() == Types.SPADE) {
@@ -468,26 +467,7 @@ public class Board extends MPanel implements ActionListener {
 
 			if (state == State.NPC) {
 
-				g2d.setFont(Statics.NPC);
-				g2d.setColor(Color.LIGHT_GRAY);
-				g2d.fillRect(0, Statics.BOARD_HEIGHT - 150, Statics.BOARD_WIDTH, 150);
-				g2d.setColor(Color.BLACK);
-				g2d.fillRect(10, Statics.BOARD_HEIGHT - 130, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
-				g2d.drawImage(current.getGif(), 10, Statics.BOARD_HEIGHT - 130, this);
-				g2d.setColor(Color.BLACK);
-
-				String l = current.getLine();
-				if (l.length() < Statics.LINE)
-					g2d.drawString(l, 140, Statics.BOARD_HEIGHT - 100);
-				else if (l.length() < Statics.LINE * 2) {
-					g2d.drawString(l.substring(0, Statics.LINE), 140, Statics.BOARD_HEIGHT - 100);
-					g2d.drawString(l.substring(Statics.LINE, l.length()), 140, Statics.BOARD_HEIGHT - 75);
-				} else if (l.length() < Statics.LINE * 3) {
-					g2d.drawString(l.substring(0, Statics.LINE), 140, Statics.BOARD_HEIGHT - 100);
-					g2d.drawString(l.substring(Statics.LINE, Statics.LINE * 2), 140, Statics.BOARD_HEIGHT - 75);
-					g2d.drawString(l.substring(Statics.LINE * 2, l.length()), 140, Statics.BOARD_HEIGHT - 50);
-				} else
-					System.err.println("The quote is too long. Shorten it.");
+				current.drawOption(g2d);
 			}
 			break;
 
@@ -857,7 +837,6 @@ public class Board extends MPanel implements ActionListener {
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
-						// TODO minor collision change
 						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
 						if (o.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
@@ -909,7 +888,6 @@ public class Board extends MPanel implements ActionListener {
 							// projectiles behave differently with their bounds;
 							// could be implemented with other objects.
 
-							// TODO collision change
 							if (o.intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
 								if (!(e instanceof Projectile) || (character instanceof Field)) {
 									e.interact(character.getMove(), character.getMaker(), true);
@@ -1129,20 +1107,10 @@ public class Board extends MPanel implements ActionListener {
 		}
 		switch (state) {
 
+		// TODO npc
 		case NPC:
-			boolean exitNPC = false;
-			if (current != null && current instanceof ServiceNPC && key == KeyEvent.VK_ENTER) {
-				((ServiceNPC) current).service();
-				exitNPC = true;
-			} else if (key == Preferences.NPC())
-				exitNPC = true;
-
-			if (exitNPC) {
-				timer.stop();
-				state = State.INGAME;
-				current = null;
-				timer.restart();
-			}
+			if (key == Preferences.NPC())
+				current.exit();
 
 			break;
 
@@ -1432,7 +1400,6 @@ public class Board extends MPanel implements ActionListener {
 				}
 				reader.close();
 
-				// TODO note
 				try {
 					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
 					data = ((CharData) is.readObject());
@@ -1529,10 +1496,13 @@ public class Board extends MPanel implements ActionListener {
 		public void mouseExited(MouseEvent arg0) {
 		}
 
+		// TODO inventory
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			if (state == State.PAUSED)
 				GameCharacter.getInventory().mouseClick(arg0);
+			else if (state == State.NPC)
+				current.mouseClick(arg0);
 		}
 
 		@Override
@@ -1553,7 +1523,6 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public ArrayList<NPC> getNPCs() {
-		// TODO Auto-generated method stub
 		return npcs;
 	}
 }
