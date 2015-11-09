@@ -167,4 +167,8 @@ public class Quest implements Serializable {
 		else
 			return "I guess you haven't seen a/an " + item.toString() + " yet. I've heard they have them in " + place + ".";
 	}
+
+	public Quests getType() {
+		return questType;
+	}
 }

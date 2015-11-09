@@ -55,8 +55,6 @@ public abstract class BlockerNPC extends NPC {
 
 	protected abstract String moveLine();
 
-	private static final NPCOption BLANK = new NPCOption("", "", new String[] {}, null);
-
 	@Override
 	public void exit() {
 		super.exit();

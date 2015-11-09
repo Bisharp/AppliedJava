@@ -33,6 +33,7 @@ public abstract class NPC extends Sprite {
 	// should be wondering a little bit more about why you are hacking in the
 	// first place.
 	public static final String QUEST = "reyzu";
+	protected static final NPCOption BLANK = new NPCOption("", "", new String[] {}, null);
 
 	protected String[] greetingDialogs;
 	protected NPCOption[] options;

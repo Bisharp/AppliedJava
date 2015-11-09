@@ -1,6 +1,10 @@
 package com.dig.www.npc;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,6 +16,7 @@ import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.util.Quest;
+import com.dig.www.util.Quest.Quests;
 import com.dig.www.util.Statics;
 
 public class QuestNPC extends NPC {
@@ -25,11 +30,18 @@ public class QuestNPC extends NPC {
 	protected boolean questAccepted = false;
 	protected boolean questCompleted = false;
 
+	protected NPCOption[] yesNo = null;
+	protected Rectangle[] yesNoRect = null;
+	protected static final String YES_OPTION = "Yes";
+
+	protected boolean say = false;
+	protected Integer n = null;
+
 	public QuestNPC(int x, int y, String loc, Board owner, String location, int id) {
 
-		super(x, y, loc, owner, new String[] { "So... any progress?" }, QUEST, location, new NPCOption[] { new NPCOption("What's wrong?", "", new String[] {
-				"What's bothering you?", "What's bothering you and does fixing it involve smashing stuff?", "...",
-				"Oh dear, something's wrong I just know. What is it?", "Something appears to be wrong; what is it?" }, true, owner) });
+		super(x, y, loc, owner, new String[] { "So... any progress?" }, QUEST, location, new NPCOption[] { new NPCOption("What's wrong?", "",
+				new String[] { "What's bothering you?", "What's bothering you and does fixing it involve smashing stuff?", "...",
+						"Oh dear, something's wrong I just know. What is it?", "Something appears to be wrong; what is it?" }, true, owner) });
 
 		quest = new Quest(this);
 		item = quest.getItem();
@@ -51,27 +63,47 @@ public class QuestNPC extends NPC {
 		}
 	}
 
-	protected NPCOption chosenOption = null;
-
 	@Override
 	public void act(NPCOption option) {
 
 		if (!questCompleted)
 			if (!questAccepted && hasActed) {
-				int n = JOptionPane.showConfirmDialog(owner, quest.getLine() + "\nWill you help me?", DigIt.NAME, JOptionPane.YES_NO_OPTION,
-						JOptionPane.YES_OPTION, new ImageIcon(gif));
-				if (n == JOptionPane.YES_OPTION) {
+				// int n = JOptionPane.showConfirmDialog(owner, quest.getLine()
+				// + "\nWill you help me?", DigIt.NAME,
+				// JOptionPane.YES_NO_OPTION,
+				// JOptionPane.YES_OPTION, new ImageIcon(gif));
+
+				if (yesNo == null) {
+					iTalk = true;
+					yesNo = new NPCOption[] {
+							new NPCOption(YES_OPTION, "", new String[] { "Of course!", "Why not?",
+									"... (You can tell from the touched sparkle in his eyes that he accepts)",
+									"I can't stand seeing someone in need! Of course!", "I will." }, true, owner),
+							new NPCOption("No", "", new String[] { "I really can't...", "NO!",
+									"... (You can tell from the flintlike glint in his eyes that he rejects)",
+									"Oh, I'd love to, but I really can't make time. I'm so sorry...", "I cannot." }, true, owner) };
+					yesNoRect = new Rectangle[2];
+					int length = 0;
+					for (int i = 0; i < yesNo.length; i++) {
+						yesNoRect[i] = new Rectangle(length + 30, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 50,
+								yesNo[i].question().length() * 10 + 30, buttonHeight);
+						length += yesNoRect[i].width + 30;
+					}
+
+					line = quest.getLine() + "\nWill you help me?";
+				}
+
+				if (n != null && n == JOptionPane.YES_OPTION) {
 					owner.getData().registerQuest(this);
 					questAccepted = true;
 					line = "I knew you would!";
-					iTalk = true;
-				} else {
+					endButtons();
+					setAcceptedVals();
+				} else if (n != null) {
 					line = "Oh... I understand.";
-					iTalk = true;
+					endButtons();
+					say = true;
 				}
-
-				setAcceptedVals();
-				hasActed = false;
 			} else if (GameCharacter.getInventory().contains(item)) {
 				GameCharacter.getInventory().decrementItem(item);
 				owner.getData().completeQuest(this);
@@ -85,10 +117,59 @@ public class QuestNPC extends NPC {
 				hasActed = true;
 	}
 
+	protected void endButtons() {
+		yesNo = null;
+		yesNoRect = null;
+		n = null;
+		hasActed = false;
+	}
+
+	@Override
+	public void drawOption(Graphics2D g2d) {
+		super.drawOption(g2d);
+
+		if (yesNo != null) {
+
+			g2d.setStroke(new BasicStroke(5));
+			g2d.setColor(Color.LIGHT_GRAY);
+			g2d.fillRect(0, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 5, Statics.BOARD_WIDTH, boxHeight);
+
+			if (quest.getType() == Quests.THEFT)
+				g2d.fillRect(142, 603, 130, 18);
+			
+			g2d.setColor(Color.black);
+			g2d.drawLine(0, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 5, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 5);
+
+			for (int i = 0; i < yesNo.length; i++) {
+
+				g2d.setColor(Color.black);
+				g2d.fill(yesNoRect[i]);
+				g2d.setColor(Color.white);
+				g2d.drawString(yesNo[i].question(), yesNoRect[i].x + 5, Statics.BOARD_HEIGHT - boxHeight / 4);
+			}
+		}
+	}
+
+	@Override
+	public void mouseClick(MouseEvent m) {
+		if (yesNo == null)
+			super.mouseClick(m);
+		else if (yesNoRect != null) {
+			Rectangle mouseBounds = new Rectangle(m.getX(), m.getY(), 5, 10);
+
+			for (int i = 0; i < yesNoRect.length; i++)
+				if (yesNoRect[i].intersects(mouseBounds)) {
+					n = yesNo[i].question().equals(YES_OPTION) ? JOptionPane.YES_OPTION : JOptionPane.NO_OPTION;
+					act(BLANK);
+					break;
+				}
+		}
+	}
+
 	@Override
 	public String getLine() {
 
-		if (!hasActed && !exiting && !questAccepted)
+		if (!hasActed && !exiting && !questAccepted && !say)
 			return "Uh... I could really use your help!";
 		else if (questCompleted)
 			if (!hasActed)
@@ -159,10 +240,17 @@ public class QuestNPC extends NPC {
 				hasActed = false;
 		} else if (!iTalk)
 			act(new NPCOption("", "", new String[] {}, owner));
-		
+
 		if (hasActed && questCompleted) {
 			setCompletedVals();
 			hasActed = false;
 		}
+	}
+
+	@Override
+	public void setLine() {
+		super.setLine();
+		hasActed = false;
+		say = false;
 	}
 }
