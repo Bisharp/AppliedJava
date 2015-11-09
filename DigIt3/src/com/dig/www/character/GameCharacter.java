@@ -72,7 +72,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT;
 
-		public static double getDir(Direction dir) {
+		public static int getDir(Direction dir) {
 			switch (dir) {
 			case UP:
 				return 270;
@@ -265,6 +265,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		specialTimer = this.NEG_TIMER_SPECIAL;
 
 		this.strength = strength;
+		direction=Direction.DOWN;
+		image = newImage("n");
 	}
 
 	@Override
@@ -724,7 +726,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 	}
 
-	void OpenLevelUp() {
+protected	void OpenLevelUp() {
 
 		levMen = new LevelUp();
 	}
@@ -769,24 +771,24 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-			if (meleeTimer > 0)
+			if (getType()==Types.DIAMOND&&meleeTimer > 0)
 				meleeTimer = 0;
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
 			rangedPress = false;
-			if (rangedTimer > 0)
-				rangedTimer = 0;
+//			if (rangedTimer > 0)
+//				rangedTimer = 0;
 		}
 
 		// Special
 		else if (keyCode == Preferences.SPECIAL()) {
 			specialPress = false;
-			if (!(type == Types.CLUB)) {
-
-				if (specialTimer > 0)
-					specialTimer = 0;
-			}
+//			if (!(type == Types.CLUB)) {
+//
+////				if (specialTimer > 0)
+////					specialTimer = 0;
+//			}
 		}
 
 		// End
@@ -829,20 +831,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 	}
 
-	public Rectangle getActBounds() {
-
-		switch (direction) {
-		case UP:
-			return new Rectangle(x + 47, y - 30, 6, 6);
-		case DOWN:
-			return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
-		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-		case LEFT:
-		default:
-			return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-		}
-	}
+	public abstract Rectangle getActBounds();
 
 	private Font HUD = new Font("Calibri", Font.BOLD, 30);
 public abstract String getRangedString();
@@ -881,13 +870,14 @@ public abstract String getRangedString();
 				String s = "images/characters/projectiles"+"/"+getRangedString();
 				
 				
-					
-				owner.getfP().add(new FProjectile(dir, x, y, 25, this, s, owner, getRangedMove()));
-if(this instanceof Spade||this instanceof SirCobalt)
+					if(getType()!=Types.SPADE)
+				owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, s, owner, getRangedMove()));
+if(this instanceof SirCobalt)
 	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			}
 
 		}
+		
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
 				String s = "images/characters/projectiles"+"/"+getRangedString();
@@ -917,7 +907,12 @@ if(this instanceof Spade||this instanceof SirCobalt)
 		}
 		return shieldPos;
 	}
-
+public int rangedAddX(){
+	return 25;
+}
+public int rangedAddY(){
+	return height/2-16;
+}
 	@Override
 	public void draw(Graphics2D g2d) {
 
@@ -954,6 +949,8 @@ if(this instanceof Spade||this instanceof SirCobalt)
 				}
 			}
 		}
+		if(player)
+			dir=getCurrentDir();
 		Point p = setAttacks();
 		if (visible) {
 
@@ -1030,7 +1027,8 @@ if(this instanceof Spade||this instanceof SirCobalt)
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
-		timersCount();
+		if(owner.getState()==State.INGAME){
+		timersCount();}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -1172,17 +1170,21 @@ if(this instanceof Spade||this instanceof SirCobalt)
 			energy = MAX_ENERGY;
 		}
 		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
-			meleeTimer--;
+			meleeTimer-=2;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
-				rangedTimer--;
+				rangedTimer-=2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
-			specialTimer--;
+			specialTimer-=2;
 		}
 		if (itemTimer > 0)
 			itemTimer--;
+		if(getType()==Types.SPADE&&rangedTimer==30-(TIMER_RANGED%2)){
+			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
+			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
+		}
 	}
 
 	public int getActing() {
@@ -1583,5 +1585,47 @@ if(this instanceof Spade||this instanceof SirCobalt)
 
 	public int getStrength() {
 		return strength;
+	}
+	public int getCurrentDir(){
+		int scrollX = owner.getScrollX();
+		int scrollY = owner.getScrollY();
+
+		int dir;
+		if (scrollX != 0 || scrollY != 0) {
+			dir = 0;
+			boolean changed = false;
+			if (scrollX < 0) {
+				dir = 0;
+				changed = true;
+			} else if (scrollX > 0) {
+				dir = 180;
+				changed = true;
+			}
+			if (scrollY < 0) {
+				if (changed) {
+
+					if (dir == 180) {
+						dir -= 45;
+					} else {
+						dir += 45;
+					}
+				} else {
+					dir = 90;
+				}
+			} else if (scrollY > 0) {
+				if (changed) {
+					if (dir == 180) {
+						dir += 45;
+					} else {
+						dir -= 45;
+					}
+				} else {
+					dir = 270;
+				}
+			}
+		} else {
+			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
+		}
+		return dir;
 	}
 }

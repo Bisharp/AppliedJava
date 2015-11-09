@@ -1,9 +1,12 @@
 package com.dig.www.character;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.start.Board;
@@ -89,52 +92,62 @@ specialTimer=0;
 
 		switch (direction) {
 		case UP:
-			return new Rectangle(x, y - Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y - Statics.BLOCK_HEIGHT+30, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case DOWN:
-			return new Rectangle(x, y + Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y + Statics.BLOCK_HEIGHT-50, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT-50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case LEFT:
 		default:
-			return new Rectangle(x - Statics.BLOCK_HEIGHT, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x - Statics.BLOCK_HEIGHT+50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		}
 	}
 
+	public int rangedAddY(){
+		return height/2-20;
+	}
 	@Override
 	public void drawTool(Graphics2D g2d) {
+		
 		int dX = 0;
 		int dY = 0;
-
+if(specialTimer>0)
+	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
-			dY = y - Statics.BLOCK_HEIGHT;
+			dY = y - Statics.BLOCK_HEIGHT + 30;
 			break;
 
 		case DOWN:
 			dX = x;
-			dY = y + Statics.BLOCK_HEIGHT;
+			dY = y + Statics.BLOCK_HEIGHT - 50;
 			break;
 
 		case RIGHT:
-			dX = x + Statics.BLOCK_HEIGHT;
+			dX = x + Statics.BLOCK_HEIGHT - 50;
 			dY = y;
 			break;
 
 		case LEFT:
-			dX = x - Statics.BLOCK_HEIGHT;
+			dX = x+50;
 			dY = y;
 			break;
 		}
-
-		if (toMoveString() != null) {
+		if(toMoveString()!=null){
+	
+		if(direction==Direction.LEFT){
+			Image anImg=newImage(toMoveString());
+			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
+		}else
 			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-		}
+			
+			
+	}
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
 
-		timersCount();
 	}
 
 	@Override
