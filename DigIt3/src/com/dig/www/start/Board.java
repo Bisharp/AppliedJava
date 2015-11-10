@@ -546,7 +546,6 @@ pointedPoint=null;
 			character.setPlayer(true);
 			friends.get(friendNum).setPlayer(false);
 			character.stop();
-			System.out.println(Statics.BOARD_WIDTH / 2 - 50 - character.getX());
 			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
 			Collections.sort(friends);
 		}
