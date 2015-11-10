@@ -801,8 +801,8 @@ pointedPoint.y+=scrollY;}
 					character.collision(b.getMidX(), b.getMidY(), false);
 					break;
 				}
-			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+			} else if ((character.getMove() == Moves.CLUB &&!character.hasMeleed()&& b.getType() == Blocks.CRYSTAL)
+					|| (character.getMove() == Moves.PIT &&!character.hasSpecialed()&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -827,8 +827,8 @@ pointedPoint.y+=scrollY;}
 					case LIQUID:
 						character.collision(b.getMidX(), b.getMidY(), false);
 					}
-				} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+				} else if ((character.getMove() == Moves.CLUB&&!character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT&&!character.hasSpecialed() && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact();
@@ -859,6 +859,8 @@ pointedPoint.y+=scrollY;}
 					}
 				}
 				Enemy e;
+				boolean bashHit=false;
+				int shieldNum=-1;
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
@@ -882,9 +884,11 @@ pointedPoint.y+=scrollY;}
 								break;
 							}
 						}
-
+						
 						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 							e.interact(character.getMove(), character, false);
+							if(character.getMove()==Moves.BASH)
+								bashHit=true;
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
@@ -902,15 +906,21 @@ pointedPoint.y+=scrollY;}
 							}
 						}
 
-						for (GameCharacter character : friends) {
+						for (int c=0;c<friends.size();c++) {
+							GameCharacter character=friends.get(c);
 							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 								e.interact(character.getMove(), character, false);
+							if(character.getMove()==Moves.BASH){
+								bashHit=true;
+								shieldNum=c;}
 							}
-
 						}
+						
+							
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
+							
 						}
 
 						for (GameCharacter character : friends) {
@@ -922,6 +932,12 @@ pointedPoint.y+=scrollY;}
 						}
 					}
 				}
+				if(bashHit){
+					if(shieldNum==-1)
+						character.endAction();
+					else
+						friends.get(shieldNum).endAction();
+				}
 				// end of enemy loop
 
 				if (movingObjects.size() > 0)
@@ -929,39 +945,52 @@ pointedPoint.y+=scrollY;}
 						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
 							o0.collideWall();
 
-				// TODO The following code appears to me to simply be a repeat
-				// of earlier code,
-				// but if it was important, un-comment it.
+				
+			}
+		}
+for(GameCharacter friend:friends){
+	if (friend.getMove() == Moves.AURA&&!friend.hasMeleed()) {
 
-				// for (GameCharacter friend : friends) {
-				// if (friend.getMove() == Moves.AURA) {
-				//
-				// boolean healed = false;
-				// if (friend.getActBounds().intersects(r3)) {
-				// character.heal(friend.getMeleeDamage() / 3);
-				// healed = true;
-				// }
-				// for (GameCharacter friend2 : friends) {
-				// if (friend == friend2) {
-				//
-				// } else {
-				// if (friend.getActBounds().intersects(friend2.getBounds())) {
-				// friend2.heal(friend.getMeleeDamage() / 3);
-				// healed = true;
-				// }
-				// }
-				// }
-				// if (healed) {
-				//
-				// friend.heal(friend.getMeleeDamage() / 3);
-				// friend.setMelee(0);
-				// }
-				// }
-				// }
+		boolean healed = false;
+		if (character.getActBounds().intersects(friend.getBounds())) {
+			character.heal(friend.getMeleeDamage() / 3);
+			healed = true;
+		}
+		for (GameCharacter friend2 : friends) {
+
+			if (friend.getActBounds().intersects(friend2.getBounds())) {
+				friend2.heal(friend.getMeleeDamage() / 3);
+				healed = true;
 			}
 		}
 
-		if (character.getMove() == Moves.AURA) {
+		if (healed) {
+			friend.heal(character.getMeleeDamage() / 3);
+			friend.endAction();
+		}
+
+	} else if (friend instanceof Heart && ((Heart) friend).usingField()) {
+		// fieldUsed = true;
+		Polygon rB = new Polygon();
+
+		for (FProjectile f : fP)
+			if (f instanceof Field) {
+				rB = ((Field) f).getIrregularBounds();
+				break;
+			}
+		if (rB.intersects(character.getBounds())) {
+			character.heal(Heart.FIELD_HEAL);
+		}
+		for (GameCharacter friend2 : friends) {
+			if (rB.intersects(friend2.getBounds())) {
+				friend2.heal(Heart.FIELD_HEAL);
+			}
+		}
+
+		
+	}
+}
+		if (character.getMove() == Moves.AURA&&!character.hasMeleed()) {
 
 			boolean healed = false;
 
@@ -975,7 +1004,7 @@ pointedPoint.y+=scrollY;}
 
 			if (healed) {
 				character.heal(character.getMeleeDamage() / 3);
-				character.setMelee(0);
+				character.endAction();
 			}
 
 		} else if (character instanceof Heart && ((Heart) character).usingField()) {

@@ -119,12 +119,13 @@ public abstract class Enemy extends Sprite {
 
 		// Clark
 		case SPADE:
+			if(!character.hasMeleed()){
 			takeDamage(character.getMeleeDamage());
-			character.endAction();
+			character.endAction();}
 			break;
 		case ARROW:
+			if(fromP)
 			takeDamage(character.getRangedDamage());
-			character.endAction();
 			break;
 		case PIT:
 
@@ -133,10 +134,12 @@ public abstract class Enemy extends Sprite {
 
 		// Carl
 		case CLUB:
+			if(!character.hasMeleed()){
 			stunTimer = STUN_MAX / 10;
 			takeDamage(character.getMeleeDamage());
 			character.endAction();
 			Statics.playSound(owner, "weapons/whop.wav");
+			}
 			break;
 		case MPITCH:
 			if (fromP) {
@@ -180,13 +183,14 @@ public abstract class Enemy extends Sprite {
 			takeDamage(character.getRangedDamage());
 			break;
 		case BASH:
+			if(!character.hasSpecialed()){
 			takeDamage(character.getSpecialDamage());
 			stunTimer = STUN_MAX;
 			if(!invincible&&! (this instanceof PathEnemy)){
 			int d = (int) pointTowards(new Point(character.getX(), character.getY()));
 			d += 180;
 			x += Math.cos((double) Math.toRadians((double) d)) * 100;
-			y += Math.sin((double) Math.toRadians((double) d)) * 100;}
+			y += Math.sin((double) Math.toRadians((double) d)) * 100;}}
 			// TODO implement launch
 			break;
 		default:
@@ -196,14 +200,16 @@ public abstract class Enemy extends Sprite {
 			takeDamage(100);
 			break;
 		case STAB:
+			if(!character.hasMeleed()){
 			takeDamage(character.getMeleeDamage());
-			character.endAction();
+			character.endAction();}
 			break;
 		case DIMENSION:
 			if (fromP)
 			takeDamage(character.getRangedDamage());
 			break;
 		case WARP:
+			if(!character.hasSpecialed()){
 			if(this instanceof Boss)
 			takeDamage(character.getSpecialDamage());
 			
@@ -212,7 +218,7 @@ public abstract class Enemy extends Sprite {
 			alive=false;
 			}
 			
-			character.endAction();	
+			character.endAction();	}
 			break;
 		}
 	}

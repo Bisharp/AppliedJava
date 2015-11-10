@@ -87,7 +87,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 		}
 	}
-
+	protected boolean meleeHit;
+	protected boolean specialHit;
+public boolean hasMeleed(){
+	return meleeHit;
+}
+public boolean hasSpecialed(){
+	return specialHit;
+}
 	public enum Types {
 
 		CLUB {
@@ -814,12 +821,16 @@ public abstract String getRangedString();
 			) {
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
+				meleeHit=false;
 			}
 		}
 		if (specialPress && !meleePress && !rangedPress) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
+				System.out.println("Special");
+				specialHit=false;
+				System.out.println(hasSpecialed());
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
@@ -829,6 +840,7 @@ public abstract String getRangedString();
 						((Heart) this).end();
 					}
 				} else {
+					
 					energy -= SEnC;
 				}
 			}
@@ -1061,12 +1073,8 @@ public int rangedAddY(){
 
 	public void endAction() {
 
-		if (meleeTimer > 0)
-			meleeTimer = 0;
-		if (rangedTimer > 0)
-			rangedTimer = 0;
-		if (specialTimer > 0)
-			specialTimer = 0;
+		meleeHit=true;
+		specialHit=true;
 	}
 
 	public Image newImage(String name) {
