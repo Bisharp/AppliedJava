@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import com.dig.www.npc.BlockerNPC;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.QuestNPC;
 import com.dig.www.objects.DropPoint;
@@ -69,6 +70,7 @@ public class CharData implements Serializable {
 	// Quest Generation
 
 	// TODO repair
+	// TODO repaired ;)
 	public String[] getAreas() {
 
 		Enumeration<String> keys = areas.keys();
@@ -103,6 +105,11 @@ public class CharData implements Serializable {
 	}
 
 	// end
+	
+
+	public void clearBlocker(int id) {
+		areas.get(currentKey).clearBlocker(id);
+	}
 
 	public class LevelData implements Serializable {
 
@@ -112,6 +119,7 @@ public class CharData implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private Hashtable<Integer, Boolean> specialCollectibles = new Hashtable<Integer, Boolean>();
 		private Hashtable<Integer, SimpleQuest> locQuests = new Hashtable<Integer, SimpleQuest>();
+		private Hashtable<Integer, Boolean> blockerNPCs = new Hashtable<Integer, Boolean>();
 		private final String location;
 		// Quest generation
 		private boolean hasDropPoints = false;
@@ -131,10 +139,18 @@ public class CharData implements Serializable {
 					SimpleQuest s = new SimpleQuest(((QuestNPC) npc).getType(), ((QuestNPC) npc).getPlace(), name, ((QuestNPC) npc).id);
 					quests.add(s);
 					locQuests.put(s.id, s);
+				} else if (npc instanceof BlockerNPC) {
+					if (((BlockerNPC) npc).id != -1)
+						blockerNPCs.put(((BlockerNPC) npc).id, true);
 				}
 
 			location = name;
 			System.out.println("New level data created for " + name + ". We have " + (hasDropPoints ? "" : "no ") + "drop points.");
+		}
+
+		public void clearBlocker(int id) {
+			if (id != -1)
+				blockerNPCs.put(id, false);
 		}
 
 		// Returns whether or not the specified collectible has been collected
@@ -252,6 +268,9 @@ public class CharData implements Serializable {
 					obj2 = (QuestNPC) obj;
 					obj2.setQuestState(getQuest(obj2.id));
 					objList.add(obj2);
+				} else if (obj instanceof BlockerNPC) {
+					if (((BlockerNPC) obj).id == -1 || blockerNPCs.get(((BlockerNPC) obj).id))
+						objList.add(obj);
 				} else
 					objList.add(obj);
 			}

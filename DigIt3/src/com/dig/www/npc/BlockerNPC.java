@@ -11,11 +11,13 @@ public abstract class BlockerNPC extends NPC {
 	protected boolean isWall = true;
 	protected boolean acts = false;
 	protected boolean initiatedAct = false;
+	public final int id;
 
-	public BlockerNPC(int x, int y, String loc, Board owner, String[] dialogs, String s, String location, NPCOption[] o, int value) {
+	public BlockerNPC(int x, int y, String loc, Board owner, String[] dialogs, String s, String location, NPCOption[] o, int value, int id) {
 		super(x, y, loc, owner, dialogs, s, location, o);
 
 		this.value = value;
+		this.id = id;
 	}
 
 	public int getValue() {
@@ -40,19 +42,20 @@ public abstract class BlockerNPC extends NPC {
 			checkWall();
 			exiting = true;
 			line = isWall ? currentOptions[0].answer() : moveLine();
+			if (!isWall)
+				owner.getData().clearBlocker(id);
 		}
 	}
-	
+
 	@Override
 	public String getCharLine() {
 		if (!initiatedAct)
 			return super.getCharLine();
+		else if (index == -1 && !exiting) {
+			return getGreeting();
+		} else if (exiting)
+			return getFarewell();
 		else
-			if (index == -1 && !exiting) {
-				return getGreeting();
-			} else if (exiting)
-				return getFarewell();
-			else
 			return currentOptions[index].questionAsked();
 	}
 
@@ -66,7 +69,7 @@ public abstract class BlockerNPC extends NPC {
 		if (inDialogue && !iTalk && acts)
 			act(BLANK);
 	}
-	
+
 	@Override
 	public void setLine() {
 		super.setLine();

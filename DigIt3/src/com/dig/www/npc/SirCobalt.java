@@ -15,7 +15,7 @@ public class SirCobalt extends BlockerNPC {
 				"This land is bursting with dangers. Good rule of thumb: If it's surrounded by a red glowy stuff, avoid it.",
 				"You think this whole thing is ridiculous? Same." }, SIR_COBALT, location, new NPCOption[] { new NPCOption("Will you join us?",
 				"I am waiting on some important information and cannot leave.", new String[] { "Will you join us?", "Come with us! Right now!",
-						"...", "Will you come with us, *please?|", "Wait... I'm talking to *myself?| How is this possible?" }, true, owner) }, 0);
+						"...", "Will you come with us, *please?|", "Wait... I'm talking to *myself?| How is this possible?" }, true, owner) }, 0, -1);
 		willJoin = canBe;
 	}
 
