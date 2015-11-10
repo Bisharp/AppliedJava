@@ -43,8 +43,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	 * 
 	 */
 	
-	protected Enemy enPoint;
-	protected int enUp;
+//	protected Enemy enPoint;
+//	protected int enUp;
+	protected boolean waiting;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
 	protected PointPath path;
@@ -86,7 +87,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 		}
 	}
-
+	protected boolean meleeHit;
+	protected boolean specialHit;
+public boolean hasMeleed(){
+	return meleeHit;
+}
+public boolean hasSpecialed(){
+	return specialHit;
+}
 	public enum Types {
 
 		CLUB {
@@ -286,6 +294,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					}
 				}
 			}
+			if(waiting&&(owner.getCharPoint().distance(x,y)<250||owner.pointedPoint!=null)){
+				waiting=false;
+			}
 			if (path != null) {
 				path.update();
 				if (pointTimer <= 0 && path.getPoints().size() > 0) {
@@ -310,77 +321,24 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					path = null;
 				}
 			}
-			if (!wallBound) {
+			if (!wallBound&&!waiting) {
 				// System.out.println(path);
 				if (path == null && owner.pointedPoint == null) {
-					if (enPoint == null) {
-						if (enUp <= 0) {
-							if (new Point(x, y).distance(owner.getCharPoint()) < 500) {
-								enUp = 5;
-								int maxDis = 250;
-								for (Enemy en : owner.getEnemies()) {
-									int distance = (int) new Point(getMidX(), getMidY()).distance(new Point(en.getX(), en.getY()));
-									if (!(en instanceof Projectile) && !en.isInvincible() && distance < maxDis) {
-										enPoint = en;
-										maxDis = distance;
-									}
-								}
-								if (maxDis == 250) {
-									meleePress = false;
-								}
-								if (!(this instanceof Diamond) && !(this instanceof Heart) && (double) health / (double) HP_MAX > 0.5) {
-									goTo = true;
-								} else {
-									goTo = false;
-									// enPoint=null;
-									// enUp=20;
-									// meleePress=false;
-								}
-							}
-
-						} else {
-							enUp--;
-						}
-					}
+					
 				} else {
-					enPoint = null;
-					enUp = 5;
-					meleePress = false;
+					
 				}
-				if (enPoint != null) {
-					if ((double) health / (double) HP_MAX < 0.5 && goTo) {
-						enPoint = null;
-						meleePress = false;
-						enUp = 1;
-						goTo = true;
-					}
-					if (new Point(x, y).distance(owner.getCharPoint()) >= 500) {
-						enPoint = null;
-						meleePress = false;
-						enUp = 50;
-						goTo = true;
-					}
-					if (!owner.getEnemies().contains(enPoint)) {
-						enPoint = null;
-						meleePress = false;
-						goTo = true;
-						enUp = 50;
-					} else {
-						// meleePress=true;
-					}
-				}
+				
 				if (path != null) {
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
-						enPoint = null;
-						enUp = 25;
+						
 						meleePress = false;
 
 						goTo = true;
 					} else {
 						pathUpdateTimer = 25;
-						enUp = 5;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
 
@@ -390,13 +348,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				} else if (owner.pointedPoint != null) {
 					getToPoint = owner.pointedPoint;
 					goTo = true;
-				} else if (enPoint != null) {
-					getToPoint = new Point(enPoint.getMidX(), enPoint.getMidY());
-				} else {
+				}  else {
 					getToPoint = owner.getCharacter().getBounds().getLocation();
 					goTo = true;
 				}
-				if (path != null || getToPoint.distance(x, y) > (enPoint != null ? 110 : 125)) {
+				if (path != null || getToPoint.distance(x, y) > 125) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -458,31 +414,37 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					moveX = false;
 					moveY = false;
 				}
-				if (enPoint != null) {
-					boolean xway = false;
-					if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() - y)) {
-						xway = true;
-					}
-					if (xway) {
-						if (x > enPoint.getX()) {
-							direction = Direction.LEFT;
-						} else {
-							direction = Direction.RIGHT;
-						}
-					} else {
-						if (y > enPoint.getY()) {
-							direction = Direction.UP;
-						} else {
-							direction = Direction.DOWN;
-
-						}
-					}
-					if (getActBounds().intersects(enPoint.getBounds())) {
-						meleePress = true;
-					} else {
-						meleePress = false;
-					}
-				}
+//				if (enPoint != null) {
+//					boolean xway = false;
+//					if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() - y)) {
+//						xway = true;
+//					}
+//					if (xway) {
+//						if (x > enPoint.getX()) {
+//							direction = Direction.LEFT;
+//						} else {
+//							direction = Direction.RIGHT;
+//						}
+//					} else {
+//						if (y > enPoint.getY()) {
+//							direction = Direction.UP;
+//						} else {
+//							direction = Direction.DOWN;
+//
+//						}
+//					}
+//					if (getActBounds().intersects(enPoint.getBounds())) {
+//						meleePress = true;
+//					} else {
+//						meleePress = false;
+//					}
+//				}
+			}if(waiting){
+				deltaX = 0;
+				deltaY = 0;
+				moveX = false;
+				moveY = false;
+				image = newImage("n");
 			}
 			// if (new Point(x, y).distance(new
 			// Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
@@ -599,7 +561,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				}
 				if (pathUpdateTimer > 0)
 					pathUpdateTimer--;
-				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 140) {
+				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 50) {
 					// if (new Point(getMidX(), getMidY()).distance(new Point(
 					// wallX, getMidY())) < 100) {
 					// deltaX = -deltaX;
@@ -617,10 +579,23 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 							break;
 						}
 					}
+					int realX=0;
+					int realY=0;
+					boolean changedP=false;
+					if(owner.pointedPoint!=null){
+						changedP=true;
+						realX=owner.getCharacterX();
+						realY=owner.getCharacterY();
+						owner.getCharacter().setX(owner.pointedPoint.x);
+						owner.getCharacter().setY(owner.pointedPoint.y);
+					}
 					path = new PointPath(me, owner);
+					if(changedP){
+						owner.getCharacter().setX(realX);
+						owner.getCharacter().setY(realY);
+					}
 					pathUpdateTimer = 50;
-					enUp = 50;
-					enPoint = null;
+					
 					meleePress = false;
 					pointTimer = 18;
 					path.update();
@@ -632,7 +607,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 		setAttacks();
 	}
-
+public void setWaiting(boolean setter){
+	waiting=setter;
+}
 	public void keyPressed(int keyCode) {
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
@@ -815,11 +792,11 @@ protected	void OpenLevelUp() {
 	}
 
 	public void collision(int midX, int midY, boolean isPlayer) {
-		if (isPlayer) {
-			if ((!goTo) && (enPoint != null)) {
-				return;
-			}
-		}
+//		if (isPlayer) {
+//			if ((!goTo) && (enPoint != null)) {
+//				return;
+//			}
+//		}
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
@@ -844,12 +821,14 @@ public abstract String getRangedString();
 			) {
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
+				meleeHit=false;
 			}
 		}
 		if (specialPress && !meleePress && !rangedPress) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
+				specialHit=false;
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
@@ -859,6 +838,7 @@ public abstract String getRangedString();
 						((Heart) this).end();
 					}
 				} else {
+					
 					energy -= SEnC;
 				}
 			}
@@ -1091,12 +1071,8 @@ public int rangedAddY(){
 
 	public void endAction() {
 
-		if (meleeTimer > 0)
-			meleeTimer = 0;
-		if (rangedTimer > 0)
-			rangedTimer = 0;
-		if (specialTimer > 0)
-			specialTimer = 0;
+		meleeHit=true;
+		specialHit=true;
 	}
 
 	public Image newImage(String name) {

@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -158,7 +159,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void changeArea() {
-
+pointedPoint=null;
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -410,7 +411,10 @@ public class Board extends MPanel implements ActionListener {
 			// +(world.get(0).getY()%100)+100//-11
 			// , 100, 100)
 			// ;
-			for (GameCharacter character : friends) {
+			if(pointedPoint!=null){
+				g2d.setColor(Color.BLUE);
+				g2d.fillOval((int)pointedPoint.getX()-25, (int)pointedPoint.getY()-25, 50,50);
+			}for (GameCharacter character : friends) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -542,7 +546,6 @@ public class Board extends MPanel implements ActionListener {
 			character.setPlayer(true);
 			friends.get(friendNum).setPlayer(false);
 			character.stop();
-			System.out.println(Statics.BOARD_WIDTH / 2 - 50 - character.getX());
 			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
 			Collections.sort(friends);
 		}
@@ -661,7 +664,9 @@ public class Board extends MPanel implements ActionListener {
 				// /\
 				// || Nightmare Fuel
 			}
-
+if(pointedPoint!=null){
+	pointedPoint.x+=scrollX;
+pointedPoint.y+=scrollY;}
 			for (int i = 0; i < fP.size(); i++) {
 
 				if (!fP.get(i).isOnScreen()) {
@@ -795,8 +800,8 @@ public class Board extends MPanel implements ActionListener {
 					character.collision(b.getMidX(), b.getMidY(), false);
 					break;
 				}
-			} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-					|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+			} else if ((character.getMove() == Moves.CLUB &&!character.hasMeleed()&& b.getType() == Blocks.CRYSTAL)
+					|| (character.getMove() == Moves.PIT &&!character.hasSpecialed()&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -821,8 +826,8 @@ public class Board extends MPanel implements ActionListener {
 					case LIQUID:
 						character.collision(b.getMidX(), b.getMidY(), false);
 					}
-				} else if ((character.getMove() == Moves.CLUB && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+				} else if ((character.getMove() == Moves.CLUB&&!character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT&&!character.hasSpecialed() && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact();
@@ -853,6 +858,8 @@ public class Board extends MPanel implements ActionListener {
 					}
 				}
 				Enemy e;
+				boolean bashHit=false;
+				int shieldNum=-1;
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
@@ -876,9 +883,11 @@ public class Board extends MPanel implements ActionListener {
 								break;
 							}
 						}
-
+						
 						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 							e.interact(character.getMove(), character, false);
+							if(character.getMove()==Moves.BASH)
+								bashHit=true;
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
@@ -896,15 +905,21 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 
-						for (GameCharacter character : friends) {
+						for (int c=0;c<friends.size();c++) {
+							GameCharacter character=friends.get(c);
 							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 								e.interact(character.getMove(), character, false);
+							if(character.getMove()==Moves.BASH){
+								bashHit=true;
+								shieldNum=c;}
 							}
-
 						}
+						
+							
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
 							character.takeDamage(e.getDamage());
+							
 						}
 
 						for (GameCharacter character : friends) {
@@ -916,6 +931,12 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 				}
+				if(bashHit){
+					if(shieldNum==-1)
+						character.endAction();
+					else
+						friends.get(shieldNum).endAction();
+				}
 				// end of enemy loop
 
 				if (movingObjects.size() > 0)
@@ -923,39 +944,52 @@ public class Board extends MPanel implements ActionListener {
 						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
 							o0.collideWall();
 
-				// TODO The following code appears to me to simply be a repeat
-				// of earlier code,
-				// but if it was important, un-comment it.
+				
+			}
+		}
+for(GameCharacter friend:friends){
+	if (friend.getMove() == Moves.AURA&&!friend.hasMeleed()) {
 
-				// for (GameCharacter friend : friends) {
-				// if (friend.getMove() == Moves.AURA) {
-				//
-				// boolean healed = false;
-				// if (friend.getActBounds().intersects(r3)) {
-				// character.heal(friend.getMeleeDamage() / 3);
-				// healed = true;
-				// }
-				// for (GameCharacter friend2 : friends) {
-				// if (friend == friend2) {
-				//
-				// } else {
-				// if (friend.getActBounds().intersects(friend2.getBounds())) {
-				// friend2.heal(friend.getMeleeDamage() / 3);
-				// healed = true;
-				// }
-				// }
-				// }
-				// if (healed) {
-				//
-				// friend.heal(friend.getMeleeDamage() / 3);
-				// friend.setMelee(0);
-				// }
-				// }
-				// }
+		boolean healed = false;
+		if (character.getActBounds().intersects(friend.getBounds())) {
+			character.heal(friend.getMeleeDamage() / 3);
+			healed = true;
+		}
+		for (GameCharacter friend2 : friends) {
+
+			if (friend.getActBounds().intersects(friend2.getBounds())) {
+				friend2.heal(friend.getMeleeDamage() / 3);
+				healed = true;
 			}
 		}
 
-		if (character.getMove() == Moves.AURA) {
+		if (healed) {
+			friend.heal(character.getMeleeDamage() / 3);
+			friend.endAction();
+		}
+
+	} else if (friend instanceof Heart && ((Heart) friend).usingField()) {
+		// fieldUsed = true;
+		Polygon rB = new Polygon();
+
+		for (FProjectile f : fP)
+			if (f instanceof Field) {
+				rB = ((Field) f).getIrregularBounds();
+				break;
+			}
+		if (rB.intersects(character.getBounds())) {
+			character.heal(Heart.FIELD_HEAL);
+		}
+		for (GameCharacter friend2 : friends) {
+			if (rB.intersects(friend2.getBounds())) {
+				friend2.heal(Heart.FIELD_HEAL);
+			}
+		}
+
+		
+	}
+}
+		if (character.getMove() == Moves.AURA&&!character.hasMeleed()) {
 
 			boolean healed = false;
 
@@ -969,7 +1003,7 @@ public class Board extends MPanel implements ActionListener {
 
 			if (healed) {
 				character.heal(character.getMeleeDamage() / 3);
-				character.setMelee(0);
+				character.endAction();
 			}
 
 		} else if (character instanceof Heart && ((Heart) character).usingField()) {
@@ -1092,7 +1126,13 @@ public class Board extends MPanel implements ActionListener {
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
-
+if(key==KeyEvent.VK_J){
+	if(pointedPoint==null){
+		
+		pointedPoint=MouseInfo.getPointerInfo().getLocation();
+	}else
+		pointedPoint=null;
+}
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
@@ -1184,7 +1224,11 @@ public class Board extends MPanel implements ActionListener {
 
 	public void reAnimate() {
 		int i;
-
+if(pointedPoint!=null){
+	pointedPoint.x+=scrollX;
+	pointedPoint.y+=scrollY;
+}
+	
 		for (i = 0; i < world.size(); i++)
 			world.get(i).basicAnimate();
 

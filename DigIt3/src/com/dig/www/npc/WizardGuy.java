@@ -121,13 +121,13 @@ public class WizardGuy extends NPC {
 										"...",
 										"Where did you get those clothes? I love the color!",
 										"Where did you get that robe? I'm just curious." },
-								false, owner),
-				// new NPCOption("This is a test.",
-				// "_Underline_ *Think| Normal +Bold _Underlined Bold_ *_Underlined Italic|_ Escaped chars: \\+\\|\\_\\*\\\\",
-				// new String[] {
-				// "Test.", "What kind of joke is this?", "...",
-				// "Huh?", "Testing, 1-2-3." }, false,
-				// owner)
+								false, owner)
+//				 new NPCOption("This is a test.",
+//				 "_Underline_ *Think| Normal +Bold _Underlined Bold_ *_Underlined Italic|_ Escaped chars: \\+\\|\\_\\*\\\\",
+//				 new String[] {
+//				 "Test.", "What kind of joke is this?", "...",
+//				 "Huh?", "Testing, 1-2-3." }, false,
+//				 owner)
 				});
 		// * * * * * /=\
 		// * * * * * | Magic. Do not touch.
