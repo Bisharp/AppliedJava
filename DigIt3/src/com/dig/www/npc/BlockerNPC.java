@@ -39,7 +39,7 @@ public abstract class BlockerNPC extends NPC {
 		if (!acts) {
 			checkWall();
 			exiting = true;
-			line = isWall ? options[0].answer() : moveLine();
+			line = isWall ? currentOptions[0].answer() : moveLine();
 		}
 	}
 	
@@ -48,7 +48,12 @@ public abstract class BlockerNPC extends NPC {
 		if (!initiatedAct)
 			return super.getCharLine();
 		else
-			return options[index].questionAsked();
+			if (index == -1 && !exiting) {
+				return getGreeting();
+			} else if (exiting)
+				return getFarewell();
+			else
+			return currentOptions[index].questionAsked();
 	}
 
 	protected abstract void checkWall();
