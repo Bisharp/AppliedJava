@@ -161,6 +161,9 @@ backwards=0;
 	//		Statics.playSound(owner, "wait-a-minute.wav");
 //			break;
 //			
+			
+				
+			
 			if(!playerGo){
 				 GameCharacter temp=player;
 				 player=us.get(me);
@@ -169,6 +172,7 @@ backwards=0;
 			playerGo=true;
 			us.get(me).pathUpdateTimer=50;
 				points.clear();
+				us.get(me).setWaiting(true);
 			//owner.getFriends().get(me).setX(player.getX());	
 			//owner.getFriends().get(me).setY(player.getY());
 			break;

@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -158,7 +159,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void changeArea() {
-
+pointedPoint=null;
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -410,7 +411,10 @@ public class Board extends MPanel implements ActionListener {
 			// +(world.get(0).getY()%100)+100//-11
 			// , 100, 100)
 			// ;
-			for (GameCharacter character : friends) {
+			if(pointedPoint!=null){
+				g2d.setColor(Color.BLUE);
+				g2d.fillOval((int)pointedPoint.getX()-25, (int)pointedPoint.getY()-25, 50,50);
+			}for (GameCharacter character : friends) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -661,7 +665,9 @@ public class Board extends MPanel implements ActionListener {
 				// /\
 				// || Nightmare Fuel
 			}
-
+if(pointedPoint!=null){
+	pointedPoint.x+=scrollX;
+pointedPoint.y+=scrollY;}
 			for (int i = 0; i < fP.size(); i++) {
 
 				if (!fP.get(i).isOnScreen()) {
@@ -1092,7 +1098,13 @@ public class Board extends MPanel implements ActionListener {
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
-
+if(key==KeyEvent.VK_J){
+	if(pointedPoint==null){
+		
+		pointedPoint=MouseInfo.getPointerInfo().getLocation();
+	}else
+		pointedPoint=null;
+}
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
@@ -1184,7 +1196,11 @@ public class Board extends MPanel implements ActionListener {
 
 	public void reAnimate() {
 		int i;
-
+if(pointedPoint!=null){
+	pointedPoint.x+=scrollX;
+	pointedPoint.y+=scrollY;
+}
+	
 		for (i = 0; i < world.size(); i++)
 			world.get(i).basicAnimate();
 
