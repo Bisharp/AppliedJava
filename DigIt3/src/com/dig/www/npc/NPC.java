@@ -279,7 +279,6 @@ this.currentOptions=options.clone();
 
 	public void setLine(NPCOption option) {
 		line = option.answer();
-System.out.println(option.answer);
 		if (option.acts())
 			act(option);
 		willOption=option;
