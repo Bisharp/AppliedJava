@@ -561,7 +561,7 @@ public boolean hasSpecialed(){
 				}
 				if (pathUpdateTimer > 0)
 					pathUpdateTimer--;
-				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 140) {
+				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 50) {
 					// if (new Point(getMidX(), getMidY()).distance(new Point(
 					// wallX, getMidY())) < 100) {
 					// deltaX = -deltaX;
