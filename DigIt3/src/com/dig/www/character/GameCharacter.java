@@ -287,7 +287,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					}
 				}
 			}
-			if(waiting&&(owner.getCharPoint().distance(x,y)<200||owner.pointedPoint!=null)){
+			if(waiting&&(owner.getCharPoint().distance(x,y)<250||owner.pointedPoint!=null)){
 				waiting=false;
 			}
 			if (path != null) {
