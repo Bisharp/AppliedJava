@@ -11,7 +11,12 @@ public class WizardGuy extends NPC {
 				"Mom told me I could grow up to be anything I wanted, so I became a wizard!",
 				"Can you believe that guy? He thinks science is superior to magic!" }, WIZARD, location, new NPCOption[] {
 				new NPCOption("Who are you?", "I am your friendly neighborhood wizard!", new String[] { "What's your name?", "Give me your name.",
-						"...", "May I ask your name?", "Your name, friend?" }, owner),
+						"...", "May I ask your name?", "Your name, friend?" },false,
+						new NPCOption[]{new NPCOption("Hi", "Hi back", new String[] { "Hello", "Hello",
+								"Hello", "Hello", "Hello" }
+						, owner)}
+				,
+				owner),
 				new NPCOption("Can you do a magic trick for me?", "Of course! Have a banana!", new String[] { "So... you know magic?",
 						"You do magic? Show me.", "...", "Ooh, you must be a really good stage magician!",
 						"Uh... why do I suddenly get the urge to see one of your magic tricks?" }, true, owner),

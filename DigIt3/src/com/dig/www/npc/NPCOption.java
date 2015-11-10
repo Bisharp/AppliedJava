@@ -1,12 +1,16 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import com.dig.www.start.Board;
+import com.dig.www.util.Statics;
 
 public class NPCOption {
 
 	protected String question;
 	protected String answer;
 	protected String[] questionAsked;
+	protected NPCOption[] newOptions;
 	protected boolean acts;
 	protected Board owner;
 	public final int ID;
@@ -18,6 +22,17 @@ public class NPCOption {
 
 	public NPCOption(String q, String a, String[] qS, boolean acts, Board owner) {
 
+		question = q;
+		answer = a;
+		this.acts = acts;
+		questionAsked = qS;
+		this.owner = owner;
+		newOptions=new NPCOption[0];
+		ID = id;
+		id++;
+	}
+	public NPCOption(String q, String a, String[] qS, boolean acts,NPCOption[]newOptions, Board owner) {
+this.newOptions=newOptions;
 		question = q;
 		answer = a;
 		this.acts = acts;
@@ -38,6 +53,7 @@ public class NPCOption {
 
 		ID = id;
 		id++;
+		newOptions=new NPCOption[0];
 	}
 
 	public String question() {
@@ -70,5 +86,8 @@ public class NPCOption {
 	public void changeQuestion(String q, String[] qA) {
 		question = q;
 		questionAsked = qA;
+	}
+	public NPCOption[]getNewOptions(){
+		return newOptions;
 	}
 }

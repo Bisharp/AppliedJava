@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -37,6 +39,7 @@ public abstract class NPC extends Sprite {
 
 	protected String[] greetingDialogs;
 	protected NPCOption[] options;
+	protected NPCOption[] currentOptions;
 	protected Rectangle[] buttons;
 	protected transient Image gif;
 	protected String line;
@@ -80,7 +83,7 @@ public abstract class NPC extends Sprite {
 	protected static final int MAX = 3;
 	protected static final int MIN = 10;
 	protected boolean wait = true;
-
+protected NPCOption willOption;
 	public NPC(int x, int y, String loc, Board owner, String[] dialogs, String s, String location, NPCOption[] options) {
 		super(x, y, loc);
 		image = newImage(loc);
@@ -94,7 +97,7 @@ public abstract class NPC extends Sprite {
 		this.y = y;
 		this.location = location;
 		gif = newImage("images/npcs/talking/" + s + ".gif");
-
+this.currentOptions=options.clone();
 		this.options = options;
 		buttons = new Rectangle[options.length];
 
@@ -128,8 +131,10 @@ public abstract class NPC extends Sprite {
 		boolean underline = false;
 
 		l = iTalk ? getLine() + (!inDialogue ? append().replace("next", "exit") : append()) :
-		//
+		
 				getCharLine() + append();
+		if(iTalk)
+			doOption();
 		posX = 0;
 		posY = Statics.BOARD_HEIGHT - (boxHeight / 3) * 2;
 
@@ -182,12 +187,12 @@ public abstract class NPC extends Sprite {
 			g2d.setStroke(new BasicStroke(5));
 			g2d.drawLine(0, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 5, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 5);
 
-			for (int i = 0; i < options.length; i++) {
+			for (int i = 0; i < currentOptions.length; i++) {
 
 				g2d.setColor(Color.black);
 				g2d.fill(buttons[i]);
 				g2d.setColor(Color.white);
-				g2d.drawString(options[i].question(), buttons[i].x + 5, Statics.BOARD_HEIGHT - boxHeight / 4);
+				g2d.drawString(currentOptions[i].question(), buttons[i].x + 5, Statics.BOARD_HEIGHT - boxHeight / 4);
 			}
 		}
 
@@ -231,7 +236,7 @@ public abstract class NPC extends Sprite {
 		} else if (exiting)
 			return getFarewell();
 		else
-			return options[index].questionAsked();
+			return currentOptions[index].questionAsked();
 	}
 
 	protected String getGreeting() {
@@ -274,11 +279,22 @@ public abstract class NPC extends Sprite {
 
 	public void setLine(NPCOption option) {
 		line = option.answer();
-
+System.out.println(option.answer);
 		if (option.acts())
 			act(option);
+		willOption=option;
 	}
-
+public void doOption(){
+	if(willOption==null)
+		return;
+	if(willOption.getNewOptions().length>0){
+		setCurrentOptions(willOption);
+		inDialogue=true;}
+	else{
+		resetCurrentOptions();
+		inDialogue=false;}
+	willOption=null;
+}
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(image, x, y, owner);
@@ -289,7 +305,6 @@ public abstract class NPC extends Sprite {
 	}
 
 	public void mouseClick(MouseEvent m) {
-
 		if (exiting || inDialogue)
 			return;
 
@@ -297,7 +312,10 @@ public abstract class NPC extends Sprite {
 
 		for (int i = 0; i < buttons.length; i++)
 			if (buttons[i].intersects(mouseBounds)) {
-				setLine(options[i]);
+				
+				
+				
+				setLine(currentOptions[i]);
 				wait = true;
 				iTalk = false;
 				index = i;
@@ -320,4 +338,28 @@ public abstract class NPC extends Sprite {
 	}
 
 	public abstract String exitLine();
+	public void setCurrentOptions(NPCOption optionGiver){
+		
+			buttons = new Rectangle[optionGiver.getNewOptions().length];
+
+			int length = 0;
+			for (int i = 0; i < optionGiver.getNewOptions().length; i++) {
+				buttons[i] = new Rectangle(length + 10, Statics.BOARD_HEIGHT - (int) (NPC.boxHeight / 2) + 50, optionGiver.getNewOptions()[i].question().length() * 10 + 10,
+						NPC.buttonHeight);
+				length += buttons[i].width + 10;
+			}
+			currentOptions=optionGiver.getNewOptions().clone();
+		
+	}
+	public void resetCurrentOptions(){
+		currentOptions=options.clone();
+		buttons = new Rectangle[options.length];
+
+		int length = 0;
+		for (int i = 0; i < options.length; i++) {
+			buttons[i] = new Rectangle(length + 10, Statics.BOARD_HEIGHT - (int) (boxHeight / 2) + 50, options[i].question().length() * 10 + 10,
+					buttonHeight);
+			length += buttons[i].width + 10;
+		}
+	}
 }
