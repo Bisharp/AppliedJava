@@ -111,6 +111,7 @@ public class StageBuilder {
 										Block.Blocks.CRYSTAL));
 								break;
 
+							// Someone delete this abomination.
 							// case '>':
 							// world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
 							// Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
@@ -258,6 +259,7 @@ public class StageBuilder {
 
 		ArrayList<NPC> npcs = new ArrayList<NPC>();
 		int questCount = 0;
+		int blockerCount = 0;
 
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
@@ -318,7 +320,8 @@ public class StageBuilder {
 							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner, loc));
 							break;
 						case NPC.GATEKEEPER:
-							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3))));
+							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3)), blockerCount));
+							blockerCount++;
 							break;
 						case NPC.MACARONI:
 							has = false;
