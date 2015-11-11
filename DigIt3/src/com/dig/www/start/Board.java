@@ -412,8 +412,7 @@ pointedPoint=null;
 //			 , 100, 100)
 //			 ;
 			if(pointedPoint!=null){
-				g2d.setColor(Color.BLUE);
-				g2d.fillOval((int)pointedPoint.getX()-25, (int)pointedPoint.getY()-25, 50,50);
+				g2d.drawImage(DigIt.lib.checkLibrary("/images/icon.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
 			}for (GameCharacter character : friends) {
 
 				// g2d.setColor(Color.GREEN);

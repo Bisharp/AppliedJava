@@ -315,7 +315,7 @@ public boolean hasSpecialed(){
 					pointTimer = 18;
 					path.removeLast();
 				}
-				if (new Point(x, y).distance(owner.getCharPoint()) < 140) {
+				if (new Point(x, y).distance(owner.getCharPoint()) < 100&&owner.pointedPoint==null) {
 					// System.out.println(getType().charName()+" CLOSE:"+new
 					// Date());
 					path = null;
