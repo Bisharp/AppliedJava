@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.security.acl.Owner;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
@@ -168,6 +169,7 @@ backwards=0;
 				 GameCharacter temp=player;
 				 player=us.get(me);
 				 us.set(me, temp);
+			
 			}
 			playerGo=true;
 			us.get(me).pathUpdateTimer=50;
@@ -196,10 +198,11 @@ backwards=0;
 			 GameCharacter temp=player;
 			 player=us.get(me);
 			 us.set(me, temp);
+			 Collections.reverse(points);
 		}
 		playerGo=true;
 		optimise();
-	points.remove(0);
+	//points.remove(0);
 		//System.out.println("Size after optimising: "+points.size());
 		playerPoint=null;
 		break;}

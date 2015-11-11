@@ -338,7 +338,6 @@ public boolean hasSpecialed(){
 
 						goTo = true;
 					} else {
-						pathUpdateTimer = 25;
 						path = null;
 						getToPoint = owner.getCharacter().getBounds().getLocation();
 
@@ -540,7 +539,7 @@ public boolean hasSpecialed(){
 
 				owner.reAnimate();
 			} else {
-				if (!isPlayerCollide) {
+				if (onceNotCollidePlayer) {
 					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
@@ -561,18 +560,14 @@ public boolean hasSpecialed(){
 				}
 				if (pathUpdateTimer > 0)
 					pathUpdateTimer--;
-				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null && new Point(x, y).distance(owner.getCharPoint()) > 50) {
-					// if (new Point(getMidX(), getMidY()).distance(new Point(
-					// wallX, getMidY())) < 100) {
-					// deltaX = -deltaX;
-					// x += deltaX;
-					// }
-					// if (new Point(getMidX(), getMidY()).distance(new Point(
-					// getMidX(), wallY)) < 100) {
-					// deltaY = -deltaY;
-					// y += deltaY;
-					// }
-
+//				if(onceNotCollidePlayer)
+//					JOptionPane.showMessageDialog(owner, "try");
+				if (pathUpdateTimer <= 0 && 
+						onceNotCollidePlayer &&
+						path == null
+						//&& new Point(x, y).distance(owner.getCharPoint()) > 50
+						) {
+//JOptionPane.showMessageDialog(owner, "work");
 					for (int c = 0; c < owner.getFriends().size(); c++) {
 						if (owner.getFriends().get(c) == this) {
 							me = c;
@@ -589,13 +584,22 @@ public boolean hasSpecialed(){
 						owner.getCharacter().setX(owner.pointedPoint.x);
 						owner.getCharacter().setY(owner.pointedPoint.y);
 					}
+					
 					path = new PointPath(me, owner);
 					if(changedP){
 						owner.getCharacter().setX(realX);
 						owner.getCharacter().setY(realY);
+						
 					}
-					pathUpdateTimer = 50;
 					
+					if(path.getPoints().size()>0){
+//						x=path.getCurrentFind().x;
+//						y=path.getCurrentFind().y;
+						//JOptionPane.showMessageDialog(owner, "size greater than 0");
+					}else{
+						//JOptionPane.showMessageDialog(owner, "size 0");
+						pathUpdateTimer = 50;
+					}
 					meleePress = false;
 					pointTimer = 18;
 					path.update();
@@ -802,6 +806,7 @@ protected	void OpenLevelUp() {
 			this.isPlayerCollide = isPlayer;
 			if (isPlayer == false) {
 				onceNotCollidePlayer = true;
+			
 			}
 			wallX = midX;
 			wallY = midY;
@@ -814,7 +819,7 @@ protected	void OpenLevelUp() {
 public abstract String getRangedString();
 	private Point setAttacks() {
 		Point shieldPos = null;
-		if (meleePress) {
+		if (meleePress&&rangedTimer<=0&&specialTimer<=0) {
 			if (meleeTimer <= NEG_TIMER_MELEE && energy >= MEnC// ||this
 																// instanceof
 																// Diamond
@@ -824,7 +829,7 @@ public abstract String getRangedString();
 				meleeHit=false;
 			}
 		}
-		if (specialPress && !meleePress && !rangedPress) {
+		if (specialPress && rangedTimer<=0&&meleeTimer<=0) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
@@ -843,7 +848,7 @@ public abstract String getRangedString();
 				}
 			}
 		}
-		if (rangedPress && !meleePress) {
+		if (rangedPress && meleeTimer<=0&&specialTimer<=0) {
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
