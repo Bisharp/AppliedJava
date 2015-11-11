@@ -10,8 +10,9 @@ public abstract class BlockerNPC extends NPC {
 	protected final int value;
 	protected boolean isWall = true;
 	protected boolean acts = false;
-	protected boolean initiatedAct = false;
 	public final int id;
+
+	protected String checkDialog;
 
 	public BlockerNPC(int x, int y, String loc, Board owner, String[] dialogs, String s, String location, NPCOption[] o, int value, int id) {
 		super(x, y, loc, owner, dialogs, s, location, o);
@@ -35,10 +36,9 @@ public abstract class BlockerNPC extends NPC {
 	@Override
 	public void act(NPCOption o) {
 
-		acts = !acts;
-		initiatedAct = true;
+		acts = true;
 
-		if (!acts) {
+		if (acts) {
 			checkWall();
 			exiting = true;
 			line = isWall ? currentOptions[0].answer() : moveLine();
@@ -49,30 +49,42 @@ public abstract class BlockerNPC extends NPC {
 
 	@Override
 	public String getCharLine() {
-		if (!initiatedAct)
+		if (!acts)
 			return super.getCharLine();
-		else if (index == -1 && !exiting) {
-			return getGreeting();
-		} else if (exiting)
-			return getFarewell();
 		else
-			return currentOptions[index].questionAsked();
+			return checkDialog;
 	}
 
 	protected abstract void checkWall();
 
 	protected abstract String moveLine();
 
+	protected abstract String byeLine();
+
 	@Override
 	public void exit() {
-		super.exit();
-		if (inDialogue && !iTalk && acts)
-			act(BLANK);
+
+		if (!acts || !iTalk) {
+			super.exit();
+			if (inDialogue && !iTalk && acts)
+				act(BLANK);
+		} else {
+			end();
+		}
 	}
 
 	@Override
 	public void setLine() {
 		super.setLine();
-		initiatedAct = false;
+		acts = false;
+		checkDialog = options[0].questionAsked();
+	}
+
+	@Override
+	public String exitLine() {
+		if (acts)
+			return "";
+		else
+			return byeLine();
 	}
 }

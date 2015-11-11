@@ -201,13 +201,22 @@ this.currentOptions=options.clone();
 				if (!exiting)
 					inDialogue = false;
 				else {
-					owner.setState(Board.State.INGAME);
-					exiting = false;
+					end();
 				}
 			else {
 				iTalk = true;
 				wait = true;
 			}
+	}
+	
+	protected void end() {
+
+		owner.setState(Board.State.INGAME);
+		exiting = false;
+		index = -1;
+		wait = true;
+		iTalk = false;
+		inDialogue = true;
 	}
 
 	protected int getPosXAdd(char c, boolean bold) {

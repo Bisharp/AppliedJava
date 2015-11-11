@@ -19,7 +19,7 @@ public class Gatekeeper extends BlockerNPC {
 
 	@Override
 	public void checkWall() {
-		if (!acts && owner.getData().getCollectibleNum() >= value)
+		if (!iTalk && owner.getData().getCollectibleNum() >= value)
 			isWall = false;
 	}
 
@@ -29,7 +29,7 @@ public class Gatekeeper extends BlockerNPC {
 	}
 
 	@Override
-	public String exitLine() {
+	public String byeLine() {
 		return "Come back when you are ready to surrender to the superior might of Drusk!";
 	}
 

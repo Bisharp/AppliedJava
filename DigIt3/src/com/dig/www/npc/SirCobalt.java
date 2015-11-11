@@ -20,7 +20,7 @@ public class SirCobalt extends BlockerNPC {
 	}
 
 	@Override
-	public String exitLine() {
+	public String byeLine() {
 		return "Always be on your guard.";
 	}
 	
@@ -32,7 +32,7 @@ public class SirCobalt extends BlockerNPC {
 	@Override
 	protected void checkWall() {
 		
-		if (willJoin && !acts) {
+		if (willJoin && !iTalk) {
 			isWall = false;
 			owner.getFriends().add(new com.dig.www.character.SirCobalt(x, y, owner, false));
 		}
