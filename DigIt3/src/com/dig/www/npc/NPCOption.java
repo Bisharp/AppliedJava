@@ -82,12 +82,20 @@ this.newOptions=newOptions;
 			return questionAsked[0];
 		}
 	}
-
+	public void setAnswer(String answer){
+		this.answer=answer;
+	}
+	public String[] questionsAsked() {
+		return questionAsked;
+	}
 	public void changeQuestion(String q, String[] qA) {
 		question = q;
 		questionAsked = qA;
 	}
 	public NPCOption[]getNewOptions(){
 		return newOptions;
+	}
+	public void setNewOptions(NPCOption[]optionsSetter){
+		newOptions=optionsSetter;
 	}
 }

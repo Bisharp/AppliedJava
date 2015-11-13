@@ -110,7 +110,6 @@ public class CharData implements Serializable {
 	public void clearBlocker(int id) {
 		areas.get(currentKey).clearBlocker(id);
 	}
-
 	public class LevelData implements Serializable {
 
 		/**
