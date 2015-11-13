@@ -9,10 +9,10 @@ import com.dig.www.util.Statics;
 
 public class ChainEnemy extends WalkingEnemy {
 
-	private ArrayList<ChainEnemy> linkList;
-	private boolean added = false;
-	private ChainEnemy follows;
-	private int links;
+	protected ArrayList<ChainEnemy> linkList;
+	protected boolean added = false;
+	protected ChainEnemy follows;
+	protected int links;
 
 	// private MyPoint[] pastPoints;
 
@@ -34,7 +34,7 @@ public class ChainEnemy extends WalkingEnemy {
 		added = true;
 	}
 
-	private int FOLLOW = 100;
+	protected int FOLLOW = 100;
 
 	public void animate() {
 
@@ -45,27 +45,6 @@ public class ChainEnemy extends WalkingEnemy {
 				linkList.add(new ChainEnemy(x, y, loc, owner, flying, health / 2, i != 0 ? linkList.get(i - 1) : this));
 			owner.getEnemies().addAll(linkList);
 		}
-
-		// super.animate();
-		//
-		// int i;
-		// for (i = 0; i < pastPoints.length; i++) {
-		// pastPoints[i].x += owner.getScrollX();
-		// pastPoints[i].y += owner.getScrollY();
-		// }
-		// for (i = pastPoints.length - 1; i >= 0; i--)
-		// if (i != 0) {
-		// pastPoints[i].x = pastPoints[i - 1].x;
-		// pastPoints[i].y = pastPoints[i - 1].y;
-		// } else {
-		// pastPoints[i].x = x;
-		// pastPoints[i].y = y;
-		// }
-		//
-		// for (i = 0; i < linkList.size(); i++) {
-		// linkList.get(i).setX(pastPoints[i].x);
-		// linkList.get(i).setY(pastPoints[i].y);
-		// }
 
 		if (follows != null) {
 			
@@ -79,7 +58,7 @@ public class ChainEnemy extends WalkingEnemy {
 			basicAnimate();
 			int dist = (int) Math.pow(follows.getX() - x, 2) + (int) Math.pow(follows.getY() - y, 2);
 
-			if (Math.sqrt(dist) > FOLLOW) {
+			if (Math.sqrt(dist) > followingDist()) {
 				int amount = getSpeed();
 
 				if (follows.getX() < x)
@@ -120,6 +99,17 @@ public class ChainEnemy extends WalkingEnemy {
 	
 	public ChainEnemy getFollows() {
 		return follows;
+	}
+
+	public void setDistance(int dist) {
+		FOLLOW = dist != -1? dist : FOLLOW;
+	}
+	
+	protected int followingDist() {
+		if (follows != null)
+			return follows.followingDist();
+		else
+			return FOLLOW;
 	}
 
 	// private class MyPoint {
