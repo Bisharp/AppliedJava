@@ -758,6 +758,8 @@ protected	void OpenLevelUp() {
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
 			rangedPress = false;
+			if(this instanceof Spade)
+				((Spade)this).keyReleased=true;
 //			if (rangedTimer > 0)
 //				rangedTimer = 0;
 		}
@@ -857,7 +859,9 @@ public abstract String getRangedString();
 				
 					if(getType()!=Types.SPADE)
 				owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, s, owner, getRangedMove()));
-if(this instanceof SirCobalt)
+					else
+					((Spade)this).keyReleased=false;
+					if(this instanceof SirCobalt)
 	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			}
 
@@ -1155,17 +1159,24 @@ public int rangedAddY(){
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
-				rangedTimer-=2;
+				if(getType()==Types.SPADE){
+					if(rangedTimer==30-(TIMER_RANGED%2)){
+			if(((Spade)this).keyReleased){
+			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
+			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
+			rangedTimer-=2;	
+		}
+			}else
+			rangedTimer-=2;	
+					}else
+			rangedTimer-=2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
 			specialTimer-=2;
 		}
 		if (itemTimer > 0)
 			itemTimer--;
-		if(getType()==Types.SPADE&&rangedTimer==30-(TIMER_RANGED%2)){
-			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
-			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
-		}
+		
 	}
 
 	public int getActing() {

@@ -16,7 +16,7 @@ public class Spade extends GameCharacter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	protected boolean keyReleased;
 	private int dirt = 0;
 
 	public Spade(int x, int y, Board owner,boolean player) {
@@ -76,7 +76,7 @@ public class Spade extends GameCharacter {
 		case 1:
 		return getType().toString();
 		case 2:
-			if(rangedTimer>=30)
+			if(rangedTimer>=30||!keyReleased)
 		return "bowD";
 			else
 				return "bowN";
