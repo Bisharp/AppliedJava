@@ -873,6 +873,9 @@ public abstract String getRangedString();
 				owner.getfP().add(new FProjectile(dir, x + (this.getWidth() / 2), y + (this.getHeight() / 2), 30, this, s, owner, Moves.MPITCH));
 
 			}
+			if(specialTimer>=0){
+				enTimer = 5;
+			}
 		} else if (type == Types.DIAMOND) {
 			boolean found = false;
 			for (int c = 0; c < owner.getfP().size(); c++) {
@@ -1166,8 +1169,11 @@ public int rangedAddY(){
 			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			rangedTimer-=2;	
 		}
+			
 			}else
 			rangedTimer-=2;	
+			
+					enTimer = 5;	
 					}else
 			rangedTimer-=2;
 		}

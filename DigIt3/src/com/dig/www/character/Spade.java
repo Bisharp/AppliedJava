@@ -119,7 +119,7 @@ public class Spade extends GameCharacter {
 			switch(direction){
 		case UP:
 			dX = x+13;
-			dY = y - Statics.BLOCK_HEIGHT + 50;
+			dY = y - Statics.BLOCK_HEIGHT + 50+13;
 			break;
 
 		case DOWN:
