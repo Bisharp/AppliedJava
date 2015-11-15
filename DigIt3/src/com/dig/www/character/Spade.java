@@ -90,10 +90,11 @@ public class Spade extends GameCharacter {
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		
-		int dX = 0;
+		
+		if(toMoveString()!=null){
+	int dX = 0;
 		int dY = 0;
-if(specialTimer>0)
-	energy=0;
+		if(toMoveString().equals(getType().toString()))
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -114,9 +115,27 @@ if(specialTimer>0)
 			dX = x+70;
 			dY = y;
 			break;
-		}
-		if(toMoveString()!=null){
-	
+		}else
+			switch(direction){
+		case UP:
+			dX = x;
+			dY = y - Statics.BLOCK_HEIGHT + 50;
+			break;
+
+		case DOWN:
+			dX = x;
+			dY = y + Statics.BLOCK_HEIGHT - 50;
+			break;
+
+		case RIGHT:
+			dX = x + Statics.BLOCK_HEIGHT - 70;
+			dY = y;
+			break;
+
+		case LEFT:
+			dX = x+70;
+			dY = y;
+			break;}
 		if(direction==Direction.LEFT){
 			Image anImg=newImage(toMoveString());
 			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);

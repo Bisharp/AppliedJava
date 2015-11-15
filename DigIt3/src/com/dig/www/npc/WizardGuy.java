@@ -14,9 +14,7 @@ public class WizardGuy extends NPC {
 				owner,
 				new String[] {
 						"Magic is cool!",
-						"It's dangerous to go alone. Take this!",
-						"Mom told me I could grow up to be anything I wanted, so I became a wizard!",
-						"Can you believe that guy? He thinks science is superior to magic!" },
+						"Where did that cloak disappear to? Oh! Hello there!"},
 				WIZARD,
 				location,
 				new NPCOption[] {
@@ -104,7 +102,7 @@ public class WizardGuy extends NPC {
 								true, owner),
 						new NPCOption(
 								"Why are you a magician, anyway?",
-								"My mom told me I could be +anything| I wanted when I grew up, so why not a wizard?",
+								"Mom told me I could grow up to be anything I wanted, so I became a wizard!",
 								new String[] {
 										"Why are you a wizard, anyway?",
 										"What made you choose such a bizarre line of work?",
@@ -122,15 +120,11 @@ public class WizardGuy extends NPC {
 										"Where did you get those clothes? I love the color!",
 										"Where did you get that robe? I'm just curious." },
 								false, owner)
-//				 new NPCOption("This is a test.",
-//				 "_Underline_ *Think| Normal +Bold _Underlined Bold_ *_Underlined Italic|_ Escaped chars: \\+\\|\\_\\*\\\\",
-//				 new String[] {
-//				 "Test.", "What kind of joke is this?", "...",
-//				 "Huh?", "Testing, 1-2-3." }, false,
-//				 owner)
 				});
 		// * * * * * /=\
 		// * * * * * | Magic. Do not touch.
+		// * * * * * * * * * * /=\
+		// * * * * * * * * * Touched it!
 	}
 
 	@Override
@@ -140,6 +134,6 @@ public class WizardGuy extends NPC {
 
 	@Override
 	public String exitLine() {
-		return "I will see you again! My Crystal Ball/Snowglobe tells me so!";
+		return "I will see you again! My Snowglobe Crystal Ball tells me so!";
 	}
 }
