@@ -118,23 +118,23 @@ public class Spade extends GameCharacter {
 		}else
 			switch(direction){
 		case UP:
-			dX = x;
+			dX = x+13;
 			dY = y - Statics.BLOCK_HEIGHT + 50;
 			break;
 
 		case DOWN:
-			dX = x;
+			dX = x+12;
 			dY = y + Statics.BLOCK_HEIGHT - 50;
 			break;
 
 		case RIGHT:
 			dX = x + Statics.BLOCK_HEIGHT - 70;
-			dY = y;
+			dY = y+13;
 			break;
 
 		case LEFT:
 			dX = x+70;
-			dY = y;
+			dY = y+12;
 			break;}
 		if(direction==Direction.LEFT){
 			Image anImg=newImage(toMoveString());
@@ -145,8 +145,6 @@ public class Spade extends GameCharacter {
 			
 	}
 
-		if (direction == Direction.UP)
-			g2d.drawImage(image, x, y, owner);
 
 	}
 	@Override
@@ -156,7 +154,7 @@ public class Spade extends GameCharacter {
 	}
 @Override
 public int rangedAddX(){
-	return 3;
+	return 15;
 }
 	public void resetDirt() {
 		// TODO Auto-generated method stub

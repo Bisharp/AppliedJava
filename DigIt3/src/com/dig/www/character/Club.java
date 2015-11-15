@@ -88,8 +88,7 @@ public class Club extends GameCharacter {
 	}
 		
 
-		if (direction == Direction.UP)
-			g2d.drawImage(image, x, y, owner);
+	
 
 	}
 
