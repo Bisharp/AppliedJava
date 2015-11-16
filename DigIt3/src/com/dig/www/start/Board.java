@@ -897,7 +897,7 @@ pointedPoint.y+=scrollY;}
 							// could be implemented with other objects.
 
 							if (o.intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
-								if (!(e instanceof Projectile) || (character instanceof Field)) {
+								if (!(e instanceof Projectile) || (character instanceof Field && e.getSlowed())) {
 									e.interact(character.getMove(), character.getMaker(), true);
 									fP.get(c).setOnScreen(false);
 								}

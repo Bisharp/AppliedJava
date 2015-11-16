@@ -3,6 +3,7 @@ package com.dig.www.enemies;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 
 import com.dig.www.character.GameCharacter;
@@ -29,7 +30,10 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 	protected int damage = 10;
-	
+
+	protected Image ice = newImage("images/effects/ice.png");
+	protected Image heart = newImage("images/effects/heart.png");
+
 	protected int slowTimer = 0;
 	protected int SLOW_MAX = 10;
 
@@ -95,14 +99,14 @@ public abstract class Enemy extends Sprite {
 		if (stunTimer > 0) {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
-			g2d.drawImage(image, x, y, owner);
+			g2d.drawImage(getImage(), x, y, owner);
 		} else
-			g2d.drawImage(image, x, y, owner);
+			g2d.drawImage(getImage(), x, y, owner);
 
 		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+			g2d.drawImage(heart, x, y, owner);
 		else if (slowTimer > 0)
-			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+			g2d.drawImage(ice, x, y, owner);
 
 		if (!(this instanceof Projectile) && !invincible) {
 			// g2d.setFont(enFont);
@@ -112,20 +116,20 @@ public abstract class Enemy extends Sprite {
 		}
 	}
 
-	public void interact(Moves move, GameCharacter character,boolean fromP) {
-
+	public void interact(Moves move, GameCharacter character, boolean fromP) {
 
 		switch (move) {
 
 		// Clark
 		case SPADE:
-			if(!character.hasMeleed()){
-			takeDamage(character.getMeleeDamage());
-			character.endAction();}
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
 			break;
 		case ARROW:
-			if(fromP)
-			takeDamage(character.getRangedDamage());
+			if (fromP)
+				takeDamage(character.getRangedDamage());
 			break;
 		case PIT:
 
@@ -134,11 +138,11 @@ public abstract class Enemy extends Sprite {
 
 		// Carl
 		case CLUB:
-			if(!character.hasMeleed()){
-			stunTimer = STUN_MAX / 10;
-			takeDamage(character.getMeleeDamage());
-			character.endAction();
-			Statics.playSound(owner, "weapons/whop.wav");
+			if (!character.hasMeleed()) {
+				stunTimer = STUN_MAX / 10;
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+				Statics.playSound(owner, "weapons/whop.wav");
 			}
 			break;
 		case MPITCH:
@@ -183,59 +187,64 @@ public abstract class Enemy extends Sprite {
 			takeDamage(character.getRangedDamage());
 			break;
 		case BASH:
-			if(!character.hasSpecialed()){
-			takeDamage(character.getSpecialDamage());
-			stunTimer = STUN_MAX;
-			if(!invincible&&! (this instanceof PathEnemy)){
-			int d = (int) pointTowards(new Point(character.getX(), character.getY()));
-			d += 180;
-			x += Math.cos((double) Math.toRadians((double) d)) * 100;
-			y += Math.sin((double) Math.toRadians((double) d)) * 100;}}
+			if (!character.hasSpecialed()) {
+				takeDamage(character.getSpecialDamage());
+				stunTimer = STUN_MAX;
+				if (!invincible && !(this instanceof PathEnemy)) {
+					int d = (int) pointTowards(new Point(character.getX(), character.getY()));
+					d += 180;
+					x += Math.cos((double) Math.toRadians((double) d)) * 100;
+					y += Math.sin((double) Math.toRadians((double) d)) * 100;
+				}
+			}
 			// TODO implement launch
 			break;
 		default:
 			break;
 		case ITEM:
-			//I need some of the changes pushed, then this will be better
+			// I need some of the changes pushed, then this will be better
 			takeDamage(100);
 			break;
 		case STAB:
-			if(!character.hasMeleed()){
-			takeDamage(character.getMeleeDamage());
-			character.endAction();}
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
 			break;
 		case DIMENSION:
 			if (fromP)
-			takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage());
 			break;
 		case WARP:
-			if(!character.hasSpecialed()){
-			if(this instanceof Boss)
-			takeDamage(character.getSpecialDamage());
-			
-			else if(!invincible){
-				owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0,4,100));
-			alive=false;
+			if (!character.hasSpecialed()) {
+				if (this instanceof Boss)
+					takeDamage(character.getSpecialDamage());
+
+				else if (!invincible) {
+					owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0, 4, 100));
+					alive = false;
+				}
+
+				character.endAction();
 			}
-			
-			character.endAction();	}
 			break;
 		}
 	}
 
 	protected boolean takeDamage(int i) {
-if (!invincible){
-	int a=health;
-	if(i<a)
-		a=i;
-			GameCharacter.plusXP(a/10);}
+		if (!invincible) {
+			int a = health;
+			if (i < a)
+				a = i;
+			GameCharacter.plusXP(a / 10);
+		}
 		health -= i;
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible) {
 			alive = false;
 			GameCharacter.plusXP(getKillXP());
 		}
-		
+
 		return alive;
 	}
 
@@ -245,7 +254,7 @@ if (!invincible){
 
 	public void basicAnimate() {
 		super.basicAnimate();
-		
+
 		if (slowTimer > 0)
 			slowTimer--;
 
@@ -278,11 +287,17 @@ if (!invincible){
 	public int getKillXP() {
 		return 5;
 	}
-	
+
 	public int getSpeed() {
-		return slowTimer <= 0? 5 : 2;
+		return slowTimer <= 0 ? 5 : 2;
 	}
-	public boolean isInvincible(){
+
+	public boolean isInvincible() {
 		return invincible;
+	}
+
+	public boolean getSlowed() {
+		// TODO Auto-generated method stub
+		return slowTimer > 0;
 	}
 }
