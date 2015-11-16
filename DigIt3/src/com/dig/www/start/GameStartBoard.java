@@ -50,7 +50,7 @@ public class GameStartBoard extends MPanel {
 	private GameSavePanel game3;
 	private GameSavePanel game4;
 	private GameSavePanel game5;
-	// private GameSavePanel game6;
+	//private GameSavePanel game6;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
 	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
@@ -70,18 +70,18 @@ public class GameStartBoard extends MPanel {
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
 
-		game1 = new GameSavePanel(1, Color.RED);
-		game2 = new GameSavePanel(2, Color.BLUE);
-		game3 = new GameSavePanel(3, Color.YELLOW);
-		game4 = new GameSavePanel(4, Color.GREEN);
-		game5 = new GameSavePanel(5, Color.CYAN);
-		// game6 = new GameSavePanel(6,Color.MAGENTA);
+		game1 = new GameSavePanel(1,Color.RED);
+		game2 = new GameSavePanel(2,Color.BLUE);
+		game3 = new GameSavePanel(3,Color.YELLOW);
+		game4 = new GameSavePanel(4,Color.GREEN);
+		game5 = new GameSavePanel(5,Color.CYAN);
+		//game6 = new GameSavePanel(6,Color.MAGENTA);
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
 		buttonPanel.add(game4);
 		buttonPanel.add(game5);
-		// buttonPanel.add(game6);
+		//buttonPanel.add(game6);
 		add(buttonPanel, BorderLayout.SOUTH);
 		// setOpaque(false);
 		setBackground(Color.BLACK);
@@ -95,18 +95,12 @@ public class GameStartBoard extends MPanel {
 		repaint();
 	}
 
-	private boolean firstRun = true;
-
 	public void paint(Graphics g) {
 
 		super.paint(g);
 
-		if (firstRun) {
-			((Graphics2D) g).setXORMode(Color.red);
-			((Graphics2D) g).drawImage(Statics.ICON.getImage(), 0, 0, this);
-			firstRun = false;
-			repaint();
-		}
+		Graphics2D g2d = (Graphics2D) g;
+
 		// screenImage = newImage("images/titleScreen/title.png");
 		//
 		// g2d.scale((double)this.getWidth()/(double)screenImage.getWidth(null),
@@ -200,8 +194,7 @@ public class GameStartBoard extends MPanel {
 	public void deleteGame(String s) {
 		// TODO deleteGame(String s)
 		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file?\n(Deleted data cannot be restored.)") == JOptionPane.YES_OPTION) {
-			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt")
-					.delete();
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt").delete();
 
 			switch (s.charAt(s.length() - 1)) {
 			case '1':
@@ -214,7 +207,7 @@ public class GameStartBoard extends MPanel {
 				game3.reset();
 				break;
 			}
-
+			
 			revalidate();
 			repaint();
 		} else
@@ -231,11 +224,10 @@ public class GameStartBoard extends MPanel {
 		JButton load;
 		JButton create;
 		JButton delete;
-		Color color;
-
-		public GameSavePanel(int saveNum, Color color) {
-			this.color = color;
-
+Color color;
+		public GameSavePanel(int saveNum,Color color) {
+			this.color=color;
+			
 			this.setPreferredSize(new Dimension(200, 150));
 			this.setBackground(color);
 			this.saveNum = saveNum;
@@ -275,8 +267,7 @@ public class GameStartBoard extends MPanel {
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
-			if (new File(
-					(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
+			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
 					.exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
@@ -285,7 +276,7 @@ public class GameStartBoard extends MPanel {
 		}
 
 		public void reset() {
-
+			
 			this.removeAll();
 			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(200, 20));
@@ -293,8 +284,7 @@ public class GameStartBoard extends MPanel {
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
-			if (new File(
-					(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
+			if (new File((GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
 					.exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);

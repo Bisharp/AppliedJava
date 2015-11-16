@@ -1,6 +1,5 @@
 package com.dig.www.enemies;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
@@ -69,7 +68,6 @@ public class LookChaseEnemy extends StandEnemy {
 		if (onScreen && Math.sqrt(Math.pow(x - owner.getCharacterX(), 2) + Math.pow(y - owner.getCharacterY(), 2)) <= sight) {
 			g2d.drawImage(cloud, owner.getCharacterX(), owner.getCharacterY(), owner);
 			g2d.drawImage(corruption, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
-			g2d.setXORMode(Color.red);
 		}
 	}
 	
