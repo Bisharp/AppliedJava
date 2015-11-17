@@ -43,8 +43,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	 * 
 	 */
 	
-//	protected Enemy enPoint;
-//	protected int enUp;
+	protected Enemy enPoint;
+	protected int enUpTimer;
+	protected static final int MAX_ATTACK_DISTANCE=250; 
+	
 	protected boolean waiting;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
@@ -324,12 +326,33 @@ public boolean hasSpecialed(){
 			if (!wallBound&&!waiting) {
 				// System.out.println(path);
 				if (path == null && owner.pointedPoint == null) {
+					if(enPoint==null&&enUpTimer<=0){
+					int chosenNum=-1;
+					int theDis=MAX_ATTACK_DISTANCE;
+					for(int c=0;c<owner.getEnemies().size();c++){
+						Point currentEn=new Point(owner.getEnemies().get(c).getX(),owner.getEnemies().get(c).getY());
+						if(!owner.getEnemies().get(c).isInvincible()&&!(owner.getEnemies().get(c) instanceof Projectile)&&currentEn.distance(new Point(x,y))<theDis&&owner.getCharPoint().distance(currentEn)>currentEn.distance(new Point(x,y))){
+							theDis=(int)currentEn.distance(new Point(x,y));
+							chosenNum=c;
+						}
+					}
 					
+					if(chosenNum!=-1){
+					enPoint=owner.getEnemies().get(chosenNum);	
+					}
+				}
+					else	if(enUpTimer>0){
+						enUpTimer--;
+					}
 				} else {
-					
+					enPoint=null;
 				}
 				
-				if (path != null) {
+				if(enPoint!=null&&(new Point(enPoint.getX(),enPoint.getY()).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||!enPoint.isAlive())){
+					enPoint=null;
+				}
+				
+					if (path != null) {
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
@@ -347,11 +370,17 @@ public boolean hasSpecialed(){
 				} else if (owner.pointedPoint != null) {
 					getToPoint = owner.pointedPoint;
 					goTo = true;
-				}  else {
-					getToPoint = owner.getCharacter().getBounds().getLocation();
+				}else if(enPoint!=null){
+					if(goTo==false)
+						getToPoint=owner.getCharPoint();
+					else
+					getToPoint=new Point(enPoint.getX(),enPoint.getY());
+				
+				}else {
+					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if (path != null || getToPoint.distance(x, y) > 125) {
+				if (path != null || ((enPoint==null&&getToPoint.distance(x, y) > 125)||(enPoint!=null&&!getActBounds().intersects(enPoint.getBounds())))) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -413,6 +442,16 @@ public boolean hasSpecialed(){
 					moveX = false;
 					moveY = false;
 				}
+				boolean shouldPressMelee=false;
+				for(int c=0;c<owner.getEnemies().size();c++){
+					if(getActBounds().intersects(owner.getEnemies().get(c).getBounds())&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
+						shouldPressMelee=true;
+						
+						break;
+					}
+				}
+				meleePress=shouldPressMelee;
+				
 //				if (enPoint != null) {
 //					boolean xway = false;
 //					if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() - y)) {
@@ -540,6 +579,8 @@ public boolean hasSpecialed(){
 				owner.reAnimate();
 			} else {
 				if (onceNotCollidePlayer) {
+					enPoint=null;
+					enUpTimer=25;
 					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
@@ -551,7 +592,7 @@ public boolean hasSpecialed(){
 
 					x += deltaX;
 					y += deltaY;
-				} else {
+				} else{
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
@@ -752,8 +793,7 @@ protected	void OpenLevelUp() {
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-			if (getType()==Types.DIAMOND&&meleeTimer > 0)
-				meleeTimer = 0;
+		
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
@@ -1149,6 +1189,9 @@ public int rangedAddY(){
 	}
 
 	protected void timersCount() {
+		if(getMove()==Moves.SHIELD&&meleePress==false){
+			meleeTimer=0;
+		}
 		if (enTimer == 0) {
 			energy += 1;
 			enTimer = 5;
