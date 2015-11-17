@@ -38,13 +38,10 @@ public class SirCobalt extends GameCharacter {
 	
 	@Override
 	public void drawTool(Graphics2D g2d) {
-		
+		int dX = 0;
+		int dY = 0;
 if(specialTimer>0)
 	energy=0;
-		
-		if(toMoveString()!=null){
-	int dX = 0;
-		int dY = 0;
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -66,6 +63,8 @@ if(specialTimer>0)
 			dY = y;
 			break;
 		}
+		if(toMoveString()!=null){
+	
 		if(direction==Direction.LEFT){
 			Image anImg=newImage(toMoveString());
 			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
@@ -75,6 +74,8 @@ if(specialTimer>0)
 			
 	}
 
+		if (direction == Direction.UP)
+			g2d.drawImage(image, x, y, owner);
 
 	}
 	@Override

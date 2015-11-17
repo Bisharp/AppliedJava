@@ -90,11 +90,10 @@ public class Spade extends GameCharacter {
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		
-		
-		if(toMoveString()!=null){
-	int dX = 0;
+		int dX = 0;
 		int dY = 0;
-		if(toMoveString().equals(getType().toString()))
+if(specialTimer>0)
+	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -115,27 +114,9 @@ public class Spade extends GameCharacter {
 			dX = x+70;
 			dY = y;
 			break;
-		}else
-			switch(direction){
-		case UP:
-			dX = x+13;
-			dY = y - Statics.BLOCK_HEIGHT + 50+13;
-			break;
-
-		case DOWN:
-			dX = x+12;
-			dY = y + Statics.BLOCK_HEIGHT - 50;
-			break;
-
-		case RIGHT:
-			dX = x + Statics.BLOCK_HEIGHT - 70;
-			dY = y+13;
-			break;
-
-		case LEFT:
-			dX = x+70;
-			dY = y+12;
-			break;}
+		}
+		if(toMoveString()!=null){
+	
 		if(direction==Direction.LEFT){
 			Image anImg=newImage(toMoveString());
 			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
@@ -145,6 +126,8 @@ public class Spade extends GameCharacter {
 			
 	}
 
+		if (direction == Direction.UP)
+			g2d.drawImage(image, x, y, owner);
 
 	}
 	@Override
@@ -154,7 +137,7 @@ public class Spade extends GameCharacter {
 	}
 @Override
 public int rangedAddX(){
-	return 15;
+	return 3;
 }
 	public void resetDirt() {
 		// TODO Auto-generated method stub

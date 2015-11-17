@@ -196,6 +196,14 @@ public class StageBuilder {
 						case '~':
 							enemies.add(new ChainEnemy(enX, enY, enImg, owner, flying, health, Integer.parseInt(stuff.get(6))));
 							break;
+							
+						case '`':
+							Enemy e = enemies.get(enemies.size() - 1);
+							enemies.remove(e);
+							enemies.add(new TailEnemy(enX, enY, enImg, owner, flying, health, Integer.parseInt(stuff.get(6)), e));
+							((ChainEnemy) enemies.get(enemies.size() - 1)).setDistance(Integer.parseInt(stuff.get(7)));
+							enemies.add(e);
+							break;
 
 						// Lowercase denotes an enemy that must see you before
 						// attacking.
@@ -320,7 +328,8 @@ public class StageBuilder {
 							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner, loc));
 							break;
 						case NPC.GATEKEEPER:
-							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3)), blockerCount));
+							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3)),
+									blockerCount));
 							blockerCount++;
 							break;
 						case NPC.MACARONI:

@@ -41,13 +41,10 @@ public class Club extends GameCharacter {
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		
-		
-	
-	
-		
-			
-			if(toMoveString()!=null){int dX = 0;
+		int dX = 0;
 		int dY = 0;
+if(specialTimer>0)
+	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -69,6 +66,11 @@ public class Club extends GameCharacter {
 			dY = y;
 			break;
 		}
+	
+	
+		
+			
+			if(toMoveString()!=null){
 		if(getMove()==Moves.MPITCH){
 		
 		
@@ -88,7 +90,8 @@ public class Club extends GameCharacter {
 	}
 		
 
-	
+		if (direction == Direction.UP)
+			g2d.drawImage(image, x, y, owner);
 
 	}
 

@@ -109,10 +109,10 @@ specialTimer=0;
 	@Override
 	public void drawTool(Graphics2D g2d) {
 		
-		
-		if(toMoveString()!=null){
-	int dX = 0;
+		int dX = 0;
 		int dY = 0;
+if(specialTimer>0)
+	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -134,6 +134,8 @@ specialTimer=0;
 			dY = y;
 			break;
 		}
+		if(toMoveString()!=null){
+	
 		if(direction==Direction.LEFT){
 			Image anImg=newImage(toMoveString());
 			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
@@ -143,7 +145,8 @@ specialTimer=0;
 			
 	}
 
-	
+		if (direction == Direction.UP)
+			g2d.drawImage(image, x, y, owner);
 
 	}
 
