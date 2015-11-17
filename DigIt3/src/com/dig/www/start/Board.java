@@ -54,7 +54,7 @@ public class Board extends MPanel implements ActionListener {
 	 * 
 	 */
 	public Point pointedPoint;
-
+public int pointedPointType=-1;
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
@@ -160,6 +160,7 @@ public class Board extends MPanel implements ActionListener {
 
 	public void changeArea() {
 pointedPoint=null;
+fP.clear();
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -412,8 +413,13 @@ pointedPoint=null;
 //			 , 100, 100)
 //			 ;
 			if(pointedPoint!=null){
-				g2d.drawImage(DigIt.lib.checkLibrary("/images/icon.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
-			}for (GameCharacter character : friends) {
+				if(pointedPointType==-1)
+				g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
+				else
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
+				
+			}
+			for (GameCharacter character : friends) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -671,9 +677,13 @@ pointedPoint.y+=scrollY;}
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
+						if(fP.get(i).getCharNum()==-2){
 						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(),
 								fP.get(i).getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
-					}
+						fP.remove(i);
+						}
+						}
+					else
 					fP.remove(i);
 					i--;
 					continue;
@@ -686,7 +696,7 @@ pointedPoint.y+=scrollY;}
 						chara = friends.get(charNum);
 
 					}
-					if (fP.get(i).getBounds().intersects(chara.getBounds())) {
+					if (fP.get(i).getBounds().contains(new Point(chara.getMidX(),chara.getMidY()))) {
 						fP.remove(i);
 						i--;
 						continue;
