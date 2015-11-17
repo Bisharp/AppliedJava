@@ -100,7 +100,7 @@ isTurning=b;
 	public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		
-			
+		
 			
 		
 		if(!collideHook){
@@ -112,6 +112,7 @@ isTurning=b;
 					x=hook.getX();
 					y=hook.getY();
 					break;
+					
 				}
 			}
 			if(move!=Moves.CHAIN||!collideHook){
@@ -125,13 +126,14 @@ isTurning=b;
 			x += Math.cos((double) Math.toRadians((double) d)) * speed;
 		y += Math.sin((double) Math.toRadians((double) d)) * speed;}
 		}
-			
+		
 			
 			if(isTurning)
 				g2d.rotate(Math.toRadians(d), x+width/2, y+height/2);
 		g2d.drawImage(image, x, y, owner);
 		if(isTurning)
 			g2d.rotate(-Math.toRadians(d), x+width/2, y+height/2);
+		
 	}
 
 	public Moves getMove() {
@@ -169,6 +171,9 @@ isTurning=b;
 	}
 	public boolean collideWithHook(){
 		return collideHook;
+	}
+	public void setCharNum(int setter){
+		this.charHoming=setter;
 	}
 	
 }

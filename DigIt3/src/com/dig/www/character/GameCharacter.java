@@ -350,6 +350,9 @@ if(poisonTimer>0){
 					if(chosenNum!=-1){
 					enPoint=owner.getEnemies().get(chosenNum);	
 					}
+					goTo=true;
+					if(this instanceof Diamond||this instanceof Heart||health<HP_MAX/2)
+						goTo=false;
 				}
 					else	if(enUpTimer>0){
 						enUpTimer--;

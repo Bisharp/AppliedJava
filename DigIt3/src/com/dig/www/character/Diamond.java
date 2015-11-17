@@ -34,12 +34,11 @@ public class Diamond extends GameCharacter {
 
 	@Override
 	public void animate() {
-		if (shield == null || !shield.collideWithHook())
-			super.animate();
-		else {
-			if (owner.getCharacter() != this)
+		if (shield == null || !shield.collideWithHook()){
+			super.animate();}
+		else if (owner.getCharacter() != this)
 				basicAnimate();
-		}
+		
 		if (shield == null) {
 			for (int c = 0; c < owner.getfP().size(); c++) {
 				if (owner.getfP().get(c).getMove() == Moves.CHAIN) {
@@ -48,10 +47,9 @@ public class Diamond extends GameCharacter {
 				}
 			}
 		}
-		if (shield != null) {
-			if (!owner.getfP().contains(shield)) {
-				shield = null;
-			} else if (shield.collideWithHook()) {
+		
+		
+			if (shield!=null&&shield.collideWithHook()) {
 
 				image = newImage("g");
 
@@ -80,8 +78,13 @@ public class Diamond extends GameCharacter {
 					x -= xP;
 					y -= yP;
 				}
-			}
+				
+				
+			
 		}
+			if (!owner.getfP().contains(shield)) {
+				shield = null;
+			}
 	}
 
 	// }

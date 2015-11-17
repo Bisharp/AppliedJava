@@ -673,7 +673,6 @@ if(pointedPoint!=null){
 	pointedPoint.x+=scrollX;
 pointedPoint.y+=scrollY;}
 			for (int i = 0; i < fP.size(); i++) {
-
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
@@ -681,12 +680,14 @@ pointedPoint.y+=scrollY;}
 						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(),
 								fP.get(i).getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
 						fP.remove(i);
+						}else{
+						fP.get(i).setCharNum(-1);
+						fP.get(i).basicAnimate();}
 						}
-						}
-					else
+					else{
 					fP.remove(i);
-					i--;
-					continue;
+					i--;continue;}
+					
 				} else if (fP.get(i).getCharNum() != -2) {
 					GameCharacter chara;
 					int charNum = fP.get(i).getCharNum();

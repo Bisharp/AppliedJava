@@ -172,9 +172,13 @@ backwards=0;
 			
 			}
 			playerGo=true;
-			us.get(me).pathUpdateTimer=50;
+			
+			
 				points.clear();
-				us.get(me).setWaiting(true);
+				for(int c=0;c<us.size();c++){
+					us.get(c).setWaiting(true);
+					us.get(c).pathUpdateTimer=50;
+				}
 			//owner.getFriends().get(me).setX(player.getX());	
 			//owner.getFriends().get(me).setY(player.getY());
 			break;
