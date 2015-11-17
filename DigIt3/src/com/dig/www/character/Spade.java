@@ -159,7 +159,10 @@ public class Spade extends GameCharacter {
 	}
 @Override
 public int rangedAddX(){
-	return 3;
+	return 13;
+}
+public int rangedAddY(){
+	return height/2-14;
 }
 	public void resetDirt() {
 		// TODO Auto-generated method stub
