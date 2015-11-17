@@ -94,6 +94,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 public boolean hasMeleed(){
 	return meleeHit;
 }
+protected int poisonTimer;
+public void poison(){
+	poisonTimer=50;
+}
 public boolean hasSpecialed(){
 	return specialHit;
 }
@@ -281,7 +285,13 @@ public boolean hasSpecialed(){
 
 	@Override
 	public void animate() {
-
+if(poisonTimer>0){
+	health-=1;
+	hpTimer = 100;
+	if (health <= 0)
+		owner.setState(Board.State.DEAD);
+}
+	
 		if (player) {
 
 		} else {
@@ -1189,6 +1199,8 @@ public int rangedAddY(){
 		if(getMove()==Moves.SHIELD&&meleePress==false){
 			meleeTimer=0;
 		}
+		if(poisonTimer>0)
+			poisonTimer--;
 		if (enTimer == 0) {
 			energy += 1;
 			enTimer = 5;
@@ -1209,9 +1221,12 @@ public int rangedAddY(){
 			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			rangedTimer-=2;	
 		}
-			}else
+			}
+					else
 			rangedTimer-=2;	
-					}else
+				if(rangedTimer>=0)
+					enTimer=5;
+				}else
 			rangedTimer-=2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
