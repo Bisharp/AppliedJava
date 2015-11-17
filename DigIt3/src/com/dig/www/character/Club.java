@@ -43,8 +43,6 @@ public class Club extends GameCharacter {
 		
 		int dX = 0;
 		int dY = 0;
-if(specialTimer>0)
-	energy=0;
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -89,9 +87,6 @@ if(specialTimer>0)
 				g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
 	}
 		
-
-		if (direction == Direction.UP)
-			g2d.drawImage(image, x, y, owner);
 
 	}
 

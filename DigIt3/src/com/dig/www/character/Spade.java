@@ -92,8 +92,9 @@ public class Spade extends GameCharacter {
 		
 		int dX = 0;
 		int dY = 0;
-if(specialTimer>0)
-	energy=0;
+		if(getType().toString().equals(toMoveString()
+				
+				))
 		switch (direction) {
 		case UP:
 			dX = x;
@@ -115,6 +116,28 @@ if(specialTimer>0)
 			dY = y;
 			break;
 		}
+		else
+			switch (direction) {
+			case UP:
+				dX = x+13;
+				dY = y - Statics.BLOCK_HEIGHT + 50+13;
+				break;
+
+			case DOWN:
+				dX = x+12;
+				dY = y + Statics.BLOCK_HEIGHT - 50;
+				break;
+
+			case RIGHT:
+				dX = x + Statics.BLOCK_HEIGHT - 70;
+				dY = y+13;
+				break;
+
+			case LEFT:
+				dX = x+70;
+				dY = y+12;
+				break;
+			}
 		if(toMoveString()!=null){
 	
 		if(direction==Direction.LEFT){
@@ -126,8 +149,7 @@ if(specialTimer>0)
 			
 	}
 
-		if (direction == Direction.UP)
-			g2d.drawImage(image, x, y, owner);
+	
 
 	}
 	@Override
