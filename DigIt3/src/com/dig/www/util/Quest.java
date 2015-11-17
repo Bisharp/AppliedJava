@@ -6,6 +6,7 @@ import com.dig.www.character.CharData.SimpleQuest;
 import com.dig.www.character.Items;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.QuestNPC;
+import com.dig.www.npc.Reyzu;
 
 public class Quest implements Serializable {
 

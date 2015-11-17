@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import com.dig.www.npc.BlockerNPC;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.QuestNPC;
+import com.dig.www.npc.Reyzu;
 import com.dig.www.objects.DropPoint;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.SpecialCollectible;
@@ -134,8 +135,8 @@ public class CharData implements Serializable {
 					hasDropPoints = true;
 
 			for (NPC npc : npcs)
-				if (npc instanceof QuestNPC) {
-					SimpleQuest s = new SimpleQuest(((QuestNPC) npc).getType(), ((QuestNPC) npc).getPlace(), name, ((QuestNPC) npc).id);
+				if (npc instanceof Reyzu) {
+					SimpleQuest s = new SimpleQuest(((Reyzu) npc).getType(), ((Reyzu) npc).getPlace(), name, ((Reyzu) npc).id);
 					quests.add(s);
 					locQuests.put(s.id, s);
 				} else if (npc instanceof BlockerNPC) {
@@ -257,14 +258,14 @@ public class CharData implements Serializable {
 		public ArrayList<NPC> filterNPC(ArrayList<NPC> input) {
 
 			NPC obj;
-			QuestNPC obj2;
+			Reyzu obj2;
 			ArrayList<NPC> objList = new ArrayList<NPC>();
 
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
 
-				if (obj instanceof QuestNPC) {
-					obj2 = (QuestNPC) obj;
+				if (obj instanceof Reyzu) {
+					obj2 = (Reyzu) obj;
 					obj2.setQuestState(getQuest(obj2.id));
 					objList.add(obj2);
 				} else if (obj instanceof BlockerNPC) {

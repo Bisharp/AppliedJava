@@ -305,10 +305,10 @@ public class StageBuilder {
 
 						switch (identity) {
 						case NPC.WIZARD:
-							npcs.add(new WizardGuy(nX, nY, "images/npcs/map/stationary/wizard.png", owner, loc));
+							npcs.add(new WizardGuy(nX, nY, owner, loc));
 							break;
 						case NPC.KEPLER:
-							npcs.add(new Kepler(nX, nY, "images/npcs/map/stationary/kepler.png", owner, loc));
+							npcs.add(new Kepler(nX, nY,  owner, loc));
 							break;
 						case NPC.SIR_COBALT:
 							boolean has = false;
@@ -322,7 +322,7 @@ public class StageBuilder {
 									}
 								}
 							if (!has)
-								npcs.add(new SirCobalt(nX, nY, "images/npcs/map/stationary/sirCobalt.png", owner, loc, stuff.get(3).startsWith("t")));
+								npcs.add(new SirCobalt(nX, nY, owner, loc, stuff.get(3).startsWith("t")));
 							break;
 						case NPC.SHOPKEEP:
 							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner, loc));
@@ -344,14 +344,14 @@ public class StageBuilder {
 									}
 								}
 							if (!has)
-								npcs.add(new Macaroni(nX, nY, "images/npcs/map/stationary/macaroni.png", owner, loc));
+								npcs.add(new Macaroni(nX, nY, owner, loc));
 							break;
-						case NPC.QUEST:
-							npcs.add(new QuestNPC(nX, nY, "images/npcs/map/stationary/reyzu.png", owner, loc, questCount));
+						case NPC.REYZU:
+							npcs.add(new Reyzu(nX, nY, owner, loc, questCount));
 							questCount++;
 							break;
 						case NPC.PLATO:
-							npcs.add(new PLATO(nX, nY, "images/npcs/map/stationary/plato.png", owner, loc));
+							npcs.add(new PLATO(nX, nY,  owner, loc));
 							break;
 						}
 
