@@ -44,7 +44,7 @@ public class Chest extends NPC {
 		if (sayWhat)
 			switch (owner.getCharacter().getType()) {
 			case CLUB:
-				return "Hey! it actually held a/an " + type.toString() + "!";
+				return "Hey! it actually held a(n) " + type.toString() + "!";
 			case HEART:
 				return "Oh cool! A(n) " + type.toString() + ".";
 			case DIAMOND:
