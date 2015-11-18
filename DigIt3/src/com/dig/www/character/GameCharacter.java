@@ -95,8 +95,10 @@ public boolean hasMeleed(){
 	return meleeHit;
 }
 protected int poisonTimer;
+protected int poisonHurtTimer;
 public void poison(){
-	poisonTimer=50;
+	poisonTimer=375;
+	poisonHurtTimer=15;
 }
 public boolean hasSpecialed(){
 	return specialHit;
@@ -286,10 +288,14 @@ public boolean hasSpecialed(){
 	@Override
 	public void animate() {
 if(poisonTimer>0){
+	if(poisonHurtTimer<=0){
 	health-=1;
 	hpTimer = 100;
 	if (health <= 0)
 		owner.setState(Board.State.DEAD);
+	poisonHurtTimer=15;}
+	else
+		poisonHurtTimer--;
 }
 	
 		if (player) {
@@ -1084,6 +1090,8 @@ public int rangedAddY(){
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
+		if(poisonTimer>0)
+			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
 		if(owner.getState()==State.INGAME){
 		timersCount();}
 	}
@@ -1184,8 +1192,9 @@ public int rangedAddY(){
 		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
 	}
 
-	public void takeDamage(int amount) {
-
+	public void takeDamage(int amount,boolean poison) {
+if(poison)
+	poison();
 		if (hitstunTimer <= 0) {
 			health -= amount;
 			hpTimer = 100;
@@ -1288,6 +1297,7 @@ public int rangedAddY(){
 		if (health > HP_MAX) {
 			health = HP_MAX;
 		}
+		poisonTimer=0;
 	}
 
 	public void setMelee(int i) {

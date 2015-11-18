@@ -930,7 +930,7 @@ pointedPoint.y+=scrollY;}
 							
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
-							character.takeDamage(e.getDamage());
+							character.takeDamage(e.getDamage(),e.poisons());
 							
 						}
 
@@ -938,7 +938,7 @@ pointedPoint.y+=scrollY;}
 							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
-								character.takeDamage(e.getDamage());
+								character.takeDamage(e.getDamage(),e.poisons());
 							}
 						}
 					}

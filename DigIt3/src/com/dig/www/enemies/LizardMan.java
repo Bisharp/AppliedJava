@@ -108,8 +108,8 @@ int roarTimer;
 						diagMove++;}
 					else if(diagMove==2){
 						roarTimer=20;
-						createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false, 20,width/2,height/6,10);
+						createProjectile("images/enemies/blasts/poison.png", 10, Statics.pointTowards(new Point((int) x,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false, 20,width/2,height/6,10,true);
 					diagMove++;
 					}
 					else if(diagMove==3){
@@ -144,8 +144,8 @@ int roarTimer;
 					}
 					else	if(bMove<3){
 						roarTimer=20;
-					createProjectile("images/enemies/blasts/0.png", 10, Statics.pointTowards(new Point((int) x,
-						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false,20,width/2,height/6,10);
+					createProjectile("images/enemies/blasts/poison.png", 10, Statics.pointTowards(new Point((int) x,
+						(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)), false,20,width/2,height/6,10,true);
 					bMove++;
 					}
 					else{

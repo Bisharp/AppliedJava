@@ -14,8 +14,9 @@ public class Projectile extends Enemy {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	double d;
-	int speed;
+	protected double d;
+	protected int speed;
+	protected boolean poisons;
 public void setTurning(boolean b){
 	isTurning=b;
 }
@@ -42,6 +43,27 @@ protected boolean isTurning;
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
 		this.damage=damage;
+	}
+	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying,int damage,boolean poisons) {
+		super(x, y, loc, owner, flying,1);
+		
+		
+		d = dir;
+		this.speed = speed;
+
+		Image img = maker.getImage();
+		int aSpeed;
+		// Moves the ball away from center of launcher's image
+		if (img.getWidth(null) >= img.getHeight(null)) {
+			aSpeed = (int) (img.getWidth(null) / 2);
+		} else {
+			aSpeed = (int) (img.getHeight(null) / 2);
+		}
+		// This is the move
+		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
+		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		this.damage=damage;
+		this.poisons=poisons;
 	}
 	@Override
 public void draw(Graphics2D g2d){
@@ -79,7 +101,9 @@ public void draw(Graphics2D g2d){
 			alive = false;
 	
 	}
-
+public boolean poisons(){
+	return poisons;
+}
 	/* 
 	 * TODO The below method will be deprecated upon Jonah's finishing of adding
 	 * extra move code. If this is still present in the second semester, delete
