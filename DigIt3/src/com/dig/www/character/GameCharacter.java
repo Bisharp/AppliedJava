@@ -476,7 +476,7 @@ if(poisonTimer>0){
 //				}
 				boolean shouldPressMelee=false;
 				for(int c=0;c<owner.getEnemies().size();c++){
-					if(((this instanceof Diamond&&owner.getEnemies().get(c) instanceof Projectile&&new Point(getMidX(),getMidY()).distance(owner.getEnemies().get(c).getMidX(),owner.getEnemies().get(c).getMidY())<300)||getActBounds().intersects(owner.getEnemies().get(c).getBounds()))&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
+					if(((this instanceof Diamond&&owner.getEnemies().get(c) instanceof Projectile&&new Point(getMidX(),getMidY()).distance(owner.getEnemies().get(c).getMidX(),owner.getEnemies().get(c).getMidY())<750)||getActBounds().intersects(owner.getEnemies().get(c).getBounds()))&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
 						shouldPressMelee=true;
 						
 						break;
