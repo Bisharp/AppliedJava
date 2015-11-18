@@ -543,9 +543,11 @@ fP.clear();
 		}
 
 		if (!decision.equals(character.getType().charName())) {
+character.releaseAll();
 
 			GameCharacter current = character;
 			int friendNum = getFriend(decision);
+			friends.get(friendNum).releaseAll();
 			character = friends.get(friendNum);
 			friends.set(friendNum, current);
 			character.setPlayer(true);

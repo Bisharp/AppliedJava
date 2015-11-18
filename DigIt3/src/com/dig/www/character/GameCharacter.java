@@ -405,45 +405,33 @@ if(poisonTimer>0){
 					// if(path!=null)
 					// System.out.println("walking");
 					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaX = -SPEED * times;
+						
+						deltaX = -SPEED;
 						moveX = true;
-						if (goTo)
-							direction = Direction.LEFT;
-						else
-							direction = Direction.RIGHT;
+						
 					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaX = SPEED * times;
+						
+						deltaX = SPEED;
 						moveX = true;
-						if (goTo)
-							direction = Direction.RIGHT;
-						else
-							direction = Direction.LEFT;
+						
 
 					} else {
 						deltaX = 0;
 						moveX = false;
 					}
 					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaY = -SPEED * times;
+						
+						deltaY = -SPEED;
 						moveY = true;
 						// if (||y > getToPoint.y + 50)
-						if (goTo)
-							direction = Direction.UP;
-						else
-							direction = Direction.DOWN;
+						
 
 					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaY = SPEED * times;
+						
+						deltaY = SPEED;
 						moveY = true;
 						// if (y < getToPoint.y - 50)
-						if (goTo)
-							direction = Direction.DOWN;
-						else
-							direction = Direction.UP;
+						
 
 					} else {
 						moveY = false;
@@ -455,9 +443,40 @@ if(poisonTimer>0){
 					moveX = false;
 					moveY = false;
 				}
+				//if(enPoint==null||!goTo){
+					if(deltaY==0){
+						if(deltaX!=0){
+							if(deltaX>0)
+								direction=Direction.RIGHT;
+							else
+								direction=Direction.LEFT;
+						}
+					}else{
+						if(deltaY<0)
+							direction=Direction.UP;
+						else
+							direction=Direction.DOWN;
+					}
+						
+				//}
+//				else{
+//					if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
+//						if(y<enPoint.getY())
+//							direction=Direction.UP;
+//					else
+//						direction=Direction.DOWN;
+//					}
+//					else{
+//						if(x<enPoint.getX())
+//							direction=Direction.RIGHT;
+//					else
+//						direction=Direction.LEFT;
+//					}
+//						
+//				}
 				boolean shouldPressMelee=false;
 				for(int c=0;c<owner.getEnemies().size();c++){
-					if(getActBounds().intersects(owner.getEnemies().get(c).getBounds())&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
+					if(((this instanceof Diamond&&owner.getEnemies().get(c) instanceof Projectile&&new Point(getMidX(),getMidY()).distance(owner.getEnemies().get(c).getMidX(),owner.getEnemies().get(c).getMidY())<300)||getActBounds().intersects(owner.getEnemies().get(c).getBounds()))&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
 						shouldPressMelee=true;
 						
 						break;
@@ -497,11 +516,7 @@ if(poisonTimer>0){
 				moveY = false;
 				image = newImage("n");
 			}
-			// if (new Point(x, y).distance(new
-			// Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
-			// x = owner.getCharacterX();
-			// y = owner.getCharacterY();
-			// }
+			
 		}
 
 		if (hitstunTimer > 0) {
@@ -1680,5 +1695,10 @@ public int rangedAddY(){
 			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
 		}
 		return dir;
+	}
+	public void releaseAll(){
+		meleePress=false;
+		rangedPress=false;
+		specialPress=false;
 	}
 }
