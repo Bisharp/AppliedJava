@@ -1700,5 +1700,7 @@ public int rangedAddY(){
 		meleePress=false;
 		rangedPress=false;
 		specialPress=false;
+		if(this instanceof Spade)
+			((Spade)this).keyReleased=true;
 	}
 }
