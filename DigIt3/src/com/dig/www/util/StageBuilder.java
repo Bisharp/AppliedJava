@@ -204,6 +204,10 @@ public class StageBuilder {
 							((ChainEnemy) enemies.get(enemies.size() - 1)).setDistance(Integer.parseInt(stuff.get(7)));
 							enemies.add(e);
 							break;
+						case '&':
+							enemies.add(new Slime(enX, enY, enImg, owner, flying, health));
+							break;
+							
 
 						// Lowercase denotes an enemy that must see you before
 						// attacking.

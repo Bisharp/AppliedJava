@@ -152,4 +152,8 @@ public abstract class Sprite implements Serializable {
 	public Board getOwner() {
 		return owner;
 	}
+	
+	public void setImage(Image i) {
+		image = i;
+	}
 }
