@@ -367,7 +367,7 @@ if(poisonTimer>0){
 					enPoint=null;
 				}
 				
-				if(enPoint!=null&&(new Point(enPoint.getX(),enPoint.getY()).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||!enPoint.isAlive())){
+				if(enPoint!=null&&((new Point(enPoint.getX(),enPoint.getY()).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||!enPoint.isAlive())||new Point(x,y).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||(health<HP_MAX/2&&goTo))){
 					enPoint=null;
 				}
 				
@@ -399,7 +399,7 @@ if(poisonTimer>0){
 					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if (path != null || ((enPoint==null&&getToPoint.distance(x, y) > 125)||(enPoint!=null&&!getActBounds().intersects(enPoint.getBounds())))) {
+				if ((path != null || ((enPoint==null&&getToPoint.distance(x, y) > 125)||(enPoint!=null&&!getActBounds().intersects(enPoint.getBounds()))))) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -443,11 +443,41 @@ if(poisonTimer>0){
 						moveY = false;
 						deltaY = 0;
 					}
-				} else {
+				}
+				
+				else {
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
+				}
+				if(!goTo){
+					if(moveX&&moveY){
+						deltaY = 0;
+						moveY = false;
+					}else if(moveX){
+						if(y<enPoint.getY()){
+							deltaY = -10;
+							moveY =true;
+							moveU=false;
+						}else{
+							deltaY = 10;
+							moveY =true;
+							moveU=true;
+						}
+							
+					}else{
+						if(x<enPoint.getX()){
+							deltaY = -10;
+							moveX =true;
+							moveL=true;
+						}else{
+							deltaX = 10;
+							moveX =true;
+							moveL=false;
+						}
+					}
+						
 				}
 				//if(enPoint==null||!goTo){
 					if(deltaY==0){
