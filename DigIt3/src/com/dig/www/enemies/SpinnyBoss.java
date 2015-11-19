@@ -55,7 +55,7 @@ private int rotate2=0;
 		
 			basicAnimate();
 			boolean acted=sortAction();
-			if(!acted){
+			if(!acted&&active){
 				if(!getBounds().intersects(getOwnerPlusBounds())){
 					//realSeq=sequence;
 					follow(3, 0, 5);

@@ -44,4 +44,9 @@ public class Shopkeep extends NPC {
 	public String exitLine() {
 		return "Come back anytime!";
 	}
+
+	@Override
+	public String getShowName() {
+		return "Strange shopkeeper";
+	}
 }

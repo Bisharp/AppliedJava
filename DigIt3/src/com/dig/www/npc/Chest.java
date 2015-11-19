@@ -44,15 +44,15 @@ public class Chest extends NPC {
 		if (sayWhat)
 			switch (owner.getCharacter().getType()) {
 			case CLUB:
-				return "Hey! it actually held a/an " + type.toString() + "!";
+				return "Hey! it actually held a(n) " + type.toString() + "!";
 			case HEART:
-				return "Oh cool! A/an " + type.toString() + ".";
+				return "Oh cool! A(n) " + type.toString() + ".";
 			case DIAMOND:
-				return "... (You can tell from the arch of his eyebrows that the chest held a/an " + type.toString() + ")";
+				return "... (You can tell from the arch of his eyebrows that the chest held a(n) " + type.toString() + ")";
 			case SIR_COBALT:
-				return "It holds a/an " + type.toString() + ".";
+				return "It holds a(n) " + type.toString() + ".";
 			default:
-				return "It's got a/an " + type.toString() + " in it.";
+				return "It's got a(n) " + type.toString() + " in it.";
 			}
 		if (opened && !exiting)
 			switch (owner.getCharacter().getType()) {
@@ -140,4 +140,10 @@ public class Chest extends NPC {
 			return "We don't have time for this;";
 		}
 	}
+
+	@Override
+	public String getShowName() {
+		return "A chest";
+	}
+	
 }

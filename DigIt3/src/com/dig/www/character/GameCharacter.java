@@ -43,8 +43,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	 * 
 	 */
 	
-//	protected Enemy enPoint;
-//	protected int enUp;
+	protected Enemy enPoint;
+	protected int enUpTimer;
+	protected static final int MAX_ATTACK_DISTANCE=250; 
+	
 	protected boolean waiting;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
@@ -91,6 +93,12 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected boolean specialHit;
 public boolean hasMeleed(){
 	return meleeHit;
+}
+protected int poisonTimer;
+protected int poisonHurtTimer;
+public void poison(){
+	poisonTimer=375;
+	poisonHurtTimer=15;
 }
 public boolean hasSpecialed(){
 	return specialHit;
@@ -279,7 +287,17 @@ public boolean hasSpecialed(){
 
 	@Override
 	public void animate() {
-
+if(poisonTimer>0){
+	if(poisonHurtTimer<=0){
+	health-=1;
+	hpTimer = 100;
+	if (health <= 0)
+		owner.setState(Board.State.DEAD);
+	poisonHurtTimer=15;}
+	else
+		poisonHurtTimer--;
+}
+	
 		if (player) {
 
 		} else {
@@ -324,12 +342,36 @@ public boolean hasSpecialed(){
 			if (!wallBound&&!waiting) {
 				// System.out.println(path);
 				if (path == null && owner.pointedPoint == null) {
+					if(enPoint==null&&enUpTimer<=0){
+					int chosenNum=-1;
+					int theDis=MAX_ATTACK_DISTANCE;
+					for(int c=0;c<owner.getEnemies().size();c++){
+						Point currentEn=new Point(owner.getEnemies().get(c).getX(),owner.getEnemies().get(c).getY());
+						if(!owner.getEnemies().get(c).isInvincible()&&!(owner.getEnemies().get(c) instanceof Projectile)&&currentEn.distance(new Point(x,y))<theDis&&owner.getCharPoint().distance(currentEn)>currentEn.distance(new Point(x,y))){
+							theDis=(int)currentEn.distance(new Point(x,y));
+							chosenNum=c;
+						}
+					}
 					
+					if(chosenNum!=-1){
+					enPoint=owner.getEnemies().get(chosenNum);	
+					}
+					goTo=true;
+					if(this instanceof Diamond||this instanceof Heart||health<HP_MAX/2)
+						goTo=false;
+				}
+					else	if(enUpTimer>0){
+						enUpTimer--;
+					}
 				} else {
-					
+					enPoint=null;
 				}
 				
-				if (path != null) {
+				if(enPoint!=null&&((new Point(enPoint.getX(),enPoint.getY()).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||!enPoint.isAlive())||new Point(x,y).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||(health<HP_MAX/2&&goTo))){
+					enPoint=null;
+				}
+				
+					if (path != null) {
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
@@ -347,11 +389,17 @@ public boolean hasSpecialed(){
 				} else if (owner.pointedPoint != null) {
 					getToPoint = owner.pointedPoint;
 					goTo = true;
-				}  else {
-					getToPoint = owner.getCharacter().getBounds().getLocation();
+				}else if(enPoint!=null){
+					if(goTo==false)
+						getToPoint=owner.getCharPoint();
+					else
+					getToPoint=new Point(enPoint.getX(),enPoint.getY());
+				
+				}else {
+					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if (path != null || getToPoint.distance(x, y) > 125) {
+				if ((path != null || ((enPoint==null&&getToPoint.distance(x, y) > 125)||(enPoint!=null&&!getActBounds().intersects(enPoint.getBounds()))))) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -363,56 +411,115 @@ public boolean hasSpecialed(){
 					// if(path!=null)
 					// System.out.println("walking");
 					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaX = -SPEED * times;
+						
+						deltaX = -SPEED;
 						moveX = true;
-						if (goTo)
-							direction = Direction.LEFT;
-						else
-							direction = Direction.RIGHT;
+						
 					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaX = SPEED * times;
+						
+						deltaX = SPEED;
 						moveX = true;
-						if (goTo)
-							direction = Direction.RIGHT;
-						else
-							direction = Direction.LEFT;
+						
 
 					} else {
 						deltaX = 0;
 						moveX = false;
 					}
 					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaY = -SPEED * times;
+						
+						deltaY = -SPEED;
 						moveY = true;
 						// if (||y > getToPoint.y + 50)
-						if (goTo)
-							direction = Direction.UP;
-						else
-							direction = Direction.DOWN;
+						
 
 					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
-						int times = goTo ? 1 : -1;
-						deltaY = SPEED * times;
+						
+						deltaY = SPEED;
 						moveY = true;
 						// if (y < getToPoint.y - 50)
-						if (goTo)
-							direction = Direction.DOWN;
-						else
-							direction = Direction.UP;
+						
 
 					} else {
 						moveY = false;
 						deltaY = 0;
 					}
-				} else {
+				}
+				
+				else {
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
 				}
+				if(!goTo){
+					if(moveX&&moveY){
+						deltaY = 0;
+						moveY = false;
+					}else if(moveX){
+						if(y<enPoint.getY()){
+							deltaY = -10;
+							moveY =true;
+							moveU=false;
+						}else{
+							deltaY = 10;
+							moveY =true;
+							moveU=true;
+						}
+							
+					}else{
+						if(x<enPoint.getX()){
+							deltaY = -10;
+							moveX =true;
+							moveL=true;
+						}else{
+							deltaX = 10;
+							moveX =true;
+							moveL=false;
+						}
+					}
+						
+				}
+				//if(enPoint==null||!goTo){
+					if(deltaY==0){
+						if(deltaX!=0){
+							if(deltaX>0)
+								direction=Direction.RIGHT;
+							else
+								direction=Direction.LEFT;
+						}
+					}else{
+						if(deltaY<0)
+							direction=Direction.UP;
+						else
+							direction=Direction.DOWN;
+					}
+						
+				//}
+//				else{
+//					if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
+//						if(y<enPoint.getY())
+//							direction=Direction.UP;
+//					else
+//						direction=Direction.DOWN;
+//					}
+//					else{
+//						if(x<enPoint.getX())
+//							direction=Direction.RIGHT;
+//					else
+//						direction=Direction.LEFT;
+//					}
+//						
+//				}
+				boolean shouldPressMelee=false;
+				for(int c=0;c<owner.getEnemies().size();c++){
+					if(((this instanceof Diamond&&owner.getEnemies().get(c) instanceof Projectile&&new Point(getMidX(),getMidY()).distance(owner.getEnemies().get(c).getMidX(),owner.getEnemies().get(c).getMidY())<750)||getActBounds().intersects(owner.getEnemies().get(c).getBounds()))&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
+						shouldPressMelee=true;
+						
+						break;
+					}
+				}
+				meleePress=shouldPressMelee;
+				
 //				if (enPoint != null) {
 //					boolean xway = false;
 //					if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() - y)) {
@@ -445,11 +552,7 @@ public boolean hasSpecialed(){
 				moveY = false;
 				image = newImage("n");
 			}
-			// if (new Point(x, y).distance(new
-			// Point(owner.getBounds().getLocation())) > Statics.BOARD_WIDTH) {
-			// x = owner.getCharacterX();
-			// y = owner.getCharacterY();
-			// }
+			
 		}
 
 		if (hitstunTimer > 0) {
@@ -540,6 +643,8 @@ public boolean hasSpecialed(){
 				owner.reAnimate();
 			} else {
 				if (onceNotCollidePlayer) {
+					enPoint=null;
+					enUpTimer=25;
 					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
@@ -551,7 +656,7 @@ public boolean hasSpecialed(){
 
 					x += deltaX;
 					y += deltaY;
-				} else {
+				} else{
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
@@ -752,8 +857,7 @@ protected	void OpenLevelUp() {
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-			if (getType()==Types.DIAMOND&&meleeTimer > 0)
-				meleeTimer = 0;
+		
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
@@ -1016,6 +1120,8 @@ public int rangedAddY(){
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
+		if(poisonTimer>0)
+			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
 		if(owner.getState()==State.INGAME){
 		timersCount();}
 	}
@@ -1116,8 +1222,9 @@ public int rangedAddY(){
 		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
 	}
 
-	public void takeDamage(int amount) {
-
+	public void takeDamage(int amount,boolean poison) {
+if(poison)
+	poison();
 		if (hitstunTimer <= 0) {
 			health -= amount;
 			hpTimer = 100;
@@ -1146,6 +1253,11 @@ public int rangedAddY(){
 	}
 
 	protected void timersCount() {
+		if(getMove()==Moves.SHIELD&&meleePress==false){
+			meleeTimer=0;
+		}
+		if(poisonTimer>0)
+			poisonTimer--;
 		if (enTimer == 0) {
 			energy += 1;
 			enTimer = 5;
@@ -1166,9 +1278,12 @@ public int rangedAddY(){
 			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
 			rangedTimer-=2;	
 		}
-			}else
+			}
+					else
 			rangedTimer-=2;	
-					}else
+				if(rangedTimer>=0)
+					enTimer=5;
+				}else
 			rangedTimer-=2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
@@ -1212,6 +1327,7 @@ public int rangedAddY(){
 		if (health > HP_MAX) {
 			health = HP_MAX;
 		}
+		poisonTimer=0;
 	}
 
 	public void setMelee(int i) {
@@ -1619,5 +1735,12 @@ public int rangedAddY(){
 			dir = GameCharacter.Direction.getDir(owner.getCharacter().getDirection());
 		}
 		return dir;
+	}
+	public void releaseAll(){
+		meleePress=false;
+		rangedPress=false;
+		specialPress=false;
+		if(this instanceof Spade)
+			((Spade)this).keyReleased=true;
 	}
 }

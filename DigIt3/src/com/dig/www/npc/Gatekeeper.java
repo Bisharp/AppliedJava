@@ -37,4 +37,9 @@ public class Gatekeeper extends BlockerNPC {
 	protected String moveLine() {
 		return "NO! HOW CAN THIS BE? I AM UNBEATABLE!";
 	}
+
+	@Override
+	public String getShowName() {
+		return "Body builder";
+	}
 }

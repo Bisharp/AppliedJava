@@ -285,4 +285,8 @@ if (!invincible){
 	public boolean isInvincible(){
 		return invincible;
 	}
+	public boolean poisons(){
+		//for now, only Projectiles poison, full thing to be implemented later
+		return false;
+	}
 }

@@ -46,6 +46,11 @@ public void createProjectile(String loc,int speed,double dir,boolean flying,int 
 actTimer=timer;
 
 }
+public void createProjectile(String loc,int speed,double dir,boolean flying,int timer,int addX,int addY,int damage,boolean poisons){
+	owner.getEnemies().add(new Projectile(dir, x+addX, y+addY, speed, this, loc, owner, flying,damage,poisons));
+actTimer=timer;
+
+}
 public void createTProjectile(String loc,int speed,double dir,boolean flying,int timer,int damage){
 	owner.getEnemies().add(new HomingProjectile(dir, x, y, speed, this, loc, owner, flying,damage));
 actTimer=timer;

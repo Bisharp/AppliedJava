@@ -35,7 +35,7 @@ public class HeadBoss extends Boss{
 	
 		basicAnimate();
 		boolean acted=sortAction();
-		if(!acted){
+		if(!acted&&active){
 			if(!getBounds().intersects(getOwnerPlusBounds())){
 				//realSeq=sequence;
 				follow(5, 0, 5);

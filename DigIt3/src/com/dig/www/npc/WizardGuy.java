@@ -6,11 +6,11 @@ import com.dig.www.start.Board;
 
 public class WizardGuy extends NPC {
 
-	public WizardGuy(int x, int y, String loc, Board owner, String location) {
+	public WizardGuy(int x, int y, Board owner, String location) {
 		super(
 				x,
 				y,
-				loc,
+				"images/npcs/map/stationary/wizard.png",
 				owner,
 				new String[] {
 						"Magic is cool!",
@@ -60,7 +60,7 @@ public class WizardGuy extends NPC {
 																owner),
 														new NPCOption(
 																"No, I want your name.",
-																"Oh, it's, *the wizard|.",
+																"Oh, it's, *The Wizard|.",
 																new String[] {
 																		"No, what is your +name|?",
 																		"+No|, I want your +name|.",
@@ -141,5 +141,9 @@ public class WizardGuy extends NPC {
 	@Override
 	public String exitLine() {
 		return "I will see you again! My Crystal Ball/Snowglobe tells me so!";
+	}
+	@Override
+	public String getShowName() {
+		return "The Wizard";
 	}
 }
