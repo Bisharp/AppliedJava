@@ -103,7 +103,7 @@ public class Slime extends WalkingEnemy {
 				darkVals[i] = 0;
 
 		int[] recolor = new int[] { 255, 255, 255, 255 };
-		int[] darkRecolor = new int[] { 255 - 50, 255 - 50, 255 - 50, 255 };
+		int[] darkRecolor = new int[] { 205, 205, 205, 255 };
 		for (int i = 0; i < darkRecolor.length - 1; i++)
 			if (darkRecolor[i] < 0)
 				darkRecolor[i] = 0;
