@@ -67,6 +67,15 @@ public final class Statics {
 	public static final Color DARK_SAND_BLUE = new Color(32, 44, 60);
 	public static final Color SAND_RED = new Color(155, 36, 36);
 	
+	public static Color darkenColor(Color c) {
+		int[] rgb = new int[] { c.getRed(), c.getGreen(), c.getBlue() };
+
+		for (int i = 0; i < rgb.length; i++)
+			rgb[i] = rgb[i] / 5;
+		
+		return new Color(rgb[0], rgb[1], rgb[2], c.getAlpha());
+	}
+	
 	public static final Font PAUSE = NPC.NPC_NORMAL;
 	public static final Font BOSS = new Font("Impact", Font.BOLD,40);
 	public static final Font MENU = new Font("Impact", Font.BOLD, 80);

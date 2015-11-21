@@ -1,5 +1,6 @@
 package com.dig.www.start;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -54,10 +55,15 @@ public class Board extends MPanel implements ActionListener {
 	 * 
 	 */
 	public Point pointedPoint;
-public int pointedPointType=-1;
+	public int pointedPointType = -1;
+
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
 	};
+
+	public enum Weather {
+		RAIN, FOG, NORMAL;
+	}
 
 	public static Preferences preferences;
 	static {
@@ -66,6 +72,7 @@ public int pointedPointType=-1;
 
 	public static final String DEFAULT = "LuigisMansion";
 	private Timer timer;
+	private static final int TIMER_WAIT = 15;
 	protected String userName;
 	protected String level;
 	private GameCharacter character;
@@ -94,10 +101,10 @@ public int pointedPointType=-1;
 	public static final int DEFAULT_Y = 350;
 	boolean levelChanged;
 	private DigIt owner;
-	private Image sky = Statics.newImage("images/sky.png");
 	private boolean isDay = true;
 	private boolean switching = false;
 	private TexturePack texturePack = TexturePack.GRASSY;
+	private Weather currentWeather = Weather.NORMAL;
 	private int startPoint = 0;
 
 	public ArrayList<Block> getWorld() {
@@ -143,7 +150,7 @@ public int pointedPointType=-1;
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
-		timer = new Timer(15, this);
+		timer = new Timer(TIMER_WAIT, this);
 
 		owner.setFocusable(false);
 
@@ -159,8 +166,8 @@ public int pointedPointType=-1;
 	}
 
 	public void changeArea() {
-pointedPoint=null;
-fP.clear();
+		pointedPoint = null;
+		fP.clear();
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -243,7 +250,7 @@ fP.clear();
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
 
-		setBackground(getTextureBack());
+		setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
 
 		save();
 		System.gc();
@@ -272,7 +279,10 @@ fP.clear();
 			// World draw
 			for (i = startPoint; i < world.size(); i++) {
 				if (world.get(i).isOnScreen() && world.get(i).isVisible())
-					world.get(i).draw(g2d);
+					if (isDay && currentWeather != Weather.RAIN)
+						world.get(i).draw(g2d);
+					else
+						world.get(i).drawNight(g2d);
 			}
 
 			// Enemy draw
@@ -395,29 +405,31 @@ fP.clear();
 						npc.draw(g2d);
 				}
 
-//			 g2d.setColor(Color.ORANGE);
-//			 //boolean back=false;
-//			
-//			 int roundX=(int)Math.ceil((character.getX()+40)/100);
-//			 int modX=Math.abs((int)((world.get(0).getX())%100));
-//			 if(modX<11&&(world.get(0).getX()<0)){
-//			 roundX--;
-//			 }
-//			 roundX*=100;
-//			 g2d.fillRect(roundX
-//			 +(world.get(0).getX()<0?100:0)+
-//			 ((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
-//			 ,
-//			 ((int)((character.getY()+30)/100))*100
-//			 +(world.get(0).getY()%100)+100//-11
-//			 , 100, 100)
-//			 ;
-			if(pointedPoint!=null){
-				if(pointedPointType==-1)
-				g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
+			// g2d.setColor(Color.ORANGE);
+			// //boolean back=false;
+			//
+			// int roundX=(int)Math.ceil((character.getX()+40)/100);
+			// int modX=Math.abs((int)((world.get(0).getX())%100));
+			// if(modX<11&&(world.get(0).getX()<0)){
+			// roundX--;
+			// }
+			// roundX*=100;
+			// g2d.fillRect(roundX
+			// +(world.get(0).getX()<0?100:0)+
+			// ((world.get(0).getX()<0?-1:1)*Math.abs(world.get(0).getX()%100))
+			// ,
+			// ((int)((character.getY()+30)/100))*100
+			// +(world.get(0).getY()%100)+100//-11
+			// , 100, 100)
+			// ;
+			if (pointedPoint != null) {
+				if (pointedPointType == -1)
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50, (int) pointedPoint.getY() - 50,
+							this);
 				else
-					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"),(int)pointedPoint.getX()-50, (int)pointedPoint.getY()-50,this);
-				
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"), (int) pointedPoint.getX() - 50,
+							(int) pointedPoint.getY() - 50, this);
+
 			}
 			for (GameCharacter character : friends) {
 
@@ -443,41 +455,55 @@ fP.clear();
 				// , 100, 100)
 				// ;
 				character.draw(g2d);
-//				 if (character.getPPath() != null) {
-//				
-//				
-//				 for (int c =character.getPPath().getPoints().size()-1 ; c >=
-//				 0; c--) {
-//				 g2d.setColor(new Color(255, 255, 0));
-//				 if (c == character.getPPath().getPoints().size()-1)
-//				 g2d.fillRect(character.getPPath().getPoint(c).x,
-//				 character.getPPath().getPoint(c).y, 10, 10);
-//				 else
-//				 g2d.drawLine(character.getPPath().getPoint(c).x,
-//				 character.getPPath().getPoint(c).y,
-//				 character.getPPath().getPoint(c+1).x,
-//				 character.getPPath().getPoint(c+1).y);
-//				 g2d.setColor(new Color(255, 0, 0));
-//				 g2d.drawString(""+c, character.getPPath().getPoint(c).x,
-//				 character.getPPath().getPoint(c).y);
-//				
-////				 else
-////				 g2d.drawString("" +c, character.getPPath().getPoint(c).x,
-////				  character.getPPath().getPoint(c).y);
-//				 }
-//				 }
+				// if (character.getPPath() != null) {
+				//
+				//
+				// for (int c =character.getPPath().getPoints().size()-1 ; c >=
+				// 0; c--) {
+				// g2d.setColor(new Color(255, 255, 0));
+				// if (c == character.getPPath().getPoints().size()-1)
+				// g2d.fillRect(character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y, 10, 10);
+				// else
+				// g2d.drawLine(character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y,
+				// character.getPPath().getPoint(c+1).x,
+				// character.getPPath().getPoint(c+1).y);
+				// g2d.setColor(new Color(255, 0, 0));
+				// g2d.drawString(""+c, character.getPPath().getPoint(c).x,
+				// character.getPPath().getPoint(c).y);
+				//
+				// // else
+				// // g2d.drawString("" +c, character.getPPath().getPoint(c).x,
+				// // character.getPPath().getPoint(c).y);
+				// }
+				// }
 			}
 
 			character.draw(g2d);
-//			 g2d.setColor(Color.BLUE);
-//			 g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
-			if (!isDay)
-				g2d.drawImage(sky, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, this);
-
-			if (state == State.NPC) {
-
-				current.drawOption(g2d);
+			// g2d.setColor(Color.BLUE);
+			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
+			switch (currentWeather) {
+			case RAIN:
+				
+				g2d.setStroke(new BasicStroke(3));
+				g2d.setColor(Statics.LIGHT_BLUE);
+				
+				int x2;
+				int y2;
+				for (int runs = 0; runs < Statics.RAND.nextInt(10) + 5; runs++) {
+					x2 = Statics.RAND.nextInt(Statics.BOARD_WIDTH);
+					y2 = Statics.RAND.nextInt(Statics.BOARD_HEIGHT);
+					g2d.drawLine(x2, y2, x2 + 5, y2 + 10);
+				}
+				
+			default:
+				break;
 			}
+
+			if (state == State.NPC)
+				current.drawOption(g2d);
+
 			break;
 
 		case PAUSED:
@@ -543,7 +569,7 @@ fP.clear();
 		}
 
 		if (!decision.equals(character.getType().charName())) {
-character.releaseAll();
+			character.releaseAll();
 
 			GameCharacter current = character;
 			int friendNum = getFriend(decision);
@@ -671,25 +697,28 @@ character.releaseAll();
 				// /\
 				// || Nightmare Fuel
 			}
-if(pointedPoint!=null){
-	pointedPoint.x+=scrollX;
-pointedPoint.y+=scrollY;}
+			if (pointedPoint != null) {
+				pointedPoint.x += scrollX;
+				pointedPoint.y += scrollY;
+			}
 			for (int i = 0; i < fP.size(); i++) {
 				if (!fP.get(i).isOnScreen()) {
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
-						if(fP.get(i).getCharNum()==-2){
-						fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(),
-								fP.get(i).getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
-						fP.remove(i);
-						}else{
-						fP.get(i).setCharNum(-1);
-						fP.get(i).basicAnimate();}
+						if (fP.get(i).getCharNum() == -2) {
+							fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), fP.get(i)
+									.getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
+							fP.remove(i);
+						} else {
+							fP.get(i).setCharNum(-1);
+							fP.get(i).basicAnimate();
 						}
-					else{
-					fP.remove(i);
-					i--;continue;}
-					
+					} else {
+						fP.remove(i);
+						i--;
+						continue;
+					}
+
 				} else if (fP.get(i).getCharNum() != -2) {
 					GameCharacter chara;
 					int charNum = fP.get(i).getCharNum();
@@ -699,7 +728,7 @@ pointedPoint.y+=scrollY;}
 						chara = friends.get(charNum);
 
 					}
-					if (fP.get(i).getBounds().contains(new Point(chara.getMidX(),chara.getMidY()))) {
+					if (fP.get(i).getBounds().contains(new Point(chara.getMidX(), chara.getMidY()))) {
 						fP.remove(i);
 						i--;
 						continue;
@@ -812,8 +841,9 @@ pointedPoint.y+=scrollY;}
 					character.collision(b.getMidX(), b.getMidY(), false);
 					break;
 				}
-			} else if ((character.getMove() == Moves.CLUB &&!character.hasMeleed()&& b.getType() == Blocks.CRYSTAL)
-					|| (character.getMove() == Moves.PIT &&!character.hasSpecialed()&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+			} else if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+					|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b
+							.getType() == Blocks.PIT))) {
 				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 					b.interact();
@@ -838,8 +868,9 @@ pointedPoint.y+=scrollY;}
 					case LIQUID:
 						character.collision(b.getMidX(), b.getMidY(), false);
 					}
-				} else if ((character.getMove() == Moves.CLUB&&!character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT&&!character.hasSpecialed() && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+				} else if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact();
@@ -870,8 +901,8 @@ pointedPoint.y+=scrollY;}
 					}
 				}
 				Enemy e;
-				boolean bashHit=false;
-				int shieldNum=-1;
+				boolean bashHit = false;
+				int shieldNum = -1;
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
@@ -895,11 +926,11 @@ pointedPoint.y+=scrollY;}
 								break;
 							}
 						}
-						
+
 						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 							e.interact(character.getMove(), character, false);
-							if(character.getMove()==Moves.BASH)
-								bashHit=true;
+							if (character.getMove() == Moves.BASH)
+								bashHit = true;
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
@@ -917,34 +948,34 @@ pointedPoint.y+=scrollY;}
 							}
 						}
 
-						for (int c=0;c<friends.size();c++) {
-							GameCharacter character=friends.get(c);
+						for (int c = 0; c < friends.size(); c++) {
+							GameCharacter character = friends.get(c);
 							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 								e.interact(character.getMove(), character, false);
-							if(character.getMove()==Moves.BASH){
-								bashHit=true;
-								shieldNum=c;}
+								if (character.getMove() == Moves.BASH) {
+									bashHit = true;
+									shieldNum = c;
+								}
 							}
 						}
-						
-							
+
 						if (e.getBounds().intersects(r3) && e.willHarm()) {
 							e.turnAround(character.getX(), character.getY());
-							character.takeDamage(e.getDamage(),e.poisons());
-							
+							character.takeDamage(e.getDamage(), e.poisons());
+
 						}
 
 						for (GameCharacter character : friends) {
 							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
-								character.takeDamage(e.getDamage(),e.poisons());
+								character.takeDamage(e.getDamage(), e.poisons());
 							}
 						}
 					}
 				}
-				if(bashHit){
-					if(shieldNum==-1)
+				if (bashHit) {
+					if (shieldNum == -1)
 						character.endAction();
 					else
 						friends.get(shieldNum).endAction();
@@ -956,52 +987,50 @@ pointedPoint.y+=scrollY;}
 						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
 							o0.collideWall();
 
-				
 			}
 		}
-for(GameCharacter friend:friends){
-	if (friend.getMove() == Moves.AURA&&!friend.hasMeleed()) {
+		for (GameCharacter friend : friends) {
+			if (friend.getMove() == Moves.AURA && !friend.hasMeleed()) {
 
-		boolean healed = false;
-		if (character.getActBounds().intersects(friend.getBounds())) {
-			character.heal(friend.getMeleeDamage() / 3);
-			healed = true;
-		}
-		for (GameCharacter friend2 : friends) {
+				boolean healed = false;
+				if (character.getActBounds().intersects(friend.getBounds())) {
+					character.heal(friend.getMeleeDamage() / 3);
+					healed = true;
+				}
+				for (GameCharacter friend2 : friends) {
 
-			if (friend.getActBounds().intersects(friend2.getBounds())) {
-				friend2.heal(friend.getMeleeDamage() / 3);
-				healed = true;
+					if (friend.getActBounds().intersects(friend2.getBounds())) {
+						friend2.heal(friend.getMeleeDamage() / 3);
+						healed = true;
+					}
+				}
+
+				if (healed) {
+					friend.heal(character.getMeleeDamage() / 3);
+					friend.endAction();
+				}
+
+			} else if (friend instanceof Heart && ((Heart) friend).usingField()) {
+				// fieldUsed = true;
+				Polygon rB = new Polygon();
+
+				for (FProjectile f : fP)
+					if (f instanceof Field) {
+						rB = ((Field) f).getIrregularBounds();
+						break;
+					}
+				if (rB.intersects(character.getBounds())) {
+					character.heal(Heart.FIELD_HEAL);
+				}
+				for (GameCharacter friend2 : friends) {
+					if (rB.intersects(friend2.getBounds())) {
+						friend2.heal(Heart.FIELD_HEAL);
+					}
+				}
+
 			}
 		}
-
-		if (healed) {
-			friend.heal(character.getMeleeDamage() / 3);
-			friend.endAction();
-		}
-
-	} else if (friend instanceof Heart && ((Heart) friend).usingField()) {
-		// fieldUsed = true;
-		Polygon rB = new Polygon();
-
-		for (FProjectile f : fP)
-			if (f instanceof Field) {
-				rB = ((Field) f).getIrregularBounds();
-				break;
-			}
-		if (rB.intersects(character.getBounds())) {
-			character.heal(Heart.FIELD_HEAL);
-		}
-		for (GameCharacter friend2 : friends) {
-			if (rB.intersects(friend2.getBounds())) {
-				friend2.heal(Heart.FIELD_HEAL);
-			}
-		}
-
-		
-	}
-}
-		if (character.getMove() == Moves.AURA&&!character.hasMeleed()) {
+		if (character.getMove() == Moves.AURA && !character.hasMeleed()) {
 
 			boolean healed = false;
 
@@ -1138,13 +1167,13 @@ for(GameCharacter friend:friends){
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
-if(key==KeyEvent.VK_J){
-	if(pointedPoint==null){
-		
-		pointedPoint=MouseInfo.getPointerInfo().getLocation();
-	}else
-		pointedPoint=null;
-}
+		if (key == KeyEvent.VK_J) {
+			if (pointedPoint == null) {
+
+				pointedPoint = MouseInfo.getPointerInfo().getLocation();
+			} else
+				pointedPoint = null;
+		}
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
@@ -1236,11 +1265,11 @@ if(key==KeyEvent.VK_J){
 
 	public void reAnimate() {
 		int i;
-if(pointedPoint!=null){
-	pointedPoint.x+=scrollX;
-	pointedPoint.y+=scrollY;
-}
-	
+		if (pointedPoint != null) {
+			pointedPoint.x += scrollX;
+			pointedPoint.y += scrollY;
+		}
+
 		for (i = 0; i < world.size(); i++)
 			world.get(i).basicAnimate();
 
@@ -1559,6 +1588,11 @@ if(pointedPoint!=null){
 				GameCharacter.getInventory().mouseClick(arg0);
 			else if (state == State.NPC)
 				current.mouseClick(arg0);
+			else if (state == State.INGAME
+					&& new Rectangle(arg0.getX(), arg0.getY(), 10, 10).intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT))) {
+				isDay = !isDay;
+				setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+			}
 		}
 
 		@Override
@@ -1580,5 +1614,10 @@ if(pointedPoint!=null){
 
 	public ArrayList<NPC> getNPCs() {
 		return npcs;
+	}
+
+	public boolean isDay() {
+		// TODO Auto-generated method stub
+		return isDay;
 	}
 }

@@ -2,7 +2,13 @@ package com.dig.www.blocks;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.PaintContext;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.ColorModel;
 
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
@@ -22,10 +28,13 @@ public class Block extends Sprite {
 
 	protected boolean canSee;
 	protected Blocks type;
+	protected Color darkColor;
 
 	public Block(int x, int y, String loc, Board owner, Blocks block) {
 		super(x, y, loc, owner);
 		type = block;
+
+		darkColor = Statics.darkenColor(getColor());
 	}
 
 	@Override
@@ -53,468 +62,475 @@ public class Block extends Sprite {
 	public void draw(Graphics2D g2d) {
 
 		if (canSee) {
-			switch (owner.getTexturePack()) {
 
-			// TODO Desert Draw
-			case DESERT:
-				switch (type) {
+			// g2d.setPaint(new MPaint(owner.isDay(), owner.getWeather()));
 
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_OFF_TAN);
-					g2d.fill(new Rectangle(x, y + 30, 60, 4));
-					g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
-					g2d.fill(new Rectangle(x, y + 80, 30, 4));
-					g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
-					g2d.draw(getBounds());
-					break;
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BLUE);
-					g2d.fill(new Rectangle(x + 60, y + 67, 40, 3));
-					g2d.fill(new Rectangle(x, y + 70, 60, 3));
-					break;
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
-					break;
+				switch (owner.getTexturePack()) {
 
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_OFF_TAN);
-					g2d.drawLine(x, y, x + width, y + height);
-					g2d.drawLine(x + width, y, x, y + height);
-					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-					break;
+				// TODO Desert Draw
+				case DESERT:
+					switch (type) {
 
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_OFF_TAN);
+						g2d.fill(new Rectangle(x, y + 30, 60, 4));
+						g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
+						g2d.fill(new Rectangle(x, y + 80, 30, 4));
+						g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
+						g2d.draw(getBounds());
+						break;
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_BLUE);
+						g2d.fill(new Rectangle(x + 60, y + 67, 40, 3));
+						g2d.fill(new Rectangle(x, y + 70, 60, 3));
+						break;
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
 
-			// TODO Snowy Draw
-			case SNOWY:
-				switch (type) {
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_OFF_TAN);
+						g2d.drawLine(x, y, x + width, y + height);
+						g2d.drawLine(x + width, y, x, y + height);
+						g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+						g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+						break;
 
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.fill(new Rectangle(x + 60, y + 40, 4, 4));
-					g2d.fill(new Rectangle(x + 30, y + 80, 3, 3));
-					g2d.draw(getBounds());
-					break;
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BLUE);
-					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
-					break;
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.BROWN);
-					g2d.fill(new Rectangle(x, y + 20, 100, 10));
-					g2d.fill(new Rectangle(x, y + 70, 100, 10));
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
 
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BROWN);
-					g2d.fill(new Rectangle(x, y + 20, 100, 10));
-					g2d.fill(new Rectangle(x, y + 70, 100, 10));
+				// TODO Snowy Draw
+				case SNOWY:
+					switch (type) {
+
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.LIGHT_GRAY);
+						g2d.fill(new Rectangle(x + 60, y + 40, 4, 4));
+						g2d.fill(new Rectangle(x + 30, y + 80, 3, 3));
+						g2d.draw(getBounds());
+						break;
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_BLUE);
+						g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
+						g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+						break;
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.BROWN);
+						g2d.fill(new Rectangle(x, y + 20, 100, 10));
+						g2d.fill(new Rectangle(x, y + 70, 100, 10));
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
+
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_BROWN);
+						g2d.fill(new Rectangle(x, y + 20, 100, 10));
+						g2d.fill(new Rectangle(x, y + 70, 100, 10));
+						break;
+
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.WHITE);
+						g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+						g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+						g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
+						g2d.setColor(Color.LIGHT_GRAY);
+						g2d.draw(getBounds());
+						break;
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
 
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.WHITE);
-					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
-					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
-					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.draw(getBounds());
-					break;
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
+				// TODO Island Draw
+				case ISLAND:
+					switch (type) {
 
-			// TODO Island Draw
-			case ISLAND:
-				switch (type) {
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.OFF_TAN);
+						g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+						g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+						g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
+						g2d.setColor(Statics.LIGHT_OFF_GREEN);
+						g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+						g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+						g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+						g2d.draw(getBounds());
+						break;
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.BLUE);
+						g2d.fill(new Rectangle(x + 70, y + 65, 30, 5));
+						g2d.fill(new Rectangle(x, y + 70, 70, 5));
+						g2d.fill(new Rectangle(x + 40, y + 25, 60, 5));
+						g2d.fill(new Rectangle(x, y + 30, 40, 5));
+						break;
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.BROWN);
+						g2d.fill(new Rectangle(x, y + 20, 100, 10));
+						g2d.fill(new Rectangle(x, y + 70, 100, 10));
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
 
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.OFF_TAN);
-					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
-					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
-					g2d.setColor(Statics.LIGHT_OFF_GREEN);
-					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
-					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
-					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-					g2d.draw(getBounds());
-					break;
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.BLUE);
-					g2d.fill(new Rectangle(x + 70, y + 65, 30, 5));
-					g2d.fill(new Rectangle(x, y + 70, 70, 5));
-					g2d.fill(new Rectangle(x + 40, y + 25, 60, 5));
-					g2d.fill(new Rectangle(x, y + 30, 40, 5));
-					break;
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.BROWN);
-					g2d.fill(new Rectangle(x, y + 20, 100, 10));
-					g2d.fill(new Rectangle(x, y + 70, 100, 10));
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
-					break;
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_BROWN);
+						g2d.fill(new Rectangle(x, y + 20, 100, 10));
+						g2d.fill(new Rectangle(x, y + 70, 100, 10));
+						break;
 
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BROWN);
-					g2d.fill(new Rectangle(x, y + 20, 100, 10));
-					g2d.fill(new Rectangle(x, y + 70, 100, 10));
-					break;
-
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_OFF_TAN);
-					g2d.fill(new Rectangle(x, y + 30, 60, 4));
-					g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
-					g2d.fill(new Rectangle(x, y + 80, 30, 4));
-					g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
-					g2d.draw(getBounds());
-					break;
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
-
-			// TODO Volcano Draw
-			case VOLCANO:
-				switch (type) {
-
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.OFF_GREEN);
-					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
-					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
-					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-					g2d.setColor(Color.GRAY);
-					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
-					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
-					g2d.setColor(Color.DARK_GRAY);
-					g2d.draw(getBounds());
-					break;
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.ORANGE);
-					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
-					break;
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_OFF_TAN);
+						g2d.fill(new Rectangle(x, y + 30, 60, 4));
+						g2d.fill(new Rectangle(x + 60, y + 26, 40, 4));
+						g2d.fill(new Rectangle(x, y + 80, 30, 4));
+						g2d.fill(new Rectangle(x + 30, y + 76, 70, 4));
+						g2d.draw(getBounds());
+						break;
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
 
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.drawLine(x, y + 15, x + width, y + 15);
-					g2d.drawLine(x, y + height - 14, x + width, y + height - 14);
-					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+				// TODO Volcano Draw
+				case VOLCANO:
+					switch (type) {
+
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.OFF_GREEN);
+						g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+						g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+						g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+						g2d.setColor(Color.GRAY);
+						g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+						g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+						g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
+						g2d.setColor(Color.DARK_GRAY);
+						g2d.draw(getBounds());
+						break;
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.ORANGE);
+						g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
+						g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+						break;
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
+
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.LIGHT_GRAY);
+						g2d.drawLine(x, y + 15, x + width, y + 15);
+						g2d.drawLine(x, y + height - 14, x + width, y + height - 14);
+						g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+						g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+						break;
+
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.GRAY);
+						g2d.fill(new Rectangle(x, y + 30, 4, 4));
+						g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
+						g2d.fill(new Rectangle(x, y + 80, 4, 4));
+						g2d.setColor(Color.DARK_GRAY);
+						g2d.draw(getBounds());
+						break;
+					case ROCK:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.MED_GRAY);
+						g2d.fill(new Rectangle(x, y + 30, 4, 4));
+						g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
+						g2d.fill(new Rectangle(x, y + 80, 4, 4));
+						break;
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
 
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.GRAY);
-					g2d.fill(new Rectangle(x, y + 30, 4, 4));
-					g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
-					g2d.fill(new Rectangle(x, y + 80, 4, 4));
-					g2d.setColor(Color.DARK_GRAY);
-					g2d.draw(getBounds());
-					break;
-				case ROCK:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.MED_GRAY);
-					g2d.fill(new Rectangle(x, y + 30, 4, 4));
-					g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
-					g2d.fill(new Rectangle(x, y + 80, 4, 4));
-					break;
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
+				// TODO Haunted Draw
+				case HAUNTED:
+					switch (type) {
 
-			// TODO Haunted Draw
-			case HAUNTED:
-				switch (type) {
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_SAND_BLUE);
+						g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+						g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+						g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+						g2d.setColor(Statics.DARK_SAND_BLUE);
+						g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
+						g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
+						g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
+						g2d.draw(getBounds());
+						break;
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_SAND_BLUE);
+						g2d.fill(new Rectangle(x, y + 30, 40, 4));
+						g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
+						g2d.fill(new Rectangle(x, y + 80, 80, 4));
+						g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
+						break;
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_SAND_BLUE);
+						g2d.draw(getBounds());
+						break;
 
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_SAND_BLUE);
-					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
-					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
-					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-					g2d.setColor(Statics.DARK_SAND_BLUE);
-					g2d.fill(new Rectangle(x + 70, y + 30, 5, 5));
-					g2d.fill(new Rectangle(x + 40, y + 70, 5, 5));
-					g2d.fill(new Rectangle(x + 10, y + 15, 3, 3));
-					g2d.draw(getBounds());
-					break;
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_SAND_BLUE);
-					g2d.fill(new Rectangle(x, y + 30, 40, 4));
-					g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
-					g2d.fill(new Rectangle(x, y + 80, 80, 4));
-					g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
-					break;
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_SAND_BLUE);
-					g2d.draw(getBounds());
-					break;
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.LIGHT_GRAY);
+						g2d.drawLine(x, y, x + width, y + height);
+						g2d.drawLine(x + width, y, x, y + height);
+						g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+						g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+						break;
 
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.LIGHT_GRAY);
-					g2d.drawLine(x, y, x + width, y + height);
-					g2d.drawLine(x + width, y, x, y + height);
-					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-					break;
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.SAND_BLUE);
+						g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
+						g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
+						g2d.fill(new Rectangle(x + 65, y + 20, 15, 15));
+						g2d.fill(new Rectangle(x + 50, y + 70, 20, 20));
+						g2d.draw(getBounds());
+						break;
 
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.SAND_BLUE);
-					g2d.fill(new Rectangle(x + 70, y + 65, 10, 10));
-					g2d.fill(new Rectangle(x + 30, y + 30, 15, 15));
-					g2d.fill(new Rectangle(x + 65, y + 20, 15, 15));
-					g2d.fill(new Rectangle(x + 50, y + 70, 20, 20));
-					g2d.draw(getBounds());
+					case ROCK:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+
+						// Brick pattern
+						int i;
+						for (i = 0; i < 10; i++)
+							g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0 ? 2 : 0), width, i != 0 ? 5 : 3));
+						g2d.fill(new Rectangle(x, y + 98, width, 2));
+						for (i = 0; i < 6; i++)
+							g2d.fill(new Rectangle(x + (20 * i) - (i != 0 ? 2 : 0), y, i != 0 ? 5 : 3, height));
+						break;
+
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
 
-				case ROCK:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
+				// TODO Lab Draw
+				case LAB:
+					switch (type) {
 
-					// Brick pattern
-					int i;
-					for (i = 0; i < 10; i++)
-						g2d.fill(new Rectangle(x, y + (10 * i) - (i != 0 ? 2 : 0), width, i != 0 ? 5 : 3));
-					g2d.fill(new Rectangle(x, y + 98, width, 2));
-					for (i = 0; i < 6; i++)
-						g2d.fill(new Rectangle(x + (20 * i) - (i != 0 ? 2 : 0), y, i != 0 ? 5 : 3, height));
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.DRAB_BROWN);
+						g2d.fillRect(x + 10, y + 70, 5, 5);
+						g2d.fillRect(x + 50, y + 30, 10, 10);
+						g2d.fillRect(x + 80, y + 80, 10, 10);
+
+						g2d.setColor(Color.WHITE);
+						g2d.fillRect(x + 85, y + 85, 5, 10);
+						g2d.fillRect(x + 75, y + 35, 5, 10);
+						g2d.fillRect(x + 45, y + 45, 5, 10);
+
+						g2d.setColor(Color.RED);
+						g2d.fillOval(x + 80, y + 80, 15, 10);
+						g2d.fillOval(x + 70, y + 30, 15, 10);
+						g2d.fillOval(x + 40, y + 40, 15, 10);
+						break;
+
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+
+						g2d.setColor(Color.GREEN);
+						g2d.fillOval(x + 70, y + 10, 5, 5);
+						g2d.fillOval(x + 30, y + 50, 10, 10);
+						g2d.fillOval(x + 80, y + 80, 10, 10);
+
+						break;
+
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
+
+					case ROCK:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+
+						int i;
+						for (i = 0; i < 5; i++)
+							g2d.drawLine(x, y + (20 * i), x + width - 1, y + (20 * i));
+
+						for (i = 0; i < 5; i++)
+							for (int c = 0; c < 5; c++)
+								g2d.fillRect(x + (20 * c) + 8, y + (20 * i) + 2, 2, 2);
+
+						break;
+
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.DRAB_BROWN);
+						g2d.fillRect(x + 10, y + 70, 5, 5);
+						g2d.fillRect(x + 50, y + 30, 10, 10);
+						g2d.fillRect(x + 80, y + 80, 10, 10);
+						break;
+
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.GRAY);
+						g2d.drawLine(x, y, x + width, y + height);
+						g2d.drawLine(x + width, y, x, y + height);
+						g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+						g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+						break;
+
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
+					break;// End Grassy
+
+				// TODO Grassy Draw
+				case GRASSY:
+				default:// Start grassy
+					switch (type) {
+
+					case GROUND:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_OFF_GREEN);
+						g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
+						g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
+						g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
+						g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
+						g2d.draw(getBounds());
+						break;
+
+					case LIQUID:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.LIGHT_BLUE);
+						g2d.fill(new Rectangle(x, y + 30, 40, 4));
+						g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
+						g2d.fill(new Rectangle(x, y + 80, 80, 4));
+						g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
+						break;
+
+					case WALL:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.BLACK);
+						g2d.draw(getBounds());
+						break;
+
+					case ROCK:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.MED_GRAY);
+						g2d.fill(new Rectangle(x, y + 30, 4, 4));
+						g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
+						g2d.fill(new Rectangle(x, y + 80, 4, 4));
+						// g2d.draw(getBounds());
+						break;
+					case DIRT:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Statics.DRAB_BROWN);
+						// g2d.fillRect(x + 70, y + 10, 20, 20);
+						g2d.fillRect(x + 10, y + 70, 5, 5);
+						g2d.fillRect(x + 50, y + 30, 10, 10);
+						g2d.fillRect(x + 80, y + 80, 10, 10);
+						// g2d.draw(getBounds());
+						break;
+
+					case CARPET:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						g2d.setColor(Color.RED);
+						g2d.drawLine(x, y, x + width, y + height);
+						g2d.drawLine(x + width, y, x, y + height);
+						g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
+						g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
+						break;
+
+					default:
+						g2d.setColor(getColor());
+						g2d.fill(getBounds());
+						break;
+					}
 					break;
-
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
-
-			// TODO Lab Draw
-			case LAB:
-				switch (type) {
-
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.DRAB_BROWN);
-					g2d.fillRect(x + 10, y + 70, 5, 5);
-					g2d.fillRect(x + 50, y + 30, 10, 10);
-					g2d.fillRect(x + 80, y + 80, 10, 10);
-
-					g2d.setColor(Color.WHITE);
-					g2d.fillRect(x + 85, y + 85, 5, 10);
-					g2d.fillRect(x + 75, y + 35, 5, 10);
-					g2d.fillRect(x + 45, y + 45, 5, 10);
-					
-					g2d.setColor(Color.RED);
-					g2d.fillOval(x + 80, y + 80, 15, 10);
-					g2d.fillOval(x + 70, y + 30, 15, 10);
-					g2d.fillOval(x + 40, y + 40, 15, 10);
-					break;
-
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-
-					g2d.setColor(Color.GREEN);
-					g2d.fillOval(x + 70, y + 10, 5, 5);
-					g2d.fillOval(x + 30, y + 50, 10, 10);
-					g2d.fillOval(x + 80, y + 80, 10, 10);
-
-					break;
-
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
-					break;
-
-				case ROCK:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
-
-					int i;
-					for (i = 0; i < 5; i++)
-						g2d.drawLine(x, y + (20 * i), x + width - 1, y + (20 * i));
-
-					for (i = 0; i < 5; i++)
-						for (int c = 0; c < 5; c++)
-							g2d.fillRect(x + (20 * c) + 8, y + (20 * i) + 2, 2, 2);
-
-					break;
-
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.DRAB_BROWN);
-					g2d.fillRect(x + 10, y + 70, 5, 5);
-					g2d.fillRect(x + 50, y + 30, 10, 10);
-					g2d.fillRect(x + 80, y + 80, 10, 10);
-					break;
-
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.GRAY);
-					g2d.drawLine(x, y, x + width, y + height);
-					g2d.drawLine(x + width, y, x, y + height);
-					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-					break;
-
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;// End Grassy
-
-			// TODO Grassy Draw
-			case GRASSY:
-			default:// Start grassy
-				switch (type) {
-
-				case GROUND:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_OFF_GREEN);
-					g2d.fill(new Rectangle(x + 30, y + 15, 4, 10));
-					g2d.fill(new Rectangle(x + 80, y + 20, 4, 10));
-					g2d.fill(new Rectangle(x + 20, y + 80, 4, 10));
-					g2d.fill(new Rectangle(x + 60, y + 60, 4, 10));
-					g2d.draw(getBounds());
-					break;
-
-				case LIQUID:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.LIGHT_BLUE);
-					g2d.fill(new Rectangle(x, y + 30, 40, 4));
-					g2d.fill(new Rectangle(x + 80, y + 76, 20, 4));
-					g2d.fill(new Rectangle(x, y + 80, 80, 4));
-					g2d.fill(new Rectangle(x + 40, y + 26, 60, 4));
-					break;
-
-				case WALL:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.BLACK);
-					g2d.draw(getBounds());
-					break;
-
-				case ROCK:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.MED_GRAY);
-					g2d.fill(new Rectangle(x, y + 30, 4, 4));
-					g2d.fill(new Rectangle(x + 60, y + 26, 4, 4));
-					g2d.fill(new Rectangle(x, y + 80, 4, 4));
-					// g2d.draw(getBounds());
-					break;
-				case DIRT:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Statics.DRAB_BROWN);
-					// g2d.fillRect(x + 70, y + 10, 20, 20);
-					g2d.fillRect(x + 10, y + 70, 5, 5);
-					g2d.fillRect(x + 50, y + 30, 10, 10);
-					g2d.fillRect(x + 80, y + 80, 10, 10);
-					// g2d.draw(getBounds());
-					break;
-
-				case CARPET:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					g2d.setColor(Color.RED);
-					g2d.drawLine(x, y, x + width, y + height);
-					g2d.drawLine(x + width, y, x, y + height);
-					g2d.drawLine(x, y + height / 2, x + width, y + height / 2);
-					g2d.drawLine(x + width / 2, y, x + width / 2, y + height);
-					break;
-
-				default:
-					g2d.setColor(getColor());
-					g2d.fill(getBounds());
-					break;
-				}
-				break;
-			}// End Switch of texturePacks
-
+				}// End Switch of texturePacks
 		}// End canSee
 		else {
-			g2d.setColor(Color.black);
+			g2d.setColor(Color.BLACK);
 			g2d.fill(getBounds());
 		}
+	}
+	
+	public void drawNight(Graphics2D g2d) {
+		g2d.setColor(canSee? darkColor : Color.black);
+		g2d.fill(getBounds());
 	}
 
 	public Color getColor() {
