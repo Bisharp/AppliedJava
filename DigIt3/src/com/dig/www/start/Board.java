@@ -637,9 +637,15 @@ public class Board extends MPanel implements ActionListener {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
 		}
+		if(pointedPoint!=null)
+		pointedPoint.setLocation(pointedPoint.getX()+x, pointedPoint.getY()+y);
 		for (GameCharacter b : friends) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
+			if(b.getPPath()!=null)
+				for(PathPoint p:b.getPPath().getPoints()){
+					p.setLocation(p.getX()+x, p.getY()+y);
+				}
 		}
 		for (Enemy b : enemies) {
 			b.setX(b.getX() + x);
