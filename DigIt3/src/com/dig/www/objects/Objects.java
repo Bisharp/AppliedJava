@@ -21,8 +21,9 @@ protected boolean wall;
 	}
 	@Override
 	public void draw(Graphics2D g2d) {
-		// TODO Auto-generated method stub
 		g2d.drawImage(image, x, y, owner);
+		if (!owner.isDay())
+			g2d.drawImage(shadow, x, y, owner);
 	}
 	public boolean isWall() {
 		return wall;

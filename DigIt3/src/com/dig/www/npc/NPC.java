@@ -86,16 +86,9 @@ public abstract class NPC extends Sprite {
 
 	public NPC(int x, int y, String loc, Board owner, String[] dialogs,
 			String s, String location, NPCOption[] options) {
-		super(x, y, loc);
-		image = newImage(loc);
-		width = image.getWidth(null);
-		height = image.getHeight(null);
+		super(x, y, loc, owner);
 
 		this.greetingDialogs = dialogs;
-		this.owner = owner;
-		this.loc = loc;
-		this.x = x;
-		this.y = y;
 		this.location = location;
 		gif = newImage("images/npcs/talking/" + s + ".gif");
 		this.currentOptions = options.clone();
@@ -361,6 +354,8 @@ public abstract class NPC extends Sprite {
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(image, x, y, owner);
+		if (!owner.isDay())
+			g2d.drawImage(shadow, x, y, owner);
 	}
 
 	public void act(NPCOption option) {

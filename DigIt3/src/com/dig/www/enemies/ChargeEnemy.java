@@ -20,11 +20,6 @@ public class ChargeEnemy extends TrackingEnemy {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ChargeEnemy(int x, int y, String loc, boolean flying) {
-		super(x, y, loc, flying);
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void turnAround(int wallX, int wallY) {
 		super.turnAround(wallX, wallY);

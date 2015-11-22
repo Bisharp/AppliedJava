@@ -15,11 +15,6 @@ public class PursuingLaunch extends Launch {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PursuingLaunch(int width, int height, String loc, int delay, boolean flying) {
-		super(width, height, loc, delay, flying);
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void turnAround(int wallX, int wallY) {
 

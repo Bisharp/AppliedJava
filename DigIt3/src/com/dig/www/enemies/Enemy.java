@@ -47,11 +47,6 @@ public abstract class Enemy extends Sprite {
 		alive = true;
 	}
 
-	public Enemy(int x, int y, String loc, boolean flying) {
-		super(x, y, loc);
-		this.flying = flying;
-	}
-
 	public boolean isAlive() {
 		return alive;
 	}
@@ -96,8 +91,13 @@ public abstract class Enemy extends Sprite {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(image, x, y, owner);
-		} else
+			if (!loc.contains("effects") && !owner.isDay())
+				g2d.drawImage(shadow, x, y, owner);
+		} else {
 			g2d.drawImage(image, x, y, owner);
+			if (!loc.contains("effects")  && !owner.isDay())
+				g2d.drawImage(shadow, x, y, owner);
+		}
 
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);

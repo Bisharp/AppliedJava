@@ -15,10 +15,6 @@ public class WalkingEnemy extends Enemy {
 		super(x, y, loc, owner, flying, health);
 	}
 
-	public WalkingEnemy(int x, int y, String loc, boolean b) {
-		super(x, y, loc, b);
-	}
-
 	@Override
 	public void turnAround(int wallX, int wallY) {
 

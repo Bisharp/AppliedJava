@@ -1,0 +1,93 @@
+package com.dig.www.util;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+
+import javax.swing.Timer;
+
+import com.dig.www.start.Board;
+
+public class Time implements ActionListener {
+
+	private Timer timer;
+	private Board owner;
+
+	private static final int SECOND = 1000;
+	private static final int CHANGE = 7;
+	private static final int END = 13;
+
+	private float time;
+	private boolean isAM;
+
+	public Time(Board b) {
+		timer = new Timer(SECOND, this);
+		owner = b;
+		timer.start();
+
+		String time = String.format("%tr", new Date());
+		String[] s = time.split(":");
+
+		this.time = Integer.parseInt(s[0]) + (Integer.parseInt(s[1]) / 100);
+		String t = s[s.length - 1];
+
+		isAM = t.endsWith("AM");
+
+		if (this.time >= 7 && this.time != 12)
+			owner.setIsDay(isAM);
+		else
+			owner.setIsDay(!isAM);
+	}
+
+	@Override
+	public synchronized void actionPerformed(ActionEvent arg0) {
+
+		time += 0.01f;
+
+		if (decimalPart(time) >= 0.60) {
+			time = Math.round(time);
+			if (time == CHANGE)
+				if (isAM)
+					owner.setIsDay(true);
+				else
+					owner.setIsDay(false);
+		}
+
+		if (time >= END)
+			time = 1;
+		else if (time == 12)
+			isAM = !isAM;
+	}
+
+	protected float decimalPart(float f) {
+		while (f >= 1)
+			f--;
+		return f;
+	}
+
+	public void pause() {
+
+		System.out.println("Pause");
+		timer.stop();
+	}
+
+	public void resume() {
+
+		System.out.println("Resume");
+		timer.restart();
+	}
+
+	public void end() {
+
+		if (timer != null)
+			timer.stop();
+	}
+	
+	public float getTime() {
+		return time;
+	}
+
+	public String toString() {
+		return String.format("%.2f", time).replace('.', ':') + " " + (isAM ? "A.M." : "P.M.");
+	}
+}

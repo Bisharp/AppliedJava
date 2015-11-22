@@ -173,9 +173,14 @@ public class Slime extends WalkingEnemy {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
-		} else
+			if (!owner.isDay())
+				g2d.drawImage(shadow, x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
+		} else {
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
-
+			if (!owner.isDay())
+				g2d.drawImage(shadow, x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
+		}
+		
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 		else if (slowTimer > 0)

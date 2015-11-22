@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 
 
 
+
 import com.dig.www.npc.NPC;
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
@@ -42,6 +43,8 @@ public final class Statics {
 	public static final ImageIcon ICON = createImageIcon("/images/icon.png");
 
 	public static final Random RAND = new Random();
+	
+	public static final Color NIGHT_SKY = new Color(0, 0, 0, 100);
 
 	public static final Color PURPLE = new Color(128, 0, 128);
 	public static final Color ORANGE = new Color(254, 83, 1);
@@ -141,5 +144,9 @@ public final class Statics {
 		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to quit?\n(Unsaved data will be lost)", DigIt.NAME,
 				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
 			System.exit(0);
+	}
+
+	public static double dist(int x1, int y1, int x2, int y2) {
+		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
 }

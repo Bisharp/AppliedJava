@@ -6,9 +6,9 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-import com.dig.www.enemies.Enemy;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.character.GameCharacter;
 
 public abstract class Sprite implements Serializable {
 
@@ -26,27 +26,20 @@ public abstract class Sprite implements Serializable {
 	protected boolean visible;
 	protected boolean onScreen = true;
 	protected transient Image image;
+	protected transient Image shadow;
 
 	protected transient Board owner;
 
 	public Sprite(int x, int y, String loc, Board owner) {
 		image = newImage(loc);
+		if (!(this instanceof GameCharacter))
+			shadow = newShadow(loc);
+
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 		visible = true;
 
 		this.owner = owner;
-
-		this.loc = loc;
-		this.x = x;
-		this.y = y;
-	}
-
-	public Sprite(int x, int y, String loc) {
-		image = newImage(loc);
-		width = image.getWidth(null);
-		height = image.getHeight(null);
-		visible = true;
 
 		this.loc = loc;
 		this.x = x;
@@ -85,6 +78,10 @@ public abstract class Sprite implements Serializable {
 
 	public Image newImage(String loc) {
 		return DigIt.lib.checkLibrary("/" + loc);
+	}
+
+	public Image newShadow(String loc) {
+		return DigIt.lib.checkShadowLibrary("/" + loc);
 	}
 
 	public Rectangle getBounds() {
@@ -132,15 +129,16 @@ public abstract class Sprite implements Serializable {
 		x += sX;
 		y += sY;
 	}
-	public void drawBar(double per,Graphics2D g2d){
+
+	public void drawBar(double per, Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(x, y-10, width, 10);
+		g2d.fillRect(x, y - 10, width, 10);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(x, y-10, (int)((double)width*(double)per), 10);
+		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 11, width + 1, 11);
 	}
-	
+
 	public boolean isOnScreen() {
 		return onScreen;
 	}
@@ -148,11 +146,11 @@ public abstract class Sprite implements Serializable {
 	public void setOnScreen(boolean onScreen) {
 		this.onScreen = onScreen;
 	}
-	
+
 	public Board getOwner() {
 		return owner;
 	}
-	
+
 	public void setImage(Image i) {
 		image = i;
 	}

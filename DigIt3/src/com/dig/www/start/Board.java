@@ -62,7 +62,17 @@ public class Board extends MPanel implements ActionListener {
 	};
 
 	public enum Weather {
-		RAIN, FOG, NORMAL;
+		RAIN, FOG {
+
+			public int special() {
+				return 500;
+			}
+		},
+		NORMAL;
+
+		public int special() {
+			return 0;
+		}
 	}
 
 	public static Preferences preferences;
@@ -104,8 +114,12 @@ public class Board extends MPanel implements ActionListener {
 	private boolean isDay = true;
 	private boolean switching = false;
 	private TexturePack texturePack = TexturePack.GRASSY;
-	private Weather currentWeather = Weather.NORMAL;
+
+	private Weather currentWeather = Weather.RAIN;
+	private int weatherTimer = 0;
 	private int startPoint = 0;
+
+	private Time t;
 
 	public ArrayList<Block> getWorld() {
 		return world;
@@ -151,6 +165,7 @@ public class Board extends MPanel implements ActionListener {
 
 		owner = dM;
 		timer = new Timer(TIMER_WAIT, this);
+		t = new Time(this);
 
 		owner.setFocusable(false);
 
@@ -187,6 +202,8 @@ public class Board extends MPanel implements ActionListener {
 		portals = sB.loadPortals();
 		npcs = sB.loadNPC();
 		objects = sB.loadObjects();
+
+		world.get(0).setDarkColors();
 
 		if (data != null)
 			data.enterLevel(level);
@@ -250,7 +267,10 @@ public class Board extends MPanel implements ActionListener {
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
 
-		setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+		if (currentWeather != Weather.FOG)
+			setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+		else
+			setBackground(Color.gray);
 
 		save();
 		System.gc();
@@ -258,6 +278,15 @@ public class Board extends MPanel implements ActionListener {
 
 	public int spawnTreasure(int i, int keyNum) {
 		return 0;
+	}
+
+	protected boolean fogCompute(int x, int y) {
+		// return x > Weather.FOG.special() && x < Statics.BOARD_WIDTH -
+		// Weather.FOG.special() && y > Weather.FOG.special() / 2
+		// && y < Statics.BOARD_HEIGHT - Weather.FOG.special() / 2;
+
+		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
+				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
 
 	public void paint(Graphics g) {
@@ -275,14 +304,42 @@ public class Board extends MPanel implements ActionListener {
 			int i;
 			Enemy e;
 			Polygon poly;
+			Block b;
 
 			// World draw
 			for (i = startPoint; i < world.size(); i++) {
-				if (world.get(i).isOnScreen() && world.get(i).isVisible())
-					if (isDay && currentWeather != Weather.RAIN)
-						world.get(i).draw(g2d);
+				b = world.get(i);
+				if (b.isOnScreen() && b.isVisible())
+					if (isDay || (currentWeather == Weather.RAIN && weatherTimer > 0))
+						switch (currentWeather) {
+						case FOG:
+							if (fogCompute(b.getX(), b.getY()))
+								b.draw(g2d);
+							else {
+								g2d.setColor(Color.GRAY);
+								g2d.fill(b.getBounds());
+							}
+							break;
+
+						default:
+							b.draw(g2d);
+							break;
+						}
 					else
-						world.get(i).drawNight(g2d);
+						switch (currentWeather) {
+						case FOG:
+							if (fogCompute(b.getX(), b.getY()))
+								b.drawNight(g2d);
+							else {
+								g2d.setColor(Color.GRAY);
+								g2d.fill(b.getBounds());
+							}
+							break;
+
+						default:
+							b.drawNight(g2d);
+							break;
+						}
 			}
 
 			// Enemy draw
@@ -305,7 +362,18 @@ public class Board extends MPanel implements ActionListener {
 					}
 					// end of that code
 					if (tag || e instanceof Boss)
-						enemies.get(i).draw(g2d);
+						switch (currentWeather) {
+
+						case FOG:
+							if (!fogCompute(e.getX(), e.getY())) {
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.fill(e.getBounds());
+								break;
+							}
+
+						default:
+							enemies.get(i).draw(g2d);
+						}
 				}
 			}
 
@@ -315,8 +383,8 @@ public class Board extends MPanel implements ActionListener {
 
 				if (fP.get(i).isOnScreen()) {
 
+					p = fP.get(i);
 					if (!(fP.get(i) instanceof Field)) {
-						p = fP.get(i);
 						// Line-of-sight mechanics
 						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
 						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
@@ -335,17 +403,17 @@ public class Board extends MPanel implements ActionListener {
 						tag = true;
 
 					if (tag)
-						fP.get(i).draw(g2d);
+						p.draw(g2d);
 				}
 			}
 
 			// Objects draw
-			for (Objects npc : objects)
+			for (Objects obj : objects)
 
-				if (npc.isOnScreen()) {
+				if (obj.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
-					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
+					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, obj.getMidX() + 10 };
+					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, obj.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -358,7 +426,18 @@ public class Board extends MPanel implements ActionListener {
 					}
 					// end of that code
 					if (tag)
-						npc.draw(g2d);
+						switch (currentWeather) {
+						case FOG:
+							if (fogCompute(obj.getX(), obj.getY()))
+								obj.draw(g2d);
+							else {
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.fill(obj.getBounds());
+							}
+							break;
+						default:
+							obj.draw(g2d);
+						}
 				}
 
 			// Portal draw
@@ -380,7 +459,18 @@ public class Board extends MPanel implements ActionListener {
 					// end of that code
 
 					if (tag)
-						p2.draw(g2d);
+						switch (currentWeather) {
+						case FOG:
+							if (fogCompute(p2.getX(), p2.getY()))
+								p2.draw(g2d);
+							else {
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.fill(p2.getBounds());
+							}
+							break;
+						default:
+							p2.draw(g2d);
+						}
 				}
 
 			// NPC draw
@@ -402,7 +492,18 @@ public class Board extends MPanel implements ActionListener {
 					// end of that code
 
 					if (tag)
-						npc.draw(g2d);
+						switch (currentWeather) {
+						case FOG:
+							if (fogCompute(npc.getX(), npc.getY()))
+								npc.draw(g2d);
+							else {
+								g2d.setColor(Color.DARK_GRAY);
+								g2d.fill(npc.getBounds());
+							}
+							break;
+						default:
+							npc.draw(g2d);
+						}
 				}
 
 			// g2d.setColor(Color.ORANGE);
@@ -483,12 +584,18 @@ public class Board extends MPanel implements ActionListener {
 			character.draw(g2d);
 			// g2d.setColor(Color.BLUE);
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
+
+			g2d.setColor(Color.black);
+			g2d.fillRect(10, 200, 200, 50);
+			g2d.setColor(Statics.PURPLE);
+			g2d.drawString(t.toString(), 50 - (t.getTime() >= 10 ? 10 : 0), 230);
+
 			switch (currentWeather) {
 			case RAIN:
-				
+
 				g2d.setStroke(new BasicStroke(3));
 				g2d.setColor(Statics.LIGHT_BLUE);
-				
+
 				int x2;
 				int y2;
 				for (int runs = 0; runs < Statics.RAND.nextInt(10) + 5; runs++) {
@@ -496,7 +603,7 @@ public class Board extends MPanel implements ActionListener {
 					y2 = Statics.RAND.nextInt(Statics.BOARD_HEIGHT);
 					g2d.drawLine(x2, y2, x2 + 5, y2 + 10);
 				}
-				
+
 			default:
 				break;
 			}
@@ -550,6 +657,7 @@ public class Board extends MPanel implements ActionListener {
 		repaint();
 
 		timer.stop();
+		t.pause();
 
 		character.stop();
 		scrollX = 0;
@@ -565,6 +673,7 @@ public class Board extends MPanel implements ActionListener {
 
 		if (decision == null) {
 			timer.restart();
+			t.resume();
 			return;
 		}
 
@@ -583,6 +692,7 @@ public class Board extends MPanel implements ActionListener {
 			Collections.sort(friends);
 		}
 		timer.restart();
+		t.resume();
 	}
 
 	private String[] getCharacters() {
@@ -637,14 +747,14 @@ public class Board extends MPanel implements ActionListener {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
 		}
-		if(pointedPoint!=null)
-		pointedPoint.setLocation(pointedPoint.getX()+x, pointedPoint.getY()+y);
+		if (pointedPoint != null)
+			pointedPoint.setLocation(pointedPoint.getX() + x, pointedPoint.getY() + y);
 		for (GameCharacter b : friends) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
-			if(b.getPPath()!=null)
-				for(PathPoint p:b.getPPath().getPoints()){
-					p.setLocation(p.getX()+x, p.getY()+y);
+			if (b.getPPath() != null)
+				for (PathPoint p : b.getPPath().getPoints()) {
+					p.setLocation(p.getX() + x, p.getY() + y);
 				}
 		}
 		for (Enemy b : enemies) {
@@ -749,6 +859,29 @@ public class Board extends MPanel implements ActionListener {
 
 			if (switching)
 				openSwitchDialogue();
+
+			// TODO weather
+			if (currentWeather != Weather.NORMAL && weatherTimer <= 0) {
+				if (Statics.RAND.nextInt(100) == 0)
+					switch (currentWeather) {
+					case RAIN:
+						weatherTimer = Statics.RAND.nextInt(10) + 5;
+						setBackground(getTextureBack());
+						break;
+					default:
+						break;
+					}
+			} else if (weatherTimer > 0) {
+				weatherTimer--;
+				if (weatherTimer == 0)
+					switch (currentWeather) {
+					case RAIN:
+						setBackground(Statics.darkenColor(getTextureBack()));
+						break;
+					default:
+						break;
+					}
+			}
 
 			setCharacterStates(character.getCollisionBounds());
 			repaint();
@@ -1098,9 +1231,11 @@ public class Board extends MPanel implements ActionListener {
 
 			if (r3.intersects(p.getBounds())) {
 				timer.stop();
+				t.pause();
 				level = p.getArea();
 				changeArea();
 				timer.restart();
+				t.resume();
 			}
 		}
 
@@ -1188,7 +1323,7 @@ public class Board extends MPanel implements ActionListener {
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
 			if (state != State.DEAD)
-				state = State.PAUSED;
+				setState(State.PAUSED);
 
 			Statics.exit(this);
 		}
@@ -1208,7 +1343,7 @@ public class Board extends MPanel implements ActionListener {
 		case INGAME:
 
 			if (key == Preferences.PAUSE()) {
-				state = State.PAUSED;
+				setState(State.PAUSED);
 				repaint();
 				return;
 			}
@@ -1246,11 +1381,19 @@ public class Board extends MPanel implements ActionListener {
 
 	private void pausedHandler(int key) {
 		if (key == Preferences.PAUSE())
-			state = State.INGAME;
+			setState(State.INGAME);
 	}
 
 	public void setState(State state) {
+
 		this.state = state;
+
+		if (state == State.PAUSED || state == State.NPC || state == State.LOADING)
+			t.pause();
+		else if (state == State.INGAME)
+			t.resume();
+		else if (state == State.DEAD)
+			t.end();
 	}
 
 	public Board getMe() {
@@ -1623,7 +1766,13 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public boolean isDay() {
-		// TODO Auto-generated method stub
 		return isDay;
+	}
+
+	public void setIsDay(boolean b) {
+
+		System.out.println("Change");
+		isDay = b;
+		setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
 	}
 }

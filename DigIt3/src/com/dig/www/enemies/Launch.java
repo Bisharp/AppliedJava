@@ -27,16 +27,6 @@ public class Launch extends Enemy {
 		DELAY = delay;
 	}
 
-	public Launch(int width, int height, String loc, int delay, boolean flying) {
-
-		super(width, height, loc, flying);
-
-		String[] s = loc.split("/");
-
-		identity = s[s.length - 1].charAt(0);
-		DELAY = delay;
-	}
-
 	public void animate() {
 
 		basicAnimate();

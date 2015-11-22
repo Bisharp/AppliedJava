@@ -15,11 +15,6 @@ public class TrackingEnemy extends Enemy {
 		// TODO Auto-generated constructor stub
 	}
 
-	public TrackingEnemy(int x, int y, String loc, boolean b) {
-		// TODO Auto-generated constructor stub
-		super(x, y, loc, b);
-	}
-
 	@Override
 	public void turnAround(int wallX, int wallY) {
 		if (turn)
