@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 
@@ -31,10 +32,13 @@ public class Slime extends WalkingEnemy {
 	protected double dir;
 	protected Image risenImage;
 	protected Image projectileImage;
-	
+	protected Image risenShadow;
+
 	protected final Color tint;
 	protected static final int SPEED = 10;
-	
+
+	protected Hashtable<String, Hashtable<String, Image>> lib = new Hashtable<String, Hashtable<String, Image>>();
+
 	public Slime(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner, flying, health);
 
@@ -48,11 +52,27 @@ public class Slime extends WalkingEnemy {
 		tint = c;
 		initializeImages();
 	}
-	
+
 	protected void initializeImages() {
-		image = tintImage(newImage(loc, 0), tint);
-		risenImage = tintImage(newImage(loc.replace(".png", "R.png"), 0), tint);
-		projectileImage = tintImage(newImage("images/enemies/blasts/slime.png", 0), tint);
+
+		Hashtable<String, Image> table;
+		if (lib.contains(tint.toString())) {
+			table = lib.get(tint.toString());
+			image = table.get(loc);
+			risenImage = table.get(loc.replace(".png", "R.png"));
+			projectileImage = table.get("images/enemies/blasts/slime.png");
+		} else {
+			table = new Hashtable<String, Image>();
+			image = tintImage(newImage(loc), tint);
+			risenImage = tintImage(newImage(loc.replace(".png", "R.png")), tint);
+			projectileImage = tintImage(newImage("images/enemies/blasts/slime.png"), tint);
+			table.put(loc, image);
+			table.put(loc.replace(".png", "R.png"), risenImage);
+			table.put("images/enemies/blasts/slime.png", projectileImage);
+			lib.put(tint.toString(), table);
+		}
+		
+		risenShadow = newShadow(loc.replace(".png", "R.png"));
 		repeats = Statics.RAND.nextInt(MAX_REPS) + 1;
 	}
 
@@ -63,20 +83,20 @@ public class Slime extends WalkingEnemy {
 		else {
 			basicAnimate();
 			if (repeats <= 0) {
-				Projectile proj = new Projectile(dir, x, y, SPEED, this, Statics.DUMMY, owner, flying,damage);
+				Projectile proj = new Projectile(dir, x, y, SPEED, this, "images/enemies/blasts/slime.png", owner, flying, damage);
 				proj.setImage(projectileImage);
 				owner.getEnemies().add(proj);
 				repeats = Statics.RAND.nextInt(MAX_REPS) + 1;
 			}
 		}
-		
+
 		if (timer > 0)
 			timer--;
 		else {
 			timer = Statics.RAND.nextInt(RAND) + MIN;
 			repeats--;
 		}
-		
+
 		dir = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
 	}
 
@@ -86,6 +106,13 @@ public class Slime extends WalkingEnemy {
 			return image;
 		else
 			return risenImage;
+	}
+	@Override
+	public Image getShadow() {
+		if (timer > RISE_POINT)
+			return shadow;
+		else
+			return risenShadow;
 	}
 
 	protected static Image tintImage(Image icon, Color newColor) {
@@ -123,8 +150,8 @@ public class Slime extends WalkingEnemy {
 		return input;
 	}
 
-	protected static final Color[] colors = new Color[] { Color.red, Color.green, Color.yellow, Statics.ORANGE, Color.blue, Color.darkGray, Color.white,
-			Statics.PURPLE, Statics.BROWN };
+	protected static final Color[] colors = new Color[] { Color.red, Color.green, Color.yellow, Statics.ORANGE, Color.blue, Color.darkGray,
+			Color.white, Statics.PURPLE, Statics.BROWN };
 	protected static final ArrayList<Color> lightColors;
 	static {
 		lightColors = new ArrayList<Color>();
@@ -141,18 +168,6 @@ public class Slime extends WalkingEnemy {
 
 	protected Color randColor() {
 		return new Color(Statics.RAND.nextInt(256), Statics.RAND.nextInt(256), Statics.RAND.nextInt(256), 255);
-	}
-
-	protected Image newImage(String loc, int nul) {
-		URL url = getClass().getResource("/" + loc);
-
-		try {
-			return new ImageIcon(url).getImage();
-		} catch (NullPointerException ex) {
-			System.err.println("ERROR: " + loc);
-			ex.printStackTrace();
-			return null;
-		}
 	}
 
 	@Override
@@ -174,13 +189,13 @@ public class Slime extends WalkingEnemy {
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 			if (!owner.isDay())
-				g2d.drawImage(shadow, x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
+				g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 		} else {
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 			if (!owner.isDay())
-				g2d.drawImage(shadow, x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
+				g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 		}
-		
+
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 		else if (slowTimer > 0)

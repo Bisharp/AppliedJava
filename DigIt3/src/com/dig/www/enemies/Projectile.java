@@ -17,17 +17,19 @@ public class Projectile extends Enemy {
 	protected double d;
 	protected int speed;
 	protected boolean poisons;
-public void setTurning(boolean b){
-	isTurning=b;
-}
+
+	public void setTurning(boolean b) {
+		isTurning = b;
+	}
+
 	// half height of image
 	int hImgX = image.getWidth(null) / 2;
 	int hImgY = image.getHeight(null) / 2;
-protected boolean isTurning;
-	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying,int damage) {
-		super(x, y, loc, owner, flying,1);
-		
-		
+	protected boolean isTurning;
+
+	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying, int damage) {
+		super(x, y, loc, owner, flying, 1);
+
 		d = dir;
 		this.speed = speed;
 
@@ -42,12 +44,12 @@ protected boolean isTurning;
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-		this.damage=damage;
+		this.damage = damage;
 	}
-	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying,int damage,boolean poisons) {
-		super(x, y, loc, owner, flying,1);
-		
-		
+
+	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying, int damage, boolean poisons) {
+		super(x, y, loc, owner, flying, 1);
+
 		d = dir;
 		this.speed = speed;
 
@@ -62,27 +64,28 @@ protected boolean isTurning;
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-		this.damage=damage;
-		this.poisons=poisons;
+		this.damage = damage;
+		this.poisons = poisons;
 	}
+
 	@Override
-public void draw(Graphics2D g2d){
-		if(isTurning)
-			g2d.rotate(Math.toRadians(d), x+width/2, y+height/2);
+	public void draw(Graphics2D g2d) {
+		if (isTurning)
+			g2d.rotate(Math.toRadians(d), x + width / 2, y + height / 2);
 		g2d.drawImage(image, x, y, owner);
-		if(isTurning)
-			g2d.rotate(-Math.toRadians(d), x+width/2, y+height/2);
-}
+		if (!owner.isDay())
+			g2d.drawImage(shadow, x, y, owner);
+		if (isTurning)
+			g2d.rotate(-Math.toRadians(d), x + width / 2, y + height / 2);
+	}
+
 	public void animate() {
 
 		basicAnimate();
 		// Move, This is the code Micah it is also in the ImportantLook class
 
-		
-			x += Math.cos((double) Math.toRadians((double) d)) * speed;
-			y += Math.sin((double) Math.toRadians((double) d)) * speed;
-		
-		
+		x += Math.cos((double) Math.toRadians((double) d)) * speed;
+		y += Math.sin((double) Math.toRadians((double) d)) * speed;
 
 		if (!onScreen)
 			alive = false;
@@ -95,28 +98,29 @@ public void draw(Graphics2D g2d){
 	}
 
 	@Override
-	public void interact(Moves type, GameCharacter chr,boolean fromP){
+	public void interact(Moves type, GameCharacter chr, boolean fromP) {
 
 		if (type == Moves.SHIELD || type == Moves.DISPENSER)
 			alive = false;
-	
+
 	}
-public boolean poisons(){
-	return poisons;
-}
-	/* 
+
+	public boolean poisons() {
+		return poisons;
+	}
+	/*
 	 * TODO The below method will be deprecated upon Jonah's finishing of adding
 	 * extra move code. If this is still present in the second semester, delete
 	 * without mercy
 	 */
-	
-	//TODO delete without mercy
-//	@Override
-//	public void interact(Types type) {
-//
-////		if (type != Types.CLUB)
-////			super.interact(type);
-////		else
-////			alive = false;
-//	}
+
+	// TODO delete without mercy
+	// @Override
+	// public void interact(Types type) {
+	//
+	// // if (type != Types.CLUB)
+	// // super.interact(type);
+	// // else
+	// // alive = false;
+	// }
 }

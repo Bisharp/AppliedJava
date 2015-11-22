@@ -83,6 +83,10 @@ public abstract class Sprite implements Serializable {
 	public Image newShadow(String loc) {
 		return DigIt.lib.checkShadowLibrary("/" + loc);
 	}
+	
+	public Image getShadow() {
+		return shadow;
+	}
 
 	public Rectangle getBounds() {
 		return new Rectangle(x, y, width, height);

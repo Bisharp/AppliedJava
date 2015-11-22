@@ -267,6 +267,8 @@ public class Board extends MPanel implements ActionListener {
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
 
+		if (currentWeather == Weather.RAIN)
+			isDay = false;
 		if (currentWeather != Weather.FOG)
 			setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
 		else
