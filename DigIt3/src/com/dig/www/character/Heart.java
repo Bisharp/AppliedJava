@@ -62,7 +62,7 @@ specialTimer=0;
 	public Heart(int x, int y, Board owner, boolean player) {
 		super(x, y, owner, Types.HEART, "heart", player, -30,
 
-		-20, -1000, 20, 10, 10, 75, 10, 80,
+		-20, -10000, 20, 10, 10, 75, 10, 80,
 
 		25, 15, 80, 20, 10, 0, Statics.STRENGTH - 5);
 		
@@ -163,11 +163,12 @@ specialTimer=0;
 	public String toMoveString() {
 		switch (getActing()) {
 		case 1:
+			case 2:
 			return getType().toString();
 
 		case 3:
 		default:
-		case 2:
+		
 			return null;
 		}
 	}

@@ -104,7 +104,7 @@ public class WizardGuy extends NPC {
 								true, owner),
 						new NPCOption(
 								"Why are you a magician, anyway?",
-								"My mom told me I could be +anything| I wanted when I grew up, so why not a wizard?",
+								"Mom told me I could grow up to be anything I wanted, so I became a wizard!",
 								new String[] {
 										"Why are you a wizard, anyway?",
 										"What made you choose such a bizarre line of work?",

@@ -944,7 +944,7 @@ public abstract String getRangedString();
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
 						((Heart) this).start();
-						specialTimer = NEG_TIMER_SPECIAL + 20;
+						specialTimer = NEG_TIMER_SPECIAL + 40;
 					} else {
 						((Heart) this).end();
 					}
