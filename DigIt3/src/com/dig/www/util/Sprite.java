@@ -9,6 +9,7 @@ import java.io.Serializable;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.character.GameCharacter;
+import com.dig.www.enemies.Boss;
 
 public abstract class Sprite implements Serializable {
 
@@ -32,7 +33,7 @@ public abstract class Sprite implements Serializable {
 
 	public Sprite(int x, int y, String loc, Board owner) {
 		image = newImage(loc);
-		if (!(this instanceof GameCharacter))
+		if (!(this instanceof GameCharacter) && !(this instanceof Boss))
 			shadow = newShadow(loc);
 
 		width = image.getWidth(null);

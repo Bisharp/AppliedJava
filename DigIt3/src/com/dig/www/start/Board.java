@@ -3,14 +3,19 @@ package com.dig.www.start;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MouseInfo;
+import java.awt.Paint;
+import java.awt.PaintContext;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +23,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.ColorModel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -112,10 +120,11 @@ public class Board extends MPanel implements ActionListener {
 	boolean levelChanged;
 	private DigIt owner;
 	private boolean isDay = true;
+	
 	private boolean switching = false;
 	private TexturePack texturePack = TexturePack.GRASSY;
 
-	private Weather currentWeather = Weather.RAIN;
+	private Weather currentWeather = Weather.NORMAL;
 	private int weatherTimer = 0;
 	private int startPoint = 0;
 
@@ -269,17 +278,10 @@ public class Board extends MPanel implements ActionListener {
 
 		if (currentWeather == Weather.RAIN)
 			isDay = false;
-		if (currentWeather != Weather.FOG)
-			setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
-		else
-			setBackground(Color.gray);
+		updateBackground();
 
-		save();
 		System.gc();
-	}
-
-	public int spawnTreasure(int i, int keyNum) {
-		return 0;
+		save();
 	}
 
 	protected boolean fogCompute(int x, int y) {
@@ -307,41 +309,41 @@ public class Board extends MPanel implements ActionListener {
 			Enemy e;
 			Polygon poly;
 			Block b;
+		
 
 			// World draw
+			// TODO figure out day/night
 			for (i = startPoint; i < world.size(); i++) {
 				b = world.get(i);
 				if (b.isOnScreen() && b.isVisible())
-					if (isDay || (currentWeather == Weather.RAIN && weatherTimer > 0))
+//					if (isDay || (currentWeather == Weather.RAIN && weatherTimer > 0))
 						switch (currentWeather) {
 						case FOG:
-							if (fogCompute(b.getX(), b.getY()))
+
+							if (!b.canSee() || !fogCompute(b.getX(), b.getY()))
+								break;
+
+							if (b.traversable())
 								b.draw(g2d);
-							else {
-								g2d.setColor(Color.GRAY);
-								g2d.fill(b.getBounds());
-							}
-							break;
 
 						default:
 							b.draw(g2d);
 							break;
 						}
-					else
-						switch (currentWeather) {
-						case FOG:
-							if (fogCompute(b.getX(), b.getY()))
-								b.drawNight(g2d);
-							else {
-								g2d.setColor(Color.GRAY);
-								g2d.fill(b.getBounds());
-							}
-							break;
-
-						default:
-							b.drawNight(g2d);
-							break;
-						}
+//					else
+//						switch (currentWeather) {
+//						case FOG:
+//
+//							if (!b.canSee() || !fogCompute(b.getX(), b.getY()))
+//								break;
+//
+//							if (b.traversable())
+//								b.draw(g2d);
+//
+//						default:
+//							b.drawNight(g2d);
+//							break;
+//						}
 			}
 
 			// Enemy draw
@@ -367,9 +369,8 @@ public class Board extends MPanel implements ActionListener {
 						switch (currentWeather) {
 
 						case FOG:
-							if (!fogCompute(e.getX(), e.getY())) {
-								g2d.setColor(Color.DARK_GRAY);
-								g2d.fill(e.getBounds());
+							if (!fogCompute(e.getX(), e.getY()) && !(e instanceof Boss)) {
+								g2d.drawImage(e.getShadow(), e.getX(), e.getY(), this);
 								break;
 							}
 
@@ -430,13 +431,10 @@ public class Board extends MPanel implements ActionListener {
 					if (tag)
 						switch (currentWeather) {
 						case FOG:
-							if (fogCompute(obj.getX(), obj.getY()))
-								obj.draw(g2d);
-							else {
-								g2d.setColor(Color.DARK_GRAY);
-								g2d.fill(obj.getBounds());
+							if (!fogCompute(obj.getX(), obj.getY())) {
+								g2d.drawImage(obj.getShadow(), obj.getX(), obj.getY(), this);
+								break;
 							}
-							break;
 						default:
 							obj.draw(g2d);
 						}
@@ -461,18 +459,7 @@ public class Board extends MPanel implements ActionListener {
 					// end of that code
 
 					if (tag)
-						switch (currentWeather) {
-						case FOG:
-							if (fogCompute(p2.getX(), p2.getY()))
-								p2.draw(g2d);
-							else {
-								g2d.setColor(Color.DARK_GRAY);
-								g2d.fill(p2.getBounds());
-							}
-							break;
-						default:
-							p2.draw(g2d);
-						}
+						p2.draw(g2d);
 				}
 
 			// NPC draw
@@ -496,13 +483,10 @@ public class Board extends MPanel implements ActionListener {
 					if (tag)
 						switch (currentWeather) {
 						case FOG:
-							if (fogCompute(npc.getX(), npc.getY()))
-								npc.draw(g2d);
-							else {
-								g2d.setColor(Color.DARK_GRAY);
-								g2d.fill(npc.getBounds());
+							if (!fogCompute(npc.getX(), npc.getY())) {
+								g2d.drawImage(npc.getShadow(), npc.getX(), npc.getY(), this);
+								break;
 							}
-							break;
 						default:
 							npc.draw(g2d);
 						}
@@ -588,9 +572,10 @@ public class Board extends MPanel implements ActionListener {
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 
 			g2d.setColor(Color.black);
-			g2d.fillRect(10, 200, 200, 50);
+			g2d.fillRect(10, 200, 200, 100);
 			g2d.setColor(Statics.PURPLE);
 			g2d.drawString(t.toString(), 50 - (t.getTime() >= 10 ? 10 : 0), 230);
+			g2d.drawString(t.trans(t.getGeneralTime()), 50, 280);
 
 			switch (currentWeather) {
 			case RAIN:
@@ -1266,7 +1251,6 @@ public class Board extends MPanel implements ActionListener {
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
 
-			// TODO collectible
 			if (o.intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
 
@@ -1330,8 +1314,6 @@ public class Board extends MPanel implements ActionListener {
 			Statics.exit(this);
 		}
 		switch (state) {
-
-		// TODO npc
 		case NPC:
 			if (key == Preferences.NPC())
 				current.exit();
@@ -1550,7 +1532,6 @@ public class Board extends MPanel implements ActionListener {
 				os.writeObject(data);
 				os.close();
 
-				// TODO working on inventory
 				os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
 				os.writeObject(GameCharacter.getInventory());
 				os.close();
@@ -1732,7 +1713,6 @@ public class Board extends MPanel implements ActionListener {
 		public void mouseExited(MouseEvent arg0) {
 		}
 
-		// TODO inventory
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			if (state == State.PAUSED)
@@ -1741,8 +1721,7 @@ public class Board extends MPanel implements ActionListener {
 				current.mouseClick(arg0);
 			else if (state == State.INGAME
 					&& new Rectangle(arg0.getX(), arg0.getY(), 10, 10).intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT))) {
-				isDay = !isDay;
-				setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+				setIsDay(!isDay);
 			}
 		}
 
@@ -1775,6 +1754,17 @@ public class Board extends MPanel implements ActionListener {
 
 		System.out.println("Change");
 		isDay = b;
-		setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+		updateBackground();
+	}
+
+	protected void updateBackground() {
+		if (currentWeather != Weather.FOG)
+			setBackground(isDay ? getTextureBack() : Statics.darkenColor(getTextureBack()));
+		else
+			setBackground(isDay ? Color.gray : Color.DARK_GRAY);
+	}
+
+	public boolean darkenWorld() {
+		return !isDay || (currentWeather == Weather.RAIN && weatherTimer == 0);
 	}
 }

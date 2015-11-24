@@ -15,7 +15,10 @@ public class Time implements ActionListener {
 
 	private static final int SECOND = 1000;
 	private static final int CHANGE = 7;
+	private static final int CHANGE_PER = 1;
 	private static final int END = 13;
+	// private boolean showColon = true;
+	private int colonTimer = 0;
 
 	private float time;
 	private boolean isAM;
@@ -66,14 +69,10 @@ public class Time implements ActionListener {
 	}
 
 	public void pause() {
-
-		System.out.println("Pause");
 		timer.stop();
 	}
 
 	public void resume() {
-
-		System.out.println("Resume");
 		timer.restart();
 	}
 
@@ -82,12 +81,47 @@ public class Time implements ActionListener {
 		if (timer != null)
 			timer.stop();
 	}
-	
+
 	public float getTime() {
 		return time;
 	}
 
 	public String toString() {
-		return String.format("%.2f", time).replace('.', ':') + " " + (isAM ? "A.M." : "P.M.");
+		colonTimer++;
+		if (colonTimer >= 50)
+			colonTimer = 0;
+
+		return String.format("%.2f", time).replace('.', colonTimer >= 30? ' ' : ':') + " " + (isAM ? "A.M." : "P.M.");
+	}
+	
+	public String getColon() {
+		return colonTimer >= 30? " " : ":";
+	}
+	
+	public static final int SUNRISE = 0;
+	public static final int DAY = 1;
+	public static final int SUNSET = 2;
+	public static final int NIGHT = 3;
+	
+	public int getGeneralTime() {
+		
+		if (time >= CHANGE && time <= CHANGE + CHANGE_PER)
+			return isAM? SUNRISE : SUNSET;
+		else if ((isAM && time < CHANGE || (int) time == 12) || (!isAM && time > CHANGE + CHANGE_PER && (int) time != 12))
+			return NIGHT;
+		else
+			return DAY;
+	}
+
+	public String trans(int generalTime) {
+
+		if (generalTime == SUNRISE)
+			return "Sunrise";
+		else if (generalTime == SUNSET)
+			return "Sunset";
+		else if (generalTime == DAY)
+			return "Day";
+		else
+			return "Night";
 	}
 }
