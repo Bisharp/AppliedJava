@@ -86,11 +86,6 @@ public abstract class SeeEnemy extends WalkingEnemy {
 	}
 
 	public abstract void act();
-
-	@Override
-	public void draw(Graphics2D g2d) {
-		super.draw(g2d);
-	}
 	
 	@Override
 	public int getSpeed() {

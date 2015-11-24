@@ -114,6 +114,8 @@ public class Diamond extends GameCharacter {
 
 		if (toMoveString() != null) {
 			g2d.drawImage(newImage(toMoveString()), x, y, owner);
+			if (owner.darkenWorld())
+				g2d.drawImage(newShadow(toMoveString()), x, y, owner);
 		}
 
 

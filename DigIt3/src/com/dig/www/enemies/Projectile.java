@@ -73,7 +73,7 @@ public class Projectile extends Enemy {
 		if (isTurning)
 			g2d.rotate(Math.toRadians(d), x + width / 2, y + height / 2);
 		g2d.drawImage(image, x, y, owner);
-		if (!owner.isDay())
+		if (owner.darkenWorld())
 			g2d.drawImage(shadow, x, y, owner);
 		if (isTurning)
 			g2d.rotate(-Math.toRadians(d), x + width / 2, y + height / 2);

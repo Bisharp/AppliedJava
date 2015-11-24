@@ -76,11 +76,6 @@ public class ChainEnemy extends WalkingEnemy {
 		}
 	}
 
-	public void draw(Graphics2D g2d) {
-
-		super.draw(g2d);
-	}
-
 	@Override
 	public void turnAround(int wallX, int wallY) {
 		if (follows == null)

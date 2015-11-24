@@ -1,5 +1,7 @@
 package com.dig.www.enemies;
 
+import java.awt.Graphics2D;
+
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
@@ -27,5 +29,10 @@ public class Explosion extends Enemy {
 	@Override
 	public void interact(Moves move, GameCharacter chr, boolean fromP) {
 
+	}
+	
+	@Override
+	public void draw(Graphics2D g2d) {
+		g2d.drawImage(image, x, y, owner);
 	}
 }

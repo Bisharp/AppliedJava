@@ -91,11 +91,11 @@ public abstract class Enemy extends Sprite {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(image, x, y, owner);
-			if (!loc.contains("effects") && !owner.isDay())
+			if (owner.darkenWorld())
 				g2d.drawImage(shadow, x, y, owner);
 		} else {
 			g2d.drawImage(image, x, y, owner);
-			if (!loc.contains("effects")  && !owner.isDay())
+			if (owner.darkenWorld())
 				g2d.drawImage(shadow, x, y, owner);
 		}
 

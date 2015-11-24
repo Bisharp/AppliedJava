@@ -53,7 +53,7 @@ public class ImageLibrary {
 		}
 	}
 	
-	// Shadow registry; left in just in case we need to create shadows of characters.
+	// Shadow registry
 
 	public Image checkShadowLibrary(String loc) {
 		image = shadows.get(loc);
@@ -67,7 +67,7 @@ public class ImageLibrary {
 	public void registerShadow(String loc) {
 
 		try {
-			image = createShadow(images.get(loc));
+			image = createShadow(checkLibrary(loc));
 			shadows.put(loc, image);
 		} catch (NullPointerException ex) {
 			System.err.println("ERROR: " + loc);

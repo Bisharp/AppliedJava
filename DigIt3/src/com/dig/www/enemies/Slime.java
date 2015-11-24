@@ -188,11 +188,11 @@ public class Slime extends WalkingEnemy {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
-			if (!owner.isDay())
+			if (owner.darkenWorld())
 				g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 		} else {
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
-			if (!owner.isDay())
+			if (owner.darkenWorld())
 				g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 		}
 

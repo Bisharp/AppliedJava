@@ -29,20 +29,20 @@ public class Heart extends GameCharacter {
 		enTimer = 5;
 		usingField = false;
 		owner.removeDispensers(this);
-specialTimer=0;
-		
+		specialTimer = 0;
+
 	}
 
 	public void start() {
 		enTimer = Integer.MAX_VALUE;
 		usingField = true;
-	
+
 	}
 
 	public void decrementEnergy(int amount) {
 		energy -= amount;
 		enTimer = Integer.MAX_VALUE; // To keep you from restoring energy while
-									// using a field.
+										// using a field.
 
 		if (energy < 0) {
 			energy = 0;
@@ -65,7 +65,7 @@ specialTimer=0;
 		-20, -10000, 20, 10, 10, 75, 10, 80,
 
 		25, 15, 80, 20, 10, 0, Statics.STRENGTH - 5);
-		
+
 	}
 
 	@Override
@@ -92,23 +92,24 @@ specialTimer=0;
 
 		switch (direction) {
 		case UP:
-			return new Rectangle(x, y - Statics.BLOCK_HEIGHT+30, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y - Statics.BLOCK_HEIGHT + 30, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case DOWN:
-			return new Rectangle(x, y + Statics.BLOCK_HEIGHT-50, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x, y + Statics.BLOCK_HEIGHT - 50, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case RIGHT:
-			return new Rectangle(x + Statics.BLOCK_HEIGHT-50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x + Statics.BLOCK_HEIGHT - 50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case LEFT:
 		default:
-			return new Rectangle(x - Statics.BLOCK_HEIGHT+50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
+			return new Rectangle(x - Statics.BLOCK_HEIGHT + 50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		}
 	}
 
-	public int rangedAddY(){
-		return height/2-20;
+	public int rangedAddY() {
+		return height / 2 - 20;
 	}
+
 	@Override
 	public void drawTool(Graphics2D g2d) {
-		
+
 		int dX = 0;
 		int dY = 0;
 		switch (direction) {
@@ -128,20 +129,18 @@ specialTimer=0;
 			break;
 
 		case LEFT:
-			dX = x+50;
+			dX = x + 50;
 			dY = y;
 			break;
 		}
-		if(toMoveString()!=null){
-	
-		if(direction==Direction.LEFT){
-			Image anImg=newImage(toMoveString());
-			g2d.drawImage(anImg, dX, dY,-anImg.getWidth(owner),anImg.getHeight(owner), owner);
-		}else
-			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-			
-			
-	}
+		if (toMoveString() != null) {
+
+			if (direction == Direction.LEFT) {
+				Image anImg = newImage(toMoveString());
+				g2d.drawImage(anImg, dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
+			} else
+				g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+		}
 
 	}
 
@@ -163,12 +162,12 @@ specialTimer=0;
 	public String toMoveString() {
 		switch (getActing()) {
 		case 1:
-			case 2:
+		case 2:
 			return getType().toString();
 
 		case 3:
 		default:
-		
+
 			return null;
 		}
 	}
@@ -177,8 +176,9 @@ specialTimer=0;
 	public Moves getRangedMove() {
 		return Moves.HAZE;
 	}
+
 	@Override
-	public String getRangedString(){
+	public String getRangedString() {
 		return "haze.png";
 	}
 }

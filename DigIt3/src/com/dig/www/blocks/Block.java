@@ -520,8 +520,13 @@ public class Block extends Sprite {
 					break;
 				}
 			else {
-				g2d.setColor(getColor());
-				g2d.fill3DRect(x, y, width, height, true);
+				if (type != Blocks.PIT) {
+					g2d.setColor(getColor());
+					g2d.fill3DRect(x, y, width, height, true);
+				} else {
+					g2d.setColor(Color.BLACK);
+					g2d.fill(getBounds());
+				}
 			}
 			// End Switch of texturePacks
 		} // end canSee
@@ -532,43 +537,21 @@ public class Block extends Sprite {
 	}
 
 	public Color computeColor(Color c) {
-		if (owner.darkenWorld())
-			c = Statics.darkenColor(c);
+
+		if (!owner.thunderStrike())
+			if (owner.darkenWorld())
+				c = Statics.darkenColor(c);
+			else if (owner.sunRise())
+				c = Statics.sunriseColor(c);
+			else if (owner.sunSet())
+				c = Statics.sunsetColor(c);
 
 		return c;
 	}
 
-	public void drawNight(Graphics2D g2d) {
-		g2d.setColor(canSee ? getDarkColor() : Color.black);
-		g2d.fill(getBounds());
-	}
-
-	public void setDarkColors() {
-		Blocks backup = type;
-		Blocks[] types = Blocks.values();
-		darkColors = new Color[types.length];
-
-		for (int i = 0; i < types.length; i++) {
-			type = types[i];
-			darkColors[i] = Statics.darkenColor(getColor());
-		}
-
-		type = backup;
-	}
-
-	public Color getDarkColor() {
-		Blocks[] types = Blocks.values();
-
-		for (int i = 0; i < types.length; i++)
-			if (types[i] == type)
-				return darkColors[i];
-
-		return Color.red;
-	}
-
 	protected boolean isStatic() {
 		return (type == Blocks.WALL && owner.getTexturePack() != TexturePack.ISLAND && owner.getTexturePack() != TexturePack.SNOWY)
-				|| type == Blocks.CRYSTAL;
+				|| type == Blocks.CRYSTAL || type == Blocks.PIT;
 	}
 
 	public Color getColor() {

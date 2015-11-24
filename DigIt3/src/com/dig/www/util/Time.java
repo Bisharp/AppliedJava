@@ -13,11 +13,10 @@ public class Time implements ActionListener {
 	private Timer timer;
 	private Board owner;
 
-	private static final int SECOND = 1000;
+	private static final int SECOND = 100;
 	private static final int CHANGE = 7;
 	private static final int CHANGE_PER = 1;
 	private static final int END = 13;
-	// private boolean showColon = true;
 	private int colonTimer = 0;
 
 	private float time;
@@ -26,7 +25,6 @@ public class Time implements ActionListener {
 	public Time(Board b) {
 		timer = new Timer(SECOND, this);
 		owner = b;
-		timer.start();
 
 		String time = String.format("%tr", new Date());
 		String[] s = time.split(":");
@@ -34,32 +32,35 @@ public class Time implements ActionListener {
 		this.time = Integer.parseInt(s[0]) + (Float.parseFloat(s[1]) / 100);
 		String t = s[s.length - 1];
 
-		isAM = t.endsWith("AM");
-
-		if (this.time >= 7 && this.time != 12)
-			owner.setIsDay(isAM);
-		else
-			owner.setIsDay(!isAM);
+		//isAM = t.endsWith("AM");
+		
+		this.time = 6.5f;
+		isAM = false;
 	}
+
+	public void start() {
+		timer.start();
+	}
+
+	private int previousTime = -1;
 
 	@Override
 	public synchronized void actionPerformed(ActionEvent arg0) {
 
 		time += 0.01f;
 
-		if (decimalPart(time) >= 0.60) {
+		if (decimalPart(time) >= 0.60)
 			time = Math.round(time);
-			if (time == CHANGE)
-				if (isAM)
-					owner.setIsDay(true);
-				else
-					owner.setIsDay(false);
-		}
 
 		if (time >= END)
 			time = 1;
 		else if (time == 12)
 			isAM = !isAM;
+
+		if (previousTime != getGeneralTime())
+			owner.updateBackground();
+
+		previousTime = getGeneralTime();
 	}
 
 	protected float decimalPart(float f) {
@@ -69,11 +70,13 @@ public class Time implements ActionListener {
 	}
 
 	public void pause() {
-		timer.stop();
+		if (timer != null)
+			timer.stop();
 	}
 
 	public void resume() {
-		timer.restart();
+		if (timer != null)
+			timer.restart();
 	}
 
 	public void end() {
@@ -91,26 +94,31 @@ public class Time implements ActionListener {
 		if (colonTimer >= 50)
 			colonTimer = 0;
 
-		return String.format("%.2f", time).replace('.', colonTimer >= 30? ' ' : ':') + " " + (isAM ? "A.M." : "P.M.");
+		return String.format("%.2f", time).replace('.', colonTimer >= 30 ? ' ' : ':') + " " + (isAM ? "A.M." : "P.M.");
 	}
-	
+
 	public String getColon() {
-		return colonTimer >= 30? " " : ":";
+		return colonTimer >= 30 ? " " : ":";
 	}
-	
+
 	public static final int SUNRISE = 0;
 	public static final int DAY = 1;
 	public static final int SUNSET = 2;
 	public static final int NIGHT = 3;
-	
+
 	public int getGeneralTime() {
-		
+
 		if (time >= CHANGE && time <= CHANGE + CHANGE_PER)
-			return isAM? SUNRISE : SUNSET;
-		else if ((isAM && time < CHANGE || (int) time == 12) || (!isAM && time > CHANGE + CHANGE_PER && (int) time != 12))
-			return NIGHT;
-		else
+			return isAM ? SUNRISE : SUNSET;
+		else if (this.time >= 7 && this.time < 12)
+			if (isAM)
+				return DAY;
+			else
+				return NIGHT;
+		else if (!isAM)
 			return DAY;
+		else
+			return NIGHT;
 	}
 
 	public String trans(int generalTime) {

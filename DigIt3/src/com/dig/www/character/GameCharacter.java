@@ -42,11 +42,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
-	
+
 	protected Enemy enPoint;
 	protected int enUpTimer;
-	protected static final int MAX_ATTACK_DISTANCE=250; 
-	
+	protected static final int MAX_ATTACK_DISTANCE = 250;
+
 	protected boolean waiting;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
@@ -89,20 +89,26 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 		}
 	}
+
 	protected boolean meleeHit;
 	protected boolean specialHit;
-public boolean hasMeleed(){
-	return meleeHit;
-}
-protected int poisonTimer;
-protected int poisonHurtTimer;
-public void poison(){
-	poisonTimer=375;
-	poisonHurtTimer=15;
-}
-public boolean hasSpecialed(){
-	return specialHit;
-}
+
+	public boolean hasMeleed() {
+		return meleeHit;
+	}
+
+	protected int poisonTimer;
+	protected int poisonHurtTimer;
+
+	public void poison() {
+		poisonTimer = 375;
+		poisonHurtTimer = 15;
+	}
+
+	public boolean hasSpecialed() {
+		return specialHit;
+	}
+
 	public enum Types {
 
 		CLUB {
@@ -281,23 +287,23 @@ public boolean hasSpecialed(){
 		specialTimer = this.NEG_TIMER_SPECIAL;
 
 		this.strength = strength;
-		direction=Direction.DOWN;
+		direction = Direction.DOWN;
 		image = newImage("n");
 	}
 
 	@Override
 	public void animate() {
-if(poisonTimer>0){
-	if(poisonHurtTimer<=0){
-	health-=1;
-	hpTimer = 100;
-	if (health <= 0)
-		owner.setState(Board.State.DEAD);
-	poisonHurtTimer=15;}
-	else
-		poisonHurtTimer--;
-}
-	
+		if (poisonTimer > 0) {
+			if (poisonHurtTimer <= 0) {
+				health -= 1;
+				hpTimer = 100;
+				if (health <= 0)
+					owner.setState(Board.State.DEAD);
+				poisonHurtTimer = 15;
+			} else
+				poisonHurtTimer--;
+		}
+
 		if (player) {
 
 		} else {
@@ -312,8 +318,8 @@ if(poisonTimer>0){
 					}
 				}
 			}
-			if(waiting&&(owner.getCharPoint().distance(x,y)<250||owner.pointedPoint!=null)){
-				waiting=false;
+			if (waiting && (owner.getCharPoint().distance(x, y) < 250 || owner.pointedPoint != null)) {
+				waiting = false;
 			}
 			if (path != null) {
 				path.update();
@@ -333,49 +339,52 @@ if(poisonTimer>0){
 					pointTimer = 18;
 					path.removeLast();
 				}
-				if (new Point(x, y).distance(owner.getCharPoint()) < 100&&owner.pointedPoint==null) {
+				if (new Point(x, y).distance(owner.getCharPoint()) < 100 && owner.pointedPoint == null) {
 					// System.out.println(getType().charName()+" CLOSE:"+new
 					// Date());
 					path = null;
 				}
 			}
-			if (!wallBound&&!waiting) {
+			if (!wallBound && !waiting) {
 				// System.out.println(path);
 				if (path == null && owner.pointedPoint == null) {
-					if(enPoint==null&&enUpTimer<=0){
-					int chosenNum=-1;
-					int theDis=MAX_ATTACK_DISTANCE;
-					for(int c=0;c<owner.getEnemies().size();c++){
-						Point currentEn=new Point(owner.getEnemies().get(c).getX(),owner.getEnemies().get(c).getY());
-						if(!owner.getEnemies().get(c).isInvincible()&&!(owner.getEnemies().get(c) instanceof Projectile)&&currentEn.distance(new Point(x,y))<theDis&&owner.getCharPoint().distance(currentEn)>currentEn.distance(new Point(x,y))){
-							theDis=(int)currentEn.distance(new Point(x,y));
-							chosenNum=c;
+					if (enPoint == null && enUpTimer <= 0) {
+						int chosenNum = -1;
+						int theDis = MAX_ATTACK_DISTANCE;
+						for (int c = 0; c < owner.getEnemies().size(); c++) {
+							Point currentEn = new Point(owner.getEnemies().get(c).getX(), owner.getEnemies().get(c).getY());
+							if (!owner.getEnemies().get(c).isInvincible() && !(owner.getEnemies().get(c) instanceof Projectile)
+									&& currentEn.distance(new Point(x, y)) < theDis
+									&& owner.getCharPoint().distance(currentEn) > currentEn.distance(new Point(x, y))) {
+								theDis = (int) currentEn.distance(new Point(x, y));
+								chosenNum = c;
+							}
 						}
-					}
-					
-					if(chosenNum!=-1){
-					enPoint=owner.getEnemies().get(chosenNum);	
-					}
-					goTo=true;
-					if(this instanceof Diamond||this instanceof Heart||health<HP_MAX/2)
-						goTo=false;
-				}
-					else	if(enUpTimer>0){
+
+						if (chosenNum != -1) {
+							enPoint = owner.getEnemies().get(chosenNum);
+						}
+						goTo = true;
+						if (this instanceof Diamond || this instanceof Heart || health < HP_MAX / 2)
+							goTo = false;
+					} else if (enUpTimer > 0) {
 						enUpTimer--;
 					}
 				} else {
-					enPoint=null;
+					enPoint = null;
 				}
-				
-				if(enPoint!=null&&((new Point(enPoint.getX(),enPoint.getY()).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||!enPoint.isAlive())||new Point(x,y).distance(owner.getCharPoint())>MAX_ATTACK_DISTANCE*1.75||(health<HP_MAX/2&&goTo))){
-					enPoint=null;
+
+				if (enPoint != null
+						&& ((new Point(enPoint.getX(), enPoint.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || !enPoint
+								.isAlive()) || new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || (health < HP_MAX / 2 && goTo))) {
+					enPoint = null;
 				}
-				
-					if (path != null) {
+
+				if (path != null) {
 
 					if (path.getPoints().size() > 0) {
 						getToPoint = path.getCurrentFind();
-						
+
 						meleePress = false;
 
 						goTo = true;
@@ -389,17 +398,18 @@ if(poisonTimer>0){
 				} else if (owner.pointedPoint != null) {
 					getToPoint = owner.pointedPoint;
 					goTo = true;
-				}else if(enPoint!=null){
-					if(goTo==false)
-						getToPoint=owner.getCharPoint();
+				} else if (enPoint != null) {
+					if (goTo == false)
+						getToPoint = owner.getCharPoint();
 					else
-					getToPoint=new Point(enPoint.getX(),enPoint.getY());
-				
-				}else {
+						getToPoint = new Point(enPoint.getX(), enPoint.getY());
+
+				} else {
 					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if ((path != null || ((enPoint==null&&getToPoint.distance(x, y) > 125)||(enPoint!=null&&!getActBounds().intersects(enPoint.getBounds()))))) {
+				if ((path != null || ((enPoint == null && getToPoint.distance(x, y) > 125) || (enPoint != null && !getActBounds().intersects(
+						enPoint.getBounds()))))) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -411,148 +421,151 @@ if(poisonTimer>0){
 					// if(path!=null)
 					// System.out.println("walking");
 					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
-						
+
 						deltaX = -SPEED;
 						moveX = true;
-						
+
 					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
-						
+
 						deltaX = SPEED;
 						moveX = true;
-						
 
 					} else {
 						deltaX = 0;
 						moveX = false;
 					}
 					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
-						
+
 						deltaY = -SPEED;
 						moveY = true;
 						// if (||y > getToPoint.y + 50)
-						
 
 					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
-						
+
 						deltaY = SPEED;
 						moveY = true;
 						// if (y < getToPoint.y - 50)
-						
 
 					} else {
 						moveY = false;
 						deltaY = 0;
 					}
 				}
-				
+
 				else {
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
 				}
-				if(!goTo){
-					if(moveX&&moveY){
+				if (!goTo) {
+					if (moveX && moveY) {
 						deltaY = 0;
 						moveY = false;
-					}else if(moveX){
-						if(y<enPoint.getY()){
+					} else if (moveX) {
+						if (y < enPoint.getY()) {
 							deltaY = -10;
-							moveY =true;
-							moveU=false;
-						}else{
+							moveY = true;
+							moveU = false;
+						} else {
 							deltaY = 10;
-							moveY =true;
-							moveU=true;
+							moveY = true;
+							moveU = true;
 						}
-							
-					}else{
-						if(x<enPoint.getX()){
+
+					} else {
+						if (x < enPoint.getX()) {
 							deltaY = -10;
-							moveX =true;
-							moveL=true;
-						}else{
+							moveX = true;
+							moveL = true;
+						} else {
 							deltaX = 10;
-							moveX =true;
-							moveL=false;
+							moveX = true;
+							moveL = false;
 						}
 					}
-						
+
 				}
-				//if(enPoint==null||!goTo){
-					if(deltaY==0){
-						if(deltaX!=0){
-							if(deltaX>0)
-								direction=Direction.RIGHT;
-							else
-								direction=Direction.LEFT;
-						}
-					}else{
-						if(deltaY<0)
-							direction=Direction.UP;
+				// if(enPoint==null||!goTo){
+				if (deltaY == 0) {
+					if (deltaX != 0) {
+						if (deltaX > 0)
+							direction = Direction.RIGHT;
 						else
-							direction=Direction.DOWN;
+							direction = Direction.LEFT;
 					}
-						
-				//}
-//				else{
-//					if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
-//						if(y<enPoint.getY())
-//							direction=Direction.UP;
-//					else
-//						direction=Direction.DOWN;
-//					}
-//					else{
-//						if(x<enPoint.getX())
-//							direction=Direction.RIGHT;
-//					else
-//						direction=Direction.LEFT;
-//					}
-//						
-//				}
-				boolean shouldPressMelee=false;
-				for(int c=0;c<owner.getEnemies().size();c++){
-					if(((this instanceof Diamond&&owner.getEnemies().get(c) instanceof Projectile&&new Point(getMidX(),getMidY()).distance(owner.getEnemies().get(c).getMidX(),owner.getEnemies().get(c).getMidY())<750)||getActBounds().intersects(owner.getEnemies().get(c).getBounds()))&&!owner.getEnemies().get(c).isInvincible()&&(!(owner.getEnemies().get(c) instanceof Projectile)||this instanceof Diamond)){
-						shouldPressMelee=true;
-						
+				} else {
+					if (deltaY < 0)
+						direction = Direction.UP;
+					else
+						direction = Direction.DOWN;
+				}
+
+				// }
+				// else{
+				// if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
+				// if(y<enPoint.getY())
+				// direction=Direction.UP;
+				// else
+				// direction=Direction.DOWN;
+				// }
+				// else{
+				// if(x<enPoint.getX())
+				// direction=Direction.RIGHT;
+				// else
+				// direction=Direction.LEFT;
+				// }
+				//
+				// }
+				boolean shouldPressMelee = false;
+				for (int c = 0; c < owner.getEnemies().size(); c++) {
+					if (((this instanceof Diamond && owner.getEnemies().get(c) instanceof Projectile && new Point(getMidX(), getMidY()).distance(
+							owner.getEnemies().get(c).getMidX(), owner.getEnemies().get(c).getMidY()) < 750) || getActBounds().intersects(
+							owner.getEnemies().get(c).getBounds()))
+							&& !owner.getEnemies().get(c).isInvincible()
+							&& (!(owner.getEnemies().get(c) instanceof Projectile) || this instanceof Diamond)) {
+						shouldPressMelee = true;
+
 						break;
 					}
 				}
-				meleePress=shouldPressMelee;
-				
-//				if (enPoint != null) {
-//					boolean xway = false;
-//					if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() - y)) {
-//						xway = true;
-//					}
-//					if (xway) {
-//						if (x > enPoint.getX()) {
-//							direction = Direction.LEFT;
-//						} else {
-//							direction = Direction.RIGHT;
-//						}
-//					} else {
-//						if (y > enPoint.getY()) {
-//							direction = Direction.UP;
-//						} else {
-//							direction = Direction.DOWN;
-//
-//						}
-//					}
-//					if (getActBounds().intersects(enPoint.getBounds())) {
-//						meleePress = true;
-//					} else {
-//						meleePress = false;
-//					}
-//				}
-			}if(waiting){
+				meleePress = shouldPressMelee;
+
+				// if (enPoint != null) {
+				// boolean xway = false;
+				// if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() -
+				// y)) {
+				// xway = true;
+				// }
+				// if (xway) {
+				// if (x > enPoint.getX()) {
+				// direction = Direction.LEFT;
+				// } else {
+				// direction = Direction.RIGHT;
+				// }
+				// } else {
+				// if (y > enPoint.getY()) {
+				// direction = Direction.UP;
+				// } else {
+				// direction = Direction.DOWN;
+				//
+				// }
+				// }
+				// if (getActBounds().intersects(enPoint.getBounds())) {
+				// meleePress = true;
+				// } else {
+				// meleePress = false;
+				// }
+				// }
+			}
+			if (waiting) {
 				deltaX = 0;
 				deltaY = 0;
 				moveX = false;
 				moveY = false;
 				image = newImage("n");
 			}
-			
+
 		}
 
 		if (hitstunTimer > 0) {
@@ -643,8 +656,8 @@ if(poisonTimer>0){
 				owner.reAnimate();
 			} else {
 				if (onceNotCollidePlayer) {
-					enPoint=null;
-					enUpTimer=25;
+					enPoint = null;
+					enUpTimer = 25;
 					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
 						deltaX = -deltaX;
 						x += deltaX;
@@ -656,7 +669,7 @@ if(poisonTimer>0){
 
 					x += deltaX;
 					y += deltaY;
-				} else{
+				} else {
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
@@ -665,44 +678,43 @@ if(poisonTimer>0){
 				}
 				if (pathUpdateTimer > 0)
 					pathUpdateTimer--;
-//				if(onceNotCollidePlayer)
-//					JOptionPane.showMessageDialog(owner, "try");
-				if (pathUpdateTimer <= 0 && 
-						onceNotCollidePlayer &&
-						path == null
-						//&& new Point(x, y).distance(owner.getCharPoint()) > 50
-						) {
-//JOptionPane.showMessageDialog(owner, "work");
+				// if(onceNotCollidePlayer)
+				// JOptionPane.showMessageDialog(owner, "try");
+				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null
+				// && new Point(x, y).distance(owner.getCharPoint()) > 50
+				) {
+					// JOptionPane.showMessageDialog(owner, "work");
 					for (int c = 0; c < owner.getFriends().size(); c++) {
 						if (owner.getFriends().get(c) == this) {
 							me = c;
 							break;
 						}
 					}
-					int realX=0;
-					int realY=0;
-					boolean changedP=false;
-					if(owner.pointedPoint!=null){
-						changedP=true;
-						realX=owner.getCharacterX();
-						realY=owner.getCharacterY();
+					int realX = 0;
+					int realY = 0;
+					boolean changedP = false;
+					if (owner.pointedPoint != null) {
+						changedP = true;
+						realX = owner.getCharacterX();
+						realY = owner.getCharacterY();
 						owner.getCharacter().setX(owner.pointedPoint.x);
 						owner.getCharacter().setY(owner.pointedPoint.y);
 					}
-					
+
 					path = new PointPath(me, owner);
-					if(changedP){
+					if (changedP) {
 						owner.getCharacter().setX(realX);
 						owner.getCharacter().setY(realY);
-						
+
 					}
-					
-					if(path.getPoints().size()>0){
-//						x=path.getCurrentFind().x;
-//						y=path.getCurrentFind().y;
-						//JOptionPane.showMessageDialog(owner, "size greater than 0");
-					}else{
-						//JOptionPane.showMessageDialog(owner, "size 0");
+
+					if (path.getPoints().size() > 0) {
+						// x=path.getCurrentFind().x;
+						// y=path.getCurrentFind().y;
+						// JOptionPane.showMessageDialog(owner,
+						// "size greater than 0");
+					} else {
+						// JOptionPane.showMessageDialog(owner, "size 0");
 						pathUpdateTimer = 50;
 					}
 					meleePress = false;
@@ -715,10 +727,14 @@ if(poisonTimer>0){
 			wallBound = false;
 		}
 		setAttacks();
+		
+		onScreen = getBounds().intersects(owner.getScreen());
 	}
-public void setWaiting(boolean setter){
-	waiting=setter;
-}
+
+	public void setWaiting(boolean setter) {
+		waiting = setter;
+	}
+
 	public void keyPressed(int keyCode) {
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
@@ -812,7 +828,7 @@ public void setWaiting(boolean setter){
 		}
 	}
 
-protected	void OpenLevelUp() {
+	protected void OpenLevelUp() {
 
 		levMen = new LevelUp();
 	}
@@ -857,25 +873,25 @@ protected	void OpenLevelUp() {
 		// Melee
 		else if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
-		
+
 		}
 		// Ranged
 		else if (keyCode == Preferences.PROJECTILE()) {
 			rangedPress = false;
-			if(this instanceof Spade)
-				((Spade)this).keyReleased=true;
-//			if (rangedTimer > 0)
-//				rangedTimer = 0;
+			if (this instanceof Spade)
+				((Spade) this).keyReleased = true;
+			// if (rangedTimer > 0)
+			// rangedTimer = 0;
 		}
 
 		// Special
 		else if (keyCode == Preferences.SPECIAL()) {
 			specialPress = false;
-//			if (!(type == Types.CLUB)) {
-//
-////				if (specialTimer > 0)
-////					specialTimer = 0;
-//			}
+			// if (!(type == Types.CLUB)) {
+			//
+			// // if (specialTimer > 0)
+			// // specialTimer = 0;
+			// }
 		}
 
 		// End
@@ -902,17 +918,17 @@ protected	void OpenLevelUp() {
 	}
 
 	public void collision(int midX, int midY, boolean isPlayer) {
-//		if (isPlayer) {
-//			if ((!goTo) && (enPoint != null)) {
-//				return;
-//			}
-//		}
+		// if (isPlayer) {
+		// if ((!goTo) && (enPoint != null)) {
+		// return;
+		// }
+		// }
 		wallBound = true;
 		if (!player) {
 			this.isPlayerCollide = isPlayer;
 			if (isPlayer == false) {
 				onceNotCollidePlayer = true;
-			
+
 			}
 			wallX = midX;
 			wallY = midY;
@@ -922,24 +938,26 @@ protected	void OpenLevelUp() {
 	public abstract Rectangle getActBounds();
 
 	private Font HUD = new Font("Calibri", Font.BOLD, 30);
-public abstract String getRangedString();
+
+	public abstract String getRangedString();
+
 	private Point setAttacks() {
 		Point shieldPos = null;
-		if (meleePress&&rangedTimer<=0&&specialTimer<=0) {
+		if (meleePress && rangedTimer <= 0 && specialTimer <= 0) {
 			if (meleeTimer <= NEG_TIMER_MELEE && energy >= MEnC// ||this
 																// instanceof
 																// Diamond
 			) {
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
-				meleeHit=false;
+				meleeHit = false;
 			}
 		}
-		if (specialPress && rangedTimer<=0&&meleeTimer<=0) {
+		if (specialPress && rangedTimer <= 0 && meleeTimer <= 0) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
-				specialHit=false;
+				specialHit = false;
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
@@ -949,31 +967,30 @@ public abstract String getRangedString();
 						((Heart) this).end();
 					}
 				} else {
-					
+
 					energy -= SEnC;
 				}
 			}
 		}
-		if (rangedPress && meleeTimer<=0&&specialTimer<=0) {
+		if (rangedPress && meleeTimer <= 0 && specialTimer <= 0) {
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
-				String s = "images/characters/projectiles"+"/"+getRangedString();
-				
-				
-					if(getType()!=Types.SPADE)
-				owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, s, owner, getRangedMove()));
-					else
-					((Spade)this).keyReleased=false;
-					if(this instanceof SirCobalt)
-	owner.getfP().get(owner.getfP().size()-1).setTurning(true);
+				String s = "images/characters/projectiles" + "/" + getRangedString();
+
+				if (getType() != Types.SPADE)
+					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
+				else
+					((Spade) this).keyReleased = false;
+				if (this instanceof SirCobalt)
+					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
 			}
 
 		}
-		
+
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {
-				String s = "images/characters/projectiles"+"/"+getRangedString();
+				String s = "images/characters/projectiles" + "/" + getRangedString();
 				owner.getfP().add(new FProjectile(dir, x + (this.getWidth() / 2), y + (this.getHeight() / 2), 30, this, s, owner, Moves.MPITCH));
 
 			}
@@ -1000,12 +1017,15 @@ public abstract String getRangedString();
 		}
 		return shieldPos;
 	}
-public int rangedAddX(){
-	return 25;
-}
-public int rangedAddY(){
-	return height/2-16;
-}
+
+	public int rangedAddX() {
+		return 25;
+	}
+
+	public int rangedAddY() {
+		return height / 2 - 16;
+	}
+
 	@Override
 	public void draw(Graphics2D g2d) {
 
@@ -1042,15 +1062,21 @@ public int rangedAddY(){
 				}
 			}
 		}
-		if(player)
-			dir=getCurrentDir();
+		if (player)
+			dir = getCurrentDir();
 		Point p = setAttacks();
-		if (visible) {
+		if (visible && onScreen) {
 
-			if (direction != Direction.LEFT && direction != Direction.UP)
+			if (direction != Direction.LEFT && direction != Direction.UP) {
 				g2d.drawImage(image, x, y, owner);
-			else if (direction != Direction.UP)
+				if (owner.darkenWorld())
+					g2d.drawImage(shadow, x, y, owner);
+
+			} else if (direction != Direction.UP) {
 				g2d.drawImage(image, x + width, y, -width, height, owner);
+				if (owner.darkenWorld())
+					g2d.drawImage(shadow, x + width, y, -width, height, owner);
+			}
 
 			if (p != null) {
 				g2d.setColor(Color.black);
@@ -1063,11 +1089,35 @@ public int rangedAddY(){
 							(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
 
 			}
-			if (direction == Direction.UP)
+
+			if (!(this instanceof Diamond))
+				drawTool(g2d);
+
+			if (direction == Direction.UP) {
 				g2d.drawImage(image, x, y, owner);
+				if (owner.darkenWorld())
+					g2d.drawImage(shadow, x, y, owner);
+			}
+
+			if (this instanceof Diamond)
+				drawTool(g2d);
+		} else if (!onScreen) {
+			int xI = x, yI = y;
+
+			if (x < 0)
+				xI = 0;
+			else if (x > Statics.BOARD_WIDTH - 50)
+				xI = Statics.BOARD_WIDTH - 50;
+
+			if (y < 0)
+				yI = 0;
+			else if (y > Statics.BOARD_HEIGHT - 50)
+				yI = Statics.BOARD_HEIGHT - 50;
+
+			
+			g2d.drawImage(Statics.newImage("images/characters/" + (charName != null ? charName : "spade") + "/icon.png"), xI, yI, owner);
 		}
 
-		drawTool(g2d);
 		if (player) {
 			g2d.setColor(Color.BLACK);
 			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
@@ -1120,10 +1170,11 @@ public int rangedAddY(){
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
-		if(poisonTimer>0)
+		if (poisonTimer > 0)
 			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
-		if(owner.getState()==State.INGAME){
-		timersCount();}
+		if (owner.getState() == State.INGAME) {
+			timersCount();
+		}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -1152,8 +1203,11 @@ public int rangedAddY(){
 			break;
 		}
 
-		if (toMoveString() != null)
+		if (toMoveString() != null) {
 			g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+			if (owner.darkenWorld())
+				g2d.drawImage(newShadow(toMoveString()), dX, dY, owner);
+		}
 
 		if (direction == Direction.UP)
 			g2d.drawImage(image, x, y, owner);
@@ -1186,12 +1240,28 @@ public int rangedAddY(){
 
 	public void endAction() {
 
-		meleeHit=true;
-		specialHit=true;
+		meleeHit = true;
+		specialHit = true;
 	}
 
 	public Image newImage(String name) {
+
+		if (isCharacterSkin(name))
+			shadow = newShadow(name);
 		return super.newImage(getPath() + name + ".png");
+	}
+
+	public Image newShadow(String name) {
+		return super.newShadow(getPath() + name + ".png");
+	}
+
+	protected static String[] playerSkins = new String[] { "n", "w0", "w1", "w2", "w3", "g" };
+
+	public boolean isCharacterSkin(String name) {
+		for (String s : playerSkins)
+			if (s.equals(name))
+				return true;
+		return false;
 	}
 
 	private String getPath() {
@@ -1222,9 +1292,9 @@ public int rangedAddY(){
 		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
 	}
 
-	public void takeDamage(int amount,boolean poison) {
-if(poison)
-	poison();
+	public void takeDamage(int amount, boolean poison) {
+		if (poison)
+			poison();
 		if (hitstunTimer <= 0) {
 			health -= amount;
 			hpTimer = 100;
@@ -1253,10 +1323,10 @@ if(poison)
 	}
 
 	protected void timersCount() {
-		if(getMove()==Moves.SHIELD&&meleePress==false){
-			meleeTimer=0;
+		if (getMove() == Moves.SHIELD && meleePress == false) {
+			meleeTimer = 0;
 		}
-		if(poisonTimer>0)
+		if (poisonTimer > 0)
 			poisonTimer--;
 		if (enTimer == 0) {
 			energy += 1;
@@ -1267,31 +1337,32 @@ if(poison)
 			energy = MAX_ENERGY;
 		}
 		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
-			meleeTimer-=2;
+			meleeTimer -= 2;
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
-				if(getType()==Types.SPADE){
-					if(rangedTimer==30-(TIMER_RANGED%2)){
-			if(((Spade)this).keyReleased){
-			owner.getfP().add(new FProjectile(dir, x+rangedAddX(), y+rangedAddY(), 25, this, "images/characters/projectiles"+"/"+getRangedString(), owner, getRangedMove()));
-			owner.getfP().get(owner.getfP().size()-1).setTurning(true);
-			rangedTimer-=2;	
-		}
-			}
-					else
-			rangedTimer-=2;	
-				if(rangedTimer>=0)
-					enTimer=5;
-				}else
-			rangedTimer-=2;
+				if (getType() == Types.SPADE) {
+					if (rangedTimer == 30 - (TIMER_RANGED % 2)) {
+						if (((Spade) this).keyReleased) {
+							owner.getfP().add(
+									new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, "images/characters/projectiles" + "/"
+											+ getRangedString(), owner, getRangedMove()));
+							owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
+							rangedTimer -= 2;
+						}
+					} else
+						rangedTimer -= 2;
+					if (rangedTimer >= 0)
+						enTimer = 5;
+				} else
+					rangedTimer -= 2;
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
-			specialTimer-=2;
+			specialTimer -= 2;
 		}
 		if (itemTimer > 0)
 			itemTimer--;
-		
+
 	}
 
 	public int getActing() {
@@ -1327,7 +1398,7 @@ if(poison)
 		if (health > HP_MAX) {
 			health = HP_MAX;
 		}
-		poisonTimer=0;
+		poisonTimer = 0;
 	}
 
 	public void setMelee(int i) {
@@ -1694,7 +1765,8 @@ if(poison)
 	public int getStrength() {
 		return strength;
 	}
-	public int getCurrentDir(){
+
+	public int getCurrentDir() {
 		int scrollX = owner.getScrollX();
 		int scrollY = owner.getScrollY();
 
@@ -1736,11 +1808,12 @@ if(poison)
 		}
 		return dir;
 	}
-	public void releaseAll(){
-		meleePress=false;
-		rangedPress=false;
-		specialPress=false;
-		if(this instanceof Spade)
-			((Spade)this).keyReleased=true;
+
+	public void releaseAll() {
+		meleePress = false;
+		rangedPress = false;
+		specialPress = false;
+		if (this instanceof Spade)
+			((Spade) this).keyReleased = true;
 	}
 }

@@ -22,7 +22,7 @@ protected boolean wall;
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(image, x, y, owner);
-		if (!owner.isDay())
+		if (owner.darkenWorld())
 			g2d.drawImage(shadow, x, y, owner);
 	}
 	public boolean isWall() {

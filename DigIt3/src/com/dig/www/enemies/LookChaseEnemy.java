@@ -10,7 +10,7 @@ import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
-public class LookChaseEnemy extends StandEnemy {
+public class LookChaseEnemy extends TrackingEnemy {
 
 	private GameCharacter chara;
 	private double d = 0;
@@ -34,32 +34,10 @@ public class LookChaseEnemy extends StandEnemy {
 				|| (chara.getDirection() == Direction.RIGHT && cX < x) || (chara.getDirection() == Direction.LEFT && cX > x))
 				&& onScreen) {
 
-			basicAnimate();
-			d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
-			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
-		} else {
 			super.animate();
+		} else {
+			basicAnimate();
 		}
-	}
-
-	@Override
-	public void turnAround(int wallX, int wallY) {
-
-		int myX = round(x, 2);
-		int myY = round(y, 2);
-		wallX = round(wallX, 2);
-		wallY = round(wallY, 2);
-
-		if (wallX > myX)
-			x -= BLOCK * getSpeed();
-		else if (wallX < myX)
-			x += BLOCK * getSpeed();
-
-		if (wallY > myY)
-			y -= BLOCK * getSpeed();
-		else if (wallY < myY)
-			y += BLOCK * getSpeed();
 	}
 
 	@Override
