@@ -22,6 +22,9 @@ public class StageBuilder {
 	private static StageBuilder me;
 	private String loc;
 	private Board owner;
+private int level=1;
+
+
 
 	public static StageBuilder getInstance(String loc, Board owner) {
 
@@ -49,6 +52,10 @@ public class StageBuilder {
 		this.loc = loc;
 	}
 
+	public int getLevel(){
+		return level;
+	}
+	
 	public ArrayList<Block> read() {
 		ArrayList<Block> world = new ArrayList<Block>();
 
@@ -133,7 +140,6 @@ public class StageBuilder {
 	}
 
 	public ArrayList<Enemy> loadEn() {
-
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
@@ -170,7 +176,7 @@ public class StageBuilder {
 						char ch = stuff.get(0).charAt(0);
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
-						int health = Integer.parseInt(stuff.get(5));
+						int health = (int)(Integer.parseInt(stuff.get(5))*(double)(1+(double)((level-1)/(double)10)));
 						switch (ch) {
 						case 'L':
 							enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
@@ -509,6 +515,12 @@ public class StageBuilder {
 					}
 					reader.close();
 				}
+				try{
+				level=Integer.parseInt(line.split(",")[2].trim());}
+				catch(Exception ex){
+					System.err.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
+					level=1000;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -566,5 +578,30 @@ public class StageBuilder {
 		}
 
 		return portals;
+	}
+	public String readWeather() {
+		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + loc + "/" + loc + ".txt";
+		File map = new File(tryLoc);
+
+		if (map.exists()) {
+
+			try {
+				String line;
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				if ((line = reader.readLine()) != null) {
+					reader.close();
+					String weather=line.split(",")[1];
+					System.out.println("Weather: " + weather);
+					if(weather.equals("none"))
+						return null;
+						else
+					return weather;
+				}
+				reader.close();
+			} catch (Exception e) {
+			}
+		}
+
+		return null;
 	}
 }
