@@ -176,7 +176,6 @@ private int level=1;
 						char ch = stuff.get(0).charAt(0);
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
-						
 						int health = (int)(Integer.parseInt(stuff.get(5))*(double)(1+(double)((level-1)/(double)10)));
 						switch (ch) {
 						case 'L':
@@ -517,7 +516,7 @@ private int level=1;
 					reader.close();
 				}
 				try{
-				Integer.parseInt(line.split(",")[2]);}
+				level=Integer.parseInt(line.split(",")[2].trim());}
 				catch(Exception ex){
 					System.err.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
 					level=1000;
