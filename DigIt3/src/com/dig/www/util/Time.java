@@ -1,5 +1,9 @@
 package com.dig.www.util;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -13,7 +17,7 @@ public class Time implements ActionListener {
 	private Timer timer;
 	private Board owner;
 
-	private static final int SECOND = 100;
+	private static final int SECOND = 1000;
 	private static final int CHANGE = 7;
 	private static final int CHANGE_PER = 1;
 	private static final int END = 13;
@@ -32,10 +36,7 @@ public class Time implements ActionListener {
 		this.time = Integer.parseInt(s[0]) + (Float.parseFloat(s[1]) / 100);
 		String t = s[s.length - 1];
 
-		//isAM = t.endsWith("AM");
-		
-		this.time = 6.5f;
-		isAM = false;
+		isAM = t.endsWith("AM");
 	}
 
 	public void start() {
@@ -61,6 +62,19 @@ public class Time implements ActionListener {
 			owner.updateBackground();
 
 		previousTime = getGeneralTime();
+	}
+
+	private static final int X = 10;
+	private static final int Y = 200;
+	public void draw(Graphics2D g2d) {
+		
+		g2d.setColor(Color.black);
+		g2d.fillRect(X, Y, 200, 50);
+		g2d.setColor(Color.green);
+		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30);
+		g2d.drawString(getColon(), 40 + X + 15, Y + 28);
+		g2d.setStroke(new BasicStroke(5));
+		g2d.drawRect(X, Y, 200, 50);
 	}
 
 	protected float decimalPart(float f) {
@@ -94,7 +108,7 @@ public class Time implements ActionListener {
 		if (colonTimer >= 50)
 			colonTimer = 0;
 
-		return String.format("%.2f", time).replace('.', colonTimer >= 30 ? ' ' : ':') + " " + (isAM ? "A.M." : "P.M.");
+		return String.format("%.2f", time).replace('.', ' ') + " " + (isAM ? "A.M." : "P.M.");
 	}
 
 	public String getColon() {

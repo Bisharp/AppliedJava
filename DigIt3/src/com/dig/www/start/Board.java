@@ -87,7 +87,7 @@ public class Board extends MPanel implements ActionListener {
 				return Weather.NONE;
 			
 			for (Weather w : Weather.values())
-				if (w.toString().equals(s)) {
+				if (w.toString().equalsIgnoreCase(s)) {
 					System.out.println("Weather confirmed: " + w.toString());
 					return w;
 				}
@@ -567,11 +567,7 @@ public class Board extends MPanel implements ActionListener {
 			// g2d.setColor(Color.BLUE);
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 
-			g2d.setColor(Color.black);
-			g2d.fillRect(10, 200, 200, 100);
-			g2d.setColor(Statics.PURPLE);
-			g2d.drawString(time.toString(), 50 - (time.getTime() >= 10 ? 10 : 0), 230);
-			g2d.drawString(time.trans(time.getGeneralTime()), 50, 280);
+			time.draw(g2d);
 
 			switch (weather) {
 			case RAIN:
