@@ -97,14 +97,20 @@ public final class Statics {
 	}
 
 	public static Color sunsetColor(Color c) {
+
 		if (sunsetColors.containsKey(c))
 			return sunsetColors.get(c);
 
 		int[] rgb = new int[] { c.getRed(), c.getGreen(), c.getBlue() };
 
-		rgb[0] += 70;
-		rgb[1] += 40;
-		rgb[2] -= 40;
+		if (c == Color.white) {
+			rgb[1] -= 30;
+			rgb[2] -= 110;
+		} else {
+			rgb[0] += 70;
+			rgb[1] += 40;
+			rgb[2] -= 40;
+		}
 
 		Color c2 = new MColor(rgb[0], rgb[1], rgb[2], c.getAlpha());
 		sunsetColors.put(c, c2);

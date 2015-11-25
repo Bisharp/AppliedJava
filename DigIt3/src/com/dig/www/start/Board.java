@@ -76,22 +76,22 @@ public class Board extends MPanel implements ActionListener {
 				return 500;
 			}
 		},
-		NORMAL, NONE;
+		NORMAL, NONE, OBSCURE;
 
 		public int special() {
 			return 0;
 		}
-		
+
 		public static Weather translate(String s) {
 			if (s == null)
 				return Weather.NONE;
-			
+
 			for (Weather w : Weather.values())
 				if (w.toString().equalsIgnoreCase(s)) {
 					System.out.println("Weather confirmed: " + w.toString());
 					return w;
 				}
-			
+
 			System.out.println("No weather.");
 			return Weather.NONE;
 		}
@@ -139,8 +139,9 @@ public class Board extends MPanel implements ActionListener {
 
 	private Weather weather = Weather.NORMAL;
 	private int weatherTimer = 0;
-	private int startPoint = 0;
+	private ArrayList<int[]> weatherList = new ArrayList<int[]>();
 
+	private int startPoint = 0;
 	private Time time;
 
 	public ArrayList<Block> getWorld() {
@@ -324,7 +325,6 @@ public class Board extends MPanel implements ActionListener {
 			Block b;
 
 			// World draw
-			// TODO figure out day/night
 			for (i = startPoint; i < world.size(); i++) {
 				b = world.get(i);
 				if (b.isOnScreen() && b.isVisible())
@@ -581,6 +581,71 @@ public class Board extends MPanel implements ActionListener {
 					x2 = Statics.RAND.nextInt(Statics.BOARD_WIDTH);
 					y2 = Statics.RAND.nextInt(Statics.BOARD_HEIGHT);
 					g2d.drawLine(x2, y2, x2 + 5, y2 + 10);
+				}
+				break;
+			// TODO at work
+			case OBSCURE:
+				switch (texturePack) {
+				case DESERT:
+					g2d.setColor(Statics.LIGHT_OFF_TAN);
+
+					for (int runs = 0; runs < Statics.RAND.nextInt(10) + 5; runs++) {
+						x2 = Statics.RAND.nextInt(Statics.BOARD_WIDTH);
+						y2 = Statics.RAND.nextInt(Statics.BOARD_HEIGHT);
+						g2d.fillRect(x2, y2, Statics.RAND.nextInt(500) + 1, Statics.RAND.nextInt(500) + 1);
+					}
+					break;
+
+				case SNOWY:
+
+					if (weatherList.isEmpty())
+						for (int i2 = 0; i2 < 700; i2++) {
+							weatherList
+									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
+						}
+
+					for (int i2 = 0; i2 < Statics.RAND.nextInt(5) + 1; i2++) {
+						weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), 0 });
+					}
+
+					switch (time.getGeneralTime()) {
+					case Time.SUNRISE:
+						g2d.setColor(Statics.sunriseColor(Color.GRAY));
+						break;
+					case Time.SUNSET:
+						g2d.setColor(Statics.sunsetColor(Color.GRAY));
+						break;
+					case Time.NIGHT:
+						g2d.setColor(Color.gray);
+						break;
+					case Time.DAY:
+					default:
+						g2d.setColor(Color.white);
+						break;
+
+					}
+
+					g2d.setStroke(new BasicStroke());
+					for (int runs = 0; runs < weatherList.size(); runs++) {
+						x2 = weatherList.get(runs)[0];
+						y2 = weatherList.get(runs)[1];
+						g2d.fillRect(x2, y2, 5, 5);
+
+						if (time.getGeneralTime() == Time.DAY) {
+							g2d.setColor(Color.darkGray);
+							g2d.drawRect(x2, y2, 5, 5);
+							g2d.setColor(Color.white);
+						}
+						weatherList.remove(runs);
+
+						if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH && y2 <= Statics.BOARD_HEIGHT) {
+							x2 += Statics.RAND.nextBoolean() ? -3 : 3;
+							y2 += 5;
+							weatherList.add(runs, new int[] { x2, y2 });
+						} else
+							runs--;
+					}
+					break;
 				}
 
 			default:
@@ -1641,7 +1706,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "hauntedTest";
+		level = "snowyTest";
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		changeArea();
@@ -1798,8 +1863,9 @@ public class Board extends MPanel implements ActionListener {
 		return time.getGeneralTime() == Time.SUNSET;
 	}
 
+	// TODO at work
 	public void changeWeather() {
-		if (weather == Weather.NONE) {
+		if (weather == Weather.NONE)
 			switch (Statics.RAND.nextInt(100)) {
 			case 0:
 				weather = Weather.RAIN;
@@ -1811,6 +1877,7 @@ public class Board extends MPanel implements ActionListener {
 				weather = Weather.NORMAL;
 				break;
 			}
-		}
+
+		weather = Weather.OBSCURE;
 	}
 }
