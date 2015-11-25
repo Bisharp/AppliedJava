@@ -147,6 +147,29 @@ public enum Items implements Serializable {
 		public boolean isWeapon() {
 			return false;
 		}
+	},
+	DONUT {
+		
+		@Override
+		public String toString() {
+			return "Donut";
+		}
+		@Override
+		protected String getPersonalDesc() {
+			return "That cop asked for a donut. We could probably give him this one. I hope he likes food coloring.";
+		}
+		@Override
+		public String getPath() {
+			return "images/objects/food/DonutUnhealthyAmountOfFoodColoring.png";
+		}
+		@Override
+		public boolean isThrowable() {
+			return false;
+		}
+		@Override 
+		public boolean isWeapon() {
+			return false;
+		}
 	};
 
 	public static Items translate(String string) {
