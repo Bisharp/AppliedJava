@@ -70,11 +70,9 @@ public class Time implements ActionListener {
 		
 		g2d.setColor(Color.black);
 		g2d.fillRect(X, Y, 200, 50);
-		g2d.setColor(Color.green);
+		g2d.setColor(Statics.PURPLE);
 		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30);
 		g2d.drawString(getColon(), 40 + X + 15, Y + 28);
-		g2d.setStroke(new BasicStroke(5));
-		g2d.drawRect(X, Y, 200, 50);
 	}
 
 	protected float decimalPart(float f) {
