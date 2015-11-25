@@ -226,7 +226,7 @@ public class Board extends MPanel implements ActionListener {
 		npcs = sB.loadNPC();
 		objects = sB.loadObjects();
 
-		//weather = Weather.translate(sB.readWeather());
+		weather = Weather.translate(sB.readWeather());
 
 		if (data != null)
 			data.enterLevel(level);

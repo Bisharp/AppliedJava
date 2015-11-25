@@ -36,6 +36,7 @@ protected boolean wall;
 		if(loc.equals("images/objects/Leaves.png")){
 			loc="images/objects/LeavesSc.png";
 			image=newImage(loc);
+			shadow = newShadow(loc);
 			x-=15;
 			y-=15;
 		}
