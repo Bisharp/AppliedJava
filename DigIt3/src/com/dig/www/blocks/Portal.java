@@ -31,7 +31,16 @@ public class Portal extends Sprite {
 		if (type.equals("default"))
 			animated = false;
 	}
+	public Portal(int x, int y, Board owner, String area, int collectibles, String type,String loc) {
+		super(x, y,loc, owner);
 
+		this.area = area;
+		this.type = type;
+		collectibleNum = collectibles;
+
+		if (type.equals("default"))
+			animated = false;
+	}
 	public String getArea() {
 		return area;
 	}
