@@ -30,7 +30,7 @@ public enum Items implements Serializable {
 	SPECIAL_COLLECTIBLE {
 		@Override
 		protected String getPersonalDesc() {
-			return "<html>An item required to progress through the game;<br>full decription to be written.";
+			return "<html>An item required to progress through the game;<br>full decription to be written. (Hi, this is a message for someone else. If you are not someone else, please disregard this message.)";
 		}
 
 		@Override
@@ -170,7 +170,47 @@ public enum Items implements Serializable {
 		public boolean isWeapon() {
 			return false;
 		}
-	};
+	},
+	WHATISTHIS {
+		@Override
+		public String toString(){
+			return "????";
+		}
+		@Override
+		protected String getPersonalDesc(){
+			return "I have no idea what this is or why we kept it.";
+		}
+		@Override
+		public String getPath() {
+			return "images/objects/InventoryObjects/whatIsThis.png";
+		}
+		@Override 
+		public boolean isThrowable() {
+			return true;
+		}
+		@Override
+		public boolean isWeapon() {
+			return true;
+		}
+	},
+	GEM {
+		@Override public String toString(){
+			return "Gem";
+		}
+		@Override protected String getPersonalDesc(){
+			return "Guys, do you think maybe this was in the chest because WE WEREN'T SUPPOSED TO TAKE IT?!?!";
+		}
+		@Override public String getPath() {
+			return "images/objects/InventoryObjects/gem.png";
+		}
+		@Override public boolean isThrowable() {
+			return true;
+		}
+		@Override public boolean isWeapon() {
+			return true;
+		}
+	}
+	;
 
 	public static Items translate(String string) {
 		for (Items i : Items.values())
