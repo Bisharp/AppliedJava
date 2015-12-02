@@ -16,6 +16,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -73,7 +74,37 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected boolean goTo = true;
 
 	public enum Direction {
-		UP, DOWN, LEFT, RIGHT;
+		UP {
+			public boolean isYAxis() {
+				return true;
+			}
+		},
+		DOWN {
+			public boolean isYAxis() {
+				return true;
+			}
+		},
+		LEFT, RIGHT, DIAG_DR {
+			public boolean isDiag() {
+				return true;
+			}
+		},
+		DIAG_DL {
+			public boolean isDiag() {
+				return true;
+			}
+		},
+		DIAG_UR {
+			public boolean isDiag() {
+				return true;
+			}
+		},
+		DIAG_UL {
+			public boolean isDiag() {
+				return true;
+			}
+		},
+		NONE;
 
 		public static int getDir(Direction dir) {
 			switch (dir) {
@@ -87,6 +118,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			default:
 				return 0;
 			}
+		}
+
+		public boolean isYAxis() {
+			return false;
+		}
+
+		public boolean isDiag() {
+			return false;
 		}
 	}
 
@@ -202,8 +241,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private int deltaX = 0;
 	private int deltaY = 0;
 	protected Direction direction = Direction.RIGHT;
+	protected Direction diagBackup = Direction.NONE;
 	protected Types type;
 
+	private boolean move = true;
 	private boolean moveX = false;
 	private boolean moveY = false;
 	private boolean moveL = false;
@@ -249,6 +290,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int meleeDamage;
 	protected int rangedDamage;
 	protected int specialDamage;
+	protected Hashtable<Direction, Boolean> collisionFlags;
 
 	// TODO strength stuff
 	protected int strength;
@@ -289,10 +331,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.strength = strength;
 		direction = Direction.DOWN;
 		image = newImage("n");
+
+		resetFlags();
 	}
 
 	@Override
 	public void animate() {
+
+		collisionFlagged = false;
 		if (poisonTimer > 0) {
 			if (poisonHurtTimer <= 0) {
 				health -= 1;
@@ -606,43 +652,50 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			} else
 				animationTimer++;
 			if (player) {
-
-				if (moveX)
-					if (moveL) {
-						deltaX++;
-						if (deltaX > SPEED)
-							deltaX = SPEED;
+				if (move) {
+					if (moveX) {
+						// if (moveL ? collisionFlags.get(Direction.LEFT) :
+						// collisionFlags.get(Direction.RIGHT))
+						if (moveL) {
+							deltaX++;
+							if (deltaX > SPEED)
+								deltaX = SPEED;
+						} else {
+							deltaX--;
+							if (deltaX < -SPEED)
+								deltaX = -SPEED;
+						}
 					} else {
-						deltaX--;
-						if (deltaX < -SPEED)
-							deltaX = -SPEED;
+						if (deltaX > 0)
+							deltaX--;
+						else if (deltaX < 0)
+							deltaX++;
 					}
-				else {
-					if (deltaX > 0)
-						deltaX--;
-					else if (deltaX < 0)
-						deltaX++;
-				}
 
-				if (moveY)
-					if (!moveU) {
-						deltaY--;
-						if (deltaY < -SPEED)
-							deltaY = -SPEED;
+					if (moveY) {
+						// if (moveU ? collisionFlags.get(Direction.UP) :
+						// collisionFlags.get(Direction.DOWN))
+						if (!moveU) {
+							deltaY--;
+							if (deltaY < -SPEED)
+								deltaY = -SPEED;
+						} else {
+							deltaY++;
+							if (deltaY > SPEED)
+								deltaY = SPEED;
+						}
 					} else {
-						deltaY++;
-						if (deltaY > SPEED)
-							deltaY = SPEED;
+						if (deltaY > 0)
+							deltaY--;
+						else if (deltaY < 0)
+							deltaY++;
 					}
-				else {
-					if (deltaY > 0)
-						deltaY--;
-					else if (deltaY < 0)
-						deltaY++;
-				}
 
-				owner.setScrollX(deltaX);
-				owner.setScrollY(deltaY);
+					owner.setScrollX(deltaX);
+					owner.setScrollY(deltaY);
+				} else {
+					move = true;
+				}
 			} else {
 				x += deltaX;
 				y += deltaY;
@@ -650,10 +703,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		} else {
 
 			if (player) {
-				owner.setScrollX(-owner.getScrollX());
-				owner.setScrollY(-owner.getScrollY());
+				double tempD = Statics.pointTowards(new Point(wallX, wallY), owner.getCharPoint()) + 180;
+				if (tempD > 360)
+					tempD -= 360;
+				owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED));
+				owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED));
 
 				owner.reAnimate();
+				wallBound = false;
 			} else {
 				if (onceNotCollidePlayer) {
 					enPoint = null;
@@ -727,8 +784,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			wallBound = false;
 		}
 		setAttacks();
-		
+
 		onScreen = getBounds().intersects(owner.getScreen());
+		resetFlags();
 	}
 
 	public void setWaiting(boolean setter) {
@@ -736,6 +794,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void keyPressed(int keyCode) {
+
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
 			for (int c = 0; c < owner.getFriends().size(); c++) {
@@ -753,30 +812,126 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 		// Left
 		if (keyCode == Preferences.LEFT()) {
-			direction = Direction.LEFT;
+			//
+			// direction = Direction.LEFT;
+			if (deltaY == 0) {
+				if (!collisionFlags.get(Direction.LEFT)) {
+					// moveX = false;
+					// moveL = false;
+					return;
+				}
+
+				direction = Direction.LEFT;
+				diagBackup = Direction.NONE;
+			} else {
+				Direction diag = deltaY < 0 ? Direction.DIAG_UL : Direction.DIAG_DL;
+				if (!collisionFlags.get(diag)) {
+					// moveX = false;
+					// moveL = false;
+					return;
+				}
+
+				direction = diag;
+				diagBackup = Direction.LEFT;
+			}
+
 			moveX = true;
 			moveL = true;
+			move = false;
 		}
 
 		// Right
 		else if (keyCode == Preferences.RIGHT()) {
-			direction = Direction.RIGHT;
+			//
+			// direction = Direction.RIGHT;
+			if (deltaY == 0) {
+				if (!collisionFlags.get(Direction.RIGHT)) {
+					// moveX = false;
+					// moveL = false;
+					return;
+				}
+
+				direction = Direction.RIGHT;
+				diagBackup = Direction.NONE;
+			} else {
+				Direction diag = deltaY < 0 ? Direction.DIAG_UR : Direction.DIAG_DR;
+				if (!collisionFlags.get(diag)) {
+					// moveX = false;
+					// moveL = false;
+					return;
+				}
+
+				direction = diag;
+				diagBackup = Direction.RIGHT;
+			}
+
 			moveX = true;
 			moveL = false;
+			move = false;
 		}
 
 		// Up
 		else if (keyCode == Preferences.UP()) {
-			direction = Direction.UP;
-			moveY = true;
-			moveU = true;
+			//
+			// direction = Direction.UP;
+			if (deltaX == 0) {
+				if (!collisionFlags.get(Direction.UP)) {
+					// moveY = false;
+					// moveU = false;
+					return;
+				}
+
+				direction = Direction.UP;
+				diagBackup = Direction.NONE;
+				moveY = true;
+				moveU = true;
+				move = false;
+			} else {
+				Direction diag = deltaX < 0 ? Direction.DIAG_UR : Direction.DIAG_UL;
+				if (!collisionFlags.get(diag)) {
+					// moveY = false;
+					// moveU = false;
+					return;
+				}
+
+				direction = diag;
+				diagBackup = Direction.UP;
+				moveY = true;
+				moveU = true;
+				move = false;
+			}
 		}
 
 		// Down
 		else if (keyCode == Preferences.DOWN()) {
-			direction = Direction.DOWN;
-			moveY = true;
-			moveU = false;
+			//
+			// direction = Direction.DOWN;
+			if (deltaX == 0) {
+				if (!collisionFlags.get(Direction.DOWN)) {
+					// moveY = false;
+					// moveU = false;
+					return;
+				}
+
+				direction = Direction.DOWN;
+				diagBackup = Direction.NONE;
+				moveY = true;
+				moveU = false;
+				move = false;
+			} else {
+				Direction diag = deltaX < 0 ? Direction.DIAG_DR : Direction.DIAG_DL;
+				if (!collisionFlags.get(diag)) {
+					// moveY = false;
+					// moveU = false;
+					return;
+				}
+
+				direction = diag;
+				diagBackup = Direction.DOWN;
+				moveY = true;
+				moveU = false;
+				move = false;
+			}
 		}
 
 		// Attack
@@ -828,6 +983,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 	}
 
+	protected void resetFlags() {
+
+		collisionFlags = new Hashtable<Direction, Boolean>();
+		for (Direction d : Direction.values())
+			collisionFlags.put(d, true);
+	}
+
 	protected void OpenLevelUp() {
 
 		levMen = new LevelUp();
@@ -845,27 +1007,41 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// Left/Right
 		if (keyCode == Preferences.LEFT() || keyCode == Preferences.RIGHT()) {
 
-			if (direction == Direction.LEFT || direction == Direction.RIGHT) {
+			if (direction.isDiag()) {
+				if (diagBackup.isYAxis())
+					direction = diagBackup;
+				else if (deltaY > 0)
+					direction = Direction.UP;
+				else if (deltaY < 0)
+					direction = Direction.DOWN;
+			} else if (direction == Direction.LEFT || direction == Direction.RIGHT)
 				if (deltaY > 0)
 					direction = Direction.UP;
 				else if (deltaY < 0)
 					direction = Direction.DOWN;
-			}
 
+			diagBackup = Direction.NONE;
 			deltaX = 0;
 			moveX = false;
 		}
 
 		// Up/Down
-		else if (keyCode == Preferences.DOWN() || keyCode == Preferences.UP()) {
-			// deltaY = 0;
-			if (direction == Direction.UP || direction == Direction.DOWN) {
+		else if (keyCode == Preferences.DOWN() || keyCode == Preferences.UP() || direction.isDiag()) {
+			if (direction.isDiag()) {
+				if (!diagBackup.isYAxis())
+					direction = diagBackup;
+				else if (deltaX > 0)
+					direction = Direction.LEFT;
+				else if (deltaX < 0)
+					direction = Direction.RIGHT;
+			} else if (direction == Direction.UP || direction == Direction.DOWN) {
 				if (deltaX > 0)
 					direction = Direction.LEFT;
 				else if (deltaX < 0)
 					direction = Direction.RIGHT;
 			}
 
+			diagBackup = Direction.NONE;
 			deltaY = 0;
 			moveY = false;
 		}
@@ -897,6 +1073,141 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		// End
 	}
 
+	private boolean collisionFlagged = false;
+
+	public void setCollisionFlag(Sprite wall) {
+
+		if (collisionFlagged)
+			return;
+
+		collisionFlags.replace(direction, false);
+
+		switch (!direction.isDiag() ? direction : getPlacement(wall)) {
+		case UP:
+		case DOWN:
+			collisionFlags.replace(deltaY < 0 ? Direction.UP : Direction.DOWN, false);
+
+			deltaY = 0;
+			moveY = false;
+			moveU = false;
+			break;
+
+		case LEFT:
+		case RIGHT:
+			collisionFlags.replace(deltaX < 0 ? Direction.LEFT : Direction.RIGHT, false);
+
+			deltaX = 0;
+			moveX = false;
+			moveL = false;
+			break;
+
+		default:
+			deltaY = 0;
+			moveY = false;
+			moveU = false;
+			deltaX = 0;
+			moveX = false;
+			moveL = false;
+			break;
+		}
+
+		if (getStationaryCollisionBounds().intersects(wall.getBounds())) {
+			wallBound = true;
+			wallX = wall.getX();
+			wallY = wall.getY();
+		}
+
+		collisionFlagged = true;
+	}
+
+	public void presetCollisionFlag(int i) {
+		collisionFlags.replace(placement[i], false);
+	}
+
+	// TODO stuff
+	// private static final Direction[] placement = new Direction[] {
+	// Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
+	private static final Direction[] placement = new Direction[] { Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.DIAG_UL,
+			Direction.DIAG_UR, Direction.DIAG_DL, Direction.DIAG_DR };
+
+	public Direction getPlacement(Sprite check) {
+		Rectangle[] r = getDirBounds();
+		Rectangle r2 = check.getBounds();
+
+		for (int i = 0; i < r.length; i++)
+			if (r2.intersects(r[i]))
+				return placement[i];
+
+		return Direction.NONE;
+	}
+
+	public int round(int round) {
+		return Math.round(round / 100) * 100;
+	}
+
+	public int getMidY() {
+		return super.getMidY() + CLIP;
+	}
+
+	// TODO collision
+	public void collision(Sprite collide, boolean isPlayer) {
+		// if (isPlayer) {
+		// if ((!goTo) && (enPoint != null)) {
+		// return;
+		// }
+		// }
+		if (player)
+			setCollisionFlag(collide);
+		else {
+			wallBound = true;
+			this.isPlayerCollide = isPlayer;
+			if (isPlayer == false) {
+				onceNotCollidePlayer = true;
+
+			}
+			wallX = collide.getMidX();
+			wallY = collide.getMidY();
+		}
+	}
+
+	// TODO forwardBounds
+	public static final int CLIP = 40;
+
+	public Rectangle[] getForwardBounds() {
+
+		return new Rectangle[] { new Rectangle(x + CLIP, y + CLIP - 10, width - 2 * CLIP, 10),
+				new Rectangle(x + width - CLIP, y + CLIP, 10, height - CLIP), new Rectangle(x + CLIP, y + height, width - 2 * CLIP, 10),
+				new Rectangle(x + CLIP - 10, y + CLIP, 10, height - CLIP) };
+	}
+
+	public Rectangle[] getDirBounds() {
+
+		return new Rectangle[] { new Rectangle(x + CLIP, y + CLIP - SPEED, width - 2 * CLIP, SPEED),
+				new Rectangle(x + width - CLIP, y + CLIP, SPEED, height - CLIP), new Rectangle(x + CLIP, y + height, width - 2 * CLIP, SPEED),
+				new Rectangle(x + CLIP - SPEED, y + CLIP, SPEED, height - CLIP), new Rectangle(x + CLIP - SPEED, y + CLIP - SPEED, SPEED, SPEED),
+				new Rectangle(x + width - CLIP, y + CLIP - SPEED, SPEED, SPEED), new Rectangle(x + CLIP - SPEED, y + height, SPEED, SPEED),
+				new Rectangle(x + width - CLIP, y + height, SPEED, SPEED) };
+	}
+
+	public Rectangle getForwardBound() {
+		if (deltaX == 0 || deltaY == 0)
+			switch (direction) {
+			case UP:
+				return new Rectangle(x + CLIP, y + CLIP - SPEED, width - 2 * CLIP, SPEED);
+			case DOWN:
+				return new Rectangle(x + CLIP, y + height, width - 2 * CLIP, SPEED);
+			case LEFT:
+				return new Rectangle(x + CLIP - SPEED, y + CLIP, SPEED, height - CLIP - SPEED / 2);
+			case RIGHT:
+			default:
+				return new Rectangle(x + width - CLIP, y + CLIP, SPEED, height - CLIP - SPEED / 2);
+			}
+		else {
+			return new Rectangle(moveL ? this.x + CLIP - SPEED : this.x + width - CLIP + SPEED, moveU ? this.y + CLIP - SPEED : this.y + height
+					+ SPEED, SPEED, SPEED);
+		}
+	}
+
 	public Rectangle getTalkBounds() {
 		if (willTalk) {
 			willTalk = false;
@@ -915,24 +1226,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 
 		return null;
-	}
-
-	public void collision(int midX, int midY, boolean isPlayer) {
-		// if (isPlayer) {
-		// if ((!goTo) && (enPoint != null)) {
-		// return;
-		// }
-		// }
-		wallBound = true;
-		if (!player) {
-			this.isPlayerCollide = isPlayer;
-			if (isPlayer == false) {
-				onceNotCollidePlayer = true;
-
-			}
-			wallX = midX;
-			wallY = midY;
-		}
 	}
 
 	public abstract Rectangle getActBounds();
@@ -1067,7 +1360,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		Point p = setAttacks();
 		if (visible && onScreen) {
 
-			if (direction != Direction.LEFT && direction != Direction.UP) {
+			if ((direction.isDiag() ? (diagBackup != Direction.LEFT) : (direction != Direction.LEFT)) && direction != Direction.UP) {
 				g2d.drawImage(image, x, y, owner);
 				if (owner.darkenWorld())
 					g2d.drawImage(shadow, x, y, owner);
@@ -1114,7 +1407,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			else if (y > Statics.BOARD_HEIGHT - 50)
 				yI = Statics.BOARD_HEIGHT - 50;
 
-			
 			g2d.drawImage(Statics.newImage("images/characters/" + (charName != null ? charName : "spade") + "/icon.png"), xI, yI, owner);
 		}
 
@@ -1174,6 +1466,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
 		if (owner.getState() == State.INGAME) {
 			timersCount();
+		}
+
+		if (player) {
+			g2d.setColor(Color.magenta);
+			g2d.draw(getCollisionBounds());
 		}
 	}
 
@@ -1268,7 +1565,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 		String dir;
 
-		if (direction != null)
+		if (direction != null) {
+			Direction direction = this.direction;
+			if (direction.isDiag())
+				direction = diagBackup;
+
 			switch (direction) {
 			case UP:
 				dir = "back";
@@ -1282,15 +1583,32 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				dir = "side";
 				break;
 			}
-		else
+		} else
 			dir = "side";
 		return "images/characters/" + (charName != null ? charName : "spade") + "/" + dir + "/";
 	}
 
 	public Rectangle getCollisionBounds() {
 
-		return new Rectangle(x + 40, y + 40, width - 80, height - 40);
+		if (!player)
+			return new Rectangle(x + CLIP, y + CLIP, width - 2 * CLIP, height - CLIP);
+		else
+			return new Rectangle(x + CLIP - deltaX, y + CLIP - deltaY, width - 2 * CLIP, height - CLIP);
 	}
+
+	public Rectangle getStationaryCollisionBounds() {
+
+		return new Rectangle(x + CLIP, y + CLIP, width - 2 * CLIP, height - CLIP);
+	}
+
+	// public Rectangle getLargerBounds() {
+	// return new Rectangle(x + CLIP - Math.abs(deltaX), y + CLIP -
+	// Math.abs(deltaY), width - 2 * CLIP + Math.abs(deltaX * 2), height - CLIP
+	// + Math.abs(deltaY * 2));
+	// // return new Rectangle(x + CLIP - SPEED, y + CLIP - SPEED, width - 2 *
+	// CLIP + SPEED, height - CLIP
+	// // + SPEED);
+	// }
 
 	public void takeDamage(int amount, boolean poison) {
 		if (poison)

@@ -42,13 +42,13 @@ protected boolean wall;
 		}
 		if(playerNum==-1){
 			if(wall)
-				owner.getCharacter().collision(getMidX(), getMidY(), false);
+				owner.getCharacter().collision(this, false);
 				
 			
 		}
 		else{
 			if(wall)
-				owner.getFriends().get(playerNum).collision(getMidX(), getMidY(), false);
+				owner.getFriends().get(playerNum).collision(this, false);
 				
 		}
 	}

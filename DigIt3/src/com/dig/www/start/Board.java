@@ -273,7 +273,6 @@ public class Board extends MPanel implements ActionListener {
 			// Deals with line-of-sight
 			if (b.getType() == Block.Blocks.WALL)
 				wallList.add(b);
-
 		}
 
 		for (Portal p : portals)
@@ -293,22 +292,23 @@ public class Board extends MPanel implements ActionListener {
 
 		changeWeather();
 		updateBackground();
+		Statics.wipeColors();
 
+		long freeMem = Runtime.getRuntime().freeMemory();
 		System.gc();
+		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
 		save();
 	}
 
 	protected boolean fogCompute(int x, int y) {
-		// return x > Weather.FOG.special() && x < Statics.BOARD_WIDTH -
-		// Weather.FOG.special() && y > Weather.FOG.special() / 2
-		// && y < Statics.BOARD_HEIGHT - Weather.FOG.special() / 2;
-
 		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
 				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
+
+		updateBackground();
 
 		Graphics2D g2d = (Graphics2D) g;
 
@@ -589,10 +589,10 @@ public class Board extends MPanel implements ActionListener {
 				case DESERT:
 					g2d.setColor(Statics.LIGHT_OFF_TAN);
 
-					for (int runs = 0; runs < Statics.RAND.nextInt(10) + 5; runs++) {
+					for (int runs = 0; runs < Statics.RAND.nextInt(500) + 100; runs++) {
 						x2 = Statics.RAND.nextInt(Statics.BOARD_WIDTH);
 						y2 = Statics.RAND.nextInt(Statics.BOARD_HEIGHT);
-						g2d.fillRect(x2, y2, Statics.RAND.nextInt(500) + 1, Statics.RAND.nextInt(500) + 1);
+						g2d.fillRect(x2, y2, 10, 10);
 					}
 					break;
 
@@ -604,19 +604,20 @@ public class Board extends MPanel implements ActionListener {
 									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
 						}
 
-					for (int i2 = 0; i2 < Statics.RAND.nextInt(5) + 1; i2++) {
-						weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), 0 });
-					}
+					if (weatherList.size() < 1000)
+						for (int i2 = 0; i2 < Statics.RAND.nextInt(5) + 1; i2++) {
+							weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), 0 });
+						}
 
 					switch (time.getGeneralTime()) {
 					case Time.SUNRISE:
-						g2d.setColor(Statics.sunriseColor(Color.GRAY));
+						g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.SUNSET:
-						g2d.setColor(Statics.sunsetColor(Color.GRAY));
+						g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.NIGHT:
-						g2d.setColor(Color.gray);
+						g2d.setColor(Statics.darkenColor(Color.lightGray));
 						break;
 					case Time.DAY:
 					default:
@@ -631,15 +632,26 @@ public class Board extends MPanel implements ActionListener {
 						y2 = weatherList.get(runs)[1];
 						g2d.fillRect(x2, y2, 5, 5);
 
-						if (time.getGeneralTime() == Time.DAY) {
+						if (time.getGeneralTime() != Time.NIGHT) {
 							g2d.setColor(Color.darkGray);
 							g2d.drawRect(x2, y2, 5, 5);
-							g2d.setColor(Color.white);
+							switch (time.getGeneralTime()) {
+							case Time.SUNRISE:
+								g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
+								break;
+							case Time.SUNSET:
+								g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
+								break;
+							case Time.DAY:
+							default:
+								g2d.setColor(Color.white);
+								break;
+							}
 						}
 						weatherList.remove(runs);
 
 						if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH && y2 <= Statics.BOARD_HEIGHT) {
-							x2 += Statics.RAND.nextBoolean() ? -3 : 3;
+							x2 += (Statics.RAND.nextBoolean() ? -3 : 3);
 							y2 += 5;
 							weatherList.add(runs, new int[] { x2, y2 });
 						} else
@@ -929,6 +941,7 @@ public class Board extends MPanel implements ActionListener {
 
 			setCharacterStates(character.getCollisionBounds());
 			repaint();
+
 			for (int c = 0; c < friends.size(); c++) {
 				for (int c2 = 0; c2 < friends.size(); c2++) {
 					if (c == c2) {
@@ -937,7 +950,7 @@ public class Board extends MPanel implements ActionListener {
 						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
 
 							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds())) {
-								friends.get(c).collision(friends.get(c2).getMidX(), friends.get(c2).getMidY(), true);
+								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
 					}
@@ -1004,54 +1017,71 @@ public class Board extends MPanel implements ActionListener {
 				b.setCanSee(tag);
 				// End of line-of-sight
 			}
-
-			if (!b.traversable() && b.getBounds().intersects(r3)) {
-
-				switch (b.getType()) {
-
-				// Cases for the floor
-				case GROUND:
-				case ROCK:
-				case CARPET:
-				case DIRT:
-					break;
-
-				// Cases for raised obstructions
-				case PIT:
-				case WALL:
-				case CRYSTAL:
-				case LIQUID:
-					character.collision(b.getMidX(), b.getMidY(), false);
-					break;
-				}
-			} else if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-					|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT || b
-							.getType() == Blocks.PIT))) {
-				if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-
-					b.interact();
-					character.endAction();
-				}
-			}
+			// TODO working
 			for (GameCharacter character : friends) {
 				Rectangle r2 = character.getCollisionBounds();
-				if (b.getType() != Block.Blocks.GROUND && b.getBounds().intersects(r2)) {
 
-					switch (b.getType()) {
+				if (Statics.dist(b.getX(), b.getY(), character.getX(), character.getY()) < 200) {
+					if (!b.traversable() && b.getBounds().intersects(r2)) {
 
-					// Cases for the floor
-					case GROUND:
-					case ROCK:
-					case CARPET:
-					case DIRT:
-						break;
-					case PIT:
-					case WALL:
-					case CRYSTAL:
-					case LIQUID:
-						character.collision(b.getMidX(), b.getMidY(), false);
+						switch (b.getType()) {
+
+						// Cases for the floor
+						case GROUND:
+						case ROCK:
+						case CARPET:
+						case DIRT:
+							break;
+						case PIT:
+						case WALL:
+						case CRYSTAL:
+						case LIQUID:
+							character.collision(b, false);
+						}
 					}
-				} else if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+					
+					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+
+							b.interact();
+							character.endAction();
+						}
+					}
+				}
+			}
+
+			if (b.isOnScreen()) {
+
+				if (!b.traversable()) {
+					if (b.getBounds().intersects(r3)) {
+
+						switch (b.getType()) {
+
+						// Cases for the floor
+						case GROUND:
+						case ROCK:
+						case CARPET:
+						case DIRT:
+							break;
+
+						// Cases for raised obstructions
+						case PIT:
+						case WALL:
+						case CRYSTAL:
+						case LIQUID:
+							character.collision(b, false);
+							break;
+						}
+					}
+
+					for (int rI = 0; rI < character.getDirBounds().length; rI++)
+						if (b.getBounds().intersects(character.getDirBounds()[rI]))
+							character.presetCollisionFlag(rI);
+				}
+
+				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
 						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
@@ -1060,9 +1090,7 @@ public class Board extends MPanel implements ActionListener {
 						character.endAction();
 					}
 				}
-			}
 
-			if (b.isOnScreen()) {
 				FProjectile p;
 				for (int u = 0; u < fP.size(); u++) {
 
@@ -1290,13 +1318,17 @@ public class Board extends MPanel implements ActionListener {
 
 			if (n.isOnScreen()) {
 				if (r3.intersects(n.getBounds()))
-					character.collision(n.getMidX(), n.getMidY(), false);
+					character.collision(n, false);
 				if (bounds != null && n.getBounds().intersects(bounds)) {
 					current = n;
 					current.setLine();
 					state = State.NPC;
 					bounds = null;
 				}
+				
+				for (int rI = 0; rI < character.getDirBounds().length; rI++)
+					if (n.getBounds().intersects(character.getDirBounds()[rI]))
+						character.presetCollisionFlag(rI);
 			}
 		}
 
@@ -1600,10 +1632,6 @@ public class Board extends MPanel implements ActionListener {
 		}
 	}
 
-	public void startGame() {
-
-	}
-
 	public void loadSave() {
 		level = DEFAULT;
 		try {
@@ -1706,7 +1734,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "snowyTest";
+		level = "helo";
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		changeArea();
@@ -1815,15 +1843,18 @@ public class Board extends MPanel implements ActionListener {
 				break;
 
 			case Time.SUNRISE:
-				setBackground(Statics.sunriseColor(Color.gray));
+				setBackground(Statics.sunriseColor(Color.gray, time.getTime()));
 				break;
 
 			case Time.SUNSET:
-				setBackground(Statics.sunsetColor(Color.gray));
+				setBackground(Statics.sunsetColor(Color.gray, time.getTime()));
 				break;
 			}
 		else if (weather == Weather.RAIN)
-			setBackground(Statics.darkenColor(getTextureBack()));
+			if (time.getGeneralTime() == Time.DAY)
+				setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
+			else
+				setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 		else
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
@@ -1835,11 +1866,11 @@ public class Board extends MPanel implements ActionListener {
 				break;
 
 			case Time.SUNRISE:
-				setBackground(Statics.sunriseColor(getTextureBack()));
+				setBackground(Statics.sunriseColor(getTextureBack(), time.getTime()));
 				break;
 
 			case Time.SUNSET:
-				setBackground(Statics.sunsetColor(getTextureBack()));
+				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
 	}
@@ -1877,7 +1908,13 @@ public class Board extends MPanel implements ActionListener {
 				weather = Weather.NORMAL;
 				break;
 			}
+	}
 
-		weather = Weather.OBSCURE;
+	public float getTime() {
+		return time.getTime();
+	}
+
+	public boolean lighterDark() {
+		return weather == Weather.RAIN && time.getGeneralTime() == Time.DAY;
 	}
 }

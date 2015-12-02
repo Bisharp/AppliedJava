@@ -64,8 +64,8 @@ public final class Statics {
 	public static final Color SAND_RED = new Color(155, 36, 36);
 
 	private static HashMap<Color, Color> darkColors = new HashMap<Color, Color>();
-	private static HashMap<Color, Color> sunriseColors = new HashMap<Color, Color>();
-	private static HashMap<Color, Color> sunsetColors = new HashMap<Color, Color>();
+	private static HashMap<Float, HashMap<Color, Color>> sunriseColors = new HashMap<Float, HashMap<Color, Color>>();
+	private static HashMap<Float, HashMap<Color, Color>> sunsetColors = new HashMap<Float, HashMap<Color, Color>>();
 
 	public static Color darkenColor(Color c) {
 		if (darkColors.containsKey(c))
@@ -81,40 +81,80 @@ public final class Statics {
 		return c2;
 	}
 
-	public static Color sunriseColor(Color c) {
-		if (sunriseColors.containsKey(c))
-			return sunriseColors.get(c);
+	public static Color sunriseColor(Color c, float time) {
 
-		int[] rgb = new int[] { c.getRed(), c.getGreen(), c.getBlue() };
+		if (sunriseColors.containsKey(time) && sunriseColors.get(time).containsKey(c))
+			return sunriseColors.get(time).get(c);
 
-		rgb[0] += 10;
-		rgb[1] -= 50;
-		rgb[2] += 0;
+		int[] rgb = new int[] { darkenColor(c).getRed(), darkColors.get(c).getGreen(), darkColors.get(c).getBlue() };
+		int[] rgb2 = rgb.clone();
+		rgb2[0] *= 7 * decimalPart(time);
+		rgb2[1] *= 7 * decimalPart(time);
+		rgb2[2] *= 7 * decimalPart(time);
 
-		Color c2 = new MColor(rgb[0], rgb[1], rgb[2], c.getAlpha());
-		sunriseColors.put(c, c2);
+		for (int i = 0; i < rgb2.length; i++)
+			rgb2[i] += rgb[i];
+
+		Color c2 = new MColor(rgb2[0], rgb2[1], rgb2[2], c.getAlpha());
+
+		if (sunriseColors.containsKey(time))
+			sunriseColors.get(time).put(c, c2);
+		else {
+			sunriseColors.put(time, new HashMap<Color, Color>());
+			sunriseColors.get(time).put(c, c2);
+		}
+
 		return c2;
 	}
 
-	public static Color sunsetColor(Color c) {
+	public static Color sunsetColor(Color c, float time) {
 
-		if (sunsetColors.containsKey(c))
-			return sunsetColors.get(c);
+		if (sunsetColors.containsKey(time) && sunsetColors.get(time).containsKey(c))
+			return sunsetColors.get(time).get(c);
 
 		int[] rgb = new int[] { c.getRed(), c.getGreen(), c.getBlue() };
+		int[] rgb2 = rgb.clone();
 
-		if (c == Color.white) {
-			rgb[1] -= 30;
-			rgb[2] -= 110;
-		} else {
-			rgb[0] += 70;
-			rgb[1] += 40;
-			rgb[2] -= 40;
+		rgb2[0] /= 8 * decimalPart(time);
+		rgb2[1] /= 8 * decimalPart(time);
+		rgb2[2] /= 8 * decimalPart(time);
+
+		for (int i = 0; i < rgb2.length; i++)
+			if (rgb2[i] > rgb[i])
+				rgb2[i] = rgb[i];
+
+		if (decimalPart(time) <= MID_SUNSET * 2) {
+			rgb2[0] += getOrangeOffset(decimalPart(time), 500);
+			rgb2[1] += getOrangeOffset(decimalPart(time), 250);
 		}
 
-		Color c2 = new MColor(rgb[0], rgb[1], rgb[2], c.getAlpha());
-		sunsetColors.put(c, c2);
+		Color c2 = new MColor(rgb2[0], rgb2[1], rgb2[2], c.getAlpha());
+
+		if (sunsetColors.containsKey(time))
+			sunsetColors.get(time).put(c, c2);
+		else {
+			sunsetColors.put(time, new HashMap<Color, Color>());
+			sunsetColors.get(time).put(c, c2);
+		}
+
 		return c2;
+	}
+
+	private static final float MID_SUNSET = 0.3f;
+	protected static int getOrangeOffset(float time, int mult) {
+		return (int) ((time <= MID_SUNSET? time : MID_SUNSET - (time - MID_SUNSET)) * mult);
+	}
+
+	public static void wipeColors() {
+		darkColors = new HashMap<Color, Color>();
+		sunriseColors = new HashMap<Float, HashMap<Color, Color>>();
+		sunsetColors = new HashMap<Float, HashMap<Color, Color>>();
+	}
+
+	public static float decimalPart(float f) {
+		while (f >= 1)
+			f--;
+		return f;
 	}
 
 	public static final Font PAUSE = NPC.NPC_NORMAL;
@@ -124,6 +164,7 @@ public final class Statics {
 
 	public static final int LINE = 300;
 	public static final int STRENGTH = 20;
+	public static final float HALF_DARK = 7.25f;
 
 	public static double pointTowards(Point b, Point a) {
 		// Point at something, This will be useful for enemies, also in

@@ -540,11 +540,14 @@ public class Block extends Sprite {
 
 		if (!owner.thunderStrike())
 			if (owner.darkenWorld())
-				c = Statics.darkenColor(c);
+				if (owner.lighterDark())
+					c = Statics.sunriseColor(c, Statics.HALF_DARK);
+				else
+					c = Statics.darkenColor(c);
 			else if (owner.sunRise())
-				c = Statics.sunriseColor(c);
+				c = Statics.sunriseColor(c, owner.getTime());
 			else if (owner.sunSet())
-				c = Statics.sunsetColor(c);
+				c = Statics.sunsetColor(c, owner.getTime());
 
 		return c;
 	}

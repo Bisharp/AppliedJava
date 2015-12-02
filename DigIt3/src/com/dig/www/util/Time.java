@@ -18,8 +18,8 @@ public class Time implements ActionListener {
 	private Board owner;
 
 	private static final int SECOND = 1000;
-	private static final int CHANGE = 7;
-	private static final int CHANGE_PER = 1;
+	private static final float CHANGE = 7.0f;
+	private static final float CHANGE_PER = 0.6f;
 	private static final int END = 13;
 	private int colonTimer = 0;
 
@@ -50,7 +50,7 @@ public class Time implements ActionListener {
 
 		time += 0.01f;
 
-		if (decimalPart(time) >= 0.60)
+		if (Statics.decimalPart(time) >= 0.60)
 			time = Math.round(time);
 
 		if (time >= END)
@@ -62,23 +62,26 @@ public class Time implements ActionListener {
 			owner.updateBackground();
 
 		previousTime = getGeneralTime();
+		
+		roundTime();
+	}
+	
+	private void roundTime() {
+		float time = this.time * 100;
+		time = Math.round(time);
+		this.time = time / 100;
 	}
 
 	private static final int X = 10;
 	private static final int Y = 200;
+
 	public void draw(Graphics2D g2d) {
-		
+
 		g2d.setColor(Color.black);
 		g2d.fillRect(X, Y, 200, 50);
 		g2d.setColor(Statics.PURPLE);
 		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30);
 		g2d.drawString(getColon(), 40 + X + 15, Y + 28);
-	}
-
-	protected float decimalPart(float f) {
-		while (f >= 1)
-			f--;
-		return f;
 	}
 
 	public void pause() {

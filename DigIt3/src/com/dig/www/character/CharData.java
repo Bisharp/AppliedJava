@@ -40,6 +40,7 @@ public class CharData implements Serializable {
 
 		if (!areas.containsKey(level))
 			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(), level));
+		
 		currentKey = level;
 	}
 
@@ -106,11 +107,11 @@ public class CharData implements Serializable {
 	}
 
 	// end
-	
 
 	public void clearBlocker(int id) {
 		areas.get(currentKey).clearBlocker(id);
 	}
+
 	public class LevelData implements Serializable {
 
 		/**
@@ -134,15 +135,15 @@ public class CharData implements Serializable {
 				else if (obj instanceof DropPoint)
 					hasDropPoints = true;
 
+			QuestNPC qNPC;
 			for (NPC npc : npcs)
-				if (npc instanceof Reyzu) {
-					SimpleQuest s = new SimpleQuest(((Reyzu) npc).getType(), ((Reyzu) npc).getPlace(), name, ((Reyzu) npc).id);
+				if (npc instanceof QuestNPC) {
+					qNPC = (QuestNPC) npc;
+					SimpleQuest s = new SimpleQuest(qNPC.getType(), qNPC.getPlace(), name, qNPC.id);
 					quests.add(s);
 					locQuests.put(s.id, s);
-				} else if (npc instanceof BlockerNPC) {
-					if (((BlockerNPC) npc).id != -1)
-						blockerNPCs.put(((BlockerNPC) npc).id, true);
-				}
+				} else if (npc instanceof BlockerNPC && ((BlockerNPC) npc).id != -1)
+					blockerNPCs.put(((BlockerNPC) npc).id, true);
 
 			location = name;
 			System.out.println("New level data created for " + name + ". We have " + (hasDropPoints ? "" : "no ") + "drop points.");
@@ -280,15 +281,15 @@ public class CharData implements Serializable {
 
 		public SimpleQuest getQuest(int id) {
 
-			return locQuests.get(new Integer(id));
+			return locQuests.get(id);
 		}
 
 		public void registerQuest(int id) {
-			locQuests.get(new Integer(id)).setAccepted(true);
+			locQuests.get(id).setAccepted(true);
 		}
 
 		public void completeQuest(int id) {
-			locQuests.get(new Integer(id)).setCompleted(true);
+			locQuests.get(id).setCompleted(true);
 		}
 
 		public boolean hasDropPoints() {

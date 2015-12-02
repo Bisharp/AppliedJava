@@ -42,6 +42,7 @@ public class Dispenser extends Objects {
 		owner.getfP().add(field);
 
 		this.maker = (Heart) maker;
+		shadow = null;
 	}
 
 	public void animate() {
