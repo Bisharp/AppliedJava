@@ -1734,7 +1734,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void newGame() {
-		level = "helo";
+		level = "hauntedTest";
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		changeArea();
