@@ -1468,10 +1468,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			timersCount();
 		}
 
-		if (player) {
-			g2d.setColor(Color.magenta);
-			g2d.draw(getCollisionBounds());
-		}
+//		if (player) {
+//			g2d.setColor(Color.magenta);
+//			g2d.draw(getCollisionBounds());
+//		}
 	}
 
 	protected void drawTool(Graphics2D g2d) {
