@@ -646,9 +646,14 @@ public class StageBuilder {
 					String area = stuff.get(2);
 					int collectibleNum = Integer.parseInt(stuff.get(3));
 					String type = stuff.get(4);
-
+					String type2=stuff.size()>5?stuff.get(5):"brown";
+if(type.equals("normal")||type.equals("boss"))
 					portals.add(new Portal(enX, enY, owner, area,
 							collectibleNum, type));
+else
+	portals.add(new Door(enX, enY, owner, area,
+			collectibleNum, type,type2));
+					
 				}
 
 			}
