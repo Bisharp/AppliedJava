@@ -64,9 +64,12 @@ public class Board extends MPanel implements ActionListener {
 	 */
 	public Point pointedPoint;
 	public int pointedPointType = -1;
-
+	
+	private int doorStateTimer=0;
+	private final int DOORSTATETMAX=50;
+	private String doorStateLev="";
 	public enum State {
-		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC;
+		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC,DOOROPEN;
 	};
 
 	public enum Weather {
@@ -316,7 +319,7 @@ public class Board extends MPanel implements ActionListener {
 
 		case NPC:
 		case INGAME:
-
+		case DOOROPEN:
 			// Tag boolean part of line-of-sight
 			boolean tag = true;
 			int i;
@@ -957,7 +960,7 @@ public class Board extends MPanel implements ActionListener {
 				}
 			}
 			break;
-
+			
 		case DEAD:
 			deadTimer--;
 			if (deadTimer == 0) {
@@ -967,7 +970,19 @@ public class Board extends MPanel implements ActionListener {
 			}
 			repaint();
 			break;
-
+		case DOOROPEN:
+			if(doorStateTimer<=0){
+				
+				timer.stop();
+				time.pause();
+				level = doorStateLev;
+				changeArea();
+				setState(State.INGAME);
+				timer.restart();
+				time.resume();
+			}else
+				doorStateTimer--;
+			break;
 		default:
 			break;
 		}
@@ -1302,13 +1317,18 @@ public class Board extends MPanel implements ActionListener {
 			p.setOnScreen(p.getBounds().intersects(getScreen()));
 
 			if (r3.intersects(p.getBounds())) {
+				if(!(p instanceof Door||p instanceof SpecialDoor)){
 				timer.stop();
 				time.pause();
 				level = p.getArea();
 				changeArea();
 				timer.restart();
-				time.resume();
+				time.resume();}
+			else{
+				setState(State.DOOROPEN);
+				doorStateLev=p.getArea();
 			}
+				}
 		}
 
 		Rectangle bounds = character.getTalkBounds();
@@ -1465,6 +1485,15 @@ public class Board extends MPanel implements ActionListener {
 			time.pause();
 		else if (state == State.INGAME)
 			time.resume();
+		else if(state==State.DOOROPEN){
+			doorStateTimer=DOORSTATETMAX;
+		character.stop();
+		character.setImage(character.newImage("n"));
+		for(GameCharacter character:friends){
+			character.stop();
+			character.setImage(character.newImage("n"));
+		}
+		}
 		else if (state == State.DEAD)
 			time.end();
 	}
