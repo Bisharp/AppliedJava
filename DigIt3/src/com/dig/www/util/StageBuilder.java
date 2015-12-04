@@ -84,11 +84,6 @@ private Point spawnPoint;
 					} else {
 						for (int i = 0; i < line.length(); i++) {
 							switch (line.charAt(i)) {
-
-							case 'O':
-								owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln
-										+ OFF - 299);
 							case '1':
 								world.add(new Block(Statics.BLOCK_HEIGHT * i,
 										Statics.BLOCK_HEIGHT * ln,
