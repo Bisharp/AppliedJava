@@ -4,3 +4,4 @@
 300,1700,images/objects/notSoInvisibleCloak.png,n,10,Invisible Cloak
 500,1500,images/dummy.png,n,-6
 2000,1600,images/dummy.png,n,-6
+700,2400,images/dummy.png,n,-3

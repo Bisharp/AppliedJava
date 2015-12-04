@@ -1,1 +1,1 @@
-2000,450,LuigisMansion,0,normal
+2000,450,LuigisMansion,0,rectDoors
