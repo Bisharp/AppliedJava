@@ -73,7 +73,7 @@ options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 			if (option.question().equals("Yes")) {
 				owner.getData().registerQuest(this);
 				questAccepted = true;
-				setAcceptedVals();
+				setAcceptedVals(0);
 			}
 
 		} else if (!questCompleted) {
@@ -108,7 +108,7 @@ options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 
 	}
 
-	protected void setAcceptedVals() {
+	protected void setAcceptedVals(int phase) {
 		greetingDialogs = new String[1];
 		greetingDialogs[0] = "So.. Any progress?";
 		options = new NPCOption[1];

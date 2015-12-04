@@ -103,7 +103,7 @@ public abstract class QuestNPC extends NPC {
 				length += buttons[i].width + 10;
 			}
 		} else if (questAccepted) {
-			setAcceptedVals();
+			setAcceptedVals(state.getAcceptedPhase());
 			currentOptions = options.clone();
 			buttons = new Rectangle[currentOptions.length];
 			int length = 0;
@@ -118,48 +118,11 @@ public abstract class QuestNPC extends NPC {
 
 	protected abstract void setCompletedVals();
 
-	// protected void setCompletedVals() {
-	// greetingDialogs=new String[1];
-	// greetingDialogs[0]="Thank you again for yor help!";
-	// options=new NPCOption[2];
-	// options[0]=new NPCOption("Is there anything else?.",
-	// "No, thanks for your help.",
-	// new String[] { "Do you need anything else?",
-	// "Do you need any more help?", "...", "Can we do anything else for you?",
-	// "Do you need further assistance?"}, false, owner) ;
-	// //Will be removed
-	// options[1]=new NPCOption("Will you join us?",
-	// "Of course not! I am not a playable character!",
-	// new String[] { "Will you join us now?",
-	// "Join us!", "...", "Can you join us?", "Care to join the cause?"}, false,
-	// owner) ;
-	//
-	// }
-	protected abstract void setAcceptedVals();
+	protected abstract void setAcceptedVals(int stage);
 
-	// protected void setAcceptedVals() {
-	// greetingDialogs=new String[1];
-	// greetingDialogs[0]="So.. Any progress?";
-	// options=new NPCOption[1];
-	// options[0]=new NPCOption("Let's check our standings.",
-	// quest.getIncompleteLine(),
-	// new String[] { "Let's see... do we have what you were looking for?",
-	// "Is any of this junk what you were looking for?", "...", "Is this it?",
-	// "Do we have what you were looking for?" }, true, owner) ;
-	// }
 
 	public String getPlace() {
 		return place;
 	}
-
-	// @Override
-	// public String exitLine() {
-	// if (questCompleted)
-	// return "See you around!";
-	// else if (questAccepted)
-	// return "Best of luck!";
-	// else
-	// return "Oh; well, see you later, I guess.";
-	// }
 
 }
