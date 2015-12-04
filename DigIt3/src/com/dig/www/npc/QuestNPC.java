@@ -41,17 +41,15 @@ public abstract class QuestNPC extends NPC {
 		this.id = id;
 	}
 
-	protected void specify(Items i, String place) {
+	protected void specify(Items i, String place,Quest.Quests type) {
 
-		if (i != Items.NULL) {
+		if (i != Items.NULL)
 			item = i;
-			quest.setItem(i);
-		}
-
-		if (place != null) {
+			
+		if (place != null) 
 			this.place = place;
-			quest.setPlace(place);
-		}
+		
+		quest.specify(item, this.place,type);
 	}
 
 	// @Override

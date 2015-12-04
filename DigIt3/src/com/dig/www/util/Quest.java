@@ -96,42 +96,18 @@ public class Quest implements Serializable {
 
 		// Chooses a location
 		String[] s = issuer.getOwner().getData().getAreas();
-		place = s[Statics.RAND.nextInt(s.length)];
-		item = Items.getRandItem();
-
-		System.out.println(place);
+		
 
 		// Creates the specifics. Note: DO NOT use Types.PLACE if it is not the
 		// location of the stolen item. Use Types.NAME for random locations
 		// superfluous to the quest. Each quest MUST have 1 Types.PLACE in it
 		// and 1 Types.THING in it to allow the player to know what he is
 		// looking for and where.
-		Types[] t = questType.getTypes();
-		specifics = new String[questType.numOfSpecifics()];
-
-		for (int i = 0; i < specifics.length; i++)
-			if (t[i] != Types.PLACE && t[i] != Types.THING)
-				specifics[i] = t[i].getDetail(this);
-			else if (t[i] != Types.THING)
-				specifics[i] = place;
-			else
-				specifics[i] = item.toString();
+specify(Items.getRandItem(),s[Statics.RAND.nextInt(s.length)],questType);
 	}
 
 	public Quest(SimpleQuest state) {
-		place = state.place;
-		item = state.item;
-
-		Types[] t = questType.getTypes();
-		specifics = new String[questType.numOfSpecifics()];
-
-		for (int i = 0; i < specifics.length; i++)
-			if (t[i] != Types.PLACE && t[i] != Types.THING)
-				specifics[i] = t[i].getDetail(this);
-			else if (t[i] != Types.THING)
-				specifics[i] = place;
-			else
-				specifics[i] = item.toString();
+		specify(state.item,state.place,questType);
 	}
 
 	public NPC getIssuer() {
@@ -156,7 +132,20 @@ public class Quest implements Serializable {
 	public void setPlace(String place2) {
 		place = place2;
 	}
-
+public void specify(Items item, String place,Quests type){
+	this.item=item;
+	this.place=place;
+	this.questType=type;
+	Types[] t = questType.getTypes();
+	specifics = new String[questType.numOfSpecifics()];
+	for (int i = 0; i < specifics.length; i++)
+		if (t[i] != Types.PLACE && t[i] != Types.THING)
+			specifics[i] = t[i].getDetail(this);
+		else if (t[i] != Types.THING)
+			specifics[i] = place;
+		else
+			specifics[i] = item.toString();
+}
 	public void setItem(Items i) {
 		item = i;
 	}

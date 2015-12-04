@@ -1,5 +1,6 @@
 package com.dig.www.util;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,7 +24,8 @@ public class StageBuilder {
 	private String loc;
 	private Board owner;
 	private int level = 1;
-
+private int spawnNum;
+private Point spawnPoint;
 	public static StageBuilder getInstance(String loc, Board owner) {
 
 		if (me == null)
@@ -446,6 +448,7 @@ public class StageBuilder {
 
 		ArrayList<Objects> npcs = new ArrayList<Objects>();
 		int count = 0;
+		int spawnCount=0;
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
@@ -498,8 +501,10 @@ public class StageBuilder {
 								npcs.add(new RandSkinObject(nX, nY, loc, wall,
 										owner));
 							else if (val == -3) {
-								owner.setSpawnX(-nX + OFF);
-								owner.setSpawnY(-nY + OFF - 299);
+								if(spawnCount==spawnNum)
+									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
+							
+							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
 							} else if (val == -5) {
@@ -527,7 +532,8 @@ public class StageBuilder {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+owner.setSpawnX(spawnPoint.x);
+owner.setSpawnY(spawnPoint.y);
 		return npcs;
 	}
 
@@ -596,6 +602,13 @@ public class StageBuilder {
 					System.err
 							.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
 					level = 1000;
+				}
+				try {
+					spawnNum = Integer.parseInt(line.split(",")[3].trim());
+				} catch (Exception ex) {
+					System.err
+							.println("WARNING: No Spawn number. Setting spawn number to 0.");
+					spawnNum = 0;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

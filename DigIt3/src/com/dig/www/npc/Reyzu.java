@@ -61,9 +61,8 @@ public class Reyzu extends QuestNPC {
 												"Oh, I'd love to, but I really can't make time. I'm so sorry...",
 												"I cannot." }, true, owner) },
 						owner) }, id);
-
-		options[0].setAnswer(quest.getLine() + "\nWill you help me?");
-
+specify(Items.DONUT, "hauntedTest",Quest.Quests.FETCH);
+options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 	}
 
 	@Override
