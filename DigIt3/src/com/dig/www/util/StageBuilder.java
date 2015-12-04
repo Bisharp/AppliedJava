@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
@@ -496,9 +498,8 @@ private Point spawnPoint;
 								npcs.add(new RandSkinObject(nX, nY, loc, wall,
 										owner));
 							else if (val == -3) {
-								if(spawnCount==spawnNum)
+								if(spawnCount<=spawnNum)
 									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
-							
 							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
@@ -527,8 +528,13 @@ private Point spawnPoint;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		try{
 owner.setSpawnX(spawnPoint.x);
-owner.setSpawnY(spawnPoint.y);
+owner.setSpawnY(spawnPoint.y);}
+		catch(Exception ex){
+			JOptionPane.showMessageDialog(owner, "No spawn point. Leaving game.");
+			System.exit(0);
+		}
 		return npcs;
 	}
 
@@ -600,10 +606,12 @@ owner.setSpawnY(spawnPoint.y);
 				}
 				try {
 					spawnNum = Integer.parseInt(line.split(",")[3].trim());
+					spawnPoint=null;
 				} catch (Exception ex) {
 					System.err
 							.println("WARNING: No Spawn number. Setting spawn number to 0.");
 					spawnNum = 0;
+					spawnPoint=null;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
