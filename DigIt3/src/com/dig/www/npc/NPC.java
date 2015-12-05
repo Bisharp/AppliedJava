@@ -128,7 +128,7 @@ public abstract class NPC extends Sprite {
 		boolean underline = false;
 
 		l = iTalk ? getLine()
-				+ (!inConversation&&!inDialogue ? append().replace("next", "exit") : append()) :
+				+ (!inDialogue ?(!inConversation? append().replace("next", "exit"):"") : append()) :
 
 		getCharLine() + append();
 		if (iTalk)
