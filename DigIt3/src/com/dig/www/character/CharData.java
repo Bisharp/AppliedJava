@@ -94,7 +94,13 @@ public class CharData implements Serializable {
 	public void registerQuest(QuestNPC npc) {
 		areas.get(currentKey).registerQuest(npc.id);
 	}
-
+	public void setAcceptedPhase(QuestNPC npc,int phase) {
+		// TODO Auto-generated method stub
+		areas.get(currentKey).getQuest(npc.id).setAcceptedPhase(phase);
+	}
+	public int getAcceptedPhase(QuestNPC npc){
+		return areas.get(currentKey).getQuest(npc.id).getAcceptedPhase();
+	}
 	public void completeQuest(QuestNPC npc) {
 		areas.get(currentKey).completeQuest(npc.id);
 	}
@@ -271,14 +277,14 @@ public class CharData implements Serializable {
 		public ArrayList<NPC> filterNPC(ArrayList<NPC> input) {
 
 			NPC obj;
-			Reyzu obj2;
+			QuestNPC obj2;
 			ArrayList<NPC> objList = new ArrayList<NPC>();
 
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
 
-				if (obj instanceof Reyzu) {
-					obj2 = (Reyzu) obj;
+				if (obj instanceof QuestNPC) {
+					obj2 = (QuestNPC) obj;
 					obj2.setQuestState(getQuest(obj2.id));
 					objList.add(obj2);
 				} else if (obj instanceof BlockerNPC) {
@@ -357,4 +363,6 @@ public class CharData implements Serializable {
 			this.completed = completed;
 		}
 	}
+
+	
 }
