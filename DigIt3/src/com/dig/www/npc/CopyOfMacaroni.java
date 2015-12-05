@@ -198,7 +198,20 @@ public class CopyOfMacaroni extends QuestNPC {
 						"Can you join us?", "Care to join the cause?" }, false,
 				owner);
 	}
-
+	protected String getGreeting() {
+		switch (owner.getCharacter().getType()) {
+		case CLUB:
+			return "Hi. Do you have something I can break?";
+		case DIAMOND:
+			return "...";
+		case HEART:
+			return "Hi!";
+		case SIR_COBALT:
+			return "Greetings.";
+		default:
+			return "Hello.";
+		}
+	}
 	@Override
 	protected void setAcceptedVals(int phase) {
 		// TODO Auto-generated method stub

@@ -415,8 +415,10 @@ private Point spawnPoint;
 										break;
 									}
 								}
-							if (!has)
-								npcs.add(new Macaroni(nX, nY, owner, loc));
+							if (!has){
+								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
+							}
+								questCount++;//It should stay outside the brackets.
 							break;
 						case NPC.REYZU:
 							npcs.add(new Reyzu(nX, nY, owner, loc, questCount));
