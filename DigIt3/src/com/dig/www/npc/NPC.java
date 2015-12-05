@@ -77,6 +77,7 @@ public abstract class NPC extends Sprite {
 	}
 
 	protected boolean iTalk = false;
+	protected boolean inConversation=false;
 	protected boolean inDialogue = true;
 	protected boolean exiting = false;
 	protected static final int MAX = 3;
@@ -127,7 +128,7 @@ public abstract class NPC extends Sprite {
 		boolean underline = false;
 
 		l = iTalk ? getLine()
-				+ (!inDialogue ? append().replace("next", "exit") : append()) :
+				+ (!inConversation&&!inDialogue ? append().replace("next", "exit") : append()) :
 
 		getCharLine() + append();
 		if (iTalk)
@@ -344,9 +345,11 @@ public abstract class NPC extends Sprite {
 		if (willOption.getNewOptions().length > 0) {
 			setCurrentOptions(willOption);
 			inDialogue = true;
+			inConversation=true;
 		} else {
 			resetCurrentOptions();
 			inDialogue = false;
+			inConversation=false;
 		}
 		willOption = null;
 	}
@@ -381,7 +384,7 @@ public abstract class NPC extends Sprite {
 
 	public void exit() {
 
-		if (!inDialogue) {
+		if (!inDialogue&&!inConversation) {
 			line = exitLine();
 			index = -1;
 			exiting = true;
