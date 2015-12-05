@@ -78,7 +78,6 @@ public class CharData implements Serializable {
 
 		Enumeration<String> keys = areas.keys();
 		ArrayList<String> aS = new ArrayList<String>();
-
 		try {
 			String key;
 			while (true) {
@@ -94,13 +93,20 @@ public class CharData implements Serializable {
 	public void registerQuest(QuestNPC npc) {
 		areas.get(currentKey).registerQuest(npc.id);
 	}
-	public void setAcceptedPhase(QuestNPC npc,int phase) {
+
+	public void setAcceptedPhase(QuestNPC npc, int phase) {
 		// TODO Auto-generated method stub
 		areas.get(currentKey).getQuest(npc.id).setAcceptedPhase(phase);
 	}
-	public int getAcceptedPhase(QuestNPC npc){
+
+	public int getAcceptedPhase(QuestNPC npc) {
 		return areas.get(currentKey).getQuest(npc.id).getAcceptedPhase();
 	}
+
+	public void setAppearPhase(QuestNPC npc, int setter) {
+		areas.get(currentKey).getQuest(npc.id).setAppearPhase(setter);
+	}
+
 	public void completeQuest(QuestNPC npc) {
 		areas.get(currentKey).completeQuest(npc.id);
 	}
@@ -231,8 +237,11 @@ public class CharData implements Serializable {
 					quests2 = new ArrayList<Items>();
 					for (int y = 0; y < quests.size(); y++) {
 						if (quests.get(y).place.equals(location)
-								&& !quests.get(y).isCompleted())
+								&& !quests.get(y).isCompleted()
+								&& quests.get(y).objectAppeared())
 							quests2.add(quests.get(y).item);
+						else if (!quests.get(y).objectAppeared())
+							points.remove(0);
 					}
 				} else {
 					points = null;
@@ -329,6 +338,7 @@ public class CharData implements Serializable {
 		public final String place;
 		public final String origin;
 		public final int id;
+		private int appearPhase = 0;
 
 		public SimpleQuest(Items item, String place, String origin, int id) {
 			this.item = item;
@@ -337,6 +347,18 @@ public class CharData implements Serializable {
 			this.id = id;
 
 			System.out.println("New simple quest.");
+		}
+
+		public boolean objectAppeared() {
+			return appearPhase <= acceptedPhase;
+		}
+
+		public int getAppearPhase() {
+			return appearPhase;
+		}
+
+		public void setAppearPhase(int setter) {
+			appearPhase = setter;
 		}
 
 		public int getAcceptedPhase() {
@@ -364,5 +386,4 @@ public class CharData implements Serializable {
 		}
 	}
 
-	
 }
