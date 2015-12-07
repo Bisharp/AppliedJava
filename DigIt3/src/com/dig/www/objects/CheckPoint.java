@@ -20,6 +20,9 @@ public void collidePlayer(int playerNum){
 		}
 	}
 }
+public int getSpawnNum(){
+	return spawnNum;
+}
 @Override
 public void animate(){
 	super.animate();

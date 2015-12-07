@@ -1530,7 +1530,11 @@ boolean beenPicked=false;
 if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked&&!(n instanceof DropPoint)){
 	if(n.interact()){
 		hasTalked=true;
-		if (n instanceof Collectible && ((Collectible) n).collectible())
+		 if (n instanceof CheckPoint) {
+			save(((CheckPoint)n).getSpawnNum());
+			System.out.println("SAVED");
+		}
+		 else	if (n instanceof Collectible && ((Collectible) n).collectible())
 			if (n instanceof MoneyObject) {
 				Statics.playSound(this, "collectibles/marioCoin.wav");
 				GameCharacter.getInventory().addMoney(
@@ -1560,6 +1564,7 @@ if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked
 				objects.remove(u);
 				u--;
 			}
+			
 	}
 }
 			for (int c = 0; c < friends.size(); c++) {
