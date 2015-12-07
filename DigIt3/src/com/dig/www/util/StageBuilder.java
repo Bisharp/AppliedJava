@@ -28,24 +28,28 @@ public class StageBuilder {
 	private int level = 1;
 private int spawnNum;
 private Point spawnPoint;
-	public static StageBuilder getInstance(String loc, Board owner) {
+	public static StageBuilder getInstance(String loc, Board owner,int spawnNum) {
 
 		if (me == null)
-			me = new StageBuilder(loc, owner);
+			me = new StageBuilder(loc, owner,spawnNum);
 
 		return me;
 	}
 
-	public StageBuilder(String loc, Board owner) {
+	public StageBuilder(String loc, Board owner,int spawnNum) {
 		setLoc(loc);
 		this.owner = owner;
+		this.spawnNum=spawnNum;
 	}
 
-	public void changeState(String loc, Board owner) {
+	public void changeState(String loc, Board owner,int spawnNum) {
 		this.owner = owner;
+		this.spawnNum=spawnNum;
 		setLoc(loc);
 	}
-
+public int getSpawnNum(){
+	return spawnNum;
+}
 	private void setLoc(String loc) {
 		String tryLoc = StageBuilder.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile()
@@ -502,6 +506,8 @@ private Point spawnPoint;
 							else if (val == -3) {
 								if(spawnCount<=spawnNum)
 									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
+								
+								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
 							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
@@ -607,12 +613,17 @@ owner.setSpawnY(spawnPoint.y);}
 					level = 1000;
 				}
 				try {
-					spawnNum = Integer.parseInt(line.split(",")[3].trim());
+					int spawnNum = Integer.parseInt(line.split(",")[3].trim());
+					if(this.spawnNum==-1)
+						this.spawnNum=spawnNum;
+				
 					spawnPoint=null;
 				} catch (Exception ex) {
-					System.err
+						if(spawnNum==-1){
+						System.err
 							.println("WARNING: No Spawn number. Setting spawn number to 0.");
-					spawnNum = 0;
+				
+						spawnNum=0;}
 					spawnPoint=null;
 				}
 			} catch (Exception e) {

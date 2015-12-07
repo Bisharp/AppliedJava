@@ -3,7 +3,12 @@ package com.dig.www.objects;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+import com.dig.www.character.Items;
 import com.dig.www.start.Board;
+import com.dig.www.start.DigIt;
 import com.dig.www.util.Sprite;
 
 public  class Objects extends Sprite{
@@ -53,5 +58,12 @@ protected boolean wall;
 		}
 	}
 	public void collideWall() {
+	}
+	public boolean interact(){
+		JOptionPane.showMessageDialog(owner,"Description", DigIt.NAME
+				+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
+				new ImageIcon(image)
+				);
+		return true;
 	}
 }

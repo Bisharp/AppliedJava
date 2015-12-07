@@ -68,7 +68,7 @@ public class Board extends MPanel implements ActionListener {
 	private int doorStateTimer = 0;
 	private final int DOORSTATETMAX = 50;
 	private String doorStateLev = "";
-
+private int spawnNum;
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC, DOOROPEN;
 	};
@@ -211,8 +211,10 @@ public class Board extends MPanel implements ActionListener {
 		time.start();
 		Collections.sort(friends);
 	}
-
-	public void changeArea() {
+public void changeArea(){
+	this.changeArea(-1);
+}
+	public void changeArea(int num) {
 		pointedPoint = null;
 		fP.clear();
 		scrollX = 0;
@@ -226,8 +228,8 @@ public class Board extends MPanel implements ActionListener {
 						((Heart) g).end();
 		}
 
-		StageBuilder sB = StageBuilder.getInstance(level, this);
-		sB.changeState(level, this);
+		StageBuilder sB = StageBuilder.getInstance(level, this,num);
+		sB.changeState(level, this,num);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -319,6 +321,7 @@ public class Board extends MPanel implements ActionListener {
 		System.gc();
 		System.out.println("Before: " + freeMem + " After: "
 				+ Runtime.getRuntime().freeMemory());
+		spawnNum=sB.getSpawnNum();
 		save();
 	}
 
@@ -1492,8 +1495,9 @@ public class Board extends MPanel implements ActionListener {
 		}
 
 		Objects n;
+		boolean hasTalked=false;
 		for (int u = 0; u < objects.size(); u++) {
-
+boolean beenPicked=false;
 			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
@@ -1502,7 +1506,7 @@ public class Board extends MPanel implements ActionListener {
 
 			if (o.intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
-
+				
 				if (n instanceof Collectible && ((Collectible) n).collectible())
 					if (n instanceof MoneyObject) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
@@ -1510,6 +1514,7 @@ public class Board extends MPanel implements ActionListener {
 								((MoneyObject) n).getValue());
 						objects.remove(u);
 						u--;
+						beenPicked=true;
 					} else if (n instanceof SpecialCollectible) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
 						GameCharacter.getInventory().addItem(
@@ -1517,22 +1522,46 @@ public class Board extends MPanel implements ActionListener {
 						data.collect(((SpecialCollectible) n).id);
 						objects.remove(u);
 						u--;
+						beenPicked=true;
+						
+					}
+				
+			}
+if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked&&!(n instanceof DropPoint)){
+	if(n.interact()){
+		hasTalked=true;
+		if (n instanceof Collectible && ((Collectible) n).collectible())
+			if (n instanceof MoneyObject) {
+				Statics.playSound(this, "collectibles/marioCoin.wav");
+				GameCharacter.getInventory().addMoney(
+						((MoneyObject) n).getValue());
+				objects.remove(u);
+				u--;
+			} else if (n instanceof SpecialCollectible) {
+				Statics.playSound(this, "collectibles/marioCoin.wav");
+				GameCharacter.getInventory().addItem(
+						((Collectible) n).getType(), 1);
+				data.collect(((SpecialCollectible) n).id);
+				objects.remove(u);
+				u--;
 
-						// This code would, once fully implemented, add an extra
+				
+			}
+			else	if (n instanceof CollectibleCharacter) {
+				// This code would, once fully implemented, add an extra
 						// character following you. You would be able to switch
 						// to him.
-					} else if (n instanceof CollectibleCharacter) {
-						friends.add(((CollectibleCharacter) n).getCharacter());
-						objects.remove(u);
-						u--;
-					} else if (n instanceof CollectibleObject) {
-						GameCharacter.getInventory().addItem(
-								((Collectible) n).getType(), 1);
-						objects.remove(u);
-						u--;
-					}
+				friends.add(((CollectibleCharacter) n).getCharacter());
+				objects.remove(u);
+				u--;
+			} else if (n instanceof CollectibleObject) {
+				GameCharacter.getInventory().addItem(
+						((Collectible) n).getType(), 1);
+				objects.remove(u);
+				u--;
 			}
-
+	}
+}
 			for (int c = 0; c < friends.size(); c++) {
 
 				if (n.getBounds().intersects(
@@ -1769,7 +1798,10 @@ public class Board extends MPanel implements ActionListener {
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
-
+public void save(int spawnNum){
+	this.spawnNum=spawnNum;
+	this.save();
+}
 	public void save() {
 		String location = (GameStartBoard.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile().toString()
@@ -1781,7 +1813,7 @@ public class Board extends MPanel implements ActionListener {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(
 						locFile));
 				writer.write(level + "," + GameCharacter.getLevel() + ","
-						+ GameCharacter.getXP());
+						+ GameCharacter.getXP()+","+spawnNum);
 				writer.newLine();
 				if (normalPlayer(character.getType()))
 					writer.write(character.getSave());
@@ -1855,6 +1887,8 @@ public class Board extends MPanel implements ActionListener {
 						int levUp = Integer.parseInt(stuff.get(1));
 						GameCharacter.setLevel(levUp);
 						int xp = Integer.parseInt(stuff.get(2));
+						int spawnNum=Integer.parseInt(stuff.get(3));
+						this.spawnNum=spawnNum;
 						GameCharacter.setXP(xp);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -1914,7 +1948,7 @@ public class Board extends MPanel implements ActionListener {
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
 				}
-				changeArea();
+				changeArea(spawnNum);
 			} else {
 				throw new FileNotFoundException();
 			}
@@ -2114,5 +2148,8 @@ public class Board extends MPanel implements ActionListener {
 
 	public boolean lighterDark() {
 		return weather == Weather.RAIN && time.getGeneralTime() == Time.DAY;
+	}
+	public int getSpawnNum(){
+		return spawnNum;
 	}
 }
