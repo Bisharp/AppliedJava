@@ -682,13 +682,14 @@ owner.setSpawnY(spawnPoint.y);}
 					String area = stuff.get(2);
 					int collectibleNum = Integer.parseInt(stuff.get(3));
 					String type = stuff.get(4);
-					String type2=stuff.size()>5?stuff.get(5):"brown";
+					int spawnNum=Integer.parseInt(stuff.get(5));
+					String type2=stuff.size()>7?stuff.get(6):"brown";
 if(type.equals("normal")||type.equals("boss"))
 					portals.add(new Portal(enX, enY, owner, area,
-							collectibleNum, type));
+							collectibleNum, type,spawnNum));
 else
 	portals.add(new Door(enX, enY, owner, area,
-			collectibleNum, type,type2));
+			collectibleNum, type,type2,spawnNum));
 					
 				}
 

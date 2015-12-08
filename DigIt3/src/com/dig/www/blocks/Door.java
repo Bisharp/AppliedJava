@@ -10,9 +10,9 @@ public class Door extends Portal{
 private String doorType;
 protected String path;
 	public Door(int x, int y, Board owner, String area, int collectibles,
-			String type,String doorType) {
+			String type,String doorType,int spawnNum) {
 		super(x, y, owner, area, collectibles, type,"images/portals/" + type + "/" + doorType//Color
-				+"/"+"c.png");
+				+"/"+"c.png",spawnNum);
 		// TODO Auto-generated constructor stub
 	this.doorType=doorType;
 	path="images/portals/" + type + "/" + doorType//Color

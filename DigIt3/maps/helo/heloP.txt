@@ -1,1 +1,1 @@
-2050,600,islandTest,0,normal
+2050,600,islandTest,0,normal,-1

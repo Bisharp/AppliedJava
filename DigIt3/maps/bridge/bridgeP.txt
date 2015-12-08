@@ -1,1 +1,1 @@
-1550,200,LuigisMansion,0,normal
+1550,200,LuigisMansion,0,normal,-1

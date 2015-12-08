@@ -1,1 +1,1 @@
-2000,450,LuigisMansion,0,rectDoors
+2000,450,LuigisMansion,0,rectDoors,-1,brown
