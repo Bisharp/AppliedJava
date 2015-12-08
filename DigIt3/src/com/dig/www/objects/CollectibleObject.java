@@ -5,7 +5,7 @@ import com.dig.www.start.Board;
 
 public class CollectibleObject extends Collectible {
 
-	public CollectibleObject(int x, int y, String loc, Board owner, Items type) {
-		super(x, y, loc, owner, type);
+	public CollectibleObject(int x, int y, String loc,boolean wall, Board owner, Items type) {
+		super(x, y, loc,wall, owner, type);
 	}
 }

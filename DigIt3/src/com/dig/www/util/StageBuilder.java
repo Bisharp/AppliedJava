@@ -488,14 +488,21 @@ public int getSpawnNum(){
 						int nY = Integer.parseInt(stuff.get(1));
 						String loc = stuff.get(2);
 						boolean wall = false;
-						int val = stuff.size() > 4 ? Integer.parseInt(stuff
-								.get(4)) : 0;
+						
+						String value = stuff.size() > 4 ? stuff
+								.get(4) : null;
+								int val;
+								try{
+									val=Integer.parseInt(value);
+								}catch(Exception ex){
+									val=0;
+								}
 						if (stuff.get(3).charAt(0) == 't')
 							wall = true;
 
 						if (stuff.size() < 6)
 							if (val == 0)
-								npcs.add(new Objects(nX, nY, loc, wall, owner));
+								npcs.add(new Objects(nX, nY, loc, wall, owner,value));
 							else if (val == -1) {
 								npcs.add(new SpecialCollectible(nX, nY, loc,
 										owner, count));
@@ -523,7 +530,7 @@ public int getSpawnNum(){
 							npcs.add(new CollectibleCharacter(nX, nY, loc,
 									owner));
 						else
-							npcs.add(new CollectibleObject(nX, nY, loc, owner,
+							npcs.add(new CollectibleObject(nX, nY, loc,wall, owner,
 									Items.translate(stuff.get(5))));
 
 					} catch (IndexOutOfBoundsException ex) {

@@ -34,6 +34,7 @@ public class Chest extends NPC {
 			sayWhat = true;
 			opened = true;
 			image = newImage("images/objects/chestO.png");
+			shadow = newShadow("images/objects/chestO.png");
 			GameCharacter.getInventory().addItem(type, 1);
 		}
 	}

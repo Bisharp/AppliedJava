@@ -13,7 +13,7 @@ public class CollectibleCharacter extends Collectible {
 	private static final long serialVersionUID = 1L;
 
 	public CollectibleCharacter(int x, int y, String loc, Board owner) {
-		super(x, y, loc, owner, Items.NULL);
+		super(x, y, loc,true, owner, Items.NULL);
 	}
 
 	public GameCharacter getCharacter() {

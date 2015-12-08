@@ -13,11 +13,15 @@ import com.dig.www.util.Sprite;
 
 public  class Objects extends Sprite{
 protected boolean wall;
-	
-	public Objects(int x, int y, String loc,boolean wall,Board owner) {
+	protected String desc;
+	public Objects(int x, int y, String loc,boolean wall,Board owner,String desc) {
 		super(x, y, loc,owner);
 		// TODO Auto-generated constructor stub
 		this.setWall(wall);
+		if(desc!=null)
+		this.desc=desc;
+		else
+			desc="An object.";
 	}
 	@Override
 	public void animate() {

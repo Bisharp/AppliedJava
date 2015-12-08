@@ -17,7 +17,7 @@ public class ThrownObject extends CollectibleObject {
 	private final int SPEED;
 	
 	public ThrownObject(int x, int y, String loc, Board owner, Items useItem) {
-		super(x, y, loc, owner, useItem);
+		super(x, y, loc,false, owner, useItem);
 		
 		// This allows characters to throw with different force
 		SPEED = owner.getCharacter().getStrength();

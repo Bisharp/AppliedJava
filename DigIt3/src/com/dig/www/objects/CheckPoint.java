@@ -7,7 +7,7 @@ private int spawnNum;
 private static final String onLoc="images/objects/checkpoints/tempOn.png";
 private static final String offLoc="images/objects/checkpoints/tempOff.png";
 	public CheckPoint(int x, int y, Board owner,int spawnNum) {
-		super(x, y, offLoc, false, owner);
+		super(x, y, offLoc, false, owner,null);
 		this.spawnNum=spawnNum;
 		// TODO Auto-generated constructor stub
 	}
