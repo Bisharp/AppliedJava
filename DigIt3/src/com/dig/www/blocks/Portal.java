@@ -37,7 +37,7 @@ this.spawnNum=spawnNum;
 		this.area = area;
 		this.type = type;
 		collectibleNum = collectibles;
-
+this.spawnNum=spawnNum;
 		if (type.equals("default"))
 			animated = false;
 	}
