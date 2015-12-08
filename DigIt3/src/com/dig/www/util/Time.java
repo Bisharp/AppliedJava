@@ -25,18 +25,24 @@ public class Time implements ActionListener {
 
 	private float time;
 	private boolean isAM;
+	
+	// TODO this is the time it starts at
+	private static final float START = 4.3f;
 
 	public Time(Board b) {
 		timer = new Timer(SECOND, this);
 		owner = b;
 
-		String time = String.format("%tr", new Date());
-		String[] s = time.split(":");
-
-		this.time = Integer.parseInt(s[0]) + (Float.parseFloat(s[1]) / 100);
-		String t = s[s.length - 1];
-
-		isAM = t.endsWith("AM");
+//		String time = String.format("%tr", new Date());
+//		String[] s = time.split(":");
+//
+//		this.time = Integer.parseInt(s[0]) + (Float.parseFloat(s[1]) / 100);
+//		String t = s[s.length - 1];
+//
+//		isAM = t.endsWith("AM");
+		
+		time = START;
+		isAM = false;
 	}
 
 	public void start() {

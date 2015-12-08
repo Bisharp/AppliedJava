@@ -25,7 +25,7 @@ public abstract class Sprite implements Serializable {
 	protected int width;
 	protected int height;
 	protected boolean visible;
-	protected boolean onScreen = true;
+	protected boolean onScreen = false;
 	protected transient Image image;
 	protected transient Image shadow;
 

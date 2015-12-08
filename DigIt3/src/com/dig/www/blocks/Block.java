@@ -538,16 +538,27 @@ public class Block extends Sprite {
 
 	public Color computeColor(Color c) {
 
-		if (!owner.thunderStrike())
-			if (owner.darkenWorld())
-				if (owner.lighterDark())
-					c = Statics.sunriseColor(c, Statics.HALF_DARK);
-				else
-					c = Statics.darkenColor(c);
-			else if (owner.sunRise())
-				c = Statics.sunriseColor(c, owner.getTime());
-			else if (owner.sunSet())
-				c = Statics.sunsetColor(c, owner.getTime());
+		switch (owner.getTexturePack()) {
+
+		case LAB:
+			break;
+
+		case HAUNTED:
+			c = Statics.darkenColor(c);
+			break;
+
+		default:
+			if (!owner.thunderStrike())
+				if (owner.darkenWorld())
+					if (owner.lighterDark())
+						c = Statics.sunriseColor(c, Statics.HALF_DARK);
+					else
+						c = Statics.darkenColor(c);
+				else if (owner.sunRise())
+					c = Statics.sunriseColor(c, owner.getTime());
+				else if (owner.sunSet())
+					c = Statics.sunsetColor(c, owner.getTime());
+		}
 
 		return c;
 	}

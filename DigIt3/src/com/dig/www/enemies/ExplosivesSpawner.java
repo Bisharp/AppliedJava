@@ -13,6 +13,6 @@ public class ExplosivesSpawner extends Launch {
 
 	@Override
 	public void addBall() {
-		owner.addEnemy(new Explosive(x, y, "images/enemies/unique/dynamite.png", owner, false, 5));
+		owner.addEnemy(new Explosive(x, y, "images/enemies/unique/dynamite.png", owner, true));
 	}
 }

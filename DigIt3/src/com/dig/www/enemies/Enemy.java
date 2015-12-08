@@ -22,6 +22,8 @@ public abstract class Enemy extends Sprite {
 	protected transient boolean alive = true;
 	protected transient int health;
 	protected int maxHealth;
+	protected int hitstunTimer = 0;
+	protected static final int HITSTUN_MAX = 15;
 	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
 	protected int harmTimer = 0;
@@ -29,11 +31,13 @@ public abstract class Enemy extends Sprite {
 	public final boolean flying;
 	public static final Font enFont = new Font("Calibri", Font.BOLD, 20);
 	protected int damage = 10;
-	
+
 	protected int slowTimer = 0;
 	protected int SLOW_MAX = 10;
 
 	protected boolean invincible = false;
+	protected boolean collisionFlagged = false;
+	protected boolean turn = true;
 
 	public Enemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner);
@@ -59,20 +63,16 @@ public abstract class Enemy extends Sprite {
 
 	public void turnAround(int wallX, int wallY) {
 
-		int myX = round(x, 2);
-		int myY = round(y, 2);
-		wallX = round(wallX, 2);
-		wallY = round(wallY, 2);
+		if (turn) {
+			double tempD = Statics.pointTowards(new Point(x, y), new Point(wallX, wallY)) + 180;
+			if (tempD > 360)
+				tempD -= 360;
+			x += (int) (Math.cos(Math.toRadians((double) tempD)) * BLOCK);
+			y += (int) (Math.sin(Math.toRadians((double) tempD)) * BLOCK);
 
-		if (wallX > myX)
-			x -= BLOCK;
-		else if (wallX < myX)
-			x += BLOCK;
-
-		if (wallY > myY)
-			y -= BLOCK;
-		else if (wallY < myY)
-			y += BLOCK;
+			collisionFlagged = true;
+		} else
+			turn = true;
 	}
 
 	public int round(int round, int val) {
@@ -90,13 +90,13 @@ public abstract class Enemy extends Sprite {
 		if (stunTimer > 0) {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
-			g2d.drawImage(image, x, y, owner);
+			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
 			if (owner.darkenWorld())
-				g2d.drawImage(shadow, x, y, owner);
+				g2d.drawImage(hitstunRenders() ? shadow : null, x, y, owner);
 		} else {
-			g2d.drawImage(image, x, y, owner);
+			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
 			if (owner.darkenWorld())
-				g2d.drawImage(shadow, x, y, owner);
+				g2d.drawImage(hitstunRenders() ? shadow : null, x, y, owner);
 		}
 
 		if (harmTimer > 0)
@@ -112,20 +112,20 @@ public abstract class Enemy extends Sprite {
 		}
 	}
 
-	public void interact(Moves move, GameCharacter character,boolean fromP) {
-
+	public void interact(Moves move, GameCharacter character, boolean fromP) {
 
 		switch (move) {
 
 		// Clark
 		case SPADE:
-			if(!character.hasMeleed()){
-			takeDamage(character.getMeleeDamage());
-			character.endAction();}
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
 			break;
 		case ARROW:
-			if(fromP)
-			takeDamage(character.getRangedDamage());
+			if (fromP)
+				takeDamage(character.getRangedDamage());
 			break;
 		case PIT:
 
@@ -134,11 +134,11 @@ public abstract class Enemy extends Sprite {
 
 		// Carl
 		case CLUB:
-			if(!character.hasMeleed()){
-			stunTimer = STUN_MAX / 10;
-			takeDamage(character.getMeleeDamage());
-			character.endAction();
-			Statics.playSound(owner, "weapons/whop.wav");
+			if (!character.hasMeleed()) {
+				stunTimer = STUN_MAX / 10;
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+				Statics.playSound(owner, "weapons/whop.wav");
 			}
 			break;
 		case MPITCH:
@@ -183,69 +183,77 @@ public abstract class Enemy extends Sprite {
 			takeDamage(character.getRangedDamage());
 			break;
 		case BASH:
-			if(!character.hasSpecialed()){
-			takeDamage(character.getSpecialDamage());
-			stunTimer = STUN_MAX;
-			if(!invincible&&! (this instanceof PathEnemy)){
-			int d = (int) pointTowards(new Point(character.getX(), character.getY()));
-			d += 180;
-			x += Math.cos((double) Math.toRadians((double) d)) * 100;
-			y += Math.sin((double) Math.toRadians((double) d)) * 100;}}
+			if (!character.hasSpecialed()) {
+				takeDamage(character.getSpecialDamage());
+				stunTimer = STUN_MAX;
+				if (!invincible && !(this instanceof PathEnemy)) {
+					int d = (int) pointTowards(new Point(character.getX(), character.getY()));
+					d += 180;
+					x += Math.cos((double) Math.toRadians((double) d)) * 100;
+					y += Math.sin((double) Math.toRadians((double) d)) * 100;
+				}
+			}
 			// TODO implement launch
 			break;
 		default:
 			break;
 		case ITEM:
-			//I need some of the changes pushed, then this will be better
+			// I need some of the changes pushed, then this will be better
 			takeDamage(100);
 			break;
 		case STAB:
-			if(!character.hasMeleed()){
-			takeDamage(character.getMeleeDamage());
-			character.endAction();}
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
 			break;
 		case DIMENSION:
 			if (fromP)
-			takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage());
 			break;
 		case WARP:
-			if(!character.hasSpecialed()){
-			if(this instanceof Boss)
-			takeDamage(character.getSpecialDamage());
-			
-			else if(!invincible){
-				owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0,4,100));
-			alive=false;
+			if (!character.hasSpecialed()) {
+				if (this instanceof Boss)
+					takeDamage(character.getSpecialDamage());
+
+				else if (!invincible) {
+					owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0, 4, 100));
+					alive = false;
+				}
+
+				character.endAction();
 			}
-			
-			character.endAction();	}
 			break;
 		}
 	}
 
 	protected boolean takeDamage(int i) {
-if (!invincible){
-	int a=health;
-	if(i<a)
-		a=i;
-			GameCharacter.plusXP(a/10);}
+		if (!invincible) {
+			int a = health;
+			if (i < a)
+				a = i;
+			GameCharacter.plusXP(a / 10);
+		}
+
 		health -= i;
+		hitstunTimer = HITSTUN_MAX;
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible) {
 			alive = false;
 			GameCharacter.plusXP(getKillXP());
 		}
-		
+
 		return alive;
 	}
 
 	public boolean willHarm() {
+		turn = false;
 		return harmTimer <= 0 && alive == true;
 	}
 
 	public void basicAnimate() {
 		super.basicAnimate();
-		
+
 		if (slowTimer > 0)
 			slowTimer--;
 
@@ -254,6 +262,11 @@ if (!invincible){
 
 		if (harmTimer > 0)
 			harmTimer--;
+
+		if (hitstunTimer > 0)
+			hitstunTimer--;
+
+		collisionFlagged = false;
 	}
 
 	@Override
@@ -278,15 +291,21 @@ if (!invincible){
 	public int getKillXP() {
 		return 5;
 	}
-	
+
 	public int getSpeed() {
-		return slowTimer <= 0? 5 : 2;
+		return slowTimer <= 0 ? 5 : 2;
 	}
-	public boolean isInvincible(){
+
+	public boolean isInvincible() {
 		return invincible;
 	}
-	public boolean poisons(){
-		//for now, only Projectiles poison, full thing to be implemented later
+
+	public boolean poisons() {
+		// for now, only Projectiles poison, full thing to be implemented later
 		return false;
+	}
+
+	protected boolean hitstunRenders() {
+		return hitstunTimer % 3 == 0 || hitstunTimer == 0;
 	}
 }

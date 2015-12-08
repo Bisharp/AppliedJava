@@ -18,10 +18,14 @@ public class WalkingEnemy extends Enemy {
 	@Override
 	public void turnAround(int wallX, int wallY) {
 
-		super.turnAround(wallX, wallY);
-		scrollX *= -1;
-		scrollY *= -1;
-		animateTimer = 10;
+		if (turn) {
+			if (collisionFlagged)
+				return;
+			super.turnAround(wallX, wallY);
+			scrollX *= -1;
+			scrollY *= -1;
+		} else
+			turn = true;
 	}
 
 	@Override

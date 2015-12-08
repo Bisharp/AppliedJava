@@ -1212,17 +1212,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (willTalk) {
 			willTalk = false;
 
-			switch (direction) {
-			case UP:
-				return new Rectangle(x, y - height, width, height);
-			case DOWN:
-				return new Rectangle(x, y + height, width, height);
-			case RIGHT:
-				return new Rectangle(x + width, y, width, height);
-			case LEFT:
-			default:
-				return new Rectangle(x - width, y, width, height);
-			}
+			return new Rectangle(x - 50, y - 50, width + 100, height + 100);
 		}
 
 		return null;
@@ -1468,10 +1458,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			timersCount();
 		}
 
-//		if (player) {
-//			g2d.setColor(Color.magenta);
-//			g2d.draw(getCollisionBounds());
-//		}
+		if (player) {
+			g2d.setColor(Color.magenta);
+			g2d.draw(getCollisionBounds());
+		}
 	}
 
 	protected void drawTool(Graphics2D g2d) {

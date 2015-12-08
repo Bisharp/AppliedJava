@@ -1039,7 +1039,7 @@ public class Board extends MPanel implements ActionListener {
 							character.collision(b, false);
 						}
 					}
-					
+
 					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
 							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
@@ -1325,7 +1325,7 @@ public class Board extends MPanel implements ActionListener {
 					state = State.NPC;
 					bounds = null;
 				}
-				
+
 				for (int rI = 0; rI < character.getDirBounds().length; rI++)
 					if (n.getBounds().intersects(character.getDirBounds()[rI]))
 						character.presetCollisionFlag(rI);
@@ -1879,7 +1879,15 @@ public class Board extends MPanel implements ActionListener {
 		if (weather == Weather.RAIN)
 			return weatherTimer <= 0;
 		else
-			return time.getGeneralTime() == Time.NIGHT;
+			switch (texturePack) {
+			case LAB:
+				return false;
+			case HAUNTED:
+				return true;
+
+			default:
+				return time.getGeneralTime() == Time.NIGHT;
+			}
 	}
 
 	public boolean thunderStrike() {
@@ -1887,11 +1895,27 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public boolean sunRise() {
-		return time.getGeneralTime() == Time.SUNRISE;
+
+//		switch (texturePack) {
+//		case LAB:
+//		case HAUNTED:
+//			return false;
+//
+//		default:
+			return time.getGeneralTime() == Time.SUNRISE;
+//		}
 	}
 
 	public boolean sunSet() {
-		return time.getGeneralTime() == Time.SUNSET;
+
+//		switch (texturePack) {
+//		case LAB:
+//		case HAUNTED:
+//			return false;
+//
+//		default:
+			return time.getGeneralTime() == Time.SUNSET;
+//		}
 	}
 
 	// TODO at work
