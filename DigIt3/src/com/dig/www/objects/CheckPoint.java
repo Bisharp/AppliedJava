@@ -1,6 +1,11 @@
 package com.dig.www.objects;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+import com.dig.www.character.Items;
 import com.dig.www.start.Board;
+import com.dig.www.start.DigIt;
 
 public class CheckPoint extends Objects{
 private int spawnNum;
@@ -34,5 +39,13 @@ public void animate(){
 		image=newImage(offLoc);
 		shadow=newShadow(offLoc);
 		}
+}
+@Override
+public boolean interact(){
+	String[]options={"Leave","Save"};
+	return JOptionPane.showOptionDialog(owner,"Do you want to save?", DigIt.NAME
+			+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+			new ImageIcon(image),options,"Save"
+			)==1;
 }
 }

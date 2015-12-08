@@ -48,6 +48,14 @@ protected boolean wall;
 			shadow = newShadow(loc);
 			x-=15;
 			y-=15;
+			switch(desc){
+			case "A pile of leaves. Did someone rake them or did they fall that way?":
+			desc="A now-scattered pile of leaves. I hope we didn't mess anything up.";
+				break;
+			default:
+				desc="A scattered pile of leaves.";
+				break;
+			}
 		}
 		if(playerNum==-1){
 			if(wall)
@@ -64,7 +72,7 @@ protected boolean wall;
 	public void collideWall() {
 	}
 	public boolean interact(){
-		JOptionPane.showMessageDialog(owner,"Description", DigIt.NAME
+		JOptionPane.showMessageDialog(owner,desc, DigIt.NAME
 				+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(image)
 				);

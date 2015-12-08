@@ -30,10 +30,10 @@ public abstract class Collectible extends Objects {
 	}
 	@Override
 	public boolean interact(){
-		JOptionPane.showMessageDialog(owner,Items.getDesc(type.toString()), DigIt.NAME
-				+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(image)
-				);
-		return true;
+		String[]options={"Leave","Take"};
+		return JOptionPane.showOptionDialog(owner,Items.getDesc(type.toString()), DigIt.NAME
+				+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				new ImageIcon(image),options,"Take"
+				)==1;
 	}
 }

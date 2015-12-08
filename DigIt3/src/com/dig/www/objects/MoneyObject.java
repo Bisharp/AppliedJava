@@ -22,10 +22,11 @@ public class MoneyObject extends Collectible {
 	}
 	@Override
 	public boolean interact(){
-		JOptionPane.showMessageDialog(owner,"This object is the game's currency, Money. This particular coin is worth "+value+" Money.", DigIt.NAME
-				+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(image)
-				);
-		return true;
+String[]options={"Leave","Take"};
+		return JOptionPane.showOptionDialog(owner,"This is Money, the game's currency. This particular coin is worth "+value+" Money.", DigIt.NAME
+				+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				new ImageIcon(image),options,"Take"
+				)==1;
+		
 	}
 }
