@@ -39,8 +39,9 @@ public class CharData implements Serializable {
 	public void enterLevel(String level) {
 
 		if (!areas.containsKey(level))
-			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(), level));
-		
+			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),
+					level));
+
 		currentKey = level;
 	}
 
@@ -77,7 +78,6 @@ public class CharData implements Serializable {
 
 		Enumeration<String> keys = areas.keys();
 		ArrayList<String> aS = new ArrayList<String>();
-
 		try {
 			String key;
 			while (true) {
@@ -92,6 +92,19 @@ public class CharData implements Serializable {
 
 	public void registerQuest(QuestNPC npc) {
 		areas.get(currentKey).registerQuest(npc.id);
+	}
+
+	public void setAcceptedPhase(QuestNPC npc, int phase) {
+		// TODO Auto-generated method stub
+		areas.get(currentKey).getQuest(npc.id).setAcceptedPhase(phase);
+	}
+
+	public int getAcceptedPhase(QuestNPC npc) {
+		return areas.get(currentKey).getQuest(npc.id).getAcceptedPhase();
+	}
+
+	public void setAppearPhase(QuestNPC npc, int setter) {
+		areas.get(currentKey).getQuest(npc.id).setAppearPhase(setter);
 	}
 
 	public void completeQuest(QuestNPC npc) {
@@ -127,11 +140,13 @@ public class CharData implements Serializable {
 
 		// end
 
-		private LevelData(ArrayList<Objects> objectList, ArrayList<NPC> npcs, String name) {
+		private LevelData(ArrayList<Objects> objectList, ArrayList<NPC> npcs,
+				String name) {
 
 			for (Objects obj : objectList)
 				if (obj instanceof SpecialCollectible)
-					specialCollectibles.put(((SpecialCollectible) obj).id, false);
+					specialCollectibles.put(((SpecialCollectible) obj).id,
+							false);
 				else if (obj instanceof DropPoint)
 					hasDropPoints = true;
 
@@ -139,14 +154,18 @@ public class CharData implements Serializable {
 			for (NPC npc : npcs)
 				if (npc instanceof QuestNPC) {
 					qNPC = (QuestNPC) npc;
-					SimpleQuest s = new SimpleQuest(qNPC.getType(), qNPC.getPlace(), name, qNPC.id);
+					SimpleQuest s = new SimpleQuest(qNPC.getType(),
+							qNPC.getPlace(), name, qNPC.id);
 					quests.add(s);
 					locQuests.put(s.id, s);
-				} else if (npc instanceof BlockerNPC && ((BlockerNPC) npc).id != -1)
+				} else if (npc instanceof BlockerNPC
+						&& ((BlockerNPC) npc).id != -1)
 					blockerNPCs.put(((BlockerNPC) npc).id, true);
 
 			location = name;
-			System.out.println("New level data created for " + name + ". We have " + (hasDropPoints ? "" : "no ") + "drop points.");
+			System.out.println("New level data created for " + name
+					+ ". We have " + (hasDropPoints ? "" : "no ")
+					+ "drop points.");
 		}
 
 		public void clearBlocker(int id) {
@@ -194,7 +213,8 @@ public class CharData implements Serializable {
 					// More variables
 					int length = 0;
 					int point;
-					int questNum = Statics.RAND.nextInt(numOfQuests < 5 ? numOfQuests : 4) + 1;
+					int questNum = Statics.RAND
+							.nextInt(numOfQuests < 5 ? numOfQuests : 4) + 1;
 					if (questNum == 0)
 						questNum++;
 
@@ -216,8 +236,12 @@ public class CharData implements Serializable {
 
 					quests2 = new ArrayList<Items>();
 					for (int y = 0; y < quests.size(); y++) {
-						if (quests.get(y).place.equals(location) && !quests.get(y).isCompleted())
+						if (quests.get(y).place.equals(location)
+								&& !quests.get(y).isCompleted()
+								&& quests.get(y).objectAppeared())
 							quests2.add(quests.get(y).item);
+						else if (!quests.get(y).objectAppeared())
+							points.remove(0);
 					}
 				} else {
 					points = null;
@@ -238,7 +262,8 @@ public class CharData implements Serializable {
 					if (points != null)
 						if (obj instanceof DropPoint) {
 							if (points.contains(count)) {
-								Items quest = quests2.get(Statics.RAND.nextInt(quests2.size()));
+								Items quest = quests2.get(Statics.RAND
+										.nextInt(quests2.size()));
 								((DropPoint) obj).setSpecs(quest);
 								quests2.remove(quest);
 								points.remove(new Integer(count));
@@ -247,7 +272,9 @@ public class CharData implements Serializable {
 						}
 
 					objList.add(obj);
-				} else if (specialCollectibles.containsKey(((SpecialCollectible) obj).id) ? !hasCollected(((SpecialCollectible) obj).id) : true)
+				} else if (specialCollectibles
+						.containsKey(((SpecialCollectible) obj).id) ? !hasCollected(((SpecialCollectible) obj).id)
+						: true)
 					objList.add(obj);
 			}
 
@@ -259,18 +286,19 @@ public class CharData implements Serializable {
 		public ArrayList<NPC> filterNPC(ArrayList<NPC> input) {
 
 			NPC obj;
-			Reyzu obj2;
+			QuestNPC obj2;
 			ArrayList<NPC> objList = new ArrayList<NPC>();
 
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
 
-				if (obj instanceof Reyzu) {
-					obj2 = (Reyzu) obj;
+				if (obj instanceof QuestNPC) {
+					obj2 = (QuestNPC) obj;
 					obj2.setQuestState(getQuest(obj2.id));
 					objList.add(obj2);
 				} else if (obj instanceof BlockerNPC) {
-					if (((BlockerNPC) obj).id == -1 || blockerNPCs.get(((BlockerNPC) obj).id))
+					if (((BlockerNPC) obj).id == -1
+							|| blockerNPCs.get(((BlockerNPC) obj).id))
 						objList.add(obj);
 				} else
 					objList.add(obj);
@@ -305,10 +333,12 @@ public class CharData implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private boolean accepted = false;
 		private boolean completed = false;
+		private int acceptedPhase;
 		public final Items item;
 		public final String place;
 		public final String origin;
 		public final int id;
+		private int appearPhase = 0;
 
 		public SimpleQuest(Items item, String place, String origin, int id) {
 			this.item = item;
@@ -317,6 +347,26 @@ public class CharData implements Serializable {
 			this.id = id;
 
 			System.out.println("New simple quest.");
+		}
+
+		public boolean objectAppeared() {
+			return appearPhase <= acceptedPhase;
+		}
+
+		public int getAppearPhase() {
+			return appearPhase;
+		}
+
+		public void setAppearPhase(int setter) {
+			appearPhase = setter;
+		}
+
+		public int getAcceptedPhase() {
+			return acceptedPhase;
+		}
+
+		public void setAcceptedPhase(int phase) {
+			this.acceptedPhase = phase;
 		}
 
 		public boolean isAccepted() {
@@ -335,4 +385,5 @@ public class CharData implements Serializable {
 			this.completed = completed;
 		}
 	}
+
 }

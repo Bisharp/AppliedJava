@@ -77,6 +77,7 @@ public abstract class NPC extends Sprite {
 	}
 
 	protected boolean iTalk = false;
+	protected boolean inConversation = false;
 	protected boolean inDialogue = true;
 	protected boolean exiting = false;
 	protected static final int MAX = 3;
@@ -127,7 +128,8 @@ public abstract class NPC extends Sprite {
 		boolean underline = false;
 
 		l = iTalk ? getLine()
-				+ (!inDialogue ? append().replace("next", "exit") : append()) :
+				+ (!inDialogue ? (!inConversation ? append().replace("next",
+						"exit") : "") : append()) :
 
 		getCharLine() + append();
 		if (iTalk)
@@ -343,10 +345,10 @@ public abstract class NPC extends Sprite {
 			return;
 		if (willOption.getNewOptions().length > 0) {
 			setCurrentOptions(willOption);
-			inDialogue = true;
+
 		} else {
 			resetCurrentOptions();
-			inDialogue = false;
+
 		}
 		willOption = null;
 	}
@@ -381,7 +383,7 @@ public abstract class NPC extends Sprite {
 
 	public void exit() {
 
-		if (!inDialogue) {
+		if (!inDialogue && !inConversation) {
 			line = exitLine();
 			index = -1;
 			exiting = true;
@@ -396,7 +398,8 @@ public abstract class NPC extends Sprite {
 	public abstract String exitLine();
 
 	public void setCurrentOptions(NPCOption optionGiver) {
-
+		inDialogue = true;
+		inConversation = true;
 		buttons = new Rectangle[optionGiver.getNewOptions().length];
 
 		int length = 0;
@@ -413,6 +416,8 @@ public abstract class NPC extends Sprite {
 	}
 
 	public void resetCurrentOptions() {
+		inDialogue = false;
+		inConversation = false;
 		currentOptions = options.clone();
 		buttons = new Rectangle[options.length];
 

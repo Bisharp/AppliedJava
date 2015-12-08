@@ -1,11 +1,14 @@
 package com.dig.www.util;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import com.dig.www.blocks.*;
 import com.dig.www.enemies.*;
@@ -23,25 +26,30 @@ public class StageBuilder {
 	private String loc;
 	private Board owner;
 	private int level = 1;
-
-	public static StageBuilder getInstance(String loc, Board owner) {
+private int spawnNum;
+private Point spawnPoint;
+	public static StageBuilder getInstance(String loc, Board owner,int spawnNum) {
 
 		if (me == null)
-			me = new StageBuilder(loc, owner);
+			me = new StageBuilder(loc, owner,spawnNum);
 
 		return me;
 	}
 
-	public StageBuilder(String loc, Board owner) {
+	public StageBuilder(String loc, Board owner,int spawnNum) {
 		setLoc(loc);
 		this.owner = owner;
+		this.spawnNum=spawnNum;
 	}
 
-	public void changeState(String loc, Board owner) {
+	public void changeState(String loc, Board owner,int spawnNum) {
 		this.owner = owner;
+		this.spawnNum=spawnNum;
 		setLoc(loc);
 	}
-
+public int getSpawnNum(){
+	return spawnNum;
+}
 	private void setLoc(String loc) {
 		String tryLoc = StageBuilder.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile()
@@ -82,11 +90,6 @@ public class StageBuilder {
 					} else {
 						for (int i = 0; i < line.length(); i++) {
 							switch (line.charAt(i)) {
-
-							case 'O':
-								owner.setSpawnX(-Statics.BLOCK_HEIGHT * i + OFF);
-								owner.setSpawnY(-Statics.BLOCK_HEIGHT * ln
-										+ OFF - 299);
 							case '1':
 								world.add(new Block(Statics.BLOCK_HEIGHT * i,
 										Statics.BLOCK_HEIGHT * ln,
@@ -416,8 +419,10 @@ public class StageBuilder {
 										break;
 									}
 								}
-							if (!has)
-								npcs.add(new Macaroni(nX, nY, owner, loc));
+							if (!has){
+								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
+							}
+								questCount++;//It should stay outside the brackets.
 							break;
 						case NPC.REYZU:
 							npcs.add(new Reyzu(nX, nY, owner, loc, questCount));
@@ -446,6 +451,7 @@ public class StageBuilder {
 
 		ArrayList<Objects> npcs = new ArrayList<Objects>();
 		int count = 0;
+		int spawnCount=0;
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
@@ -482,14 +488,21 @@ public class StageBuilder {
 						int nY = Integer.parseInt(stuff.get(1));
 						String loc = stuff.get(2);
 						boolean wall = false;
-						int val = stuff.size() > 4 ? Integer.parseInt(stuff
-								.get(4)) : 0;
+						
+						String value = stuff.size() > 4 ? stuff
+								.get(4) : null;
+								int val;
+								try{
+									val=Integer.parseInt(value);
+								}catch(Exception ex){
+									val=0;
+								}
 						if (stuff.get(3).charAt(0) == 't')
 							wall = true;
 
 						if (stuff.size() < 6)
 							if (val == 0)
-								npcs.add(new Objects(nX, nY, loc, wall, owner));
+								npcs.add(new Objects(nX, nY, loc, wall, owner,value));
 							else if (val == -1) {
 								npcs.add(new SpecialCollectible(nX, nY, loc,
 										owner, count));
@@ -498,8 +511,11 @@ public class StageBuilder {
 								npcs.add(new RandSkinObject(nX, nY, loc, wall,
 										owner));
 							else if (val == -3) {
-								owner.setSpawnX(-nX + OFF);
-								owner.setSpawnY(-nY + OFF - 299);
+								if(spawnCount<=spawnNum)
+									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
+								
+								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
+							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
 							} else if (val == -5) {
@@ -514,7 +530,7 @@ public class StageBuilder {
 							npcs.add(new CollectibleCharacter(nX, nY, loc,
 									owner));
 						else
-							npcs.add(new CollectibleObject(nX, nY, loc, owner,
+							npcs.add(new CollectibleObject(nX, nY, loc,wall, owner,
 									Items.translate(stuff.get(5))));
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -527,7 +543,13 @@ public class StageBuilder {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+		try{
+owner.setSpawnX(spawnPoint.x);
+owner.setSpawnY(spawnPoint.y);}
+		catch(Exception ex){
+			JOptionPane.showMessageDialog(owner, "No spawn point. Leaving game.");
+			System.exit(0);
+		}
 		return npcs;
 	}
 
@@ -597,6 +619,20 @@ public class StageBuilder {
 							.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
 					level = 1000;
 				}
+				try {
+					int spawnNum = Integer.parseInt(line.split(",")[3].trim());
+					if(this.spawnNum==-1)
+						this.spawnNum=spawnNum;
+				
+					spawnPoint=null;
+				} catch (Exception ex) {
+						if(spawnNum==-1){
+						System.err
+							.println("WARNING: No Spawn number. Setting spawn number to 0.");
+				
+						spawnNum=0;}
+					spawnPoint=null;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -646,13 +682,14 @@ public class StageBuilder {
 					String area = stuff.get(2);
 					int collectibleNum = Integer.parseInt(stuff.get(3));
 					String type = stuff.get(4);
-					String type2=stuff.size()>5?stuff.get(5):"brown";
+					int spawnNum=Integer.parseInt(stuff.get(5));
+					String type2=stuff.size()>7?stuff.get(6):"brown";
 if(type.equals("normal")||type.equals("boss"))
 					portals.add(new Portal(enX, enY, owner, area,
-							collectibleNum, type));
+							collectibleNum, type,spawnNum));
 else
 	portals.add(new Door(enX, enY, owner, area,
-			collectibleNum, type,type2));
+			collectibleNum, type,type2,spawnNum));
 					
 				}
 

@@ -61,9 +61,8 @@ public class Reyzu extends QuestNPC {
 												"Oh, I'd love to, but I really can't make time. I'm so sorry...",
 												"I cannot." }, true, owner) },
 						owner) }, id);
-
-		options[0].setAnswer(quest.getLine() + "\nWill you help me?");
-
+specify(Items.DONUT, "hauntedTest",Quest.Quests.FETCH);
+options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 	}
 
 	@Override
@@ -74,7 +73,7 @@ public class Reyzu extends QuestNPC {
 			if (option.question().equals("Yes")) {
 				owner.getData().registerQuest(this);
 				questAccepted = true;
-				setAcceptedVals();
+				setAcceptedVals(0);
 			}
 
 		} else if (!questCompleted) {
@@ -109,7 +108,7 @@ public class Reyzu extends QuestNPC {
 
 	}
 
-	protected void setAcceptedVals() {
+	protected void setAcceptedVals(int phase) {
 		greetingDialogs = new String[1];
 		greetingDialogs[0] = "So.. Any progress?";
 		options = new NPCOption[1];

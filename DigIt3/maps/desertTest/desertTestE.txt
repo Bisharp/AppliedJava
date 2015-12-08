@@ -1,6 +1,0 @@
-s,1500,1300,images/enemies/unique/security.png,f,10,cop
-s,1650,650,images/enemies/unique/security.png,f,10,cop
-s,1550,150,images/enemies/unique/security.png,f,10,cop
-s,1250,550,images/enemies/unique/security.png,f,10,cop
-s,750,1550,images/enemies/unique/security.png,f,10,cop
-s,250,1550,images/enemies/unique/security.png,f,10,cop

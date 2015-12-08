@@ -1,2 +1,0 @@
-500,5000,images/objects/collectibles/special.png,n,-1
-500,5300,images/objects/collectibles/special.png,n,-1
