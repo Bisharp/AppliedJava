@@ -68,7 +68,8 @@ public class Board extends MPanel implements ActionListener {
 	private int doorStateTimer = 0;
 	private final int DOORSTATETMAX = 50;
 	private String doorStateLev = "";
-private int spawnNum;
+	private int spawnNum;
+
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC, DOOROPEN;
 	};
@@ -182,15 +183,11 @@ private int spawnNum;
 
 	public Board(DigIt dM, String name) {
 		this.userName = name;
-		character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
-				Statics.BOARD_HEIGHT / 2 - 50, this, true);
+		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
-		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150,
-				Statics.BOARD_HEIGHT / 2 - 50, this, false));
-		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
-				Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		friends.add(new Club(Statics.BOARD_WIDTH / 2,
-				Statics.BOARD_HEIGHT / 2 + 150, this, false));
+		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
+		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
+		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 
 		this.addMouseListener(new PersonalMouse());
 
@@ -211,9 +208,11 @@ private int spawnNum;
 		time.start();
 		Collections.sort(friends);
 	}
-public void changeArea(){
-	this.changeArea(-1);
-}
+
+	public void changeArea() {
+		this.changeArea(-1);
+	}
+
 	public void changeArea(int num) {
 		pointedPoint = null;
 		fP.clear();
@@ -228,8 +227,8 @@ public void changeArea(){
 						((Heart) g).end();
 		}
 
-		StageBuilder sB = StageBuilder.getInstance(level, this,num);
-		sB.changeState(level, this,num);
+		StageBuilder sB = StageBuilder.getInstance(level, this, num);
+		sB.changeState(level, this, num);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -250,9 +249,7 @@ public void changeArea(){
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(),
-							"images/objects/chestC.png", this, level,
-							((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
 				}
 
 		if (character.getType() == Types.SPADE) {
@@ -260,28 +257,25 @@ public void changeArea(){
 		}
 
 		for (int c = 0; c < friends.size(); c++) {
-			if(c<3){
-				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50-100+(c*100));
-				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50-100);
-			}else if(c==3){
-				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50-100);
+			if (c < 3) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
+			} else if (c == 3) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
-			}
-			else if(c==4){
-				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50+100);
+			} else if (c == 4) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + 100);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
-			}
-			else if(c<8){
-				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50-100+((c-5)*100));
-				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50+100);
-			}else{
+			} else if (c < 8) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 + 100);
+			} else {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
 			}
 			if (friends.get(c).getType() == Types.SPADE) {
 				((Spade) friends.get(c)).resetDirt();
 			}
-
 
 		}
 		for (int c = 0; c < enemies.size(); c++) {
@@ -319,17 +313,14 @@ public void changeArea(){
 
 		long freeMem = Runtime.getRuntime().freeMemory();
 		System.gc();
-		System.out.println("Before: " + freeMem + " After: "
-				+ Runtime.getRuntime().freeMemory());
-		spawnNum=sB.getSpawnNum();
+		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
+		spawnNum = sB.getSpawnNum();
 		save();
 	}
 
 	protected boolean fogCompute(int x, int y) {
-		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG
-				.special()
-				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT
-						- Statics.BLOCK_HEIGHT);
+		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
+				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
 
 	public void paint(Graphics g) {
@@ -371,20 +362,16 @@ public void changeArea(){
 
 			// Enemy draw
 			for (i = 0; i < enemies.size(); i++) {
-				if (enemies.get(i).isOnScreen()
-						|| enemies.get(i) instanceof Boss) {
+				if (enemies.get(i).isOnScreen() || enemies.get(i) instanceof Boss) {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -396,10 +383,8 @@ public void changeArea(){
 						switch (weather) {
 
 						case FOG:
-							if (!fogCompute(e.getX(), e.getY())
-									&& !(e instanceof Boss)) {
-								g2d.drawImage(e.getShadow(), e.getX(),
-										e.getY(), this);
+							if (!fogCompute(e.getX(), e.getY()) && !(e instanceof Boss)) {
+								g2d.drawImage(e.getShadow(), e.getX(), e.getY(), this);
 								break;
 							}
 
@@ -418,18 +403,12 @@ public void changeArea(){
 					p = fP.get(i);
 					if (!(fP.get(i) instanceof Field)) {
 						// Line-of-sight mechanics
-						int[] xs = { p.getMidX() - 10,
-								character.getMidX() - 10,
-								character.getMidX() + 10, p.getMidX() + 10 };
-						int[] ys = { p.getMidY() - 10,
-								character.getMidY() - 10,
-								character.getMidY() + 10, p.getMidY() + 10 };
+						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
+						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
 						poly = new Polygon(xs, ys, xs.length);
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& poly.intersects(wallList.get(x)
-											.getBounds())) {
+							if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -450,15 +429,12 @@ public void changeArea(){
 
 				if (obj.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, obj.getMidX() + 10 };
-					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, obj.getMidY() + 10 };
+					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, obj.getMidX() + 10 };
+					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, obj.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -470,8 +446,7 @@ public void changeArea(){
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(obj.getX(), obj.getY())) {
-								g2d.drawImage(obj.getShadow(), obj.getX(),
-										obj.getY(), this);
+								g2d.drawImage(obj.getShadow(), obj.getX(), obj.getY(), this);
 								break;
 							}
 						default:
@@ -483,15 +458,12 @@ public void changeArea(){
 			for (Portal p2 : portals)
 				if (p2.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, p2.getMidX() + 10 };
-					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, p2.getMidY() + 10 };
+					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p2.getMidX() + 10 };
+					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p2.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -508,15 +480,12 @@ public void changeArea(){
 			for (NPC npc : npcs)
 				if (npc.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, npc.getMidX() + 10 };
-					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, npc.getMidY() + 10 };
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -529,8 +498,7 @@ public void changeArea(){
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(npc.getX(), npc.getY())) {
-								g2d.drawImage(npc.getShadow(), npc.getX(),
-										npc.getY(), this);
+								g2d.drawImage(npc.getShadow(), npc.getX(), npc.getY(), this);
 								break;
 							}
 						default:
@@ -557,15 +525,11 @@ public void changeArea(){
 			// ;
 			if (pointedPoint != null) {
 				if (pointedPointType == -1)
-					g2d.drawImage(
-							DigIt.lib.checkLibrary("/images/pointed/go.png"),
-							(int) pointedPoint.getX() - 50,
-							(int) pointedPoint.getY() - 50, this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50, (int) pointedPoint.getY() - 50,
+							this);
 				else
-					g2d.drawImage(DigIt.lib
-							.checkLibrary("/images/pointed/attack.png"),
-							(int) pointedPoint.getX() - 50, (int) pointedPoint
-									.getY() - 50, this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"), (int) pointedPoint.getX() - 50,
+							(int) pointedPoint.getY() - 50, this);
 
 			}
 			for (GameCharacter character : friends) {
@@ -656,7 +620,7 @@ public void changeArea(){
 				switch (texturePack) {
 				case DESERT:
 					g2d.setColor(Statics.LIGHT_OFF_TAN);
-					
+
 					if (state != State.NPC)
 						while (weatherList.size() > 0)
 							weatherList.remove(0);
@@ -682,29 +646,20 @@ public void changeArea(){
 					if (weatherList.isEmpty())
 						for (int i2 = 0; i2 < 700; i2++) {
 							weatherList
-									.add(new int[] {
-											Statics.RAND
-													.nextInt(Statics.BOARD_WIDTH - 5),
-											Statics.RAND
-													.nextInt(Statics.BOARD_HEIGHT - 5) });
+									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
 						}
 
 					if (weatherList.size() < 1000 && state != State.NPC)
 						for (int i2 = 0; i2 < Statics.RAND.nextInt(5) + 1; i2++) {
-							weatherList.add(new int[] {
-									Statics.RAND
-											.nextInt(Statics.BOARD_WIDTH - 5),
-									0 });
+							weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), 0 });
 						}
 
 					switch (time.getGeneralTime()) {
 					case Time.SUNRISE:
-						g2d.setColor(Statics.sunriseColor(Color.lightGray,
-								time.getTime()));
+						g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.SUNSET:
-						g2d.setColor(Statics.sunsetColor(Color.lightGray,
-								time.getTime()));
+						g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.NIGHT:
 						g2d.setColor(Statics.darkenColor(Color.lightGray));
@@ -727,12 +682,10 @@ public void changeArea(){
 							g2d.drawRect(x2, y2, 5, 5);
 							switch (time.getGeneralTime()) {
 							case Time.SUNRISE:
-								g2d.setColor(Statics.sunriseColor(
-										Color.lightGray, time.getTime()));
+								g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
 								break;
 							case Time.SUNSET:
-								g2d.setColor(Statics.sunsetColor(
-										Color.lightGray, time.getTime()));
+								g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
 								break;
 							case Time.DAY:
 							default:
@@ -744,8 +697,7 @@ public void changeArea(){
 						if (state != State.NPC) {
 							weatherList.remove(runs);
 
-							if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH
-									&& y2 <= Statics.BOARD_HEIGHT) {
+							if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH && y2 <= Statics.BOARD_HEIGHT) {
 								x2 += (Statics.RAND.nextBoolean() ? -3 : 3);
 								y2 += 5;
 								weatherList.add(runs, new int[] { x2, y2 });
@@ -820,9 +772,8 @@ public void changeArea(){
 		// char[] names = {'S', 'C', 'D', 'H'};
 		String decision;
 
-		decision = ((String) JOptionPane.showInputDialog(this,
-				"Please select a character: ", DigIt.NAME,
-				JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
+		decision = ((String) JOptionPane.showInputDialog(this, "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
+				getCharacters(), null));
 
 		if (decision == null) {
 			timer.restart();
@@ -841,8 +792,7 @@ public void changeArea(){
 			character.setPlayer(true);
 			friends.get(friendNum).setPlayer(false);
 			character.stop();
-			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(),
-					(int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
 			Collections.sort(friends);
 		}
 		timer.restart();
@@ -902,8 +852,7 @@ public void changeArea(){
 			b.setY(b.getY() + y);
 		}
 		if (pointedPoint != null)
-			pointedPoint.setLocation(pointedPoint.getX() + x,
-					pointedPoint.getY() + y);
+			pointedPoint.setLocation(pointedPoint.getX() + x, pointedPoint.getY() + y);
 		for (GameCharacter b : friends) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
@@ -964,8 +913,7 @@ public void changeArea(){
 				}
 
 				enemies.get(i).animate();
-				enemies.get(i).setOnScreen(
-						enemies.get(i).getBounds().intersects(getScreen()));
+				enemies.get(i).setOnScreen(enemies.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -978,11 +926,8 @@ public void changeArea(){
 
 					if (fP.get(i).getMove() == Moves.CHAIN) {
 						if (fP.get(i).getCharNum() == -2) {
-							fP.add(new FProjectile(fP.get(i).getD() - 180, fP
-									.get(i).getX(), fP.get(i).getY(), fP.get(i)
-									.getSpeed(), fP.get(i).getMaker(), fP
-									.get(i).getLoc(), fP.get(i).getOwner(),
-									Moves.CHAIN, -1, false));
+							fP.add(new FProjectile(fP.get(i).getD() - 180, fP.get(i).getX(), fP.get(i).getY(), fP.get(i).getSpeed(), fP.get(i)
+									.getMaker(), fP.get(i).getLoc(), fP.get(i).getOwner(), Moves.CHAIN, -1, false));
 							fP.remove(i);
 						} else {
 							fP.get(i).setCharNum(-1);
@@ -1003,10 +948,7 @@ public void changeArea(){
 						chara = friends.get(charNum);
 
 					}
-					if (fP.get(i)
-							.getBounds()
-							.contains(
-									new Point(chara.getMidX(), chara.getMidY()))) {
+					if (fP.get(i).getBounds().contains(new Point(chara.getMidX(), chara.getMidY()))) {
 						fP.remove(i);
 						i--;
 						continue;
@@ -1014,8 +956,7 @@ public void changeArea(){
 				}
 
 				fP.get(i).animate();
-				fP.get(i).setOnScreen(
-						fP.get(i).getBounds().intersects(getScreen()));
+				fP.get(i).setOnScreen(fP.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -1054,11 +995,9 @@ public void changeArea(){
 					if (c == c2) {
 
 					} else {
-						if (!friends.get(c).getWallBound()
-								&& !friends.get(c2).getWallBound()) {
+						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
 
-							if (friends.get(c).getBounds()
-									.intersects(friends.get(c2).getBounds())) {
+							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds())) {
 								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
@@ -1121,18 +1060,11 @@ public void changeArea(){
 				// Line-of-sight
 				if (b.isOnScreen())
 					if (b.getType() != Block.Blocks.WALL) {
-						int[] xs = { b.getMidX() - 10,
-								character.getMidX() - 10,
-								character.getMidX() + 10, b.getMidX() + 10 };
-						int[] ys = { b.getMidY() - 10,
-								character.getMidY() - 10,
-								character.getMidY() + 10, b.getMidY() + 10 };
+						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
+						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& new Polygon(xs, ys, xs.length)
-											.intersects(wallList.get(x)
-													.getBounds())) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -1149,8 +1081,7 @@ public void changeArea(){
 			for (GameCharacter character : friends) {
 				Rectangle r2 = character.getCollisionBounds();
 
-				if (Statics.dist(b.getX(), b.getY(), character.getX(),
-						character.getY()) < 200) {
+				if (Statics.dist(b.getX(), b.getY(), character.getX(), character.getY()) < 200) {
 					if (!b.traversable() && b.getBounds().intersects(r2)) {
 
 						switch (b.getType()) {
@@ -1169,26 +1100,19 @@ public void changeArea(){
 						}
 					}
 
-<<<<<<< HEAD
 					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
 							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-=======
-					if ((character.getMove() == Moves.CLUB
-							&& !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-							|| (character.getMove() == Moves.PIT
-									&& !character.hasSpecialed() && (b
-									.getType() == Blocks.GROUND
-									|| b.getType() == Blocks.DIRT || b
-									.getType() == Blocks.PIT))) {
-						if (b.getBounds().intersects(character.getActBounds())
-								&& !b.getBounds().intersects(
-										character.getCollisionBounds())) {
->>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
-							b.interact();
-							character.endAction();
+							if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
+								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+
+									b.interact();
+									character.endAction();
+								}
 						}
 					}
 				}
@@ -1219,19 +1143,14 @@ public void changeArea(){
 					}
 
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
-						if (b.getBounds().intersects(
-								character.getDirBounds()[rI]))
+						if (b.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 				}
 
-				if ((character.getMove() == Moves.CLUB
-						&& !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT
-								&& !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-					if (b.getBounds().intersects(character.getActBounds())
-							&& !b.getBounds().intersects(
-									character.getCollisionBounds())) {
+					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact();
 						character.endAction();
@@ -1243,10 +1162,8 @@ public void changeArea(){
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
-						o = p instanceof Irregular ? ((Irregular) p)
-								.getIrregularBounds() : p.getBounds();
-						if (o.getBounds().intersects(b.getBounds())
-								&& p.getMove() != Moves.DISPENSER) {
+						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
+						if (o.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -1287,30 +1204,22 @@ public void changeArea(){
 							}
 						}
 
-						if (character.getActing() > 0
-								&& character.getActBounds().intersects(
-										e.getBounds())) {
+						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
 							e.interact(character.getMove(), character, false);
 							if (character.getMove() == Moves.BASH)
 								bashHit = true;
 						}
 						for (int c = 0; c < fP.size(); c++) {
 							FProjectile character = fP.get(c);
-							o = character instanceof Irregular ? ((Irregular) character)
-									.getIrregularBounds() : character
-									.getBounds();
+							o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
 
 							// This modification would allow us to make certain
 							// projectiles behave differently with their bounds;
 							// could be implemented with other objects.
 
-							if (o.intersects(e.getBounds())
-									&& character.isOnScreen()
-									&& character.getHarming()) {
-								if (!(e instanceof Projectile)
-										|| (character instanceof Field)) {
-									e.interact(character.getMove(),
-											character.getMaker(), true);
+							if (o.intersects(e.getBounds()) && character.isOnScreen() && character.getHarming()) {
+								if (!(e instanceof Projectile) || (character instanceof Field)) {
+									e.interact(character.getMove(), character.getMaker(), true);
 									fP.get(c).setOnScreen(false);
 								}
 							}
@@ -1318,11 +1227,8 @@ public void changeArea(){
 
 						for (int c = 0; c < friends.size(); c++) {
 							GameCharacter character = friends.get(c);
-							if (character.getActing() > 0
-									&& character.getActBounds().intersects(
-											e.getBounds())) {
-								e.interact(character.getMove(), character,
-										false);
+							if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+								e.interact(character.getMove(), character, false);
 								if (character.getMove() == Moves.BASH) {
 									bashHit = true;
 									shieldNum = c;
@@ -1340,8 +1246,7 @@ public void changeArea(){
 							Rectangle r2 = character.getBounds();
 							if (e.getBounds().intersects(r2) && e.willHarm()) {
 								e.turnAround(character.getX(), character.getY());
-								character
-										.takeDamage(e.getDamage(), e.poisons());
+								character.takeDamage(e.getDamage(), e.poisons());
 							}
 						}
 					}
@@ -1356,8 +1261,7 @@ public void changeArea(){
 
 				if (movingObjects.size() > 0)
 					for (Objects o0 : movingObjects)
-						if (o0.getBounds().intersects(b.getBounds())
-								&& !b.traversable())
+						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
 							o0.collideWall();
 
 			}
@@ -1420,8 +1324,7 @@ public void changeArea(){
 				character.endAction();
 			}
 
-		} else if (character instanceof Heart
-				&& ((Heart) character).usingField()) {
+		} else if (character instanceof Heart && ((Heart) character).usingField()) {
 			// fieldUsed = true;
 			Polygon rB = new Polygon();
 
@@ -1446,8 +1349,7 @@ public void changeArea(){
 		if (movingObjects.size() > 0)
 			for (Objects o0 : movingObjects) {
 				for (Objects o1 : objects)
-					if (o0.getBounds().intersects(o1.getBounds())
-							&& o1.isWall() && o0 != o1)
+					if (o0.getBounds().intersects(o1.getBounds()) && o1.isWall() && o0 != o1)
 						o0.collideWall();
 				for (NPC n : npcs)
 					if (o0.getBounds().intersects(n.getBounds()))
@@ -1502,82 +1404,74 @@ public void changeArea(){
 		}
 
 		Objects n;
-		boolean hasTalked=false;
+		boolean hasTalked = false;
 		for (int u = 0; u < objects.size(); u++) {
-boolean beenPicked=false;
+			boolean beenPicked = false;
 			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
-			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds()
-					: n.getBounds();
+			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
 
 			if (o.intersects(character.getCollisionBounds())) {
 				n.collidePlayer(-1);
-				
+
 				if (n instanceof Collectible && ((Collectible) n).collectible())
 					if (n instanceof MoneyObject) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
-						GameCharacter.getInventory().addMoney(
-								((MoneyObject) n).getValue());
+						GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
 						objects.remove(u);
 						u--;
-						beenPicked=true;
+						beenPicked = true;
 					} else if (n instanceof SpecialCollectible) {
 						Statics.playSound(this, "collectibles/marioCoin.wav");
-						GameCharacter.getInventory().addItem(
-								((Collectible) n).getType(), 1);
+						GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
 						data.collect(((SpecialCollectible) n).id);
 						objects.remove(u);
 						u--;
-						beenPicked=true;
-						
-					}
-				
-			}
-if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked&&!(n instanceof DropPoint)){
-	if(n.interact()){
-		hasTalked=true;
-		 if (n instanceof CheckPoint) {
-			save(((CheckPoint)n).getSpawnNum());
-			System.out.println("SAVED");
-		}
-		 else	if (n instanceof Collectible && ((Collectible) n).collectible())
-			if (n instanceof MoneyObject) {
-				Statics.playSound(this, "collectibles/marioCoin.wav");
-				GameCharacter.getInventory().addMoney(
-						((MoneyObject) n).getValue());
-				objects.remove(u);
-				u--;
-			} else if (n instanceof SpecialCollectible) {
-				Statics.playSound(this, "collectibles/marioCoin.wav");
-				GameCharacter.getInventory().addItem(
-						((Collectible) n).getType(), 1);
-				data.collect(((SpecialCollectible) n).id);
-				objects.remove(u);
-				u--;
+						beenPicked = true;
 
-				
+					}
+
 			}
-			else	if (n instanceof CollectibleCharacter) {
-				// This code would, once fully implemented, add an extra
-						// character following you. You would be able to switch
-						// to him.
-				friends.add(((CollectibleCharacter) n).getCharacter());
-				objects.remove(u);
-				u--;
-			} else if (n instanceof CollectibleObject) {
-				GameCharacter.getInventory().addItem(
-						((Collectible) n).getType(), 1);
-				objects.remove(u);
-				u--;
+			if (!beenPicked && state != State.NPC && bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
+				if (n.interact()) {
+					hasTalked = true;
+					if (n instanceof CheckPoint) {
+						save(((CheckPoint) n).getSpawnNum());
+						System.out.println("SAVED");
+					} else if (n instanceof Collectible && ((Collectible) n).collectible())
+						if (n instanceof MoneyObject) {
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
+							objects.remove(u);
+							u--;
+						} else if (n instanceof SpecialCollectible) {
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
+							data.collect(((SpecialCollectible) n).id);
+							objects.remove(u);
+							u--;
+
+						} else if (n instanceof CollectibleCharacter) {
+							// This code would, once fully implemented, add an
+							// extra
+							// character following you. You would be able to
+							// switch
+							// to him.
+							friends.add(((CollectibleCharacter) n).getCharacter());
+							objects.remove(u);
+							u--;
+						} else if (n instanceof CollectibleObject) {
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
+							objects.remove(u);
+							u--;
+						}
+
+				}
 			}
-			
-	}
-}
 			for (int c = 0; c < friends.size(); c++) {
 
-				if (n.getBounds().intersects(
-						friends.get(c).getCollisionBounds())) {
+				if (n.getBounds().intersects(friends.get(c).getCollisionBounds())) {
 					n.collidePlayer(c);
 				}
 			}
@@ -1598,8 +1492,7 @@ if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
-			JOptionPane.showMessageDialog(owner, Preferences.getControls(),
-					DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -1667,8 +1560,7 @@ if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked
 
 		this.state = state;
 
-		if (state == State.PAUSED || state == State.NPC
-				|| state == State.LOADING)
+		if (state == State.PAUSED || state == State.NPC || state == State.LOADING)
 			time.pause();
 		else if (state == State.INGAME)
 			time.resume();
@@ -1719,10 +1611,8 @@ if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked
 		for (i = 0; i < friends.size(); i++) {
 			friends.get(i).basicAnimate();
 			if (friends.get(i).getPPath() != null)
-				for (int c = 0; c < friends.get(i).getPPath().getPoints()
-						.size(); c++) {
-					friends.get(i).getPPath().getPoints().get(c)
-							.update(scrollX, scrollY);
+				for (int c = 0; c < friends.get(i).getPPath().getPoints().size(); c++) {
+					friends.get(i).getPPath().getPoints().get(c).update(scrollX, scrollY);
 				}
 		}
 		// if(points!=null)
@@ -1810,22 +1700,20 @@ if(!beenPicked&&state!=State.NPC&&bounds!=null&&o.intersects(bounds)&&!hasTalked
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
-public void save(int spawnNum){
-	this.spawnNum=spawnNum;
-	this.save();
-}
+
+	public void save(int spawnNum) {
+		this.spawnNum = spawnNum;
+		this.save();
+	}
+
 	public void save() {
-		String location = (GameStartBoard.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile().toString()
-				+ "saveFiles/" + userName + "/");
+		String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/" + userName + "/");
 		File loc = new File(location);
 		if (loc.exists()) {
 			File locFile = new File(location + userName + ".txt");
 			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(
-						locFile));
-				writer.write(level + "," + GameCharacter.getLevel() + ","
-						+ GameCharacter.getXP()+","+spawnNum);
+				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
+				writer.write(level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
 				writer.newLine();
 				if (normalPlayer(character.getType()))
 					writer.write(character.getSave());
@@ -1841,35 +1729,30 @@ public void save(int spawnNum){
 				// character.getInventory().getMoney() : "0");
 				writer.close();
 
-				ObjectOutputStream os = new ObjectOutputStream(
-						new FileOutputStream(location + "data.ser"));
+				ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
 				os.writeObject(data);
 				os.close();
 
-				os = new ObjectOutputStream(new FileOutputStream(location
-						+ "inventory.ser"));
+				os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
 				os.writeObject(GameCharacter.getInventory());
 				os.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		} else {
-			JOptionPane.showMessageDialog(owner, "Could not save to "
-					+ location);
+			JOptionPane.showMessageDialog(owner, "Could not save to " + location);
 		}
 	}
 
 	public void loadSave() {
 		level = DEFAULT;
 		try {
-			String location = (GameStartBoard.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile().toString()
-					+ "saveFiles/" + userName + "/");
+			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+					+ userName + "/");
 			File saveFile = new File(location + userName + ".txt");
 
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				ArrayList<String> lines = new ArrayList<String>();
 
@@ -1899,8 +1782,8 @@ public void save(int spawnNum){
 						int levUp = Integer.parseInt(stuff.get(1));
 						GameCharacter.setLevel(levUp);
 						int xp = Integer.parseInt(stuff.get(2));
-						int spawnNum=Integer.parseInt(stuff.get(3));
-						this.spawnNum=spawnNum;
+						int spawnNum = Integer.parseInt(stuff.get(3));
+						this.spawnNum = spawnNum;
 						GameCharacter.setXP(xp);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -1920,16 +1803,12 @@ public void save(int spawnNum){
 						name = "club";
 
 					if (character.getType().toString().equals(name)) {
-						character.load(lines.get(c)
-								.substring(name.length() + 1));
+						character.load(lines.get(c).substring(name.length() + 1));
 
 					} else {
 						for (int cA = 0; cA < friends.size(); cA++) {
-							if (friends.get(cA).getType().toString()
-									.equals(name)) {
-								friends.get(cA).load(
-										lines.get(c).substring(
-												name.length() + 1));
+							if (friends.get(cA).getType().toString().equals(name)) {
+								friends.get(cA).load(lines.get(c).substring(name.length() + 1));
 								break;
 							}
 						}
@@ -1938,21 +1817,18 @@ public void save(int spawnNum){
 				reader.close();
 
 				try {
-					ObjectInputStream is = new ObjectInputStream(
-							new FileInputStream(location + "data.ser"));
+					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
 					data = ((CharData) is.readObject());
 					data.setOwner(this);
 					is.close();
 
-					is = new ObjectInputStream(new FileInputStream(location
-							+ "preferences.ser"));
+					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
 					preferences = ((Preferences) is.readObject());
 					is.close();
 
 					// reader = new BufferedReader(new FileReader(location +
 					// "inventory.txt"));
-					is = new ObjectInputStream(new FileInputStream(location
-							+ "inventory.ser"));
+					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
 					Inventory w = (Inventory) is.readObject();
 					is.close();
 					GameCharacter.setInventory(w);
@@ -1976,9 +1852,8 @@ public void save(int spawnNum){
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		changeArea();
-		preferences.save(Preferences.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile().toString()
-				+ "saveFiles/" + owner.getUserName() + "/");
+		preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+				+ owner.getUserName() + "/");
 	}
 
 	public ArrayList<Objects> getObjects() {
@@ -2052,8 +1927,7 @@ public void save(int spawnNum){
 
 	public void addItem(Items useItem) {
 		if (useItem != Items.NULL) {
-			ThrownObject o = new ThrownObject(character.getX(),
-					character.getY(), useItem.getPath(), this, useItem);
+			ThrownObject o = new ThrownObject(character.getX(), character.getY(), useItem.getPath(), this, useItem);
 			objects.add(o);
 			movingObjects.add(o);
 		}
@@ -2092,11 +1966,9 @@ public void save(int spawnNum){
 			}
 		else if (weather == Weather.RAIN)
 			if (time.getGeneralTime() == Time.DAY)
-				setBackground(weatherTimer <= 0 ? Statics.sunriseColor(
-						getTextureBack(), Statics.HALF_DARK) : getTextureBack());
+				setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 			else
-				setBackground(weatherTimer <= 0 ? Statics
-						.darkenColor(getTextureBack()) : getTextureBack());
+				setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 		else
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
@@ -2108,13 +1980,11 @@ public void save(int spawnNum){
 				break;
 
 			case Time.SUNRISE:
-				setBackground(Statics.sunriseColor(getTextureBack(),
-						time.getTime()));
+				setBackground(Statics.sunriseColor(getTextureBack(), time.getTime()));
 				break;
 
 			case Time.SUNSET:
-				setBackground(Statics.sunsetColor(getTextureBack(),
-						time.getTime()));
+				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
 	}
@@ -2140,26 +2010,26 @@ public void save(int spawnNum){
 
 	public boolean sunRise() {
 
-//		switch (texturePack) {
-//		case LAB:
-//		case HAUNTED:
-//			return false;
-//
-//		default:
-			return time.getGeneralTime() == Time.SUNRISE;
-//		}
+		// switch (texturePack) {
+		// case LAB:
+		// case HAUNTED:
+		// return false;
+		//
+		// default:
+		return time.getGeneralTime() == Time.SUNRISE;
+		// }
 	}
 
 	public boolean sunSet() {
 
-//		switch (texturePack) {
-//		case LAB:
-//		case HAUNTED:
-//			return false;
-//
-//		default:
-			return time.getGeneralTime() == Time.SUNSET;
-//		}
+		// switch (texturePack) {
+		// case LAB:
+		// case HAUNTED:
+		// return false;
+		//
+		// default:
+		return time.getGeneralTime() == Time.SUNSET;
+		// }
 	}
 
 	// TODO at work
@@ -2185,7 +2055,8 @@ public void save(int spawnNum){
 	public boolean lighterDark() {
 		return weather == Weather.RAIN && time.getGeneralTime() == Time.DAY;
 	}
-	public int getSpawnNum(){
+
+	public int getSpawnNum() {
 		return spawnNum;
 	}
 }
