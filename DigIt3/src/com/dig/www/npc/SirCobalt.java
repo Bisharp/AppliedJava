@@ -51,8 +51,9 @@ public class SirCobalt extends BlockerNPC {
 	}
 	@Override
 	public Rectangle getBounds(){
-		
+		if(isWall)
 		return new Rectangle(x+20,y,60,100);
-		
+		else
+		return new Rectangle();	
 	}
 }
