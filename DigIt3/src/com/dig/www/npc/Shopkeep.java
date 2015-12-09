@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import javax.swing.JOptionPane;
 
 import com.dig.www.character.GameCharacter;
@@ -48,5 +50,11 @@ public class Shopkeep extends NPC {
 	@Override
 	public String getShowName() {
 		return "Strange shopkeeper";
+	}
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x+10,y+5,80,95);
+		
 	}
 }

@@ -134,5 +134,10 @@ options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 	public String getShowName() {
 		return "Reyzu";
 	}
-
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x+5,y+5,75,95);
+		
+	}
 }

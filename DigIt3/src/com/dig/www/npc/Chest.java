@@ -1,6 +1,7 @@
 package com.dig.www.npc;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
@@ -122,6 +123,13 @@ public class Chest extends NPC {
 		default:
 			return "Eh?";
 		}
+	}
+	@Override
+	public Rectangle getBounds(){
+		if(opened)
+		return new Rectangle(x+3,y+5,94,70);
+		else
+			return new Rectangle(x+3,y+30,94,70);
 	}
 
 	@Override

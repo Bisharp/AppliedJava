@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import com.dig.www.start.Board;
 
 public class Kepler extends NPC {
@@ -18,5 +20,11 @@ public class Kepler extends NPC {
 	@Override
 	public String getShowName() {
 		return "Kepler";
+	}
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x+15,y,65,100);
+		
 	}
 }

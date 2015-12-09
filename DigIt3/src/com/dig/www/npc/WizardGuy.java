@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
 import com.dig.www.start.Board;
@@ -145,5 +147,11 @@ public class WizardGuy extends NPC {
 	@Override
 	public String getShowName() {
 		return "The Wizard";
+	}
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x+10,y,95,100);
+		
 	}
 }
