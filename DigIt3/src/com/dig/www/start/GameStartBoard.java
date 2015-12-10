@@ -162,8 +162,13 @@ public class GameStartBoard extends MPanel {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			String[]packs=new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile()+"/maps").list();
+		String	pack = ((String) JOptionPane.showInputDialog(this,
+					"Select a game.", DigIt.NAME,
+					JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs, Statics.MAIN));
 			// System.out.println("Save name accepted");
 			owner.setUserName(s);
+			owner.setPack(pack);
 			// address = "images/titleScreen/loading.png";
 			repaint();
 			owner.newGame();

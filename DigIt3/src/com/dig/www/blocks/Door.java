@@ -25,7 +25,7 @@ protected String path;
 	}
 	@Override
 	public String getArea() {
-		image=new ImageIcon(getClass().getResource("/images/portals/rectDoors/brown/o.png")).getImage();
+		image=new ImageIcon(getClass().getResource("/images/portals/doors/brown/o.png")).getImage();
 		return area;
 	}
 }

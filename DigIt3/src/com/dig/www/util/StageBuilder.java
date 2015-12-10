@@ -513,7 +513,7 @@ public int getSpawnNum(){
 							else if (val == -3) {
 								if(spawnCount<=spawnNum)
 									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
-								
+								if(wall)
 								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
 							spawnCount++;
 							} else if (val == -4) {

@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import com.dig.www.start.Board;
 
 public class SirCobalt extends BlockerNPC {
@@ -46,5 +48,12 @@ public class SirCobalt extends BlockerNPC {
 	@Override
 	public String getShowName() {
 		return "Sir Cobalt";
+	}
+	@Override
+	public Rectangle getBounds(){
+		if(isWall)
+		return new Rectangle(x+20,y,60,100);
+		else
+		return new Rectangle();	
 	}
 }

@@ -22,13 +22,12 @@ public class DigIt extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private MPanel activePanel;
-
 	private String userName;
 	private Thread controllerThread;
 	public static final ImageLibrary lib;
 	public static final SoundPlayer soundPlayer;
 	public static final String NAME = "Quest of Four";
-
+private String pack=Statics.MAIN;
 	static {
 		lib = ImageLibrary.getInstance();
 		soundPlayer = new SoundPlayer();
@@ -128,7 +127,9 @@ public class DigIt extends JFrame {
 	public DigIt getMe() {
 		return this;
 	}
-
+public void setPack(String setter){
+	pack=setter;
+}
 	public void keyPress(int key) {
 		activePanel.keyPress(key);
 	}

@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import javax.swing.JOptionPane;
 
 import com.dig.www.character.GameCharacter;
@@ -232,5 +234,10 @@ public class CopyOfMacaroni extends QuestNPC {
 			options = options[0].newOptions;
 		}
 	}
-
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x,y+10,80,90);
+		
+	}
 }

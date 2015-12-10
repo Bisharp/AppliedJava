@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Rectangle;
+
 import com.dig.www.start.Board;
 
 public class Macaroni extends NPC {
@@ -19,5 +21,11 @@ public class Macaroni extends NPC {
 	@Override
 	public String getShowName() {
 		return "Super Macaroni Noodle Man";
+	}
+	@Override
+	public Rectangle getBounds(){
+		
+		return new Rectangle(x,y+10,80,90);
+		
 	}
 }
