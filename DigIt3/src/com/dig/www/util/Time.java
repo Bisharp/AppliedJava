@@ -27,7 +27,7 @@ public class Time implements ActionListener {
 	private boolean isAM;
 	
 	// TODO this is the time it starts at
-	private static final float START = 4.3f;
+	private static final float START = 6.59f;
 
 	public Time(Board b) {
 		timer = new Timer(SECOND, this);

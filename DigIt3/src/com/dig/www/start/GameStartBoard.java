@@ -221,11 +221,16 @@ public class GameStartBoard extends MPanel {
 	}
 
 	public class GameSavePanel extends JPanel {
-		int saveNum;
-		JButton load;
-		JButton create;
-		JButton delete;
-		Color color;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		protected int saveNum;
+		protected JButton load;
+		protected JButton create;
+		protected JButton delete;
+		protected Color color;
 
 		public GameSavePanel(int saveNum, Color color) {
 			this.color = color;

@@ -715,17 +715,25 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				if (onceNotCollidePlayer) {
 					enPoint = null;
 					enUpTimer = 25;
-					if (new Point(getMidX(), getMidY()).distance(new Point(wallX, getMidY())) < 100) {
-						deltaX = -deltaX;
-						x += deltaX;
-					}
-					if (new Point(getMidX(), getMidY()).distance(new Point(getMidX(), wallY)) < 100) {
-						deltaY = -deltaY;
-						y += deltaY;
-					}
+					// if (new Point(getMidX(), getMidY()).distance(new
+					// Point(wallX, getMidY())) < 100) {
+					// deltaX = -deltaX;
+					// x += deltaX;
+					// }
+					// if (new Point(getMidX(), getMidY()).distance(new
+					// Point(getMidX(), wallY)) < 100) {
+					// deltaY = -deltaY;
+					// y += deltaY;
+					// }
 
-					x += deltaX;
-					y += deltaY;
+					double tempD = Statics.pointTowards(new Point(wallX, wallY), new Point(x, y)) + 180;
+					if (tempD > 360)
+						tempD -= 360;
+					x -= (int) (Math.cos(Math.toRadians((double) tempD)) * SPEED);
+					y -= (int) (Math.sin(Math.toRadians((double) tempD)) * SPEED);
+
+					// x += deltaX;
+					// y += deltaY;
 				} else {
 					deltaX = 0;
 					deltaY = 0;
@@ -1165,8 +1173,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				onceNotCollidePlayer = true;
 
 			}
-			wallX = collide.getMidX();
-			wallY = collide.getMidY();
+			wallX = collide.getX();
+			wallY = collide.getY();
 		}
 	}
 
@@ -1639,7 +1647,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (enTimer == 0) {
 			energy += 1;
 			enTimer = 5;
-		} else
+		} else if (specialTimer <= 0)
 			enTimer--;
 		if (energy > MAX_ENERGY) {
 			energy = MAX_ENERGY;

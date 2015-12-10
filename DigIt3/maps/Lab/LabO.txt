@@ -6,3 +6,4 @@
 385,385,images/objects/table/,true,-2
 335,735,images/objects/table/,true,-2
 1350,1850,images/objects/PTree0.png,true,0
+1200,1200,images/dummy.png,n,-3

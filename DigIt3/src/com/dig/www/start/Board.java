@@ -326,6 +326,7 @@ public class Board extends MPanel implements ActionListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 
+		// TODO work on this stuff
 		updateBackground();
 
 		Graphics2D g2d = (Graphics2D) g;
@@ -615,7 +616,7 @@ public class Board extends MPanel implements ActionListener {
 					g2d.drawLine(x2, y2, x2 + 5, y2 + 10);
 				}
 				break;
-			// TODO at work
+
 			case OBSCURE:
 				switch (texturePack) {
 				case DESERT:
@@ -1021,7 +1022,7 @@ public class Board extends MPanel implements ActionListener {
 				timer.stop();
 				time.pause();
 				level = doorStateLev;
-				changeArea();
+				changeArea(spawnNum);
 				setState(State.INGAME);
 				timer.restart();
 				time.resume();
@@ -1376,6 +1377,7 @@ public class Board extends MPanel implements ActionListener {
 					timer.restart();
 					time.resume();
 				} else {
+					spawnNum = p.getSpawnNum();
 					setState(State.DOOROPEN);
 					doorStateLev = p.getArea();
 				}
@@ -1947,6 +1949,26 @@ public class Board extends MPanel implements ActionListener {
 
 	public void updateBackground() {
 		if (weather == Weather.FOG)
+			updateFog();
+		else if (weather == Weather.RAIN)
+			updateRain();
+		else
+			updateNormal();
+	}
+
+	// These three methods are used by updateBackground
+	protected void updateFog() {
+
+		switch (texturePack) {
+
+		case LAB:
+			setBackground(Color.gray);
+			break;
+		case HAUNTED:
+			setBackground(Color.darkGray);
+			break;
+
+		default:
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
 				setBackground(Color.gray);
@@ -1964,12 +1986,24 @@ public class Board extends MPanel implements ActionListener {
 				setBackground(Statics.sunsetColor(Color.gray, time.getTime()));
 				break;
 			}
-		else if (weather == Weather.RAIN)
-			if (time.getGeneralTime() == Time.DAY)
-				setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
-			else
-				setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
+		}
+
+	}
+
+	protected void updateRain() {
+		if (time.getGeneralTime() == Time.DAY)
+			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
+			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
+	}
+
+	protected void updateNormal() {
+		switch (texturePack) {
+		case HAUNTED:
+			setBackground(Statics.darkenColor(getTextureBack()));
+			break;
+
+		default:
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
 				setBackground(getTextureBack());
@@ -1987,6 +2021,7 @@ public class Board extends MPanel implements ActionListener {
 				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
+		}
 	}
 
 	public boolean darkenWorld() {
