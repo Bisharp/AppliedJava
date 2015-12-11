@@ -16,7 +16,7 @@ public class HeadBoss extends Boss{
 //int realSeq;
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
-		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		owner.getEnemies().add(new Explosion(x, y, owner));
 		
 	}
 	@Override
@@ -25,11 +25,11 @@ public class HeadBoss extends Boss{
 	if(health<(maxHealth/3)&&phase<2){
 		phase=2;
 		Statics.playSound(owner,bossPhaseS);
-		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		owner.getEnemies().add(new Explosion(x, y, owner));
 	}if(health<(maxHealth/3)*2&&phase<1){
 			phase=1;
 			Statics.playSound(owner,bossPhaseS);
-			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+			owner.getEnemies().add(new Explosion(x, y, owner));
 				
 	}
 	

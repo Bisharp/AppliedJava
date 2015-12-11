@@ -44,12 +44,12 @@ private int rotate2=0;
 		if(health<(maxHealth/3)&&phase<2){
 			phase=2;
 			Statics.playSound(owner,bossPhaseS);
-			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+			owner.getEnemies().add(new Explosion(x, y, owner));
 		speed++;
 		}if(health<(maxHealth/3)*2&&phase<1){
 				phase=1;
 				Statics.playSound(owner,bossPhaseS);
-				owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+				owner.getEnemies().add(new Explosion(x, y, owner));
 				speed++;	
 		}
 		
@@ -222,7 +222,7 @@ private int rotate2=0;
 	@Override
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
-		owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+		owner.getEnemies().add(new Explosion(x, y,  owner));
 		
 	}
 }
