@@ -204,6 +204,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				return "sirCobalt";
 			}
 		},
+		WIZARD {
+			@Override
+			public String charName() {
+				return "The Wizard";
+			}
+
+			public String toString() {
+				return "wizard";
+			}
+		},
 		PROJECTILE {
 			public String toString() {
 				return "projectile";
@@ -1220,7 +1230,19 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		if (willTalk) {
 			willTalk = false;
 
-			return new Rectangle(x - 50, y - 50, width + 100, height + 100);
+			switch (direction.isDiag() ? diagBackup : direction) {
+
+			case LEFT:
+				return new Rectangle(x, y + CLIP, CLIP, height - CLIP);
+			case RIGHT:
+				return new Rectangle(x + width - CLIP, y + CLIP, CLIP, height - CLIP);
+			case UP:
+				return new Rectangle(x + CLIP, y, width - 2 * CLIP, CLIP);
+			case DOWN:
+				return new Rectangle(x + CLIP, y + height, width - 2 * CLIP, CLIP);
+			default:
+				return new Rectangle(x - 50, y - 50, width + 100, height + 100);
+			}
 		}
 
 		return null;
@@ -1466,10 +1488,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			timersCount();
 		}
 
-		if (player) {
-			g2d.setColor(Color.magenta);
-			g2d.draw(getCollisionBounds());
-		}
+//		if (player) {
+//			willTalk = true;
+//			g2d.setColor(Color.magenta);
+//			g2d.draw(getTalkBounds());
+//		}
 	}
 
 	protected void drawTool(Graphics2D g2d) {

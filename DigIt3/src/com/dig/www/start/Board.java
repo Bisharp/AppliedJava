@@ -1991,7 +1991,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	protected void updateRain() {
-		if (time.getGeneralTime() == Time.DAY)
+		if (time.getGeneralTime() == Time.DAY && texturePack != TexturePack.HAUNTED)
 			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
 			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());

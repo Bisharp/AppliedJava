@@ -544,7 +544,9 @@ public class Block extends Sprite {
 			break;
 
 		case HAUNTED:
-			c = Statics.darkenColor(c);
+
+			if (!owner.thunderStrike())
+				c = Statics.darkenColor(c);
 			break;
 
 		default:
