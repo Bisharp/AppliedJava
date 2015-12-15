@@ -43,7 +43,7 @@ int roarTimer;
 			followTimer=0;
 			attackNum=-1;
 			Statics.playSound(owner,bossPhaseS);
-			owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
+			owner.getEnemies().add(new CycleExplosion(x, y, "images/effects/shadow", owner,0,4,1000,this));
 		phaseA=true;
 		int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
 		int yPoint=(int) Math.max(
@@ -61,7 +61,7 @@ int roarTimer;
 				followTimer=0;
 				attackNum=-1;
 				Statics.playSound(owner,bossPhaseS);
-				owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
+				owner.getEnemies().add(new CycleExplosion(x, y, "images/effects/shadow", owner,0,4,1000,this));
 				phaseA=true;		
 				int xPoint=(int)(owner.getWorld().get(0).getX()+(15.5*100));
 				int yPoint=(int) Math.max(
