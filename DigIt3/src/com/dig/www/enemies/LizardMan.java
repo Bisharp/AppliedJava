@@ -82,7 +82,7 @@ int roarTimer;
 			followTimer=0;
 			attackNum=-1;
 			Statics.playSound(owner,bossPhaseS);
-			owner.getEnemies().add(new Explosion(x, y, "images/effects/explosion.png", owner));
+			owner.getEnemies().add(new Explosion(x, y, owner));
 	bMove=1;
 		}
 		 
@@ -187,7 +187,7 @@ int roarTimer;
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
-		owner.getEnemies().add(new Explosion(x, y, "images/effects/shadow.png", owner));
+		owner.getEnemies().add(new Explosion(x, y, owner));
 		
 	}
 	public boolean sortAction(){
