@@ -209,8 +209,112 @@ public enum Items implements Serializable {
 		@Override public boolean isWeapon() {
 			return true;
 		}
+	},
+	VIDEO_GAME {
+		@Override public String toString(){
+			return "Video Game";
+		}
+		@Override protected String getPersonalDesc(){
+			return "Video games are fun. Wouldn't it be so weird if WE were actually in a video game?";
+		}
+		@Override public String getPath() {
+			int n = Statics.RAND.nextInt(7) + 1;
+			return ("images/objects/InventoryObjects/videoGame" + n + ".png");
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	BLACK_ORB{
+		@Override public String toString(){
+			return "Sinister Black Orb of Ultimate Agony and Suffering";
+		}
+		@Override protected String getPersonalDesc(){
+			return "It feels sort of tingly...";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/blackOrb.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	WIZARD_HAT{
+		@Override public String toString(){
+			return "Wizard Hat";
+		}
+		@Override protected String getPersonalDesc(){
+			return "The tag on the inside says \"If lost, draw a chalk circle around it, chant the magic words, and put it in the mail addressed to the forest tower.\"";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/wizardHat.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	COBALT_HAT{
+		@Override public String toString(){
+			return "Cobalt Hat";
+		}
+		@Override protected String getPersonalDesc(){
+			return "It looks exactly like Sir Cobalt's. Does wearing it make me look as cool as him?";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/cobaltHat.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	GOGGLES{
+		@Override public String toString(){
+			return "Goggles";
+		}
+		@Override protected String getPersonalDesc(){
+			return "A spare pair of Dr. Kepler's lab goggles. How can he see through these?";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/keplerGoggles.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	CAPE{
+		@Override public String toString(){
+			return "Cape";
+		}
+		@Override protected String getPersonalDesc(){
+			return "This looks like it probably belongs to Super Macaroni Noodle Man. It could use some cleaning.";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/cheesyCape.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
 	}
 	;
+
 
 	public static Items translate(String string) {
 		for (Items i : Items.values())
