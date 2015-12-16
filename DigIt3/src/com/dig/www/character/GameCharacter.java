@@ -1044,7 +1044,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 
 		// Up/Down
-		else if (keyCode == Preferences.DOWN() || keyCode == Preferences.UP() || direction.isDiag()) {
+		else if (keyCode == Preferences.DOWN() || keyCode == Preferences.UP()) {
 			if (direction.isDiag()) {
 				if (!diagBackup.isYAxis())
 					direction = diagBackup;
@@ -1065,7 +1065,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 
 		// Melee
-		else if (keyCode == Preferences.ATTACK()) {
+		 if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
 
 		}
@@ -1379,17 +1379,18 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			dir = getCurrentDir();
 		Point p = setAttacks();
 		if (visible && onScreen) {
-
-			if ((direction.isDiag() ? (diagBackup != Direction.LEFT) : (direction != Direction.LEFT)) && direction != Direction.UP) {
-				g2d.drawImage(image, x, y, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(shadow, x, y, owner);
-
-			} else if (direction != Direction.UP) {
+ if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
 				g2d.drawImage(image, x + width, y, -width, height, owner);
 				if (owner.darkenWorld())
 					g2d.drawImage(shadow, x + width, y, -width, height, owner);
 			}
+ else //((direction.isDiag() ? (diagBackup != Direction.LEFT) : (direction != Direction.LEFT)) && direction != Direction.UP) 
+	 {
+				g2d.drawImage(image, x, y, owner);
+				if (owner.darkenWorld())
+					g2d.drawImage(shadow, x, y, owner);
+
+			} 
 
 			if (p != null) {
 				g2d.setColor(Color.black);
@@ -1582,14 +1583,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		return false;
 	}
 
-	private String getPath() {
+	protected String getPath() {
 
 		String dir;
 
 		if (direction != null) {
 			Direction direction = this.direction;
-			if (direction.isDiag())
-				direction = diagBackup;
+//			if (direction.isDiag())
+//				direction = diagBackup;
 
 			switch (direction) {
 			case UP:

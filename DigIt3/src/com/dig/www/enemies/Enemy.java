@@ -224,6 +224,23 @@ public abstract class Enemy extends Sprite {
 				character.endAction();
 			}
 			break;
+			
+		case WIZ_M:
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
+			break;
+		case WIZ_R:
+			if (fromP)
+				takeDamage(character.getRangedDamage());
+			break;
+		case WIZ_S:
+			if (!character.hasSpecialed()) {
+				takeDamage(character.getSpecialDamage());
+				character.endAction();
+			}
+			break;
 		}
 	}
 

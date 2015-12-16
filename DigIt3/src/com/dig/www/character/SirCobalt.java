@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -46,18 +47,22 @@ public class SirCobalt extends GameCharacter {
 			break;
 
 		case RIGHT:
+		case DIAG_UR:
+		case DIAG_DR:
 			dX = x + Statics.BLOCK_HEIGHT - 50;
 			dY = y;
 			break;
 
 		case LEFT:
+		case DIAG_UL:
+		case DIAG_DL:
 			dX = x + 50;
 			dY = y;
 			break;
 		}
 		if (toMoveString() != null) {
 
-			if (direction == Direction.LEFT) {
+			if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
 				Image anImg = newImage(toMoveString());
 				g2d.drawImage(anImg, dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
 				if (owner.darkenWorld())
