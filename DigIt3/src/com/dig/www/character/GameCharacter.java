@@ -47,7 +47,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected Enemy enPoint;
 	protected int enUpTimer;
 	protected static final int MAX_ATTACK_DISTANCE = 250;
-
 	protected boolean waiting;
 	protected LevelUp levMen;
 	protected boolean levUp = false;
@@ -75,36 +74,67 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	public enum Direction {
 		UP {
+			public Direction getOpposite(){
+				return DOWN;
+			}
 			public boolean isYAxis() {
 				return true;
 			}
 		},
 		DOWN {
+			public Direction getOpposite(){
+				return UP;
+			}
 			public boolean isYAxis() {
 				return true;
 			}
 		},
-		LEFT, RIGHT, DIAG_DR {
+		LEFT{
+			public Direction getOpposite(){
+				return RIGHT;
+			}
+		}, RIGHT{
+			public Direction getOpposite(){
+				return LEFT;
+			}
+		}, DIAG_DR {
+			public Direction getOpposite(){
+				return DIAG_UL;
+			}
+		
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_DL {
+			public Direction getOpposite(){
+				return DIAG_UR;
+			}
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_UR {
+			public Direction getOpposite(){
+				return DIAG_DL;
+			}
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_UL {
+			public Direction getOpposite(){
+				return DIAG_DR;
+			}
 			public boolean isDiag() {
 				return true;
 			}
 		},
-		NONE;
+		NONE{
+			public Direction getOpposite(){
+				return RIGHT;
+			}
+		};
 
 		public static int getDir(Direction dir) {
 			switch (dir) {
@@ -127,6 +157,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		public boolean isDiag() {
 			return false;
 		}
+		public abstract Direction getOpposite();
 	}
 
 	protected boolean meleeHit;
@@ -212,6 +243,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			public String toString() {
 				return "wizard";
+			}
+		},
+		MACARONI {
+			@Override
+			public String charName() {
+				return "Super Macaroni Noodle";
+			}
+
+			public String toString() {
+				return "macaroni";
 			}
 		},
 		PROJECTILE {
@@ -309,11 +350,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	protected int itemTimer = 0;
 	protected static final int ITEM_MAX = 20;
-
 	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
 			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY, int MEnC, int REnC,
 			int SEnC, int meleeDamage, int rangedDamage, int specialDamage, int strength) {
-		super(x, y, "n", owner);
+		super(x, y, "images/dummy.png", owner);
 		this.player = player;
 		this.charName = charName;
 		this.type = type;
@@ -1291,9 +1331,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
 
-				if (getType() != Types.SPADE)
+				if (getType() != Types.SPADE){
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
-				else
+					if(getType()==Types.MACARONI)
+					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
+				}else
 					((Spade) this).keyReleased = false;
 				if (this instanceof SirCobalt)
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
@@ -1379,6 +1421,14 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			dir = getCurrentDir();
 		Point p = setAttacks();
 		if (visible && onScreen) {
+			if(this instanceof Macaroni&&meleeTimer>0){
+				g2d.rotate(Math.toRadians((meleeTimer)), getMidX(), getMidY());
+				g2d.drawImage(image, x, y, owner);
+				if (owner.darkenWorld())
+					g2d.drawImage(shadow, x, y, owner);
+					
+				g2d.rotate(Math.toRadians(-meleeTimer), getMidX(), getMidY());
+			}else{
  if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
 				g2d.drawImage(image, x + width, y, -width, height, owner);
 				if (owner.darkenWorld())
@@ -1391,7 +1441,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					g2d.drawImage(shadow, x, y, owner);
 
 			} 
-
+			}
 			if (p != null) {
 				g2d.setColor(Color.black);
 
@@ -1407,11 +1457,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			if (!(this instanceof Diamond))
 				drawTool(g2d);
 
-			if (direction == Direction.UP) {
-				g2d.drawImage(image, x, y, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(shadow, x, y, owner);
-			}
+//			if (direction == Direction.UP) {
+//				g2d.drawImage(image, x, y, owner);
+//				if (owner.darkenWorld())
+//					g2d.drawImage(shadow, x, y, owner);
+//			}
 
 			if (this instanceof Diamond)
 				drawTool(g2d);
@@ -1564,10 +1614,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public Image newImage(String name) {
-
-		if (isCharacterSkin(name))
-			shadow = newShadow(name);
-		return super.newImage(getPath() + name + ".png");
+if(!name.contains("/")){
+		if (isCharacterSkin(name)){
+			shadow = newShadow(name);}
+		return super.newImage(getPath() + name + ".png");}
+		else{
+		return	super.newImage(name);
+		}
 	}
 
 	public Image newShadow(String name) {
@@ -1635,6 +1688,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public void takeDamage(int amount, boolean poison) {
 		if (poison)
 			poison();
+		if(amount>0)
 		if (hitstunTimer <= 0) {
 			health -= amount;
 			hpTimer = 100;

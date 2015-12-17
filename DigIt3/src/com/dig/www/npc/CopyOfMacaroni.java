@@ -6,12 +6,13 @@ import javax.swing.JOptionPane;
 
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
+import com.dig.www.character.Macaroni;
 import com.dig.www.start.Board;
 import com.dig.www.util.Quest;
 
 public class CopyOfMacaroni extends QuestNPC {
 	private boolean once;
-
+private boolean isWall=true;
 	public CopyOfMacaroni(int x, int y, Board owner, String location, int id) {
 		super(
 				x,
@@ -142,8 +143,11 @@ public class CopyOfMacaroni extends QuestNPC {
 				}
 				break;
 			}
+		}else if(option.question().equals("Will you join us now?")){
+			isWall=false;
+			owner.getFriends().add(new Macaroni(x, y, owner, false));
+		
 		}
-
 	}
 
 	@Override
@@ -197,7 +201,7 @@ public class CopyOfMacaroni extends QuestNPC {
 		options[1] = new NPCOption("Will you join us now?",
 				"I will as soon as I am implemented.", new String[] {
 						"Will you join us now?", "Join us!", "...",
-						"Can you join us?", "Care to join the cause?" }, false,
+						"Can you join us?", "Care to join the cause?" }, true,
 				owner);
 	}
 	protected String getGreeting() {
@@ -236,8 +240,9 @@ public class CopyOfMacaroni extends QuestNPC {
 	}
 	@Override
 	public Rectangle getBounds(){
-		
-		return new Rectangle(x,y+10,80,90);
-		
+		if(isWall)
+			return new Rectangle(x,y+10,80,90);
+		else
+		return new Rectangle();	
 	}
 }

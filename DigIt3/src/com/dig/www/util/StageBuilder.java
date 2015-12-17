@@ -410,11 +410,11 @@ public int getSpawnNum(){
 							break;
 						case NPC.MACARONI:
 							has = false;
-							if (owner.getCharacter().getType() == Types.SIR_COBALT)
+							if (owner.getCharacter().getType() == Types.MACARONI)
 								has = true;
 							if (!has)
 								for (GameCharacter chara : owner.getFriends()) {
-									if (chara.getType() == Types.SIR_COBALT) {
+									if (chara.getType() == Types.MACARONI) {
 										has = true;
 										break;
 									}
