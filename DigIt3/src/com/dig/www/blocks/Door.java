@@ -1,5 +1,7 @@
 package com.dig.www.blocks;
 
+import java.awt.Graphics2D;
+
 import javax.swing.ImageIcon;
 
 import com.dig.www.objects.Objects;
@@ -22,6 +24,12 @@ protected String path;
 	@Override
 	public void animate() {
 		basicAnimate();
+	}
+	@Override
+	public void draw(Graphics2D g2d) {
+		g2d.drawImage(image, x, y, owner);
+		if (owner.darkenWorld())
+			g2d.drawImage(shadow, x, y, owner);
 	}
 	@Override
 	public String getArea() {

@@ -13,6 +13,7 @@ import com.dig.www.util.Quest;
 public class CopyOfMacaroni extends QuestNPC {
 	private boolean once;
 private boolean isWall=true;
+private boolean exitingA;
 	public CopyOfMacaroni(int x, int y, Board owner, String location, int id) {
 		super(
 				x,
@@ -146,21 +147,28 @@ private boolean isWall=true;
 		}else if(option.question().equals("Will you join us now?")){
 			isWall=false;
 			owner.getFriends().add(new Macaroni(x, y, owner, false));
-		
+		exitingA=true;
+		exiting=true;
 		}
 	}
-
+	
 	@Override
-	public String exitLine() {
-		if (questAccepted && owner.getData().getAcceptedPhase(this) > 1)
-			return "Good-*brie|!";
-		else
-			return "Oh! Good-*brie|!";
-	}
+	public void exit() {
 
+		if (!exitingA || !iTalk) {
+			super.exit();
+			if (inDialogue && !iTalk && exitingA)
+				act(BLANK);
+		} else {
+			end();
+		}
+	}
 	@Override
 	protected String getFarewell() {
-		if (questAccepted)
+	if(exitingA){
+		return options[1].questionAsked();
+	}
+		else if (questAccepted)
 			return super.getFarewell();
 		else
 			switch (owner.getCharacter().getType()) {
@@ -199,7 +207,7 @@ private boolean isWall=true;
 						"How did you find yourself in that predicament?" },
 				false, owner);
 		options[1] = new NPCOption("Will you join us now?",
-				"I will as soon as I am implemented.", new String[] {
+				"Sure! *Aura| we going now?", new String[] {
 						"Will you join us now?", "Join us!", "...",
 						"Can you join us?", "Care to join the cause?" }, true,
 				owner);
@@ -244,5 +252,16 @@ private boolean isWall=true;
 			return new Rectangle(x,y+10,80,90);
 		else
 		return new Rectangle();	
+	}
+	@Override
+	public String exitLine() {
+		if (exitingA)
+			return "";
+		else{
+			if (questCompleted)
+				return "Good-*brie|!";
+			else
+				return "Oh! Good-*brie|!";	
+		}
 	}
 }

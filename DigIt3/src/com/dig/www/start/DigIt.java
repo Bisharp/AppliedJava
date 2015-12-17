@@ -59,6 +59,7 @@ private String pack=Statics.MAIN;
 	}
 
 	public void newBoard() {
+		soundPlayer.stopMusic();
 		nullBoards();
 		activePanel = null;
 		activePanel = new Board(this, userName);
