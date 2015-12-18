@@ -256,9 +256,11 @@ int roarTimer;
 	public Image newImage(String name) {
 		if(name.contains("/"))
 		return super.newImage(name);	
-		else
-		return super.newImage(getPath() + name + ".png");
+		else{
+			shadow=newShadow(getPath() + name + ".png");
+		return super.newImage(getPath() + name + ".png");}
 	}
+	
 	private String getPath() {
 
 		String dire= "side";
@@ -279,12 +281,20 @@ int roarTimer;
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 		if(Math.abs(dir)<=50||Math.abs(dir)>=310){
 			g2d.drawImage(image, x + width, y, -width, height, owner);
-		}else
+			if (owner.darkenWorld())
+				g2d.drawImage(shadow, x+width, y,-width,height, owner);
+		}else{
 			g2d.drawImage(image, x, y, owner);
-		} else{if(Math.abs(dir)<=50||Math.abs(dir)>=310){
+			if (owner.darkenWorld())
+				g2d.drawImage(shadow, x, y, owner);
+		}} else{if(Math.abs(dir)<=50||Math.abs(dir)>=310){
 			g2d.drawImage(image, x + width, y, -width, height, owner);
-		}else
+			if (owner.darkenWorld())
+				g2d.drawImage(shadow, x+width, y,-width,height, owner);
+		}else{
 			g2d.drawImage(image, x, y, owner);
+		if (owner.darkenWorld())
+			g2d.drawImage(shadow, x, y, owner);}
 		}
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
