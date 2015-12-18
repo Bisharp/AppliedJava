@@ -187,8 +187,11 @@ public final class Statics {
 	public static Image newImage(String loc) {
 		return DigIt.lib.checkLibrary("/" + loc);
 	}
-
-	public static int getFolderCont(String defaultDir) {
+public static String getRandomItem(String folderLoc){
+	String[]items=new File(folderLoc).list();
+	return items[RAND.nextInt(items.length)];
+}
+	public static int getFolderCont(String defaultDir) {//Outdated and will be removed. new ^
 		// TODO Auto-generated method stub
 		try {
 

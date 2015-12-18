@@ -24,7 +24,7 @@ public class Dispenser extends Objects {
 	private Heart maker;
 
 	public Dispenser(int x, int y, GameCharacter maker, String loc, Board owner, double dir) {
-		super(x, y, loc, false, owner,"A dispenser placed using Destiny's wand given to her by the wizard.\n It blocks projectiles, heals friendlies, and slows enemies.");
+		super(x, y, loc, false, owner,"Dispenser");
 
 		Image img = maker.getImage();
 		int aSpeed;

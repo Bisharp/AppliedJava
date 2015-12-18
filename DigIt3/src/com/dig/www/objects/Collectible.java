@@ -17,7 +17,7 @@ public abstract class Collectible extends Objects {
 	private Items type;
 	
 	public Collectible(int x, int y, String loc,boolean wall, Board owner, Items type) {
-		super(x, y, loc, wall, owner,null);
+		super(x, y, loc, wall, owner,"update");
 		this.type = type;
 	}
 
