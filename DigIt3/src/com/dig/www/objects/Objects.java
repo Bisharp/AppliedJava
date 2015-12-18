@@ -47,6 +47,7 @@ protected boolean wall;
 			shadow = newShadow(loc);
 			x-=15;
 			y-=15;
+			if(desc!=null)
 			switch(desc){
 			case "A pile of leaves. Did someone rake them or did they fall that way?":
 			desc="A now-scattered pile of leaves. I hope we didn't mess anything up.";
