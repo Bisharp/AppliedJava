@@ -1,6 +1,6 @@
 500,1500,images/objects/Leaves.png,false,A pile of leaves. Did someone rake them or did they fall that way?
-300,1500,images/objects/collectibles/coin0.png,true,10
-300,1600,images/objects/collectibles/coin1.png,true,10
+300,1500,images/objects/collectibles/coin10.png,true,10
+300,1600,images/objects/collectibles/coin10.png,true,10
 300,1700,images/objects/notSoInvisibleCloak.png,true,10,Invisible Cloak
 500,1500,images/dummy.png,n,-6
 2000,1600,images/dummy.png,n,-6
