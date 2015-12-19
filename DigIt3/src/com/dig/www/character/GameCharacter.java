@@ -310,8 +310,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected transient int meleeTimer = -1;
 	protected transient int rangedTimer = -1;
 	protected transient int specialTimer = -1;
-	protected transient int energy;
-	protected int MAX_ENERGY;
+	protected transient float energy;
+	
 	private int SPEED;
 
 	private int counter = 0;
@@ -320,7 +320,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	private static final int ANIMAX = 7;
 	private static final int MAX = 4;
 	private String charName;
-	protected int HP_MAX;
+	
 	private int HP_TIMER_MAX = 50;
 	private int HITSTUN_MAX = 10;
 
@@ -330,7 +330,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int TIMER_MELEE;
 	protected int TIMER_RANGED;
 	protected int TIMER_SPECIAL;
-	protected int health = HP_MAX;
+	
 	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
@@ -338,9 +338,25 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int REnC;
 	protected int SEnC;
 	protected int pathUpdateTimer;
-	protected int meleeDamage;
-	protected int rangedDamage;
-	protected int specialDamage;
+	
+	protected int BHP_MAX;
+	protected int BMAX_ENERGY;
+	protected int BmeleeDamage;
+	protected int BrangedDamage;
+	protected int BspecialDamage;
+	protected static final float HP_MAX_M=1;
+	protected static final float MAX_ENERGY_M=1;
+	protected static final float meleeDamage_M=1;
+	protected static final float rangedDamage_M=1;
+	protected static final float specialDamage_M=1;
+	
+	protected float HP_MAX;
+	protected float MAX_ENERGY;
+	protected float meleeDamage;
+	protected float rangedDamage;
+	protected float specialDamage;
+	
+	protected float health = HP_MAX;
 	protected Hashtable<Direction, Boolean> collisionFlags;
 
 	// TODO strength stuff
@@ -364,8 +380,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.TIMER_RANGED = TIMER_RANGED;
 		this.TIMER_SPECIAL = TIMER_SPECIAL;
 		this.HP_MAX = HP_MAX;
+		this.BHP_MAX = HP_MAX;
 		this.SPEED = SPEED;
+		
 		this.MAX_ENERGY = MAX_ENERGY;
+		this.BMAX_ENERGY = MAX_ENERGY;
 		energy = MAX_ENERGY;
 		health = HP_MAX;
 		this.MEnC = MEnC;
@@ -374,6 +393,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		this.meleeDamage = meleeDamage;
 		this.rangedDamage = rangedDamage;
 		this.specialDamage = specialDamage;
+		
+		this.BmeleeDamage = Math.max(meleeDamage, 10);
+		this.BrangedDamage = Math.max(rangedDamage, 10);
+		this.BspecialDamage = Math.max(specialDamage, 10);
+		
 		meleeTimer = this.NEG_TIMER_MELEE;
 		rangedTimer = this.NEG_TIMER_RANGED;
 		specialTimer = this.NEG_TIMER_SPECIAL;
@@ -2013,7 +2037,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						meleeDamage++;
+						meleeDamage+=BmeleeDamage/10*meleeDamage_M;
 						myLevel++;
 						melee.setText("Melee: " + meleeDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2027,7 +2051,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						rangedDamage++;
+						rangedDamage+=BrangedDamage/10*rangedDamage_M;
 						myLevel++;
 						ranged.setText("Ranged: " + rangedDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2041,7 +2065,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						specialDamage++;
+						specialDamage+=BspecialDamage/10*specialDamage_M;
 						myLevel++;
 						special.setText("Special: " + specialDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2055,7 +2079,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						HP_MAX += 5;
+						HP_MAX += BHP_MAX/10*HP_MAX_M;
 						myLevel++;
 						mHealth.setText("Health: " + HP_MAX);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2070,7 +2094,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						MAX_ENERGY += 8;
+						MAX_ENERGY += BMAX_ENERGY/10*MAX_ENERGY_M;
 						myLevel++;
 						mEn.setText("Energy: " + MAX_ENERGY);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2145,15 +2169,15 @@ if(!name.contains("/")){
 	}
 
 	public int getMeleeDamage() {
-		return meleeDamage;
+		return (int)meleeDamage;
 	}
 
 	public int getRangedDamage() {
-		return rangedDamage;
+		return (int)rangedDamage;
 	}
 
 	public int getSpecialDamage() {
-		return specialDamage;
+		return (int)specialDamage;
 	}
 
 	public int getStrength() {
