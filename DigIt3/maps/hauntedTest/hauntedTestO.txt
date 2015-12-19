@@ -1,4 +1,4 @@
-500,1500,images/objects/Leaves.png,false,A pile of leaves. Did someone rake them or did they fall that way?
+500,1500,images/objects/Leaves.png,false,LeavesDefault
 300,1500,images/objects/collectibles/coin10.png,true,10
 300,1600,images/objects/collectibles/coin10.png,true,10
 300,1700,images/objects/notSoInvisibleCloak.png,true,10,Invisible Cloak

@@ -55,12 +55,6 @@ protected boolean wall;
 			case "How did these leaves get here? There isn't a tree in sight.":
 				desc="A now-scattered pile of leaves. Maybe they will blow away.";
 					break;
-			case "These leaves must have fallen recently, otherwise they would be covered in snow.":
-				desc="These leaves must have fallen recently, otherwise they would be covered in snow.";
-				break;
-			default:
-				desc="A scattered pile of leaves.";
-				break;
 			}
 		}
 		if(playerNum==-1){
@@ -103,11 +97,8 @@ protected boolean wall;
 			//collideWall() method. This is only for leaves that spawn scattered.
 		case "LeavesSnow":
 			return "These leaves must have fallen recently, otherwise they would be covered in snow.";
-		case "LeavesScSnow":
-			return "These leaves must have fallen recently, otherwise they would be covered in snow.";
+		
 		case "LeavesDesert":
-			return "How did these leaves get here? There isn't a tree in sight.";
-		case "LeavesScDesert":
 			return "How did these leaves get here? There isn't a tree in sight.";
 		}
 		//Find by loc
