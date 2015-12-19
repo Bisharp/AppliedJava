@@ -188,7 +188,16 @@ public final class Statics {
 		return DigIt.lib.checkLibrary("/" + loc);
 	}
 public static String getRandomItem(String folderLoc){
-	String[]items=new File(folderLoc).list();
+	FilenameFilter dirFilter = new FilenameFilter() {
+		@Override
+		public boolean accept(File dir, String name) {
+			if (name.endsWith(".png") || name.endsWith(".gif")|| name.endsWith(".jpg"))
+				return true;
+			return false;
+		}
+	};
+	String[]items=new File(folderLoc).list(dirFilter);
+	
 	return items[RAND.nextInt(items.length)];
 }
 	public static int getFolderCont(String defaultDir) {//Outdated and will be removed. new ^
