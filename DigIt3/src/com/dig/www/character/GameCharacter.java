@@ -1864,12 +1864,12 @@ if(!name.contains("/")){
 		}
 		try {
 
-			int health = Integer.parseInt(stuff.get(0));
-			int energy = Integer.parseInt(stuff.get(1));
+			float health = Float.parseFloat(stuff.get(0));
+			float energy = Float.parseFloat(stuff.get(1));
 			int myLevel = Integer.parseInt(stuff.get(2));
-			int melee = Integer.parseInt(stuff.get(3));
-			int ranged = Integer.parseInt(stuff.get(4));
-			int special = Integer.parseInt(stuff.get(5));
+			float melee = Float.parseFloat(stuff.get(3));
+			float ranged = Float.parseFloat(stuff.get(4));
+			float special = Float.parseFloat(stuff.get(5));
 			this.myLevel = myLevel;
 			HP_MAX = health;
 			MAX_ENERGY = energy;
