@@ -1414,27 +1414,33 @@ public class Board extends MPanel implements ActionListener {
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
 
-			if (o.intersects(character.getCollisionBounds())) {
-				n.collidePlayer(-1);
+			if (n.isOnScreen()) {
+				if (o.intersects(character.getCollisionBounds())) {
+					n.collidePlayer(-1);
 
-				if (n instanceof Collectible && ((Collectible) n).collectible())
-					if (n instanceof MoneyObject) {
-						Statics.playSound(this, "collectibles/marioCoin.wav");
-						GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
-						objects.remove(u);
-						u--;
-						beenPicked = true;
-					} else if (n instanceof SpecialCollectible) {
-						Statics.playSound(this, "collectibles/marioCoin.wav");
-						GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
-						data.collect(((SpecialCollectible) n).id);
-						objects.remove(u);
-						u--;
-						beenPicked = true;
+					if (n instanceof Collectible && ((Collectible) n).collectible())
+						if (n instanceof MoneyObject) {
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
+							objects.remove(u);
+							u--;
+							beenPicked = true;
+						} else if (n instanceof SpecialCollectible) {
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
+							data.collect(((SpecialCollectible) n).id);
+							objects.remove(u);
+							u--;
+							beenPicked = true;
 
-					}
-
+						}
+				}
+				
+				for (int rI = 0; rI < character.getDirBounds().length; rI++)
+					if (n.getBounds().intersects(character.getDirBounds()[rI]))
+						character.presetCollisionFlag(rI);
 			}
+			
 			if (!beenPicked && state != State.NPC && bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
 				if (n.interact()) {
 					hasTalked = true;
