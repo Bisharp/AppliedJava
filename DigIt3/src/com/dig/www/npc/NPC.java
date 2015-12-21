@@ -32,7 +32,19 @@ public abstract class NPC extends Sprite {
 	public static final String MACARONI = "macaroni";
 	public static final String PLATO = "plato";
 	public static final String REYZU = "reyzu";
+	public static final String SPADE = "shovel";
+	public static final String CLUB = "club";
+	public static final String DIAMOND = "diamond";
+	public static final String HEART = "heart";
 
+	protected String byeI;
+	protected String byeChar;
+	protected String hiChar;
+	protected String lastI;
+	protected String lastChar;
+
+	protected boolean isObstacle=true;
+	
 	protected static final NPCOption BLANK = new NPCOption("", "",
 			new String[] {}, null);
 
@@ -107,6 +119,32 @@ public abstract class NPC extends Sprite {
 		NPCOption.resetId();
 	}
 
+	public NPC(int x, int y, String loc, Board owner, String[] dialogs,
+			String s, String location, NPCOption[] options, String hiChar,
+			String byeI, String byeChar,boolean isObstacle) {//Note NO hiI because that is s.
+		super(x, y, loc, owner);
+		this.isObstacle=isObstacle;
+		this.byeI = byeI;
+		this.hiChar = hiChar;
+		this.byeChar = byeChar;
+		this.greetingDialogs = dialogs;
+		this.location = location;
+		gif = newImage("images/npcs/talking/" + s + ".gif");
+		this.currentOptions = options.clone();
+		this.options = options;
+		buttons = new Rectangle[options.length];
+
+		int length = 0;
+		for (int i = 0; i < options.length; i++) {
+			buttons[i] = new Rectangle(length + 10, Statics.BOARD_HEIGHT
+					- (int) (boxHeight / 2) + 50, options[i].question()
+					.length() * 10 + 10, buttonHeight);
+			length += buttons[i].width + 10;
+		}
+
+		NPCOption.resetId();
+	}
+
 	public void animate() {
 		basicAnimate();
 	}
@@ -132,7 +170,7 @@ public abstract class NPC extends Sprite {
 						"exit") : "") : append()) :
 
 		getCharLine() + append();
-		if (iTalk)
+if (iTalk)
 			doOption();
 		posX = 0;
 		posY = Statics.BOARD_HEIGHT - (boxHeight / 3) * 2;
@@ -186,9 +224,11 @@ public abstract class NPC extends Sprite {
 
 		g2d.fillRect(5, Statics.BOARD_HEIGHT - boxHeight / 2 - 102,
 				Statics.BLOCK_HEIGHT + 10, Statics.BLOCK_HEIGHT + 10);
-		g2d.drawImage(iTalk ? getGif() : newImage("images/npcs/talking/"
-				+ owner.getCharacter().getType().toString() + ".gif"), 10,
-				Statics.BOARD_HEIGHT - boxHeight / 2 - 97, owner);
+		g2d.drawImage(iTalk ? (lastI != null ? newImage("images/npcs/talking/"
+				+ lastI + ".gif") : getGif()) : newImage("images/npcs/talking/"
+				+ (lastChar != null ? lastChar : owner.getCharacter().getType()
+						.toString()) + ".gif"), 10, Statics.BOARD_HEIGHT
+				- boxHeight / 2 - 97, owner);
 
 		if (iTalk && !inDialogue && !exiting) {
 			g2d.setStroke(new BasicStroke(5));
@@ -241,7 +281,7 @@ public abstract class NPC extends Sprite {
 		for (int c = 0; c < string.length; c++)
 			g2d.drawString(string[c], 6, Statics.BOARD_HEIGHT - boxHeight / 2
 					- 100 + ((c - string.length) * font.getSize()));
-
+		
 		if (inDialogue && !wait)
 			if (iTalk)
 				if (!exiting)
@@ -263,6 +303,8 @@ public abstract class NPC extends Sprite {
 		wait = true;
 		iTalk = false;
 		inDialogue = true;
+		lastI = null;
+		lastChar = null;
 	}
 
 	protected int getPosXAdd(char c, boolean bold) {
@@ -326,6 +368,8 @@ public abstract class NPC extends Sprite {
 	}
 
 	public void setLine() {
+		lastI = null;
+		lastChar = hiChar;
 		line = greetingDialogs[Statics.RAND.nextInt(greetingDialogs.length)];
 		wait = true;
 		iTalk = false;
@@ -338,6 +382,8 @@ public abstract class NPC extends Sprite {
 		if (option.acts())
 			act(option);
 		willOption = option;
+		lastI = option.getCharAnswer();
+		lastChar = option.getCharQuestion();
 	}
 
 	public void doOption() {
@@ -390,6 +436,8 @@ public abstract class NPC extends Sprite {
 			wait = true;
 			iTalk = false;
 			inDialogue = true;
+			lastI = byeI;
+			lastChar = byeChar;
 		} else {
 			wait = false;
 		}
@@ -431,4 +479,7 @@ public abstract class NPC extends Sprite {
 	}
 
 	public abstract String getShowName();
+	public boolean isObstacle(){
+		return isObstacle;
+	}
 }

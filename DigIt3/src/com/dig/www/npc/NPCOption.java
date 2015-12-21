@@ -15,7 +15,8 @@ public class NPCOption {
 	protected Board owner;
 	public final int ID;
 	protected static int id = 0;
-	
+	protected String CharQuestion;//this is the name of the person asking;
+	protected String CharAnswer;//this is the name of the person answering;
 	public static void resetId() {
 		id = 0;
 	}
@@ -42,7 +43,18 @@ this.newOptions=newOptions;
 		ID = id;
 		id++;
 	}
-
+	public NPCOption(String q, String a, String[] qS, boolean acts,NPCOption[]newOptions, Board owner,String charQuestion,String charAnswer) {
+		this.newOptions=newOptions;
+				question = q;
+				answer = a;
+				this.acts = acts;
+				questionAsked = qS;
+				this.owner = owner;
+				this.CharQuestion=charQuestion;
+				this.CharAnswer=charAnswer;
+				ID = id;
+				id++;
+			}
 	public NPCOption(String q, String a, String[] qS, Board owner) {
 
 		question = q;
@@ -97,5 +109,11 @@ this.newOptions=newOptions;
 	}
 	public void setNewOptions(NPCOption[]optionsSetter){
 		newOptions=optionsSetter;
+	}
+	public String getCharQuestion(){
+		return CharQuestion;
+	}
+	public String getCharAnswer(){
+		return CharAnswer;
 	}
 }
