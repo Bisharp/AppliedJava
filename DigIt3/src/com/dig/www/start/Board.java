@@ -57,6 +57,7 @@ import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
 import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
+import com.dig.www.npc.TouchNPC;
 import com.dig.www.objects.CheckPoint;
 import com.dig.www.objects.Collectible;
 import com.dig.www.objects.CollectibleCharacter;
@@ -1412,12 +1413,26 @@ public class Board extends MPanel implements ActionListener {
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 
 			if (n.isOnScreen()) {
-				if (r3.intersects(n.getBounds()))
+				if (r3.intersects(n.getBounds())){
+					if(n.isObstacle())
 					character.collision(n, false);
-				if (bounds != null && n.getBounds().intersects(bounds)) {
+				if(n instanceof TouchNPC&&n.willTalk())	{
 					current = n;
 					current.setLine();
 					state = State.NPC;
+					character.setImage(character.newImage("n"));
+					for(GameCharacter character:friends)
+						character.setImage(character.newImage("n"));
+					bounds = null;
+				}
+				}
+				if (bounds != null && n.getBounds().intersects(bounds)&&(!(n instanceof TouchNPC)||((TouchNPC)n).buttonTalk())&&n.willTalk()) {
+					current = n;
+					current.setLine();
+					state = State.NPC;
+					character.setImage(character.newImage("n"));
+					for(GameCharacter character:friends)
+						character.setImage(character.newImage("n"));
 					bounds = null;
 				}
 if(n.isObstacle())

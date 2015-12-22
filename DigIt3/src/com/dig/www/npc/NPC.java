@@ -10,15 +10,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import com.dig.www.start.Board;
+import com.dig.www.util.Preferences;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
-import com.dig.www.util.Preferences;
 
 public abstract class NPC extends Sprite {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final Font NPC_NORMAL = new Font(Statics.FONT, Font.PLAIN, 20);
 	public static final Font NPC_THOUGHT = new Font(Statics.FONT, Font.ITALIC,
 			20);
@@ -481,5 +483,9 @@ if (iTalk)
 	public abstract String getShowName();
 	public boolean isObstacle(){
 		return isObstacle;
+	}
+	
+	public boolean willTalk(){
+	return true;	
 	}
 }
