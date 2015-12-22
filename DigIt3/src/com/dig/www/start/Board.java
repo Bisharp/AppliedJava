@@ -1420,7 +1420,7 @@ public class Board extends MPanel implements ActionListener {
 					state = State.NPC;
 					bounds = null;
 				}
-
+if(n.isObstacle())
 				for (int rI = 0; rI < character.getDirBounds().length; rI++)
 					if (n.getBounds().intersects(character.getDirBounds()[rI]))
 						character.presetCollisionFlag(rI);
@@ -1457,7 +1457,7 @@ public class Board extends MPanel implements ActionListener {
 
 						}
 				}
-				
+				if(objects.get(u).isWall())
 				for (int rI = 0; rI < character.getDirBounds().length; rI++)
 					if (n.getBounds().intersects(character.getDirBounds()[rI]))
 						character.presetCollisionFlag(rI);
