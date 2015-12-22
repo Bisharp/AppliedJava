@@ -1,8 +1,13 @@
 package com.dig.www.npc;
 
+
 import com.dig.www.start.Board;
 
 public class Hi extends NPC implements TouchNPC{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 private boolean hasTalked=false;
 	public Hi(int x, int y, Board owner,
 			String location) {

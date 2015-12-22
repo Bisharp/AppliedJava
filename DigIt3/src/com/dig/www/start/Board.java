@@ -1,21 +1,15 @@
 package com.dig.www.start;
 
+
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.MouseInfo;
-import java.awt.Paint;
-import java.awt.PaintContext;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,9 +17,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,19 +29,49 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import com.dig.www.blocks.*;
+import com.dig.www.blocks.Block;
 import com.dig.www.blocks.Block.Blocks;
-import com.dig.www.npc.*;
-import com.dig.www.objects.*;
-import com.dig.www.util.*;
-import com.dig.www.character.*;
+import com.dig.www.blocks.Door;
+import com.dig.www.blocks.Portal;
+import com.dig.www.blocks.SpecialDoor;
+import com.dig.www.blocks.TexturePack;
+import com.dig.www.character.CharData;
+import com.dig.www.character.Club;
+import com.dig.www.character.Diamond;
+import com.dig.www.character.FProjectile;
+import com.dig.www.character.Field;
+import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
-import com.dig.www.enemies.*;
+import com.dig.www.character.Heart;
+import com.dig.www.character.Inventory;
+import com.dig.www.character.Items;
+import com.dig.www.character.Moves;
+import com.dig.www.character.PathPoint;
+import com.dig.www.character.Spade;
+import com.dig.www.enemies.Boss;
+import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.Projectile;
+import com.dig.www.npc.Chest;
+import com.dig.www.npc.NPC;
+import com.dig.www.objects.CheckPoint;
+import com.dig.www.objects.Collectible;
+import com.dig.www.objects.CollectibleCharacter;
+import com.dig.www.objects.CollectibleObject;
+import com.dig.www.objects.Dispenser;
+import com.dig.www.objects.DropPoint;
+import com.dig.www.objects.MoneyObject;
+import com.dig.www.objects.Objects;
+import com.dig.www.objects.SpecialCollectible;
+import com.dig.www.objects.ThrownObject;
+import com.dig.www.util.Irregular;
+import com.dig.www.util.Preferences;
+import com.dig.www.util.StageBuilder;
+import com.dig.www.util.Statics;
+import com.dig.www.util.Time;
 
 public class Board extends MPanel implements ActionListener {
 
@@ -107,10 +128,11 @@ public class Board extends MPanel implements ActionListener {
 		preferences = new Preferences();
 	}
 
-	public static final String DEFAULT = "LuigisMansion";
+	public static final String DEFAULT = "Start";
 	private Timer timer;
 	private static final int TIMER_WAIT = 15;
 	protected String userName;
+	protected String mode;
 	protected String level;
 	private GameCharacter character;
 	protected ArrayList<GameCharacter> friends = new ArrayList<GameCharacter>();
@@ -181,7 +203,8 @@ public class Board extends MPanel implements ActionListener {
 	// */ \
 	// * | Getters/setters for owner
 
-	public Board(DigIt dM, String name) {
+	public Board(DigIt dM,String mode, String name) {
+		this.mode=mode;
 		this.userName = name;
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
@@ -226,9 +249,8 @@ public class Board extends MPanel implements ActionListener {
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
-
-		StageBuilder sB = StageBuilder.getInstance(level, this, num);
-		sB.changeState(level, this, num);
+		StageBuilder sB = StageBuilder.getInstance(mode,level, this, num);
+		sB.changeState(mode,level, this, num);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -1851,12 +1873,12 @@ public class Board extends MPanel implements ActionListener {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			newGame();
+			newGame(owner.getLevel());
 		}
 	}
 
-	public void newGame() {
-		level = "hauntedTest";
+	public void newGame(String level) {
+		this.level = level;
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		changeArea();

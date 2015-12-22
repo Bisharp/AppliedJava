@@ -1,5 +1,6 @@
 package com.dig.www.start;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,23 +12,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
-import java.io.ObjectInputStream;
-import java.nio.file.Files;
-import java.sql.Savepoint;
+import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.util.Statics;
 
 public class GameStartBoard extends MPanel {
@@ -169,6 +167,26 @@ public class GameStartBoard extends MPanel {
 			// System.out.println("Save name accepted");
 			owner.setUserName(s);
 			owner.setPack(pack);
+			try{
+				String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "maps/"
+						+ pack + "/");
+				File saveFile = new File(location + "info.txt");
+
+				if (saveFile.exists()) {
+					BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+					String line;
+					ArrayList<String> lines = new ArrayList<String>();
+
+					while ((line = reader.readLine()) != null)
+						lines.add(line);
+if(lines.size()>0){
+owner.setLevel(lines.get(0).trim());					
+}
+				
+					reader.close();}
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
 			// address = "images/titleScreen/loading.png";
 			repaint();
 			owner.newGame();

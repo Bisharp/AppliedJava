@@ -1,22 +1,64 @@
 package com.dig.www.util;
 
+
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.dig.www.blocks.*;
-import com.dig.www.enemies.*;
-import com.dig.www.npc.*;
-import com.dig.www.objects.*;
+import com.dig.www.blocks.Block;
+import com.dig.www.blocks.Door;
+import com.dig.www.blocks.HardBlock;
+import com.dig.www.blocks.Portal;
+import com.dig.www.blocks.TexturePack;
 import com.dig.www.character.GameCharacter;
-import com.dig.www.character.Items;
 import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.character.Items;
+import com.dig.www.enemies.BackwardPathEnemy;
+import com.dig.www.enemies.BackwardSecurityEnemy;
+import com.dig.www.enemies.ChainEnemy;
+import com.dig.www.enemies.ChargeEnemy;
+import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.ExplosivesSpawner;
+import com.dig.www.enemies.HeadBoss;
+import com.dig.www.enemies.Launch;
+import com.dig.www.enemies.LizardMan;
+import com.dig.www.enemies.LookChaseEnemy;
+import com.dig.www.enemies.PathEnemy;
+import com.dig.www.enemies.PatrolSecurityEnemy;
+import com.dig.www.enemies.PursuingLaunch;
+import com.dig.www.enemies.SecurityEnemy;
+import com.dig.www.enemies.SeeChaseEnemy;
+import com.dig.www.enemies.SeeShootEnemy;
+import com.dig.www.enemies.SideToPlayer;
+import com.dig.www.enemies.Slime;
+import com.dig.www.enemies.SpinnyBoss;
+import com.dig.www.enemies.StandEnemy;
+import com.dig.www.enemies.TailEnemy;
+import com.dig.www.enemies.TrackingEnemy;
+import com.dig.www.enemies.WalkingEnemy;
+import com.dig.www.npc.CopyOfMacaroni;
+import com.dig.www.npc.Gatekeeper;
+import com.dig.www.npc.Kepler;
+import com.dig.www.npc.NPC;
+import com.dig.www.npc.PLATO;
+import com.dig.www.npc.Reyzu;
+import com.dig.www.npc.Shopkeep;
+import com.dig.www.npc.SirCobalt;
+import com.dig.www.npc.WizardGuy;
+import com.dig.www.objects.BossBlock;
+import com.dig.www.objects.CheckPoint;
+import com.dig.www.objects.CollectibleCharacter;
+import com.dig.www.objects.CollectibleObject;
+import com.dig.www.objects.DropPoint;
+import com.dig.www.objects.HookObject;
+import com.dig.www.objects.MoneyObject;
+import com.dig.www.objects.Objects;
+import com.dig.www.objects.RandSkinObject;
+import com.dig.www.objects.SpecialCollectible;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -28,22 +70,25 @@ public class StageBuilder {
 	private int level = 1;
 private int spawnNum;
 private Point spawnPoint;
-	public static StageBuilder getInstance(String loc, Board owner,int spawnNum) {
+private String mode;
+	public static StageBuilder getInstance(String mode,String loc, Board owner,int spawnNum) {
 
 		if (me == null)
-			me = new StageBuilder(loc, owner,spawnNum);
+			me = new StageBuilder(mode,loc, owner,spawnNum);
 
 		return me;
 	}
 
-	public StageBuilder(String loc, Board owner,int spawnNum) {
+	public StageBuilder(String mode,String loc, Board owner,int spawnNum) {
 		setLoc(loc);
+		this.mode=mode;
 		this.owner = owner;
 		this.spawnNum=spawnNum;
 	}
 
-	public void changeState(String loc, Board owner,int spawnNum) {
+	public void changeState(String mode,String loc, Board owner,int spawnNum) {
 		this.owner = owner;
+		this.mode=mode;
 		this.spawnNum=spawnNum;
 		setLoc(loc);
 	}
@@ -53,7 +98,7 @@ public int getSpawnNum(){
 	private void setLoc(String loc) {
 		String tryLoc = StageBuilder.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile()
-				+ "maps/" + loc + "/" + loc + ".txt";
+				+ "maps/"+mode+"/" + loc + "/" + loc + ".txt";
 		File map = new File(tryLoc);
 		if (!map.exists())
 			loc = Board.DEFAULT;
@@ -72,7 +117,7 @@ public int getSpawnNum(){
 			boolean first = true;
 			String tryLoc = StageBuilder.class.getProtectionDomain()
 					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "/" + loc + ".txt";
+					+ "maps/"+mode+"/" + loc + "/" + loc + ".txt";
 
 			File map = new File(tryLoc);
 
@@ -172,7 +217,7 @@ public int getSpawnNum(){
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
 					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "/" + loc + "E.txt");
+					+ "maps/"+mode+"/"  + loc + "/" + loc + "E.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(
 						saveFile));
@@ -340,7 +385,7 @@ public int getSpawnNum(){
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
 					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "/" + loc + "N.txt");
+					+ "maps/"+mode+"/"  + loc + "/" + loc + "N.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(
 						saveFile));
@@ -420,7 +465,7 @@ public int getSpawnNum(){
 									}
 								}
 							if (!has){
-								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
+								//npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
 							}
 								questCount++;//It should stay outside the brackets.
 							break;
@@ -456,7 +501,7 @@ public int getSpawnNum(){
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
 					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "/" + loc + "O.txt");
+					+ "maps/"+mode+"/"  + loc + "/" + loc + "O.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(
 						saveFile));
@@ -576,7 +621,7 @@ owner.setSpawnY(spawnPoint.y);}
 	public TexturePack readText() {
 		String tryLoc = StageBuilder.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile()
-				+ "maps/" + loc + "/" + loc + ".txt";
+				+ "maps/"+mode+"/"  + loc + "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
 		File map = new File(tryLoc);
 
@@ -648,7 +693,7 @@ owner.setSpawnY(spawnPoint.y);}
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(StageBuilder.class.getProtectionDomain()
 					.getCodeSource().getLocation().getFile()
-					+ "maps/" + loc + "/" + loc + "P.txt");
+					+ "maps/"+mode+"/"  + loc + "/" + loc + "P.txt");
 			if (saveFile.exists()) {
 				BufferedReader reader = new BufferedReader(new FileReader(
 						saveFile));
@@ -704,7 +749,7 @@ else
 	public String readWeather() {
 		String tryLoc = StageBuilder.class.getProtectionDomain()
 				.getCodeSource().getLocation().getFile()
-				+ "maps/" + loc + "/" + loc + ".txt";
+				+ "maps/"+mode+"/"  + loc + "/" + loc + ".txt";
 		File map = new File(tryLoc);
 
 		if (map.exists()) {

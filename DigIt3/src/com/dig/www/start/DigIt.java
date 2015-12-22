@@ -1,19 +1,16 @@
 package com.dig.www.start;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-import com.dig.www.util.ImageLibrary;
 import com.dig.www.util.GameControllerRunnable;
+import com.dig.www.util.ImageLibrary;
 import com.dig.www.util.Preferences;
 import com.dig.www.util.SoundPlayer;
 import com.dig.www.util.Statics;
@@ -28,6 +25,7 @@ public class DigIt extends JFrame {
 	public static final SoundPlayer soundPlayer;
 	public static final String NAME = "Quest of Four";
 private String pack=Statics.MAIN;
+private String level=Board.DEFAULT;
 	static {
 		lib = ImageLibrary.getInstance();
 		soundPlayer = new SoundPlayer();
@@ -62,7 +60,7 @@ private String pack=Statics.MAIN;
 		soundPlayer.stopMusic();
 		nullBoards();
 		activePanel = null;
-		activePanel = new Board(this, userName);
+		activePanel = new Board(this,pack,userName);
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 	}
@@ -70,7 +68,7 @@ private String pack=Statics.MAIN;
 	public void newGame() {
 		newBoard();
 		if (activePanel instanceof Board) {
-			((Board) activePanel).newGame();
+			((Board) activePanel).newGame(level);
 		}
 	}
 
@@ -151,5 +149,11 @@ public void setPack(String setter){
 		dialogue.setIconImage(Statics.ICON.getImage());
 		dialogue.revalidate();
 		dialogue.setVisible(true);
+	}
+	public void setLevel(String setter){
+		this.level=setter;
+	}
+	public String getLevel(){
+		return level;
 	}
 }
