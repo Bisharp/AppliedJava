@@ -1758,7 +1758,7 @@ if(n.isObstacle())
 			File locFile = new File(location + userName + ".txt");
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-				writer.write(level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
+				writer.write(mode+","+level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
 				writer.newLine();
 				if (normalPlayer(character.getType()))
 					writer.write(character.getSave());
@@ -1822,12 +1822,14 @@ if(n.isObstacle())
 						stuff.add(currentS);
 					}
 					try {
-						String lev = stuff.get(0);
+						String mode=stuff.get(0);
+						this.mode=mode;
+						String lev = stuff.get(1);
 						level = lev;
-						int levUp = Integer.parseInt(stuff.get(1));
+						int levUp = Integer.parseInt(stuff.get(2));
 						GameCharacter.setLevel(levUp);
-						int xp = Integer.parseInt(stuff.get(2));
-						int spawnNum = Integer.parseInt(stuff.get(3));
+						int xp = Integer.parseInt(stuff.get(3));
+						int spawnNum = Integer.parseInt(stuff.get(4));
 						this.spawnNum = spawnNum;
 						GameCharacter.setXP(xp);
 					} catch (Exception e) {
