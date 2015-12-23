@@ -465,7 +465,7 @@ public int getSpawnNum(){
 									}
 								}
 							if (!has){
-								//npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
+								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
 							}
 								questCount++;//It should stay outside the brackets.
 							break;
