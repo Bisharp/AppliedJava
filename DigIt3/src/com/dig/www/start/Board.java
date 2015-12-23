@@ -1472,7 +1472,7 @@ if(n.isObstacle())
 
 						}
 				}
-				if(objects.get(u).isWall())
+				if(n.isWall())
 				for (int rI = 0; rI < character.getDirBounds().length; rI++)
 					if (n.getBounds().intersects(character.getDirBounds()[rI]))
 						character.presetCollisionFlag(rI);
@@ -1901,6 +1901,8 @@ if(n.isObstacle())
 		changeArea();
 		preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
 				+ owner.getUserName() + "/");
+//		for(Items i:Items.values())
+//			GameCharacter.getInventory().addItem(i, 100);
 	}
 
 	public ArrayList<Objects> getObjects() {
