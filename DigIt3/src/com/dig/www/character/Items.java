@@ -312,6 +312,40 @@ public enum Items implements Serializable {
 		@Override public boolean isWeapon() {
 			return false;
 		}
+	},
+	BACON{
+		@Override public String toString(){
+			return "Bacon";
+		}
+		@Override protected String getPersonalDesc(){
+			return "Everybody loves this stuff. Except for vegetarians.";
+		}
+		@Override public String getPath(){
+			return "images/objects/food/Bacon.png";
+		}
+		@Override public boolean isThrowable(){
+			return false;
+		}
+		@Override public boolean isWeapon(){
+			return false;
+		}
+	},
+	BACONGOLDEN{
+		@Override public String toString(){
+			return "Ultimate Bacon";
+		}
+		@Override protected String getPersonalDesc(){
+			return "Destiny says that legend spoke of bacon that put all other bacon to shame. Apparently if I eat it everything else will taste terrible by comparison. I... think I'll pass.";
+		}
+		@Override public String getPath(){
+			return "images/objects/food/BaconGolden.png";
+		}
+		@Override public boolean isThrowable(){
+			return false;
+		}
+		@Override public boolean isWeapon(){
+			return false;
+		}
 	}
 	;
 
