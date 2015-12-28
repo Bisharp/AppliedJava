@@ -829,45 +829,71 @@ public class Board extends MPanel implements ActionListener {
 
 		for (GameCharacter friend : friends)
 			s0.add(friend.getType().charName());
-
-		String[] s = new String[friends.size()];
-
-		if (!s0.contains(GameCharacter.Types.SPADE.charName())) {
-			s[0] = GameCharacter.Types.CLUB.charName();
-			s[1] = GameCharacter.Types.HEART.charName();
-			s[2] = GameCharacter.Types.DIAMOND.charName();
-		} else if (!s0.contains(GameCharacter.Types.CLUB.charName())) {
-			s[0] = GameCharacter.Types.SPADE.charName();
-			s[1] = GameCharacter.Types.HEART.charName();
-			s[2] = GameCharacter.Types.DIAMOND.charName();
-		} else if (!s0.contains(GameCharacter.Types.HEART.charName())) {
-			s[0] = GameCharacter.Types.SPADE.charName();
-			s[1] = GameCharacter.Types.CLUB.charName();
-			s[2] = GameCharacter.Types.DIAMOND.charName();
-		} else if (!s0.contains(GameCharacter.Types.DIAMOND.charName())) {
-			s[0] = GameCharacter.Types.SPADE.charName();
-			s[1] = GameCharacter.Types.CLUB.charName();
-			s[2] = GameCharacter.Types.HEART.charName();
-		} else {
-			s[0] = GameCharacter.Types.SPADE.charName();
-			s[1] = GameCharacter.Types.CLUB.charName();
-			s[2] = GameCharacter.Types.HEART.charName();
-			s[3] = GameCharacter.Types.DIAMOND.charName();
+//
+		String[] s1 = new String[friends.size()];
+		boolean clark=false;
+		boolean club=false;
+		boolean heart=false;
+		boolean diamond=false;
+		boolean sirCobalt=false;
+		boolean wizard=false;
+		boolean kepler=false;
+		boolean macaroni=false;
+		;
+		for(String a:s0){
+			if(a.equals(GameCharacter.Types.SPADE.charName()))
+				clark=true;
+			else if(a.equals(GameCharacter.Types.CLUB.charName()))
+			club=true;
+			else if(a.equals(GameCharacter.Types.HEART.charName()))
+				heart=true;
+			else if(a.equals(GameCharacter.Types.DIAMOND.charName()))
+				diamond=true;
+			else if(a.equals(GameCharacter.Types.SIR_COBALT.charName()))
+				sirCobalt=true;
+			else if(a.equals(GameCharacter.Types.WIZARD.charName()))
+				wizard=true;
+//			else if(a.equals(GameCharacter.Types.KEPLER.charName()))
+//				kepler=true;
+			else if(a.equals(GameCharacter.Types.MACARONI.charName()))
+				macaroni=true;}
+		int c=0;
+		if(clark){
+			s1[c]=GameCharacter.Types.SPADE.charName();
+			c++;
 		}
-
-		int i = 3;
-		if (s0.size() > i)
-			for (String s1 : s0)
-				if (!normalPlayer(GameCharacter.Types.translateCharName(s1))) {
-					s[i] = s1;
-					i++;
-				}
-
-		return s;
+		if(club){
+			s1[c]=GameCharacter.Types.CLUB.charName();
+			c++;
+		}
+		if(heart){
+			s1[c]=GameCharacter.Types.HEART.charName();
+			c++;
+		}
+		if(diamond){
+			s1[c]=GameCharacter.Types.DIAMOND.charName();
+			c++;
+		}
+		if(sirCobalt){
+			s1[c]=GameCharacter.Types.SIR_COBALT.charName();
+			c++;
+		}
+		if(wizard){
+			s1[c]=GameCharacter.Types.WIZARD.charName();
+			c++;
+		}
+//		if(kepler){
+//			s1[c]=GameCharacter.Types.KEPLER.charName();
+//			c++;
+//		}
+		if(macaroni){
+			s1[c]=GameCharacter.Types.MACARONI.charName();
+			c++;
+		}	
+		return s1;
 	}
-
-	private void scroll(int x, int y) {
-
+	
+private void scroll(int x, int y) {
 		character.setX(character.getX() + x);
 		character.setY(character.getY() + y);
 
