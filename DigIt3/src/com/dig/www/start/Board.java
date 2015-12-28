@@ -1908,6 +1908,9 @@ if(n.isObstacle())
 	public ArrayList<Objects> getObjects() {
 		return objects;
 	}
+	public ArrayList<Portal> getPortals() {
+		return portals;
+	}
 
 	public boolean normalPlayer(GameCharacter.Types type) {
 		switch (type) {

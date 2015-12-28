@@ -17,48 +17,9 @@ import com.dig.www.blocks.TexturePack;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Items;
-import com.dig.www.enemies.BackwardPathEnemy;
-import com.dig.www.enemies.BackwardSecurityEnemy;
-import com.dig.www.enemies.ChainEnemy;
-import com.dig.www.enemies.ChargeEnemy;
-import com.dig.www.enemies.Enemy;
-import com.dig.www.enemies.ExplosivesSpawner;
-import com.dig.www.enemies.HeadBoss;
-import com.dig.www.enemies.Launch;
-import com.dig.www.enemies.LizardMan;
-import com.dig.www.enemies.LookChaseEnemy;
-import com.dig.www.enemies.PathEnemy;
-import com.dig.www.enemies.PatrolSecurityEnemy;
-import com.dig.www.enemies.PursuingLaunch;
-import com.dig.www.enemies.SecurityEnemy;
-import com.dig.www.enemies.SeeChaseEnemy;
-import com.dig.www.enemies.SeeShootEnemy;
-import com.dig.www.enemies.SideToPlayer;
-import com.dig.www.enemies.Slime;
-import com.dig.www.enemies.SpinnyBoss;
-import com.dig.www.enemies.StandEnemy;
-import com.dig.www.enemies.TailEnemy;
-import com.dig.www.enemies.TrackingEnemy;
-import com.dig.www.enemies.WalkingEnemy;
-import com.dig.www.npc.CopyOfMacaroni;
-import com.dig.www.npc.Gatekeeper;
-import com.dig.www.npc.Kepler;
-import com.dig.www.npc.NPC;
-import com.dig.www.npc.PLATO;
-import com.dig.www.npc.Reyzu;
-import com.dig.www.npc.Shopkeep;
-import com.dig.www.npc.SirCobalt;
-import com.dig.www.npc.WizardGuy;
-import com.dig.www.objects.BossBlock;
-import com.dig.www.objects.CheckPoint;
-import com.dig.www.objects.CollectibleCharacter;
-import com.dig.www.objects.CollectibleObject;
-import com.dig.www.objects.DropPoint;
-import com.dig.www.objects.HookObject;
-import com.dig.www.objects.MoneyObject;
-import com.dig.www.objects.Objects;
-import com.dig.www.objects.RandSkinObject;
-import com.dig.www.objects.SpecialCollectible;
+import com.dig.www.enemies.*;
+import com.dig.www.npc.*;
+import com.dig.www.objects.*;
 import com.dig.www.start.Board;
 
 public class StageBuilder {
@@ -423,6 +384,18 @@ public int getSpawnNum(){
 							break;
 						case NPC.KEPLER:
 							npcs.add(new Kepler(nX, nY, owner, loc));
+							break;
+						case "TutorialSirCobalt":
+							npcs.add(new TutorialSirCobalt(nX, nY, owner, loc));
+							break;
+						case "Tutorial1":
+							npcs.add(new Tutorial1(nX, nY, owner, loc));
+							break;
+						case "Tutorial2":
+							npcs.add(new Tutorial2(nX, nY, owner, loc));
+							break;
+						case "Tutorial3":
+							npcs.add(new Tutorial3(nX, nY, owner, loc));
 							break;
 						case NPC.SIR_COBALT:
 							boolean has = false;

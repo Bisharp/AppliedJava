@@ -58,10 +58,7 @@ public boolean willTalk(){
 	return willTalk;}
 }
 @Override
-public void draw(Graphics2D g){
-	super.draw(g);
-	
-}
+public void draw(Graphics2D g){}
 @Override
 protected String append() {
 	if(cantExit&&!inDialogue)
@@ -86,4 +83,8 @@ if(cantExit)
 public void trueHasTalked(){
 	hasTalked=true;
 }
+@Override
+protected abstract String getGreeting();
+@Override
+protected abstract String getFarewell();
 }

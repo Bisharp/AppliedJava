@@ -26,5 +26,17 @@ private boolean hasTalked=false;
 		return "bye";
 	}
 
+	@Override
+	protected String getGreeting() {
+		// TODO Auto-generated method stub
+		return "hi";
+	}
+
+	@Override
+	protected String getFarewell() {
+		// TODO Auto-generated method stub
+		return"hi";
+	}
+
 
 }
