@@ -7,14 +7,14 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Preferences;
 import com.dig.www.util.Statics;
 
-public abstract class InvisbleNormalOnceTouchNPC extends NPC implements TouchNPC{
+public abstract class InvisibleNormalOnceTouchNPC extends NPC implements TouchNPC{
 	protected boolean hasTalked;
 	protected boolean cantExit;
 	protected String[] chars;
-public InvisbleNormalOnceTouchNPC(int x, int y, Board owner,
+public InvisibleNormalOnceTouchNPC(int x, int y, Board owner,
 			String[] dialogs, String s, String location, NPCOption[] options,
 			String hiChar, String byeI, String byeChar,boolean cantExit,String[]chars) {
-		super(x, y,Statics.DUMMY, owner, dialogs, s, location, options, hiChar, byeI, byeChar,
+		super(x, y,null, owner, dialogs, s, location, options, hiChar, byeI, byeChar,
 				false);
 		this.cantExit=cantExit;
 		this.chars=chars;
@@ -51,14 +51,12 @@ public boolean willTalk(){
 	if(!hasTalked)
 	for(NPC npc:owner.getNPCs()){
 		if(this.getClass().toString().equals(npc.getClass().toString())){
-			((InvisbleNormalOnceTouchNPC)npc).trueHasTalked();
+			((InvisibleNormalOnceTouchNPC)npc).trueHasTalked();
 		}
 	}
 	
 	return willTalk;}
 }
-@Override
-public void draw(Graphics2D g){}
 @Override
 protected String append() {
 	if(cantExit&&!inDialogue)

@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
 
-public class Tutorial2 extends InvisbleNormalOnceTouchNPC {
+public class Tutorial2 extends InvisibleNormalOnceTouchNPC {
 
 	public Tutorial2(int x, int y, Board owner, String location) {
 		super(

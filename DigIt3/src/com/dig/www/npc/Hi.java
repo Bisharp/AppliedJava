@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
-public class Hi extends InvisbleNormalOnceTouchNPC{
+public class Hi extends InvisibleNormalOnceTouchNPC{
 /**
 	 * 
 	 */
