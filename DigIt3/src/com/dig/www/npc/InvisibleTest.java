@@ -15,7 +15,7 @@ public class InvisibleTest extends InvisbleNormalOnceTouchNPC {
 								"Come on, just say anything. Anything?",
 								"Come on, just say anything. Anything?",
 								"Come on, just say anything. Anything?" },
-						true, new NPCOption[0], owner, NPC.CLUB, NPC.DIAMOND) }// new
+						true, new NPCOption[0], owner, null, NPC.DIAMOND,"images/icon.png","images/npcs/talking/wizard.gif") }// new
 																		// NPCOption[]{new
 																		// NPCOption(q,
 																		// a,

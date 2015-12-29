@@ -16,7 +16,7 @@ private boolean hasTalked=false;
 			String location) {
 		super(x, y,owner, new String[]{"hi","hi","hi","hi","hi"}, NPC.MACARONI,location,new NPCOption[]
 			{
-			new NPCOption("hi", "ok",new String[]{"hi","hi","hi","hi","hi"}, false,new NPCOption[0], owner, NPC.CLUB, NPC.GATEKEEPER)
+			new NPCOption("hi", "ok",new String[]{"hi","hi","hi","hi","hi"}, false,new NPCOption[0], owner, NPC.CLUB, NPC.GATEKEEPER,"images/npcs/talking/kepler.gif",null)
 			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{}
 	);
 	}

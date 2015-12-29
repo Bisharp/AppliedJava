@@ -20,10 +20,21 @@ public class MoneyObject extends Collectible {
 	public int getValue() {
 		return value;
 	}
+	public String adder(){
+		String s="\n ";
+		switch(value){
+		case 20:
+			s+= "Don't spend it all in one place!";
+			break;
+		default:
+			return "";
+		}
+		return s;
+	}
 	@Override
 	public boolean interact(){
 String[]options={"Leave","Take"};
-		return JOptionPane.showOptionDialog(owner,"This is Money, the game's currency. This particular coin is worth "+value+" Money.", DigIt.NAME
+		return JOptionPane.showOptionDialog(owner,"This is Money, the game's currency. This particular coin is worth "+value+" Money."+adder(), DigIt.NAME
 				+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(image),options,"Take"
 				)==1;
