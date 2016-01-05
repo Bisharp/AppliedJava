@@ -540,7 +540,14 @@ public int getSpawnNum(){
 								npcs.add(new HookObject(nX, nY, owner));
 							} else if (val == -6) {
 								npcs.add(new DropPoint(nX, nY, owner));
-							} else
+							}
+							else if(val==-7){
+								npcs.add(new ActivatedBossWallActivator(nX, nY, owner));
+							}
+							else if(val==-8){
+								npcs.add(new ActivatedBossWall(nX, nY, owner));
+							}
+							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner,
 										val));
 						else if (Items.translate(stuff.get(5)).equals(
