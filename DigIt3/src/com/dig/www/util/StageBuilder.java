@@ -562,6 +562,7 @@ public int getSpawnNum(){
 			ex.printStackTrace();
 		}
 		try{
+			owner.setSpawnLoc(spawnPoint);
 owner.setSpawnX(spawnPoint.x);
 owner.setSpawnY(spawnPoint.y);}
 		catch(Exception ex){

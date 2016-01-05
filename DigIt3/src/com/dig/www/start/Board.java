@@ -91,7 +91,7 @@ public class Board extends MPanel implements ActionListener {
 	private final int DOORSTATETMAX = 50;
 	private String doorStateLev = "";
 	private int spawnNum;
-
+private Point spawnLoc;
 	public enum State {
 		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC, DOOROPEN;
 	};
@@ -280,6 +280,7 @@ public class Board extends MPanel implements ActionListener {
 		}
 
 		for (int c = 0; c < friends.size(); c++) {
+			friends.get(c).setDead(false);
 			if (c < 3) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
@@ -330,6 +331,10 @@ public class Board extends MPanel implements ActionListener {
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
 
+		if(spawnLoc!=null){
+			spawnLoc.x -= spawnX-Statics.BOARD_WIDTH / 2 - 50+100;
+			spawnLoc.y -= spawnY-Statics.BOARD_HEIGHT / 2 - 50+100;
+		}
 		changeWeather();
 		updateBackground();
 		Statics.wipeColors();
@@ -796,12 +801,15 @@ public class Board extends MPanel implements ActionListener {
 		// char[] names = {'S', 'C', 'D', 'H'};
 		String decision;
 
-		decision = ((String) JOptionPane.showInputDialog(this, "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
+		decision = ((String) JOptionPane.showInputDialog(this, (character.isDead()?"Your current character has been defeated.\n":"")+"Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON,
 				getCharacters(), null));
 
 		if (decision == null) {
 			timer.restart();
 			time.resume();
+			if(character.isDead()){
+				openSwitchDialogue();
+			}
 			return;
 		}
 
@@ -824,7 +832,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	private String[] getCharacters() {
-
+ArrayList<GameCharacter>friends=getAliveFriends();
 		ArrayList<String> s0 = new ArrayList<String>();
 
 		for (GameCharacter friend : friends)
@@ -903,6 +911,10 @@ private void scroll(int x, int y) {
 		}
 		if (pointedPoint != null)
 			pointedPoint.setLocation(pointedPoint.getX() + x, pointedPoint.getY() + y);
+	
+		if (spawnLoc != null)
+			spawnLoc.setLocation(spawnLoc.getX() + x, spawnLoc.getY() + y);
+		
 		for (GameCharacter b : friends) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
@@ -970,6 +982,10 @@ private void scroll(int x, int y) {
 			if (pointedPoint != null) {
 				pointedPoint.x += scrollX;
 				pointedPoint.y += scrollY;
+			}
+			if (spawnLoc != null) {
+				spawnLoc.x += scrollX;
+				spawnLoc.y += scrollY;
 			}
 			for (int i = 0; i < fP.size(); i++) {
 				if (!fP.get(i).isOnScreen()) {
@@ -1508,6 +1524,7 @@ if(n.isObstacle())
 				if (n.interact()) {
 					hasTalked = true;
 					if (n instanceof CheckPoint) {
+						spawnLoc=new Point(n.getX(),n.getY());
 						save(((CheckPoint) n).getSpawnNum());
 						System.out.println("SAVED");
 					} else if (n instanceof Collectible && ((Collectible) n).collectible())
@@ -1669,7 +1686,10 @@ if(n.isObstacle())
 			pointedPoint.x += scrollX;
 			pointedPoint.y += scrollY;
 		}
-
+		if (spawnLoc != null) {
+			spawnLoc.x += scrollX;
+			spawnLoc.y += scrollY;
+		}
 		for (i = 0; i < world.size(); i++)
 			world.get(i).basicAnimate();
 
@@ -2169,5 +2189,21 @@ if(n.isObstacle())
 
 	public int getSpawnNum() {
 		return spawnNum;
+	}
+	public Point getSpawnLoc(){
+		return spawnLoc;
+	}
+	public void setSpawnLoc(Point p){
+		spawnLoc=p;
+	}
+	public ArrayList<GameCharacter>getAliveFriends(){
+		ArrayList<GameCharacter>alive=new ArrayList<GameCharacter>();
+		for(GameCharacter c:friends)
+			if(!c.isDead())
+				alive.add(c);
+		return alive;
+	}
+	public void setSwitching(boolean b){
+		switching=b;
 	}
 }

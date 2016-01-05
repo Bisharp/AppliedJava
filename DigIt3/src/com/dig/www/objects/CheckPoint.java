@@ -1,5 +1,7 @@
 package com.dig.www.objects;
 
+import java.awt.Point;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -21,6 +23,7 @@ public void collidePlayer(int playerNum){
 	if(playerNum==-1){
 		if(owner.getSpawnNum()!=spawnNum){
 			//set checkpoint
+		owner.setSpawnLoc(new Point(x,y));
 		owner.save(spawnNum);	
 		}
 	}
