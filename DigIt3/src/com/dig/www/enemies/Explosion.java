@@ -14,6 +14,10 @@ public class Explosion extends Enemy {
 	public Explosion(int x, int y, Board owner) {
 		super(x, y, "images/effects/explosion/", owner, true, -10);
 	}
+	public Explosion(int x, int y, Board owner,int damage) {
+		super(x, y, "images/effects/explosion/", owner, true, -10);
+		this.damage=damage;
+	}
 	protected Explosion(int x, int y, String loc, Board owner,int damage) {
 		super(x, y, loc, owner, true, -10);
 		this.damage=damage;

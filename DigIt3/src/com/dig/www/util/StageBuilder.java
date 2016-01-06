@@ -547,7 +547,7 @@ public int getSpawnNum(){
 							else if(val==-8){
 								npcs.add(new ActivatedBossWall(nX, nY, owner));
 							}else if(val==-9){
-								npcs.add(new CompanionCube(nX, nY, owner,wall));
+								npcs.add(new PushCube(nX, nY, owner,wall));
 							}
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner,
