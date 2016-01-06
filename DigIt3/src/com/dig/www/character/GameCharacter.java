@@ -1722,12 +1722,11 @@ if(!name.contains("/")){
 			health -= amount;
 			hpTimer = 100;
 			hitstunTimer = HITSTUN_MAX;
-
+}
 			if (health <= 0){
 				
 				if(owner.getAliveFriends().size()==0)
 				owner.setState(Board.State.DEAD);
-				
 				else{
 				x=owner.getSpawnLoc().x;
 				y=owner.getSpawnLoc().y;
@@ -1738,7 +1737,7 @@ if(!name.contains("/")){
 						owner.setSwitching(true);
 				}
 			}
-		}
+		
 	}
 
 	public abstract boolean canAct();

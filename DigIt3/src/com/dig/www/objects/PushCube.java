@@ -65,6 +65,15 @@ public void collidePlayer(int playerNum) {
 			super.collidePlayer(playerNum);
 			return;
 		}
+	}
+	for (int i = 0; i < owner.getNPCs().size(); i++) {
+		if(owner.getNPCs().get(i).isObstacle()&&owner.getNPCs().get(i).getBounds().intersects(getBounds())){
+			x=oldX;
+			y=oldY;
+			willIsWall=true;
+			super.collidePlayer(playerNum);
+			return;
+		}
 	}}else{
 		super.collidePlayer(playerNum);
 		willIsWall=true;}
@@ -96,7 +105,7 @@ public boolean interact(){
 			new ImageIcon(image),options,"Leave"
 			)==1;
 	if(b){
-		owner.getEnemies().add(new Explosion(x-((100-width)/2), y-((100-height)/2), owner));
+		owner.getEnemies().add(new Explosion(x-((100-width)/2), y-((100-height)/2), owner,0));
 	Point p=owner.getWorld().get(0).getBounds().getLocation();
 	x=p.x+spawnX;
 	y=p.y+spawnY;

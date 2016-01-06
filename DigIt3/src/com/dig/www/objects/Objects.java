@@ -84,6 +84,8 @@ protected boolean wall;
 		switch(identifier){
 		case "update":
 			return null;//This is used for objects that update the interact method so that it wont go through the whole loop
+		case "CubeButton":
+			return "This looks like a button, but it doesn't do anything when stepped on, even with all of us together.";
 		case "pushCube":
 			return "Push cube: a pushable cube. It can activate certain buttons if it is on top of them.";
 		case "companionCube":
