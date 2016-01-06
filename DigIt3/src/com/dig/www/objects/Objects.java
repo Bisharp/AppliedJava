@@ -41,7 +41,7 @@ protected boolean wall;
 	}
 
 	public void collidePlayer(int playerNum){
-		if(loc.equals("images/objects/Leaves.png")){
+		if(loc!=null&&loc.equals("images/objects/Leaves.png")){
 			loc="images/objects/LeavesSc.png";
 			image=newImage(loc);
 			shadow = newShadow(loc);
@@ -79,6 +79,7 @@ protected boolean wall;
 		return true;
 	}
 	public String getDescription(String loc,String identifier){
+		
 		//Find by identifier
 		if(identifier!=null)
 		switch(identifier){
@@ -108,6 +109,8 @@ protected boolean wall;
 			return "How did these leaves get here? There isn't a tree in sight.";
 		}
 		//Find by loc
+		if(loc==null)
+			return null;
 		switch(loc){
 		
 		}

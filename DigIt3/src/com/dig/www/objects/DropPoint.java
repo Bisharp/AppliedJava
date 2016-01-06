@@ -17,7 +17,7 @@ public class DropPoint extends Objects {
 	private Items type;
 
 	public DropPoint(int x, int y, Board owner) {
-		super(x, y, Statics.DUMMY, false, owner,null);
+		super(x, y, null, false, owner,null);
 	}
 
 	public void setSpecs(Items itemType) {

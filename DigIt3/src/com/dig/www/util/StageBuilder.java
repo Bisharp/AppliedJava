@@ -543,6 +543,8 @@ public int getSpawnNum(){
 									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
 								if(wall)
 								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
+								else if(stuff.get(3).equals("invisible"))
+									npcs.add(new InvisibleCheckPoint(nX,nY,owner,spawnCount));
 							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
