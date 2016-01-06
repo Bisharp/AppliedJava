@@ -6,8 +6,8 @@ public class BackwardPatrolChaseEnemy extends PatrolChaseEnemy {
 	
 	private boolean backwards = false;
 
-	public BackwardPatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health, String summoned, int[][] point) {
-		super(x, y, loc, owner, flying, health, summoned, point);
+	public BackwardPatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health,int[][] point) {
+		super(x, y, loc, owner, flying, health, point);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -19,7 +19,7 @@ public class BackwardPatrolChaseEnemy extends PatrolChaseEnemy {
 		if (position >= points.length) {
 			backwards = true;
 			position -= 1;
-		} else if (position <= 0) {
+		} else if (position < 0) {
 			backwards = false;
 			position += 1;
 		}

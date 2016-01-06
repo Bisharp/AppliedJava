@@ -298,6 +298,16 @@ public int getSpawnNum(){
 										owner, flying, health,
 										createArray(stuff.get(6))));
 							break;
+						case "PatrolChase":
+							if (stuff.get(7).charAt(0) == 'B')
+								enemies.add(new BackwardPatrolChaseEnemy(enX, enY,
+										enImg, owner, flying, health,
+										createArray(stuff.get(6))));
+							else
+								enemies.add(new PatrolChaseEnemy(enX, enY, enImg,
+										owner, flying, health,
+										createArray(stuff.get(6))));
+							break;
 						case "Security":
 							enemies.add(new SecurityEnemy(enX, enY, enImg,
 									owner, flying, health, stuff.get(6)));

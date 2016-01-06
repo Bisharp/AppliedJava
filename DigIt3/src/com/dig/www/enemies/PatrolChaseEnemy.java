@@ -14,7 +14,6 @@ public class PatrolChaseEnemy extends SeeEnemy {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected final String summon;
 	protected int[][] points;
 	protected int position = -1;
 
@@ -24,10 +23,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 	protected static final int MOVE_MAX = 50;
 	protected int moveTimer = 0;
 
-	public PatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health, String summoned, int[][] point) {
+	public PatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health, int[][] point) {
 		super(x, y, loc, owner, flying, health);
-
-		summon = summoned;
 		points = point;
 
 		startX = x;
@@ -112,10 +109,12 @@ y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
 
-		g2d.setColor(Color.yellow);
-		g2d.fill(getSight());
 		
-		if (scrollY < 0)
+		
+		
 			drawBar((double) health / (double) maxHealth, g2d);
+			if(!hasTarget){
+				g2d.setColor(Color.yellow);
+			g2d.fill(getSight());}
 	}
 }
