@@ -171,7 +171,9 @@ private Point spawnLoc;
 
 	private int startPoint = 0;
 	private Time time;
-
+public int getStartPoint(){
+	return startPoint;
+}
 	public ArrayList<Block> getWorld() {
 		return world;
 	}

@@ -423,7 +423,7 @@ if(dead){
 				health -= 1;
 				hpTimer = 100;
 				if (health <= 0)
-					owner.setState(Board.State.DEAD);
+					takeDamage(0, false);
 				poisonHurtTimer = 15;
 			} else
 				poisonHurtTimer--;
