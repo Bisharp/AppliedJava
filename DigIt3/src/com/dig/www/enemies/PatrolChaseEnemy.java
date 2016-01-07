@@ -43,6 +43,8 @@ protected int currentY;
 		if (!hasTarget) {
 			x += scrollX;
 			y += scrollY;
+			currentX=x;
+			currentY=y;
 			moveTimer--;
 			if (moveTimer <= 0)
 				changePos();
@@ -61,8 +63,6 @@ protected int currentY;
 			x = startX;
 			y = startY;
 		}
-		currentX=x;
-		currentY=y;
 		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
 		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
 		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
@@ -101,10 +101,6 @@ protected int currentY;
 		hasTarget = false;
 		x=currentX;
 		y=currentY;
-		for(int c=0;c<position;c++){
-			x+=points[c][0]*100;
-			y+=points[c][1]*100;
-		}
 		return;
 		}
 		
@@ -117,10 +113,6 @@ y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
-
-		
-		g2d.setColor(Color.ORANGE);
-		g2d.fillOval(currentX, currentY, width, height);
 			drawBar((double) health / (double) maxHealth, g2d);
 			if(!hasTarget){
 				g2d.setColor(Color.yellow);
