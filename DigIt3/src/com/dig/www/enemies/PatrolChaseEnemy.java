@@ -19,7 +19,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 
 	protected int startX;
 	protected int startY;
-
+protected int currentX;
+protected int currentY;
 	protected static final int MOVE_MAX = 50;
 	protected int moveTimer = 0;
 
@@ -29,6 +30,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 
 		startX = x;
 		startY = y;
+		currentX = x;
+	currentY = y;
 	}
 
 	@Override
@@ -58,7 +61,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 			x = startX;
 			y = startY;
 		}
-		
+		currentX=x;
+		currentY=y;
 		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
 		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
 		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
@@ -76,6 +80,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 
 		startX += owner.getScrollX();
 		startY += owner.getScrollY();
+		currentX += owner.getScrollX();
+		currentY += owner.getScrollY();
 	}
 	
 	@Override
@@ -84,14 +90,17 @@ public class PatrolChaseEnemy extends SeeEnemy {
 		
 		startX = x;
 		startY = y;
+
+		currentX = x;
+		currentY = y;
 	}
 
 	@Override
 	public void act() {
 		if(!isOnScreen()){
 		hasTarget = false;
-		x=startX;
-		y=startY;
+		x=currentX;
+		y=currentY;
 		for(int c=0;c<position;c++){
 			x+=points[c][0]*100;
 			y+=points[c][1]*100;
@@ -110,8 +119,8 @@ y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 		super.draw(g2d);
 
 		
-		
-		
+		g2d.setColor(Color.ORANGE);
+		g2d.fillOval(currentX, currentY, width, height);
 			drawBar((double) health / (double) maxHealth, g2d);
 			if(!hasTarget){
 				g2d.setColor(Color.yellow);

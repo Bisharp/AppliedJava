@@ -22,4 +22,9 @@ public class InvisibleCheckPoint extends CheckPoint{
 		// TODO Auto-generated method stub
 		return new ImageIcon().getImage();
 	}
+	@Override
+	public boolean interact() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
