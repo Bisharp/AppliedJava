@@ -45,17 +45,17 @@ public void collidePlayer(int playerNum) {
 	int oldY=y;
 	Point mid=new Point(getMidX(),getMidY());
 	Point pMid=new Point(p.getMidX(),p.getMidY());
-	if(Math.abs(mid.x-pMid.x)>40){
+	if(Math.abs(mid.x-pMid.x)>30){
 		if(mid.x>pMid.x)
-			x+=20;
+			x+=10;
 		else
-			x-=20;
+			x-=10;
 	}
-	if(Math.abs(mid.y-pMid.y)>40){
+	if(Math.abs(mid.y-pMid.y)>30){
 		if(mid.y>pMid.y)
-			y+=20;
+			y+=10;
 		else
-			y-=20;
+			y-=10;
 	}
 	for (int i = owner.getStartPoint(); i < owner.getWorld().size(); i++) {
 		if(!owner.getWorld().get(i).traversable()&&owner.getWorld().get(i).getBounds().intersects(getBounds())){
