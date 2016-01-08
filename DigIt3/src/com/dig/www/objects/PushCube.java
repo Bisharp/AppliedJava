@@ -99,16 +99,31 @@ public boolean isWall() {
 }
 public boolean interact(){
 	if(canIns){
-	String[]options={"Leave","Press \"Incinerate\" button"};
-	boolean b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
+	String[]options={"Leave","Pull","Pull2"};
+boolean b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
 			+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 			new ImageIcon(image),options,"Leave"
 			)==1;
-	if(b){
-		owner.getEnemies().add(new Explosion(x-((100-width)/2), y-((100-height)/2), owner,0));
-	Point p=owner.getWorld().get(0).getBounds().getLocation();
-	x=p.x+spawnX;
-	y=p.y+spawnY;
+if(b){
+		int tx=owner.getCharacterX();
+		int ty=owner.getCharacterY();
+		int willX=x;
+		int willY=y;
+		boolean moveX=Math.abs((tx-x))>30;
+		boolean moveY=Math.abs((ty-y))>30;
+		owner.scroll(moveX?(-(tx-x)):0, moveY?(-(ty-y)):0);
+		owner.getCharacter().setX(tx);
+		owner.getCharacter().setY(ty);
+		x=willX;
+		y=willY;
+		for (Block bl:owner.getWorld()) {
+			if(!bl.traversable()&&(owner.getCharacter().getCollisionBounds().intersects(bl.getBounds()))){
+				owner.scroll(moveX?((tx-x)):0, moveY?((ty-y)):0);owner.getCharacter().setX(tx);
+		owner.getCharacter().setY(ty);
+		x=willX;
+		y=willY;
+			}
+		}
 	}
 	return b;}
 	else{
