@@ -564,7 +564,7 @@ public int getSpawnNum(){
 							else if(val==-9){
 								npcs.add(new PushCube(nX, nY, owner,wall));
 							}else if(val==-10){
-								npcs.add(new CompanionCube(nX, nY, owner,wall));
+								npcs.add(new BombCube(nX, nY,wall,owner));
 							}else if(val==-11){
 								npcs.add(new CubeButtonMoneyGiver(nX, nY, owner));
 							}
