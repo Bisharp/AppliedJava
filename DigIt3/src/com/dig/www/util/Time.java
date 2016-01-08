@@ -153,4 +153,8 @@ public class Time implements ActionListener {
 		else
 			return "Night";
 	}
+	public void setTime(float time,boolean am){
+		this.time=time;
+		this.isAM=am;
+	}
 }
