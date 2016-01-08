@@ -903,7 +903,7 @@ ArrayList<GameCharacter>friends=getAliveFriends();
 		return s1;
 	}
 	
-private void scroll(int x, int y) {
+public void scroll(int x, int y) {
 		character.setX(character.getX() + x);
 		character.setY(character.getY() + y);
 
