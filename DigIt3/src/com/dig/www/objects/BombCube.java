@@ -4,8 +4,8 @@ import com.dig.www.start.Board;
 
 public class BombCube extends PushCube{
 
-	public BombCube(int x, int y,boolean wall, Board owner) {
-		super(x, y, "images/objects/companionCube.png", owner, wall,"companionCube");
+	public BombCube(int x, int y,boolean temp, Board owner) {
+		super(x, y, "images/objects/companionCube.png", owner, "companionCube");
 		// TODO Auto-generated constructor stub
 	}
 

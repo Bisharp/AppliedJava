@@ -14,24 +14,13 @@ import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 
 public class PushCube extends Objects{
-private boolean willIsWall;
-private boolean inBetween;//This makes it so that friends will pathfind around it.
-private int spawnX;
-private int spawnY;
-private boolean canIns;
-	public PushCube(int x, int y,Board owner,boolean canIns) {
+protected boolean willIsWall;
+protected boolean inBetween;//This makes it so that friends will pathfind around it.
+	public PushCube(int x, int y,Board owner,boolean temp) {
 		super(x, y, "images/objects/pushCube.png", true, owner, "pushCube");
-		// TODO Auto-generated constructor stub
-		spawnX=x;
-		spawnY=y-100;
-		this.canIns=canIns;
 	}
-	public PushCube(int x, int y,String loc,Board owner,boolean canIns, String identifier) {
+	public PushCube(int x, int y,String loc,Board owner, String identifier) {
 		super(x, y, loc, true, owner,identifier);
-		// TODO Auto-generated constructor stub
-		spawnX=x;
-		spawnY=y-100;
-		this.canIns=canIns;
 	}
 @Override
 public void collidePlayer(int playerNum) {
@@ -74,7 +63,19 @@ public void collidePlayer(int playerNum) {
 			super.collidePlayer(playerNum);
 			return;
 		}
-	}}else{
+	}
+	for (int i = 0; i < owner.getObjects().size(); i++) {
+		if((owner.getObjects().get(i).isWall()||owner.getObjects().get(i) instanceof PushCube)&&(!(owner.getObjects().get(i)==this))&&(owner.getObjects().get(i).getBounds().intersects(getBounds()))
+				){
+			x=oldX;
+			y=oldY;
+			willIsWall=true;
+			super.collidePlayer(playerNum);
+			return;
+		}
+	}
+	
+	}else{
 		super.collidePlayer(playerNum);
 		willIsWall=true;}
 }
@@ -98,8 +99,7 @@ public boolean isWall() {
 		return false;
 }
 public boolean interact(){
-	if(canIns){
-	String[]options={"Leave","Pull","Pull2"};
+	String[]options={"Leave","Pull"};
 boolean b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
 			+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 			new ImageIcon(image),options,"Leave"
@@ -125,13 +125,6 @@ if(b){
 			}
 		}
 	}
-	return b;}
-	else{
-		JOptionPane.showMessageDialog(owner,desc, DigIt.NAME
-				+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
-				new ImageIcon(image)
-				);
-		return true;
-	}
+	return b;
 }
 }
