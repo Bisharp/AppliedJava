@@ -63,6 +63,8 @@ public final class Statics {
 	public static final Color SAND_BLUE = new Color(48, 65, 88);
 	public static final Color DARK_SAND_BLUE = new Color(32, 44, 60);
 	public static final Color SAND_RED = new Color(155, 36, 36);
+	
+	public static final Color LIGHT = new Color(255, 255, 255, 20);
 
 	private static HashMap<Color, Color> darkColors = new HashMap<Color, Color>();
 	private static HashMap<Float, HashMap<Color, Color>> sunriseColors = new HashMap<Float, HashMap<Color, Color>>();

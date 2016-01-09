@@ -196,10 +196,7 @@ public class Slime extends WalkingEnemy {
 				g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
 		}
 
-		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
-		else if (slowTimer > 0)
-			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+		drawStatus(g2d);
 
 		drawBar((double) health / (double) maxHealth, g2d);
 	}

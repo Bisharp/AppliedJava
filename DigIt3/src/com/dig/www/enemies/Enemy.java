@@ -35,6 +35,9 @@ public abstract class Enemy extends Sprite {
 	protected int slowTimer = 0;
 	protected int SLOW_MAX = 10;
 
+	protected boolean slipped = false;
+	protected static final int SLIP_MAX = 50;
+
 	protected boolean invincible = false;
 	protected boolean collisionFlagged = false;
 	protected boolean turn = true;
@@ -99,10 +102,7 @@ public abstract class Enemy extends Sprite {
 				g2d.drawImage(hitstunRenders() ? shadow : null, x, y, owner);
 		}
 
-		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
-		else if (slowTimer > 0)
-			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+		drawStatus(g2d);
 
 		if (!(this instanceof Projectile) && !invincible) {
 			// g2d.setFont(enFont);
@@ -110,6 +110,17 @@ public abstract class Enemy extends Sprite {
 			// g2d.drawString("" + health, x, y - 10);
 			drawBar((double) health / (double) maxHealth, g2d);
 		}
+	}
+
+	protected void drawStatus(Graphics2D g2d) {
+
+		if (harmTimer > 0)
+			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+		if (slowTimer > 0)
+			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+		if (slipped)
+			g2d.drawImage(newImage("images/effects/slip.png"), x, y - 59, owner);
+
 	}
 
 	public void interact(Moves move, GameCharacter character, boolean fromP) {
@@ -217,14 +228,14 @@ public abstract class Enemy extends Sprite {
 					takeDamage(character.getSpecialDamage());
 
 				else if (!invincible) {
-					owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0, 4, 100,null));
+					owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0, 4, 100, null));
 					alive = false;
 				}
 
 				character.endAction();
 			}
 			break;
-			
+
 		case WIZ_M:
 			if (!character.hasMeleed()) {
 				takeDamage(character.getMeleeDamage());
@@ -239,6 +250,15 @@ public abstract class Enemy extends Sprite {
 			if (!character.hasSpecialed()) {
 				takeDamage(character.getSpecialDamage());
 				character.endAction();
+			}
+			break;
+
+		case MAC_S:
+			if (!character.hasSpecialed()) {
+				takeDamage(character.getSpecialDamage());
+				character.endAction();
+				stunTimer = SLIP_MAX;
+				slipped = true;
 			}
 			break;
 		}
@@ -274,8 +294,11 @@ public abstract class Enemy extends Sprite {
 		if (slowTimer > 0)
 			slowTimer--;
 
-		if (stunTimer > 0)
+		if (stunTimer > 0) {
 			stunTimer--;
+			if (stunTimer <= 0 && slipped)
+				slipped = false;
+		}
 
 		if (harmTimer > 0)
 			harmTimer--;

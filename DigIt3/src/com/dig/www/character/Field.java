@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
+import com.dig.www.objects.Light;
 import com.dig.www.start.Board;
 import com.dig.www.util.Irregular;
 import com.dig.www.util.Sprite;
@@ -36,6 +37,10 @@ public class Field extends FProjectile implements Irregular {
 		height = SIDE;
 
 		field();
+		
+		Light l = new Light(x, y, owner, 100, true, false);
+		owner.getMovingObjects().add(l);
+		owner.getObjects().add(l);
 	}
 
 	private void field() {

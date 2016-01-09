@@ -1,6 +1,5 @@
 package com.dig.www.start;
 
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -124,6 +123,10 @@ public class Board extends MPanel implements ActionListener {
 		}
 	}
 
+	public enum DayNight {
+		DAY, NIGHT, ANY;
+	}
+
 	public static Preferences preferences;
 	static {
 		preferences = new Preferences();
@@ -167,6 +170,7 @@ public class Board extends MPanel implements ActionListener {
 
 	private Weather weather = Weather.NORMAL;
 	private int weatherTimer = 0;
+	private DayNight dN = DayNight.NIGHT;
 	private ArrayList<int[]> weatherList = new ArrayList<int[]>();
 
 	private int startPoint = 0;
@@ -204,8 +208,8 @@ public class Board extends MPanel implements ActionListener {
 	// */ \
 	// * | Getters/setters for owner
 
-	public Board(DigIt dM,String mode, String name) {
-		this.mode=mode;
+	public Board(DigIt dM, String mode, String name) {
+		this.mode = mode;
 		this.userName = name;
 		character = new Spade(Statics.BOARD_WIDTH / 2 - 50, Statics.BOARD_HEIGHT / 2 - 50, this, true);
 		friends.clear();
@@ -250,8 +254,8 @@ public class Board extends MPanel implements ActionListener {
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
-		StageBuilder sB = StageBuilder.getInstance(mode,level, this, num);
-		sB.changeState(mode,level, this, num);
+		StageBuilder sB = StageBuilder.getInstance(mode, level, this, num);
+		sB.changeState(mode, level, this, num);
 		setTexturePack(sB.readText());
 		world = sB.read();
 		enemies = sB.loadEn();
@@ -829,71 +833,72 @@ public class Board extends MPanel implements ActionListener {
 
 		for (GameCharacter friend : friends)
 			s0.add(friend.getType().charName());
-//
+		//
 		String[] s1 = new String[friends.size()];
-		boolean clark=false;
-		boolean club=false;
-		boolean heart=false;
-		boolean diamond=false;
-		boolean sirCobalt=false;
-		boolean wizard=false;
-		boolean kepler=false;
-		boolean macaroni=false;
+		boolean clark = false;
+		boolean club = false;
+		boolean heart = false;
+		boolean diamond = false;
+		boolean sirCobalt = false;
+		boolean wizard = false;
+		boolean kepler = false;
+		boolean macaroni = false;
 		;
-		for(String a:s0){
-			if(a.equals(GameCharacter.Types.SPADE.charName()))
-				clark=true;
-			else if(a.equals(GameCharacter.Types.CLUB.charName()))
-			club=true;
-			else if(a.equals(GameCharacter.Types.HEART.charName()))
-				heart=true;
-			else if(a.equals(GameCharacter.Types.DIAMOND.charName()))
-				diamond=true;
-			else if(a.equals(GameCharacter.Types.SIR_COBALT.charName()))
-				sirCobalt=true;
-			else if(a.equals(GameCharacter.Types.WIZARD.charName()))
-				wizard=true;
-//			else if(a.equals(GameCharacter.Types.KEPLER.charName()))
-//				kepler=true;
-			else if(a.equals(GameCharacter.Types.MACARONI.charName()))
-				macaroni=true;}
-		int c=0;
-		if(clark){
-			s1[c]=GameCharacter.Types.SPADE.charName();
+		for (String a : s0) {
+			if (a.equals(GameCharacter.Types.SPADE.charName()))
+				clark = true;
+			else if (a.equals(GameCharacter.Types.CLUB.charName()))
+				club = true;
+			else if (a.equals(GameCharacter.Types.HEART.charName()))
+				heart = true;
+			else if (a.equals(GameCharacter.Types.DIAMOND.charName()))
+				diamond = true;
+			else if (a.equals(GameCharacter.Types.SIR_COBALT.charName()))
+				sirCobalt = true;
+			else if (a.equals(GameCharacter.Types.WIZARD.charName()))
+				wizard = true;
+			// else if(a.equals(GameCharacter.Types.KEPLER.charName()))
+			// kepler=true;
+			else if (a.equals(GameCharacter.Types.MACARONI.charName()))
+				macaroni = true;
+		}
+		int c = 0;
+		if (clark) {
+			s1[c] = GameCharacter.Types.SPADE.charName();
 			c++;
 		}
-		if(club){
-			s1[c]=GameCharacter.Types.CLUB.charName();
+		if (club) {
+			s1[c] = GameCharacter.Types.CLUB.charName();
 			c++;
 		}
-		if(heart){
-			s1[c]=GameCharacter.Types.HEART.charName();
+		if (heart) {
+			s1[c] = GameCharacter.Types.HEART.charName();
 			c++;
 		}
-		if(diamond){
-			s1[c]=GameCharacter.Types.DIAMOND.charName();
+		if (diamond) {
+			s1[c] = GameCharacter.Types.DIAMOND.charName();
 			c++;
 		}
-		if(sirCobalt){
-			s1[c]=GameCharacter.Types.SIR_COBALT.charName();
+		if (sirCobalt) {
+			s1[c] = GameCharacter.Types.SIR_COBALT.charName();
 			c++;
 		}
-		if(wizard){
-			s1[c]=GameCharacter.Types.WIZARD.charName();
+		if (wizard) {
+			s1[c] = GameCharacter.Types.WIZARD.charName();
 			c++;
 		}
-//		if(kepler){
-//			s1[c]=GameCharacter.Types.KEPLER.charName();
-//			c++;
-//		}
-		if(macaroni){
-			s1[c]=GameCharacter.Types.MACARONI.charName();
+		// if(kepler){
+		// s1[c]=GameCharacter.Types.KEPLER.charName();
+		// c++;
+		// }
+		if (macaroni) {
+			s1[c] = GameCharacter.Types.MACARONI.charName();
 			c++;
-		}	
+		}
 		return s1;
 	}
-	
-private void scroll(int x, int y) {
+
+	private void scroll(int x, int y) {
 		character.setX(character.getX() + x);
 		character.setY(character.getY() + y);
 
@@ -1439,32 +1444,32 @@ private void scroll(int x, int y) {
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 
 			if (n.isOnScreen()) {
-				if (r3.intersects(n.getBounds())){
-					if(n.isObstacle())
-					character.collision(n, false);
-				if(n instanceof TouchNPC&&n.willTalk())	{
+				if (r3.intersects(n.getBounds())) {
+					if (n.isObstacle())
+						character.collision(n, false);
+					if (n instanceof TouchNPC && n.willTalk()) {
+						current = n;
+						current.setLine();
+						state = State.NPC;
+						character.setImage(character.newImage("n"));
+						for (GameCharacter character : friends)
+							character.setImage(character.newImage("n"));
+						bounds = null;
+					}
+				}
+				if (bounds != null && n.getBounds().intersects(bounds) && (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
 					current = n;
 					current.setLine();
 					state = State.NPC;
 					character.setImage(character.newImage("n"));
-					for(GameCharacter character:friends)
+					for (GameCharacter character : friends)
 						character.setImage(character.newImage("n"));
 					bounds = null;
 				}
-				}
-				if (bounds != null && n.getBounds().intersects(bounds)&&(!(n instanceof TouchNPC)||((TouchNPC)n).buttonTalk())&&n.willTalk()) {
-					current = n;
-					current.setLine();
-					state = State.NPC;
-					character.setImage(character.newImage("n"));
-					for(GameCharacter character:friends)
-						character.setImage(character.newImage("n"));
-					bounds = null;
-				}
-if(n.isObstacle())
-				for (int rI = 0; rI < character.getDirBounds().length; rI++)
-					if (n.getBounds().intersects(character.getDirBounds()[rI]))
-						character.presetCollisionFlag(rI);
+				if (n.isObstacle())
+					for (int rI = 0; rI < character.getDirBounds().length; rI++)
+						if (n.getBounds().intersects(character.getDirBounds()[rI]))
+							character.presetCollisionFlag(rI);
 			}
 		}
 
@@ -1498,12 +1503,12 @@ if(n.isObstacle())
 
 						}
 				}
-				if(n.isWall())
-				for (int rI = 0; rI < character.getDirBounds().length; rI++)
-					if (n.getBounds().intersects(character.getDirBounds()[rI]))
-						character.presetCollisionFlag(rI);
+				if (n.isWall())
+					for (int rI = 0; rI < character.getDirBounds().length; rI++)
+						if (n.getBounds().intersects(character.getDirBounds()[rI]))
+							character.presetCollisionFlag(rI);
 			}
-			
+
 			if (!beenPicked && state != State.NPC && bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
 				if (n.interact()) {
 					hasTalked = true;
@@ -1784,7 +1789,7 @@ if(n.isObstacle())
 			File locFile = new File(location + userName + ".txt");
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-				writer.write(mode+","+level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
+				writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
 				writer.newLine();
 				if (normalPlayer(character.getType()))
 					writer.write(character.getSave());
@@ -1848,8 +1853,8 @@ if(n.isObstacle())
 						stuff.add(currentS);
 					}
 					try {
-						String mode=stuff.get(0);
-						this.mode=mode;
+						String mode = stuff.get(0);
+						this.mode = mode;
 						String lev = stuff.get(1);
 						level = lev;
 						int levUp = Integer.parseInt(stuff.get(2));
@@ -1927,13 +1932,14 @@ if(n.isObstacle())
 		changeArea();
 		preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
 				+ owner.getUserName() + "/");
-//		for(Items i:Items.values())
-//			GameCharacter.getInventory().addItem(i, 100);
+		// for(Items i:Items.values())
+		// GameCharacter.getInventory().addItem(i, 100);
 	}
 
 	public ArrayList<Objects> getObjects() {
 		return objects;
 	}
+
 	public ArrayList<Portal> getPortals() {
 		return portals;
 	}
@@ -2035,12 +2041,12 @@ if(n.isObstacle())
 	// These three methods are used by updateBackground
 	protected void updateFog() {
 
-		switch (texturePack) {
+		switch (dN) {
 
-		case LAB:
+		case DAY:
 			setBackground(Color.gray);
 			break;
-		case HAUNTED:
+		case NIGHT:
 			setBackground(Color.darkGray);
 			break;
 
@@ -2067,19 +2073,16 @@ if(n.isObstacle())
 	}
 
 	protected void updateRain() {
-		if (time.getGeneralTime() == Time.DAY && texturePack != TexturePack.HAUNTED)
+		if ((time.getGeneralTime() == Time.DAY && texturePack != TexturePack.HAUNTED) || dN == DayNight.DAY)
 			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
 			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 	}
 
 	protected void updateNormal() {
-		switch (texturePack) {
-		case HAUNTED:
-			setBackground(Statics.darkenColor(getTextureBack()));
-			break;
 
-		default:
+		switch (dN) {
+		case ANY:
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
 				setBackground(getTextureBack());
@@ -2097,22 +2100,25 @@ if(n.isObstacle())
 				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
+			break;
+
+		case DAY:
+			setBackground(getTextureBack());
+			break;
+
+		case NIGHT:
+			setBackground(Statics.darkenColor(getTextureBack()));
+			break;
 		}
 	}
 
 	public boolean darkenWorld() {
 		if (weather == Weather.RAIN)
 			return weatherTimer <= 0;
+		else if (dN == DayNight.ANY)
+			return time.getGeneralTime() == Time.NIGHT;
 		else
-			switch (texturePack) {
-			case LAB:
-				return false;
-			case HAUNTED:
-				return true;
-
-			default:
-				return time.getGeneralTime() == Time.NIGHT;
-			}
+			return dN == DayNight.NIGHT;
 	}
 
 	public boolean thunderStrike() {
@@ -2127,7 +2133,7 @@ if(n.isObstacle())
 		// return false;
 		//
 		// default:
-		return time.getGeneralTime() == Time.SUNRISE;
+		return time.getGeneralTime() == Time.SUNRISE && dN == DayNight.ANY;
 		// }
 	}
 
@@ -2139,7 +2145,7 @@ if(n.isObstacle())
 		// return false;
 		//
 		// default:
-		return time.getGeneralTime() == Time.SUNSET;
+		return time.getGeneralTime() == Time.SUNSET && dN == DayNight.ANY;
 		// }
 	}
 

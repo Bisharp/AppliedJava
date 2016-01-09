@@ -49,22 +49,24 @@ public class GameControllerRunnable implements Runnable {
 	}
 	
 
-	private static final int Y_STICK = 0;
-	private static final int X_STICK = 1;
-	private static final int Y2_STICK = 2;
-	private static final int X2_STICK = 3;
-	private static final int Z_AXIS = 4;
-	private static final int A = 5;
-	private static final int B = 6;
-	private static final int X = 7;
-	private static final int Y = 8;
-	private static final int LB = 9;
-	private static final int RB = 10;
-	private static final int BACK = 11;
-	private static final int START = 12;
-	private static final int STICK_PRESS = 13;
-	private static final int STICK2_PRESS = 14;
-	private static final int HAT_SWITCH = 15;
+	protected static final int Y_STICK = 0;
+	protected static final int X_STICK = 1;
+	protected static final int Y2_STICK = 2;
+	protected static final int X2_STICK = 3;
+	protected static final int Z_AXIS = 4;
+	protected static final int A = 5;
+	protected static final int B = 6;
+	protected static final int X = 7;
+	protected static final int Y = 8;
+	protected static final int LB = 9;
+	protected static final int RB = 10;
+	protected static final int BACK = 11;
+	protected static final int START = 12;
+	protected static final int STICK_PRESS = 13;
+	protected static final int STICK2_PRESS = 14;
+	protected static final int HAT_SWITCH = 15;
+	
+	protected static GameControllerPreferences p;
 
 	private static final float Z_SENSITIVITY = 0.7f;
 	private final float WALK_SENSITIVITY = 0.4f;
@@ -78,6 +80,8 @@ public class GameControllerRunnable implements Runnable {
 
 		if (controller != null)
 			buttonPressed = new boolean[16];
+		
+		p = new GameControllerPreferences();
 
 		// owner = dM;
 	}

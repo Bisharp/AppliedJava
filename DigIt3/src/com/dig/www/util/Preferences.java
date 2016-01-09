@@ -596,4 +596,13 @@ public class Preferences implements Serializable {
 				+ "\nPause: " + KeyEvent.getKeyText(PAUSE()) + "  |  Switch characters: "
 				+ KeyEvent.getKeyText(CHAR_CHANGE());
 	}
+	
+	//------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------
+	
+	protected GameControllerPreferences gCP = new GameControllerPreferences();
+	
+	public GameControllerPreferences getGCP() {
+		return gCP;
+	}
 }
