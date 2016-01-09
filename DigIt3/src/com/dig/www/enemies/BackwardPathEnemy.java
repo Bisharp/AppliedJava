@@ -19,7 +19,7 @@ public class BackwardPathEnemy extends PathEnemy {
 		if (position >= points.length) {
 			backwards = true;
 			position -= 1;
-		} else if (position <= 0) {
+		} else if (position < 0) {
 			backwards = false;
 			position += 1;
 		}

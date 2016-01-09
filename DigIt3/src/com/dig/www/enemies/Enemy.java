@@ -197,7 +197,7 @@ public abstract class Enemy extends Sprite {
 			if (!character.hasSpecialed()) {
 				takeDamage(character.getSpecialDamage());
 				stunTimer = STUN_MAX;
-				if (!invincible && !(this instanceof PathEnemy)) {
+				if (!invincible && !(this instanceof PathEnemy)&&!(this instanceof PatrolChaseEnemy)) {
 					int d = (int) pointTowards(new Point(character.getX(), character.getY()));
 					d += 180;
 					x += Math.cos((double) Math.toRadians((double) d)) * 100;

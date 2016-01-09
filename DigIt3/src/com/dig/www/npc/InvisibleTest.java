@@ -2,7 +2,7 @@ package com.dig.www.npc;
 
 import com.dig.www.start.Board;
 
-public class InvisibleTest extends InvisbleNormalOnceTouchNPC {
+public class InvisibleTest extends InvisibleNormalOnceTouchNPC {
 
 	public InvisibleTest(int x, int y, Board owner, String location) {
 		super(x, y, owner, new String[] { "..." }, NPC.DIAMOND, location,
@@ -15,7 +15,7 @@ public class InvisibleTest extends InvisbleNormalOnceTouchNPC {
 								"Come on, just say anything. Anything?",
 								"Come on, just say anything. Anything?",
 								"Come on, just say anything. Anything?" },
-						true, new NPCOption[0], owner, NPC.CLUB, NPC.DIAMOND) }// new
+						true, new NPCOption[0], owner, NPC.CLUB, NPC.DIAMOND,null,null) }// new
 																		// NPCOption[]{new
 																		// NPCOption(q,
 																		// a,

@@ -41,7 +41,7 @@ protected boolean wall;
 	}
 
 	public void collidePlayer(int playerNum){
-		if(loc.equals("images/objects/Leaves.png")){
+		if(loc!=null&&loc.equals("images/objects/Leaves.png")){
 			loc="images/objects/LeavesSc.png";
 			image=newImage(loc);
 			shadow = newShadow(loc);
@@ -79,11 +79,18 @@ protected boolean wall;
 		return true;
 	}
 	public String getDescription(String loc,String identifier){
+		
 		//Find by identifier
 		if(identifier!=null)
 		switch(identifier){
 		case "update":
 			return null;//This is used for objects that update the interact method so that it wont go through the whole loop
+		case "CubeButton":
+			return "This looks like a button, but it doesn't do anything when stepped on, even with all of us together.";
+		case "pushCube":
+			return "Push cube: a pushable cube. It can activate certain buttons if it is on top of them.";
+		case "companionCube":
+			return "The Weighted Companion Cube will never threaten to stab you and, in fact, cannot speak.";
 		case "BossBlock":
 			return "This strange portal-like wall bars the way.";
 		case "HookObject":
@@ -102,6 +109,8 @@ protected boolean wall;
 			return "How did these leaves get here? There isn't a tree in sight.";
 		}
 		//Find by loc
+		if(loc==null)
+			return null;
 		switch(loc){
 		
 		}

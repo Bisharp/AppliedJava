@@ -44,6 +44,8 @@ public abstract class NPC extends Sprite {
 	protected String hiChar;
 	protected String lastI;
 	protected String lastChar;
+	private String lastICut;
+	private String lastCharCut;
 
 	protected boolean isObstacle=true;
 	
@@ -283,7 +285,15 @@ if (iTalk)
 		for (int c = 0; c < string.length; c++)
 			g2d.drawString(string[c], 6, Statics.BOARD_HEIGHT - boxHeight / 2
 					- 100 + ((c - string.length) * font.getSize()));
-		
+		g2d.setColor(Color.BLACK);
+		if(iTalk){
+			if(lastICut!=null){
+				g2d.fillRect(0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight);
+		g2d.drawImage(Statics.newImage(lastICut), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
+			}}else if(lastCharCut!=null){
+				g2d.fillRect(0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight);
+			g2d.drawImage(Statics.newImage(lastCharCut), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
+			}
 		if (inDialogue && !wait)
 			if (iTalk)
 				if (!exiting)
@@ -306,6 +316,8 @@ if (iTalk)
 		iTalk = false;
 		inDialogue = true;
 		lastI = null;
+		lastCharCut=null;
+		lastICut=null;
 		lastChar = null;
 	}
 
@@ -377,6 +389,8 @@ if (iTalk)
 		iTalk = false;
 		inDialogue = true;
 		index = -1;
+		lastCharCut=null;
+		lastICut=null;
 	}
 
 	public void setLine(NPCOption option) {
@@ -386,6 +400,8 @@ if (iTalk)
 		willOption = option;
 		lastI = option.getCharAnswer();
 		lastChar = option.getCharQuestion();
+		lastCharCut=option.cutSceneQ();
+		lastICut=option.cutSceneA();
 	}
 
 	public void doOption() {
@@ -440,6 +456,8 @@ if (iTalk)
 			inDialogue = true;
 			lastI = byeI;
 			lastChar = byeChar;
+			lastCharCut=null;
+			lastICut=null;
 		} else {
 			wait = false;
 		}
@@ -462,7 +480,6 @@ if (iTalk)
 			length += buttons[i].width + 10;
 		}
 		currentOptions = optionGiver.getNewOptions().clone();
-
 	}
 
 	public void resetCurrentOptions() {

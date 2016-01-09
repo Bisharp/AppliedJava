@@ -298,6 +298,16 @@ public int getSpawnNum(){
 										owner, flying, health,
 										createArray(stuff.get(6))));
 							break;
+						case "PatrolChase":
+							if (stuff.get(7).charAt(0) == 'B')
+								enemies.add(new BackwardPatrolChaseEnemy(enX, enY,
+										enImg, owner, flying, health,
+										createArray(stuff.get(6))));
+							else
+								enemies.add(new PatrolChaseEnemy(enX, enY, enImg,
+										owner, flying, health,
+										createArray(stuff.get(6))));
+							break;
 						case "Security":
 							enemies.add(new SecurityEnemy(enX, enY, enImg,
 									owner, flying, health, stuff.get(6)));
@@ -533,6 +543,8 @@ public int getSpawnNum(){
 									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
 								if(wall)
 								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
+								else if(stuff.get(3).equals("invisible"))
+									npcs.add(new InvisibleCheckPoint(nX,nY,owner,spawnCount));
 							spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
@@ -540,7 +552,23 @@ public int getSpawnNum(){
 								npcs.add(new HookObject(nX, nY, owner));
 							} else if (val == -6) {
 								npcs.add(new DropPoint(nX, nY, owner));
-							} else
+							}
+							else if(val==-7){
+								npcs.add(new ActivatedBossWallActivator(nX, nY, owner));
+							}
+							else if(val==-8){
+								npcs.add(new ActivatedBossWall(nX, nY, owner));
+							}else if(val==-9){
+								npcs.add(new PushCube(nX, nY, owner,wall));
+							}
+							else if(val==-9){
+								npcs.add(new PushCube(nX, nY, owner,wall));
+							}else if(val==-10){
+								npcs.add(new BombCube(nX, nY,wall,owner));
+							}else if(val==-11){
+								npcs.add(new CubeButtonMoneyGiver(nX, nY, owner));
+							}
+							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner,
 										val));
 						else if (Items.translate(stuff.get(5)).equals(
@@ -562,6 +590,7 @@ public int getSpawnNum(){
 			ex.printStackTrace();
 		}
 		try{
+			owner.setSpawnLoc(spawnPoint);
 owner.setSpawnX(spawnPoint.x);
 owner.setSpawnY(spawnPoint.y);}
 		catch(Exception ex){

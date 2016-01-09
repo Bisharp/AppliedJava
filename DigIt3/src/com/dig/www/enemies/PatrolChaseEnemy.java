@@ -14,24 +14,24 @@ public class PatrolChaseEnemy extends SeeEnemy {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected final String summon;
 	protected int[][] points;
 	protected int position = -1;
 
 	protected int startX;
 	protected int startY;
-
+protected int currentX;
+protected int currentY;
 	protected static final int MOVE_MAX = 50;
 	protected int moveTimer = 0;
 
-	public PatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health, String summoned, int[][] point) {
+	public PatrolChaseEnemy(int x, int y, String loc, Board owner, boolean flying, int health, int[][] point) {
 		super(x, y, loc, owner, flying, health);
-
-		summon = summoned;
 		points = point;
 
 		startX = x;
 		startY = y;
+		currentX = x;
+	currentY = y;
 	}
 
 	@Override
@@ -43,6 +43,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 		if (!hasTarget) {
 			x += scrollX;
 			y += scrollY;
+			currentX=x;
+			currentY=y;
 			moveTimer--;
 			if (moveTimer <= 0)
 				changePos();
@@ -61,7 +63,6 @@ public class PatrolChaseEnemy extends SeeEnemy {
 			x = startX;
 			y = startY;
 		}
-		
 		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
 		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
 		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
@@ -79,6 +80,8 @@ public class PatrolChaseEnemy extends SeeEnemy {
 
 		startX += owner.getScrollX();
 		startY += owner.getScrollY();
+		currentX += owner.getScrollX();
+		currentY += owner.getScrollY();
 	}
 	
 	@Override
@@ -87,18 +90,17 @@ public class PatrolChaseEnemy extends SeeEnemy {
 		
 		startX = x;
 		startY = y;
+
+		currentX = x;
+		currentY = y;
 	}
 
 	@Override
 	public void act() {
 		if(!isOnScreen()){
 		hasTarget = false;
-		x=startX;
-		y=startY;
-		for(int c=0;c<position;c++){
-			x+=points[c][0]*100;
-			y+=points[c][1]*100;
-		}
+		x=currentX;
+		y=currentY;
 		return;
 		}
 		
@@ -111,11 +113,9 @@ y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
 	@Override
 	public void draw(Graphics2D g2d) {
 		super.draw(g2d);
-
-		g2d.setColor(Color.yellow);
-		g2d.fill(getSight());
-		
-		if (scrollY < 0)
 			drawBar((double) health / (double) maxHealth, g2d);
+			if(!hasTarget){
+				g2d.setColor(Color.yellow);
+			g2d.fill(getSight());}
 	}
 }

@@ -43,7 +43,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
-
+protected boolean dead;
 	protected Enemy enPoint;
 	protected int enUpTimer;
 	protected static final int MAX_ATTACK_DISTANCE = 250;
@@ -411,14 +411,19 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	@Override
 	public void animate() {
-
+if(dead){
+	basicAnimate();
+	if(owner.getCharacter()!=this&&!owner.getCharacter().isDead()&&getBounds().intersects(owner.getCharacter().getBounds()))
+		dead=false;
+	onScreen = getBounds().intersects(owner.getScreen());
+}else{
 		collisionFlagged = false;
 		if (poisonTimer > 0) {
 			if (poisonHurtTimer <= 0) {
 				health -= 1;
 				hpTimer = 100;
 				if (health <= 0)
-					owner.setState(Board.State.DEAD);
+					takeDamage(0, false);
 				poisonHurtTimer = 15;
 			} else
 				poisonHurtTimer--;
@@ -869,7 +874,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 		onScreen = getBounds().intersects(owner.getScreen());
 		resetFlags();
-	}
+	}}
 
 	public void setWaiting(boolean setter) {
 		waiting = setter;
@@ -1717,10 +1722,22 @@ if(!name.contains("/")){
 			health -= amount;
 			hpTimer = 100;
 			hitstunTimer = HITSTUN_MAX;
-
-			if (health <= 0)
+}
+			if (health <= 0){
+				
+				if(owner.getAliveFriends().size()==0)
 				owner.setState(Board.State.DEAD);
-		}
+				else{
+				x=owner.getSpawnLoc().x;
+				y=owner.getSpawnLoc().y;
+				health=(float)0.01;
+					dead=true;
+					image=newImage("n");
+					if(player)
+						owner.setSwitching(true);
+				}
+			}
+		
 	}
 
 	public abstract boolean canAct();
@@ -2234,4 +2251,9 @@ if(!name.contains("/")){
 		if (this instanceof Spade)
 			((Spade) this).keyReleased = true;
 	}
+	public boolean isDead(){
+		return dead;
+	}
+	public void setDead(boolean setter){
+	dead=setter;}
 }

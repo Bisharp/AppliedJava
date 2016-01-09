@@ -1,5 +1,8 @@
 package com.dig.www.enemies;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import com.dig.www.start.Board;
 
 public class BackwardSecurityEnemy extends PatrolSecurityEnemy {
@@ -19,7 +22,7 @@ public class BackwardSecurityEnemy extends PatrolSecurityEnemy {
 		if (position >= points.length) {
 			backwards = true;
 			position -= 1;
-		} else if (position <= 0) {
+		} else if (position < 0) {
 			backwards = false;
 			position += 1;
 		}

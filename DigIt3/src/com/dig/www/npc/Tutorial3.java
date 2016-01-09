@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import com.dig.www.blocks.Portal;
 import com.dig.www.start.Board;
 
-public class Tutorial3 extends InvisbleNormalOnceTouchNPC {
+public class Tutorial3 extends InvisibleNormalOnceTouchNPC {
 	private boolean hasTouched;
 
 	public Tutorial3(int x, int y, Board owner, String location) {

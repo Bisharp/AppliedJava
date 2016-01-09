@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
+
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.character.GameCharacter;
@@ -32,12 +34,18 @@ public abstract class Sprite implements Serializable {
 	protected transient Board owner;
 
 	public Sprite(int x, int y, String loc, Board owner) {
+		if(loc!=null){
 		image = newImage(loc);
 		if (!(this instanceof GameCharacter) && !(this instanceof Boss))
 			shadow = newShadow(loc);
 
 		width = image.getWidth(null);
-		height = image.getHeight(null);
+		height = image.getHeight(null);}else{
+			image=new ImageIcon().getImage();
+			shadow=new ImageIcon().getImage();
+			width=100;
+			height=100;//by default null images have bounds of 100x100
+		}
 		visible = true;
 
 		this.owner = owner;

@@ -46,11 +46,15 @@ private int rotate2=0;
 			Statics.playSound(owner,bossPhaseS);
 			owner.getEnemies().add(new Explosion(x, y, owner));
 		speed++;
+		x-=(image.getWidth(owner)-image3.getWidth(owner))/2;
+		y-=(image.getHeight(owner)-image3.getHeight(owner))/2;
 		}if(health<(maxHealth/3)*2&&phase<1){
 				phase=1;
 				Statics.playSound(owner,bossPhaseS);
 				owner.getEnemies().add(new Explosion(x, y, owner));
 				speed++;	
+				x-=(image3.getWidth(owner)-image2.getWidth(owner))/2;
+				y-=(image3.getHeight(owner)-image2.getHeight(owner))/2;
 		}
 		
 			basicAnimate();
