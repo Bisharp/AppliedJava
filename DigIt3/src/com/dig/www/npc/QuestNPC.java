@@ -124,5 +124,25 @@ public abstract class QuestNPC extends NPC {
 	public String getPlace() {
 		return place;
 	}
-
+public void setPhase(int setter){
+	owner.getData().setAcceptedPhase(this, setter);
+	setAcceptedVals(setter);
+}
+public int getPhase(){
+	return owner.getData().getAcceptedPhase(this);
+}
+public void setAccepted(boolean setter){
+	this.questAccepted=setter;
+	setAcceptedVals(getPhase());
+}
+public boolean getAccepted(){
+	return questAccepted;
+}
+public void setCompleted(boolean setter){
+	this.questCompleted=setter;
+	setCompletedVals();
+}
+public boolean getCompleted(){
+	return questCompleted;
+}
 }
