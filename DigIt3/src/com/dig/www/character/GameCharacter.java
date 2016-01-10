@@ -43,6 +43,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	protected GameCharacter healing;
 protected boolean dead;
 	protected Enemy enPoint;
 	protected int enUpTimer;
@@ -470,9 +471,35 @@ if(dead){
 					path = null;
 				}
 			}
-			if (!wallBound && !waiting) {
-				// System.out.println(path);
-				if (path == null && owner.pointedPoint == null) {
+			if (path == null && owner.pointedPoint == null&&type==Types.HEART) {
+					if (healing == null && enUpTimer <= 0) {
+						int chosenNum = -2;
+						int theDis = Integer.MAX_VALUE;
+						if (owner.getCharacter()!=this
+								&& owner.getCharPoint().distance(new Point(x, y)) < MAX_ATTACK_DISTANCE
+								&& owner.getCharacter().health<(owner.getCharacter().HP_MAX*0.75)&&theDis>owner.getCharacter().health) {
+							theDis = (int)owner.getCharacter().health;
+							chosenNum = -1;
+						}
+						for (int c = 0; c < owner.getFriends().size(); c++) {
+							Point currentEn = new Point(owner.getFriends().get(c).getX(), owner.getFriends().get(c).getY());
+							if (owner.getFriends().get(c)!=this
+									&& currentEn.distance(new Point(x, y)) < MAX_ATTACK_DISTANCE
+									&& owner.getFriends().get(c).health<(owner.getFriends().get(c).HP_MAX*0.75)&&theDis>owner.getFriends().get(c).health) {
+								theDis = (int)owner.getFriends().get(c).health;
+								chosenNum = c;
+							}
+						}
+
+						if (chosenNum>-1) {
+							healing = owner.getCharacter();
+						}else if(chosenNum==-1)
+							healing=owner.getCharacter();
+					}
+				} else {
+					healing = null;
+				}
+				if (path == null && owner.pointedPoint == null&&healing==null) {
 					if (enPoint == null && enUpTimer <= 0) {
 						int chosenNum = -1;
 						int theDis = MAX_ATTACK_DISTANCE;
@@ -488,21 +515,29 @@ if(dead){
 
 						if (chosenNum != -1) {
 							enPoint = owner.getEnemies().get(chosenNum);
-						}
+						
 						goTo = true;
 						if (this instanceof Diamond || this instanceof Heart || health < HP_MAX / 2)
-							goTo = false;
+							goTo = false;}
 					} else if (enUpTimer > 0) {
 						enUpTimer--;
 					}
 				} else {
 					enPoint = null;
 				}
+			if (!wallBound && !waiting) {
+				// System.out.println(path);
+				
 
 				if (enPoint != null
 						&& ((new Point(enPoint.getX(), enPoint.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || !enPoint
 								.isAlive()) || new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || (health < HP_MAX / 2 && goTo))) {
 					enPoint = null;
+				}
+				if(healing!=null&&((new Point(healing.getX(), healing.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || healing
+								.isDead())|| new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75||healing.health>healing.HP_MAX*0.75)
+								){
+					healing=null;
 				}
 
 				if (path != null) {
@@ -529,12 +564,20 @@ if(dead){
 					else
 						getToPoint = new Point(enPoint.getX(), enPoint.getY());
 
-				} else {
+				}
+				else if (healing != null) {
+						getToPoint = new Point(healing.getX(), healing.getY());
+
+				}else {
 					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if ((path != null || ((enPoint == null && getToPoint.distance(x, y) > 125) || (enPoint != null && !getActBounds().intersects(
-						enPoint.getBounds()))))) {
+				if ((path != null || ((enPoint == null && healing==null && getToPoint.distance(x, y) > 125) || (enPoint != null && !getActBounds().intersects(
+						enPoint.getBounds())|| (healing != null && !getActBounds().intersects(
+								healing.getBounds())
+								)
+						)
+						))) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -612,19 +655,20 @@ if(dead){
 
 				}
 				// if(enPoint==null||!goTo){
-				if (deltaY == 0) {
-					if (deltaX != 0) {
+				if (deltaX == 0) {
+					if (deltaY != 0) {
+					if (deltaY < 0)
+						direction = Direction.UP;
+					else
+						direction = Direction.DOWN;
+				}} else {
 						if (deltaX > 0)
 							direction = Direction.RIGHT;
 						else
 							direction = Direction.LEFT;
 					}
-				} else {
-					if (deltaY < 0)
-						direction = Direction.UP;
-					else
-						direction = Direction.DOWN;
-				}
+					
+				
 
 				// }
 				// else{
@@ -652,6 +696,19 @@ if(dead){
 						shouldPressMelee = true;
 
 						break;
+					}
+				}
+				if(type==Types.HEART){
+					if(owner.getCharacter().getBounds().intersects(getActBounds())&&owner.getCharacter()!=this&&owner.getCharacter().health<owner.getCharacter().HP_MAX*0.75)
+						shouldPressMelee=true;
+					else{
+						for(GameCharacter g:owner.getFriends()){
+							if(g!=this&&g.getBounds().intersects(getActBounds())&&g.health<g.HP_MAX*0.75){
+								shouldPressMelee=true;
+								break;
+							}
+								
+						}
 					}
 				}
 				meleePress = shouldPressMelee;
@@ -682,7 +739,9 @@ if(dead){
 				// meleePress = false;
 				// }
 				// }
-			}
+			}else{
+				System.out.println(waiting);
+				System.out.println(wallBound);}
 			if (waiting) {
 				deltaX = 0;
 				deltaY = 0;
@@ -793,6 +852,7 @@ if(dead){
 			} else {
 				if (onceNotCollidePlayer) {
 					enPoint = null;
+					healing=null;
 					enUpTimer = 25;
 					// if (new Point(getMidX(), getMidY()).distance(new
 					// Point(wallX, getMidY())) < 100) {
@@ -813,7 +873,7 @@ if(dead){
 
 					// x += deltaX;
 					// y += deltaY;
-				} else {
+				} else if(healing==null&&enPoint==null){
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
@@ -1246,9 +1306,10 @@ if(dead){
 		if (player)
 			setCollisionFlag(collide);
 		else {
+			if(!isPlayer||!(enPoint!=null||healing!=null))
 			wallBound = true;
 			this.isPlayerCollide = isPlayer;
-			if (isPlayer == false) {
+			if (!isPlayer) {
 				onceNotCollidePlayer = true;
 
 			}

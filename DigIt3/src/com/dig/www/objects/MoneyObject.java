@@ -23,8 +23,14 @@ public class MoneyObject extends Collectible {
 	public String adder(){
 		String s="\n ";
 		switch(value){
+		case 3:
+			s+="About the price of a burger.";
+			break;
 		case 20:
 			s+= "Don't spend it all in one place!";
+			break;
+		case -100:
+			s+="Why would I ever pick that up?";
 			break;
 		default:
 			return "";
