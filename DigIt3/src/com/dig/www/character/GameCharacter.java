@@ -476,7 +476,7 @@ if(dead){
 						int chosenNum = -2;
 						int theDis = Integer.MAX_VALUE;
 						if (owner.getCharacter()!=this
-								&& owner.getCharPoint().distance(new Point(x, y)) < MAX_ATTACK_DISTANCE
+								&& owner.getCharPoint().distance(new Point(x, y)) < MAX_ATTACK_DISTANCE*1.75
 								&& owner.getCharacter().health<(owner.getCharacter().HP_MAX*0.75)&&theDis>owner.getCharacter().health) {
 							theDis = (int)owner.getCharacter().health;
 							chosenNum = -1;
@@ -484,7 +484,7 @@ if(dead){
 						for (int c = 0; c < owner.getFriends().size(); c++) {
 							Point currentEn = new Point(owner.getFriends().get(c).getX(), owner.getFriends().get(c).getY());
 							if (owner.getFriends().get(c)!=this
-									&& currentEn.distance(new Point(x, y)) < MAX_ATTACK_DISTANCE
+									&& currentEn.distance(new Point(x, y)) < MAX_ATTACK_DISTANCE*1.75
 									&& owner.getFriends().get(c).health<(owner.getFriends().get(c).HP_MAX*0.75)&&theDis>owner.getFriends().get(c).health) {
 								theDis = (int)owner.getFriends().get(c).health;
 								chosenNum = c;
@@ -525,20 +525,26 @@ if(dead){
 				} else {
 					enPoint = null;
 				}
-			if (!wallBound && !waiting) {
-				// System.out.println(path);
-				
-
 				if (enPoint != null
 						&& ((new Point(enPoint.getX(), enPoint.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || !enPoint
 								.isAlive()) || new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || (health < HP_MAX / 2 && goTo))) {
 					enPoint = null;
 				}
-				if(healing!=null&&((new Point(healing.getX(), healing.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || healing
-								.isDead())|| new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75||healing.health>healing.HP_MAX*0.75)
+				if(healing!=null&&((
+						new Point(healing.getX(), healing.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 
+						|| healing
+								.isDead())
+								||
+								new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 2.75
+								||healing.health>healing.HP_MAX*0.75)
 								){
 					healing=null;
 				}
+			if (!wallBound && !waiting) {
+				// System.out.println(path);
+				
+
+				
 
 				if (path != null) {
 
@@ -567,17 +573,33 @@ if(dead){
 				}
 				else if (healing != null) {
 						getToPoint = new Point(healing.getX(), healing.getY());
-
+goTo=true;
 				}else {
 					getToPoint = owner.getCharPoint();
 					goTo = true;
 				}
-				if ((path != null || ((enPoint == null && healing==null && getToPoint.distance(x, y) > 125) || (enPoint != null && !getActBounds().intersects(
-						enPoint.getBounds())|| (healing != null && !getActBounds().intersects(
-								healing.getBounds())
-								)
+				if (
+						
+						path != null || 
+						(
+								(
+										enPoint == null && healing==null 
+						&& getToPoint.distance(x, y) > 125
 						)
-						))) {
+						|| (
+								enPoint != null && !getActBounds().intersects(
+						enPoint.getBounds()
+						)
+						)|| (
+								healing != null
+								&& !getActBounds().intersects(
+								healing.getBounds())
+								&&new Point(x,y).distance(healing.getX(),healing.getY())>50
+								)
+						
+						)
+						
+						) {
 					int amount = 2;
 					if (path != null) {
 						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
@@ -618,6 +640,10 @@ if(dead){
 						moveY = false;
 						deltaY = 0;
 					}
+					
+					
+					
+				
 				}
 
 				else {
@@ -625,8 +651,14 @@ if(dead){
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
+//					if(type==Types.HEART)
+//				{
+//					System.out.println(deltaX);
+//					System.out.println(deltaY);
+//				}
 				}
-				if (!goTo) {
+				
+				if (!goTo&&enPoint!=null) {
 					if (moveX && moveY) {
 						deltaY = 0;
 						moveY = false;
@@ -739,9 +771,7 @@ if(dead){
 				// meleePress = false;
 				// }
 				// }
-			}else{
-				System.out.println(waiting);
-				System.out.println(wallBound);}
+			}
 			if (waiting) {
 				deltaX = 0;
 				deltaY = 0;
@@ -941,7 +971,6 @@ if(dead){
 	}
 
 	public void keyPressed(int keyCode) {
-
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
 			for (int c = 0; c < owner.getFriends().size(); c++) {
