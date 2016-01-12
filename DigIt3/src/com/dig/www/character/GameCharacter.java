@@ -589,10 +589,10 @@ goTo=true;
 						|| (
 								enPoint != null && !getActBounds().intersects(
 						enPoint.getBounds()
-						)
+						)&&!rangedPress
 						)|| (
 								healing != null
-								&& !getActBounds().intersects(
+								&& !getBounds().intersects(
 								healing.getBounds())
 								&&new Point(x,y).distance(healing.getX(),healing.getY())>50
 								)
@@ -687,21 +687,49 @@ goTo=true;
 
 				}
 				// if(enPoint==null||!goTo){
-				if (deltaX == 0) {
-					if (deltaY != 0) {
-					if (deltaY < 0)
-						direction = Direction.UP;
-					else
-						direction = Direction.DOWN;
-				}} else {
-						if (deltaX > 0)
-							direction = Direction.RIGHT;
-						else
-							direction = Direction.LEFT;
-					}
-					
-				
-
+//				if (deltaX == 0) {
+//					if (deltaY != 0) {
+//					if (deltaY < 0)
+//						direction = Direction.UP;
+//					else
+//						direction = Direction.DOWN;
+//				}} else {
+//						if (deltaX > 0)
+//							direction = Direction.RIGHT;
+//						else
+//							direction = Direction.LEFT;
+//					}
+//					
+//				
+if(deltaX!=0||deltaY!=0){
+	if(deltaX==0){
+		if(deltaY>0)
+			direction=Direction.DOWN;
+		else
+			direction=Direction.UP;
+	}
+	else if(deltaY==0){
+		if(deltaX>0)
+			direction=Direction.RIGHT;
+		else
+			direction=Direction.LEFT;
+	}
+	else{
+		if(deltaX>0){
+			if(deltaY>0){
+				direction=Direction.DIAG_DR;
+			}else{
+				direction=Direction.DIAG_UR;
+			}
+		}else{
+			if(deltaY>0){
+				direction=Direction.DIAG_DL;
+			}else{
+				direction=Direction.DIAG_UL;
+			}
+		}
+	}
+}
 				// }
 				// else{
 				// if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
@@ -719,6 +747,25 @@ goTo=true;
 				//
 				// }
 				boolean shouldPressMelee = false;
+				boolean shouldRangedPress=false;
+				Rectangle rect;
+	switch(direction){
+	case UP:
+		rect=new Rectangle(x+rangedAddX(),y+rangedAddY()-Statics.BOARD_HEIGHT,20,Statics.BOARD_HEIGHT);
+		break;
+	case DOWN:
+		rect=new Rectangle(x+rangedAddX(),y+rangedAddY(),20,Statics.BOARD_HEIGHT);
+		break;
+	case LEFT:
+		rect=new Rectangle(x+rangedAddX()-Statics.BOARD_WIDTH,y+rangedAddY(),Statics.BOARD_WIDTH,20);
+		break;
+	case RIGHT:
+		rect=new Rectangle(x+rangedAddX(),y+rangedAddY(),Statics.BOARD_WIDTH,20);
+		break;
+	default:
+		rect=new Rectangle();
+	}
+	
 				for (int c = 0; c < owner.getEnemies().size(); c++) {
 					if (((this instanceof Diamond && owner.getEnemies().get(c) instanceof Projectile && new Point(getMidX(), getMidY()).distance(
 							owner.getEnemies().get(c).getMidX(), owner.getEnemies().get(c).getMidY()) < 750) || getActBounds().intersects(
@@ -728,7 +775,11 @@ goTo=true;
 						shouldPressMelee = true;
 
 						break;
-					}
+					}else{
+						if(!shouldRangedPress&&rect.intersects(owner.getEnemies().get(c).getBounds())&& !owner.getEnemies().get(c).isInvincible()
+								&& !(owner.getEnemies().get(c) instanceof Projectile)){
+						shouldRangedPress=true;
+					}}
 				}
 				if(type==Types.HEART){
 					if(owner.getCharacter().getBounds().intersects(getActBounds())&&owner.getCharacter()!=this&&owner.getCharacter().health<owner.getCharacter().HP_MAX*0.75)
@@ -744,6 +795,10 @@ goTo=true;
 					}
 				}
 				meleePress = shouldPressMelee;
+
+				if(meleePress)
+					shouldRangedPress=false;
+	rangedPress=shouldRangedPress;
 
 				// if (enPoint != null) {
 				// boolean xway = false;
@@ -1502,7 +1557,10 @@ goTo=true;
 
 	@Override
 	public void draw(Graphics2D g2d) {
-
+if(!player){
+	deltaX=-deltaX;
+	deltaY=-deltaY;
+}
 		if (deltaX != 0 || deltaY != 0) {
 			dir = 0;
 			boolean changed = false;
@@ -1535,6 +1593,10 @@ goTo=true;
 					dir = 270;
 				}
 			}
+		}
+		if(!player){
+			deltaX=-deltaX;
+			deltaY=-deltaY;
 		}
 		if (player)
 			dir = getCurrentDir();
