@@ -492,7 +492,7 @@ if(dead){
 						}
 
 						if (chosenNum>-1) {
-							healing = owner.getCharacter();
+							healing = owner.getFriends().get(chosenNum);
 						}else if(chosenNum==-1)
 							healing=owner.getCharacter();
 					}
