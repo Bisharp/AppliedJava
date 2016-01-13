@@ -34,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
+import com.dig.www.games.Jump.Jump;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.start.GameStartBoard;
@@ -248,11 +249,35 @@ public class Inventory implements Serializable {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (jList.getSelectedValue() != null)
-							JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
+						if (jList.getSelectedValue() != null){
+							if(jList.getSelectedValue().split(" x")[0].equals(Items.VIDEO_GAME.toString())){
+						ArrayList<String>options=new ArrayList<String>();
+						options.add("Turn off console");
+						for(Items s:items){
+							switch(s.toString()){
+							case "Jump Video Game":
+								if(!options.contains("Jump"))
+									options.add("Jump");
+								break;
+								default:
+							}
+						}
+						String desc="Which game would you like to play?";
+						if(options.size()==1)
+							desc="You do not currently have any games. If you collect games, you can play them here.";
+						
+						int i=JOptionPane.showOptionDialog(getMe(), desc, DigIt.NAME
+									+ " Item Description", JOptionPane.CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE, new ImageIcon(Items.translate(jList.getSelectedValue().split(" x")[0]).getPath()), options.toArray(), "Leave");
+					
+							if(options.get(i).equals("Jump")){
+								new Jump();
+							}
+							}else
+								JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
 									+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
 									new ImageIcon(Items.translate(jList.getSelectedValue().split(" x")[0]).getPath()));
-					}
+					
+							}}
 				});
 			}
 			scrollPane.setSize(new Dimension((int) d.getWidth(), (int) d.getHeight() - buttonHeight));

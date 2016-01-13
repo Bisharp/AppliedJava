@@ -212,14 +212,31 @@ public enum Items implements Serializable {
 	},
 	VIDEO_GAME {
 		@Override public String toString(){
-			return "Video Game";
+			return "Video Game Console";
 		}
 		@Override protected String getPersonalDesc(){
 			return "Video games are fun. Wouldn't it be so weird if WE were actually in a video game?";
 		}
 		@Override public String getPath() {
-			int n = Statics.RAND.nextInt(7) + 1;
+			int n = Statics.RAND.nextInt(8) + 1;
 			return ("images/objects/InventoryObjects/videoGame" + n + ".png");
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
+	},
+	JUMP {
+		@Override public String toString(){
+			return "Jump Video Game";
+		}
+		@Override protected String getPersonalDesc(){
+			return "<html>A video game called Jump. You can only play Jump if you have a <i>Video Game Console</i>.";
+		}
+		@Override public String getPath() {
+			return "images/objects/InventoryObjects/videoGame8.png";
 		}
 		@Override public boolean isThrowable() {
 			return false;
@@ -352,8 +369,8 @@ public enum Items implements Serializable {
 
 	public static Items translate(String string) {
 		for (Items i : Items.values())
-			if (i.toString().equals(string))
-				return i;
+			if (i.toString().equals(string)){
+				return i;}
 
 		return NULL;
 	}
