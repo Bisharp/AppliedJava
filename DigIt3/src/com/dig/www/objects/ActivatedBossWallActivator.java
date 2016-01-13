@@ -68,6 +68,8 @@ if(minX!=Integer.MIN_VALUE)
 		Point p=owner.getCharPoint();
 		System.out.println(maxY);
 		for(GameCharacter chara:owner.getFriends()){
+			if(chara.isDead())
+				continue;
 			if(minX!=Integer.MIN_VALUE){
 				if(chara.getX()<minX){
 					chara.setX(p.x);
