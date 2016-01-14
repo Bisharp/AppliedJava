@@ -126,6 +126,13 @@ public class Board extends MPanel implements ActionListener {
 
 	public enum DayNight {
 		DAY, NIGHT, ANY;
+		
+		public DayNight translate(String name) {
+			for (DayNight d : DayNight.values())
+				if (d.name().equalsIgnoreCase(name))
+					return d;
+			return DayNight.ANY;
+		}
 	}
 
 	public static Preferences preferences;
@@ -240,6 +247,8 @@ public class Board extends MPanel implements ActionListener {
 		timer.start();
 		time.start();
 		Collections.sort(friends);
+		
+		time.setTime(7.0f, false);
 	}
 
 	public void changeArea() {
@@ -259,6 +268,8 @@ public class Board extends MPanel implements ActionListener {
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
+
+		// TODO finish
 		StageBuilder sB = StageBuilder.getInstance(mode, level, this, num);
 		sB.changeState(mode, level, this, num);
 		setTexturePack(sB.readText());
@@ -267,6 +278,8 @@ public class Board extends MPanel implements ActionListener {
 		portals = sB.loadPortals();
 		npcs = sB.loadNPC();
 		objects = sB.loadObjects();
+
+		StageBuilder.setTime(this);
 
 		weather = Weather.translate(sB.readWeather());
 
@@ -1339,19 +1352,18 @@ public class Board extends MPanel implements ActionListener {
 					for (Objects o0 : movingObjects)
 						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
 							o0.collideWall();
-
 			}
+
 		}
+
 		for (GameCharacter friend : friends) {
 			if (friend.getMove() == Moves.AURA && !friend.hasMeleed()) {
-
 				boolean healed = false;
-				if (character.getActBounds().intersects(friend.getBounds())) {
+				if (friend.getActBounds().intersects(character.getBounds())) {
 					character.heal(friend.getMeleeDamage() / 3);
 					healed = true;
 				}
 				for (GameCharacter friend2 : friends) {
-
 					if (friend.getActBounds().intersects(friend2.getBounds())) {
 						friend2.heal(friend.getMeleeDamage() / 3);
 						healed = true;
@@ -1742,7 +1754,7 @@ public class Board extends MPanel implements ActionListener {
 	public State getState() {
 		return state;
 	}
-	
+
 	public ArrayList<Block> getWallList() {
 		return wallList;
 	}
@@ -2054,8 +2066,20 @@ public class Board extends MPanel implements ActionListener {
 		return npcs;
 	}
 
+	public void setDayNight(DayNight time) {
+		dN = time;
+	}
+
 	public boolean isDay() {
-		return time.getGeneralTime() == Time.DAY;
+
+		switch (dN) {
+		case DAY:
+			return true;
+		case NIGHT:
+			return false;
+		default:
+			return time.getGeneralTime() == Time.DAY;
+		}
 	}
 
 	public void updateBackground() {

@@ -1,6 +1,5 @@
 package com.dig.www.start;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -67,6 +66,7 @@ public class GameStartBoard extends MPanel {
 		owner.setFocusable(false);
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
+		buttonPanel.setFocusable(false);
 
 		game1 = new GameSavePanel(1, Color.RED);
 		game2 = new GameSavePanel(2, Color.BLUE);
@@ -135,8 +135,7 @@ public class GameStartBoard extends MPanel {
 
 	public void newGame(String s) {
 
-		if (new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt")
-				.exists()) {
+		if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s + ".txt").exists()) {
 			if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
 				return;
 		}
@@ -148,7 +147,7 @@ public class GameStartBoard extends MPanel {
 			// .getLocation().getFile()
 			// + "saveFiles/" + s).mkdirs();
 			try {
-				String loc = GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/";
+				String loc = Statics.getBasedir() + "saveFiles/" + s + "/";
 				File f = new File(loc);
 
 				if (!f.exists())
@@ -160,16 +159,14 @@ public class GameStartBoard extends MPanel {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			String[]packs=new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile()+"/maps").list();
-		String	pack = ((String) JOptionPane.showInputDialog(this,
-					"Select a game.", DigIt.NAME,
-					JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs, Statics.MAIN));
+			String[] packs = new File(Statics.getBasedir() + "/maps").list();
+			String pack = ((String) JOptionPane.showInputDialog(this, "Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs,
+					Statics.MAIN));
 			// System.out.println("Save name accepted");
 			owner.setUserName(s);
 			owner.setPack(pack);
-			try{
-				String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "maps/"
-						+ pack + "/");
+			try {
+				String location = (Statics.getBasedir() + "maps/" + pack + "/");
 				File saveFile = new File(location + "info.txt");
 
 				if (saveFile.exists()) {
@@ -179,12 +176,13 @@ public class GameStartBoard extends MPanel {
 
 					while ((line = reader.readLine()) != null)
 						lines.add(line);
-if(lines.size()>0){
-owner.setLevel(lines.get(0).trim());					
-}
-				
-					reader.close();}
-			}catch(Exception ex){
+					if (lines.size() > 0) {
+						owner.setLevel(lines.get(0).trim());
+					}
+
+					reader.close();
+				}
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 			// address = "images/titleScreen/loading.png";
@@ -248,7 +246,7 @@ owner.setLevel(lines.get(0).trim());
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		protected int saveNum;
 		protected JButton load;
 		protected JButton create;
@@ -262,9 +260,15 @@ owner.setLevel(lines.get(0).trim());
 			this.setBackground(color);
 			this.saveNum = saveNum;
 			this.setLayout(new BorderLayout());
+			this.setFocusable(false);
+
 			load = new JButton("Load Game");
 			create = new JButton("New Game");
 			delete = new JButton("Delete Game");
+
+			load.setFocusable(false);
+			create.setFocusable(false);
+			delete.setFocusable(false);
 
 			load.addActionListener(new ActionListener() {
 
@@ -293,13 +297,13 @@ owner.setLevel(lines.get(0).trim());
 
 			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(200, 20));
+			label.setFocusable(false);
 			this.add(label, BorderLayout.NORTH);
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
-			if (new File(
-					(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
-					.exists()) {
+			buttonPanel.setFocusable(false);
+			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/" + fileS() + ".txt")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}
@@ -311,13 +315,13 @@ owner.setLevel(lines.get(0).trim());
 			this.removeAll();
 			JLabel label = new JLabel(fileS(), SwingConstants.CENTER);
 			label.setPreferredSize(new Dimension(200, 20));
+			label.setFocusable(false);
 			this.add(label, BorderLayout.NORTH);
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
-			if (new File(
-					(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + fileS() + "/" + fileS() + ".txt"))
-					.exists()) {
+			buttonPanel.setFocusable(false);
+			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/" + fileS() + ".txt")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}

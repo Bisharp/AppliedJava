@@ -1,6 +1,5 @@
 package com.dig.www.util;
 
-
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,6 +20,7 @@ import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
 import com.dig.www.objects.*;
 import com.dig.www.start.Board;
+import com.dig.www.start.Board.DayNight;
 
 public class StageBuilder {
 
@@ -29,37 +29,43 @@ public class StageBuilder {
 	private String loc;
 	private Board owner;
 	private int level = 1;
-private int spawnNum;
-private Point spawnPoint;
-private String mode;
-	public static StageBuilder getInstance(String mode,String loc, Board owner,int spawnNum) {
+	private int spawnNum;
+	private Point spawnPoint;
+	private String mode;
+	private DayNight time;
+	
+	protected DayNight getTime() {
+		return time;
+	}
+
+	public static StageBuilder getInstance(String mode, String loc, Board owner, int spawnNum) {
 
 		if (me == null)
-			me = new StageBuilder(mode,loc, owner,spawnNum);
+			me = new StageBuilder(mode, loc, owner, spawnNum);
 
 		return me;
 	}
 
-	public StageBuilder(String mode,String loc, Board owner,int spawnNum) {
+	public StageBuilder(String mode, String loc, Board owner, int spawnNum) {
 		setLoc(loc);
-		this.mode=mode;
+		this.mode = mode;
 		this.owner = owner;
-		this.spawnNum=spawnNum;
+		this.spawnNum = spawnNum;
 	}
 
-	public void changeState(String mode,String loc, Board owner,int spawnNum) {
+	public void changeState(String mode, String loc, Board owner, int spawnNum) {
 		this.owner = owner;
-		this.mode=mode;
-		this.spawnNum=spawnNum;
+		this.mode = mode;
+		this.spawnNum = spawnNum;
 		setLoc(loc);
 	}
-public int getSpawnNum(){
-	return spawnNum;
-}
+
+	public int getSpawnNum() {
+		return spawnNum;
+	}
+
 	private void setLoc(String loc) {
-		String tryLoc = StageBuilder.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile()
-				+ "maps/"+mode+"/" + loc + "/" + loc + ".txt";
+		String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
 		File map = new File(tryLoc);
 		if (!map.exists())
 			loc = Board.DEFAULT;
@@ -76,16 +82,13 @@ public int getSpawnNum(){
 		try {
 			int ln = 0;
 			boolean first = true;
-			String tryLoc = StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/"+mode+"/" + loc + "/" + loc + ".txt";
+			String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
 
 			File map = new File(tryLoc);
 
 			if (map.exists()) {
 
-				BufferedReader reader = new BufferedReader(new FileReader(
-						tryLoc));
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				String line;
 
 				while ((line = reader.readLine()) != null) {
@@ -97,57 +100,37 @@ public int getSpawnNum(){
 						for (int i = 0; i < line.length(); i++) {
 							switch (line.charAt(i)) {
 							case '1':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i,
-										Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner,
-										Block.Blocks.GROUND));
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
 								break;
 							case '2':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i,
-										Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner, Block.Blocks.DIRT));
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.DIRT));
 								break;
 							case 'L':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i,
-										Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner,
-										Block.Blocks.LIQUID));
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.LIQUID));
 								break;
 							case 'W':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT
-										* i, Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner, Block.Blocks.WALL));
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
 								break;
 							case 'I':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT
-										* i, Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner, Block.Blocks.WALL));
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
 								world.get(world.size() - 1).setVisible(false);
 								break;
 
 							case 'P':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i,
-										Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner, Block.Blocks.PIT));
+								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.PIT));
 								break;
 
 							case 'R':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT
-										* i, Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner, Block.Blocks.ROCK));
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.ROCK));
 								break;
 
 							case 'C':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT
-										* i, Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner,
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
 										Block.Blocks.CARPET));
 								break;
 
 							case '*':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT
-										* i, Statics.BLOCK_HEIGHT * ln,
-										Statics.DUMMY, owner,
+								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
 										Block.Blocks.CRYSTAL));
 								break;
 
@@ -176,12 +159,9 @@ public int getSpawnNum(){
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/"+mode+"/"  + loc + "/" + loc + "E.txt");
+			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				while ((line = reader.readLine()) != null) {
 					strings.add(line);
@@ -214,111 +194,75 @@ public int getSpawnNum(){
 						int health = (int) (Integer.parseInt(stuff.get(5)) * (double) (1 + (double) ((level - 1) / (double) 10)));
 						switch (ch) {
 						case "Launch":
-							enemies.add(new Launch(enX, enY, enImg, owner,
-									Integer.parseInt(stuff.get(6)), flying,
-									health));
+							enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case "Pursuing Launch":
-							enemies.add(new PursuingLaunch(enX, enY, enImg,
-									owner, Integer.parseInt(stuff.get(6)),
-									flying, health));
+							enemies.add(new PursuingLaunch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case "Standing":
-							enemies.add(new StandEnemy(enX, enY, enImg, owner,
-									flying, health));
+							enemies.add(new StandEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "Tracking":
-							enemies.add(new TrackingEnemy(enX, enY, enImg,
-									owner, flying, health));
+							enemies.add(new TrackingEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "Charge":
-							enemies.add(new ChargeEnemy(enX, enY, enImg, owner,
-									flying, health));
+							enemies.add(new ChargeEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "Walking":
-							enemies.add(new WalkingEnemy(enX, enY, enImg,
-									owner, flying, health));
+							enemies.add(new WalkingEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "Explosive Spawning":
-							enemies.add(new ExplosivesSpawner(enX, enY, enImg,
-									owner, Integer.parseInt(stuff.get(6)),
-									flying, health));
+							enemies.add(new ExplosivesSpawner(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case "Chain":
-							enemies.add(new ChainEnemy(enX, enY, enImg, owner,
-									flying, health, Integer.parseInt(stuff
-											.get(6))));
+							enemies.add(new ChainEnemy(enX, enY, enImg, owner, flying, health, Integer.parseInt(stuff.get(6))));
 							break;
 
 						case "Tail":
 							Enemy e = enemies.get(enemies.size() - 1);
 							enemies.remove(e);
-							enemies.add(new TailEnemy(enX, enY, enImg, owner,
-									flying, health, Integer.parseInt(stuff
-											.get(6)), e));
-							((ChainEnemy) enemies.get(enemies.size() - 1))
-									.setDistance(Integer.parseInt(stuff.get(7)));
+							enemies.add(new TailEnemy(enX, enY, enImg, owner, flying, health, Integer.parseInt(stuff.get(6)), e));
+							((ChainEnemy) enemies.get(enemies.size() - 1)).setDistance(Integer.parseInt(stuff.get(7)));
 							enemies.add(e);
 							break;
 						case "Slime":
-							enemies.add(new Slime(enX, enY, enImg, owner,
-									flying, health));
+							enemies.add(new Slime(enX, enY, enImg, owner, flying, health));
 							break;
 
 						// Lowercase denotes an enemy that must see you before
 						// attacking.
 						case "See Chase":
-							enemies.add(new SeeChaseEnemy(enX, enY, enImg,
-									owner, flying, health));
+							enemies.add(new SeeChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "See Shoot":
-							enemies.add(new SeeShootEnemy(enX, enY, enImg,
-									owner, Integer.parseInt(stuff.get(6)),
-									flying, health));
+							enemies.add(new SeeShootEnemy(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
 							break;
 						case "Path Security":
 							if (stuff.get(8).charAt(0) == 'B')
-								enemies.add(new BackwardSecurityEnemy(enX, enY,
-										enImg, owner, flying, health, stuff
-												.get(6), createArray(stuff
-												.get(7))));
+								enemies.add(new BackwardSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							else
-								enemies.add(new PatrolSecurityEnemy(enX, enY,
-										enImg, owner, flying, health, stuff
-												.get(6), createArray(stuff
-												.get(7))));
+								enemies.add(new PatrolSecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6), createArray(stuff.get(7))));
 							break;
 						case "Path":
 							if (stuff.get(7).charAt(0) == 'B')
-								enemies.add(new BackwardPathEnemy(enX, enY,
-										enImg, owner, flying, health,
-										createArray(stuff.get(6))));
+								enemies.add(new BackwardPathEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
 							else
-								enemies.add(new PathEnemy(enX, enY, enImg,
-										owner, flying, health,
-										createArray(stuff.get(6))));
+								enemies.add(new PathEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
 							break;
 						case "PatrolChase":
 							if (stuff.get(7).charAt(0) == 'B')
-								enemies.add(new BackwardPatrolChaseEnemy(enX, enY,
-										enImg, owner, flying, health,
-										createArray(stuff.get(6))));
+								enemies.add(new BackwardPatrolChaseEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
 							else
-								enemies.add(new PatrolChaseEnemy(enX, enY, enImg,
-										owner, flying, health,
-										createArray(stuff.get(6))));
+								enemies.add(new PatrolChaseEnemy(enX, enY, enImg, owner, flying, health, createArray(stuff.get(6))));
 							break;
 						case "Security":
-							enemies.add(new SecurityEnemy(enX, enY, enImg,
-									owner, flying, health, stuff.get(6)));
+							enemies.add(new SecurityEnemy(enX, enY, enImg, owner, flying, health, stuff.get(6)));
 							break;
 						case "Look Chase":
-							enemies.add(new LookChaseEnemy(enX, enY, enImg,
-									owner, flying, health));
+							enemies.add(new LookChaseEnemy(enX, enY, enImg, owner, flying, health));
 							break;
 						case "Side To Player":
-							enemies.add(new SideToPlayer(enX, enY, enImg,
-									owner, flying, health));
+							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying, health));
 							break;
 
 						case "Head Boss":
@@ -354,12 +298,9 @@ public int getSpawnNum(){
 
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/"+mode+"/"  + loc + "/" + loc + "N.txt");
+			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				while ((line = reader.readLine()) != null) {
 					strings.add(line);
@@ -419,20 +360,13 @@ public int getSpawnNum(){
 									}
 								}
 							if (!has)
-								npcs.add(new SirCobalt(nX, nY, owner, loc,
-										stuff.get(3).startsWith("t")));
+								npcs.add(new SirCobalt(nX, nY, owner, loc, stuff.get(3).startsWith("t")));
 							break;
 						case NPC.SHOPKEEP:
-							npcs.add(new Shopkeep(nX, nY,
-									"images/npcs/map/stationary/shopkeep.png",
-									owner, loc));
+							npcs.add(new Shopkeep(nX, nY, "images/npcs/map/stationary/shopkeep.png", owner, loc));
 							break;
 						case NPC.GATEKEEPER:
-							npcs.add(new Gatekeeper(
-									nX,
-									nY,
-									"images/npcs/map/stationary/gatekeeper.png",
-									owner, loc, Integer.parseInt(stuff.get(3)),
+							npcs.add(new Gatekeeper(nX, nY, "images/npcs/map/stationary/gatekeeper.png", owner, loc, Integer.parseInt(stuff.get(3)),
 									blockerCount));
 							blockerCount++;
 							break;
@@ -447,10 +381,10 @@ public int getSpawnNum(){
 										break;
 									}
 								}
-							if (!has){
-								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc,questCount));
+							if (!has) {
+								npcs.add(new CopyOfMacaroni(nX, nY, owner, loc, questCount));
 							}
-								questCount++;//It should stay outside the brackets.
+							questCount++;// It should stay outside the brackets.
 							break;
 						case NPC.REYZU:
 							npcs.add(new Reyzu(nX, nY, owner, loc, questCount));
@@ -479,15 +413,12 @@ public int getSpawnNum(){
 
 		ArrayList<Objects> npcs = new ArrayList<Objects>();
 		int count = 0;
-		int spawnCount=0;
+		int spawnCount = 0;
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/"+mode+"/"  + loc + "/" + loc + "O.txt");
+			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				while ((line = reader.readLine()) != null) {
 					strings.add(line);
@@ -516,68 +447,57 @@ public int getSpawnNum(){
 						int nY = Integer.parseInt(stuff.get(1));
 						String loc = stuff.get(2);
 						boolean wall = false;
-						
-						String value = stuff.size() > 4 ? stuff
-								.get(4) : null;
-								int val;
-								try{
-									val=Integer.parseInt(value);
-								}catch(Exception ex){
-									val=0;
-								}
+
+						String value = stuff.size() > 4 ? stuff.get(4) : null;
+						int val;
+						try {
+							val = Integer.parseInt(value);
+						} catch (Exception ex) {
+							val = 0;
+						}
 						if (stuff.get(3).charAt(0) == 't')
 							wall = true;
 
 						if (stuff.size() < 6)
 							if (val == 0)
-								npcs.add(new Objects(nX, nY, loc, wall, owner,value));
+								npcs.add(new Objects(nX, nY, loc, wall, owner, value));
 							else if (val == -1) {
-								npcs.add(new SpecialCollectible(nX, nY, loc,
-										owner, count));
+								npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
 								count++;
 							} else if (val == -2)
-								npcs.add(new RandSkinObject(nX, nY, loc, wall,
-										owner));
+								npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
 							else if (val == -3) {
-								if(spawnCount<=spawnNum)
-									spawnPoint=new Point(-nX + OFF,-nY + OFF - 299);
-								if(wall)
-								npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
-								else if(stuff.get(3).equals("invisible"))
-									npcs.add(new InvisibleCheckPoint(nX,nY,owner,spawnCount));
-							spawnCount++;
+								if (spawnCount <= spawnNum)
+									spawnPoint = new Point(-nX + OFF, -nY + OFF - 299);
+								if (wall)
+									npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
+								else if (stuff.get(3).equals("invisible"))
+									npcs.add(new InvisibleCheckPoint(nX, nY, owner, spawnCount));
+								spawnCount++;
 							} else if (val == -4) {
 								npcs.add(new BossBlock(nX, nY, owner));
 							} else if (val == -5) {
 								npcs.add(new HookObject(nX, nY, owner));
 							} else if (val == -6) {
 								npcs.add(new DropPoint(nX, nY, owner));
-							}
-							else if(val==-7){
+							} else if (val == -7) {
 								npcs.add(new ActivatedBossWallActivator(nX, nY, owner));
-							}
-							else if(val==-8){
+							} else if (val == -8) {
 								npcs.add(new ActivatedBossWall(nX, nY, owner));
-							}else if(val==-9){
-								npcs.add(new PushCube(nX, nY, owner,wall));
-							}
-							else if(val==-9){
-								npcs.add(new PushCube(nX, nY, owner,wall));
-							}else if(val==-10){
-								npcs.add(new BombCube(nX, nY,wall,owner));
-							}else if(val==-11){
+							} else if (val == -9) {
+								npcs.add(new PushCube(nX, nY, owner, wall));
+							} else if (val == -9) {
+								npcs.add(new PushCube(nX, nY, owner, wall));
+							} else if (val == -10) {
+								npcs.add(new BombCube(nX, nY, wall, owner));
+							} else if (val == -11) {
 								npcs.add(new CubeButtonMoneyGiver(nX, nY, owner));
-							}
-							else
-								npcs.add(new MoneyObject(nX, nY, loc, owner,
-										val));
-						else if (Items.translate(stuff.get(5)).equals(
-								Items.NULL.toString()))
-							npcs.add(new CollectibleCharacter(nX, nY, loc,
-									owner));
+							} else
+								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
+						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
+							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
 						else
-							npcs.add(new CollectibleObject(nX, nY, loc,wall, owner,
-									Items.translate(stuff.get(5))));
+							npcs.add(new CollectibleObject(nX, nY, loc, wall, owner, Items.translate(stuff.get(5))));
 
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
@@ -589,11 +509,11 @@ public int getSpawnNum(){
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		try{
+		try {
 			owner.setSpawnLoc(spawnPoint);
-owner.setSpawnX(spawnPoint.x);
-owner.setSpawnY(spawnPoint.y);}
-		catch(Exception ex){
+			owner.setSpawnX(spawnPoint.x);
+			owner.setSpawnY(spawnPoint.y);
+		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(owner, "No spawn point. Leaving game.");
 			System.exit(0);
 		}
@@ -621,9 +541,7 @@ owner.setSpawnY(spawnPoint.y);}
 	}
 
 	public TexturePack readText() {
-		String tryLoc = StageBuilder.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile()
-				+ "maps/"+mode+"/"  + loc + "/" + loc + ".txt";
+		String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
 		File map = new File(tryLoc);
 
@@ -631,8 +549,7 @@ owner.setSpawnY(spawnPoint.y);}
 
 			try {
 				String line;
-				BufferedReader reader = new BufferedReader(new FileReader(
-						tryLoc));
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				if ((line = reader.readLine()) != null) {
 					switch (line.charAt(0)) {
 					case 'D':
@@ -659,27 +576,36 @@ owner.setSpawnY(spawnPoint.y);}
 					}
 					reader.close();
 				}
+
+				String[] array = line.split(",");
+
 				try {
-					level = Integer.parseInt(line.split(",")[2].trim());
+					level = Integer.parseInt(array[2].trim());
 				} catch (Exception ex) {
-					System.err
-							.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
+					System.err.println("WARNING: No map level. Setting map level to 1000 to punish cheaters. Expect EXTREME difficulty.");
 					level = 1000;
 				}
 				try {
-					int spawnNum = Integer.parseInt(line.split(",")[3].trim());
-					if(this.spawnNum==-1)
-						this.spawnNum=spawnNum;
-				
-					spawnPoint=null;
+					int spawnNum = Integer.parseInt(array[3].trim());
+					if (this.spawnNum == -1)
+						this.spawnNum = spawnNum;
+
+					spawnPoint = null;
 				} catch (Exception ex) {
-						if(spawnNum==-1){
-						System.err
-							.println("WARNING: No Spawn number. Setting spawn number to 0.");
-				
-						spawnNum=0;}
-					spawnPoint=null;
+					if (spawnNum == -1) {
+						System.err.println("WARNING: No Spawn number. Setting spawn number to 0.");
+
+						spawnNum = 0;
+					}
+					spawnPoint = null;
 				}
+
+				try {
+					time = DayNight.valueOf(array[4]);
+				} catch (Exception ex) {
+					time = DayNight.ANY;
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -688,17 +614,19 @@ owner.setSpawnY(spawnPoint.y);}
 
 		return pack;
 	}
+	
+	public static void setTime(Board set) {
+		set.setDayNight(me.getTime());
+	}
 
 	public ArrayList<Portal> loadPortals() {
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
 			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile()
-					+ "maps/"+mode+"/"  + loc + "/" + loc + "P.txt");
+			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
+					+ "/" + loc + "P.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				while ((line = reader.readLine()) != null) {
 					strings.add(line);
@@ -729,15 +657,13 @@ owner.setSpawnY(spawnPoint.y);}
 					String area = stuff.get(2);
 					int collectibleNum = Integer.parseInt(stuff.get(3));
 					String type = stuff.get(4);
-					int spawnNum=Integer.parseInt(stuff.get(5));
-					String type2=stuff.size()>7?stuff.get(6):"brown";
-if(type.equals("normal")||type.equals("boss"))
-					portals.add(new Portal(enX, enY, owner, area,
-							collectibleNum, type,spawnNum));
-else
-	portals.add(new Door(enX, enY, owner, area,
-			collectibleNum, type,type2,spawnNum));
-					
+					int spawnNum = Integer.parseInt(stuff.get(5));
+					String type2 = stuff.size() > 7 ? stuff.get(6) : "brown";
+					if (type.equals("normal") || type.equals("boss"))
+						portals.add(new Portal(enX, enY, owner, area, collectibleNum, type, spawnNum));
+					else
+						portals.add(new Door(enX, enY, owner, area, collectibleNum, type, type2, spawnNum));
+
 				}
 
 			}
@@ -749,17 +675,15 @@ else
 	}
 
 	public String readWeather() {
-		String tryLoc = StageBuilder.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile()
-				+ "maps/"+mode+"/"  + loc + "/" + loc + ".txt";
+		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc + "/" + loc
+				+ ".txt";
 		File map = new File(tryLoc);
 
 		if (map.exists()) {
 
 			try {
 				String line;
-				BufferedReader reader = new BufferedReader(new FileReader(
-						tryLoc));
+				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				if ((line = reader.readLine()) != null) {
 					reader.close();
 					String weather = line.split(",")[1];
