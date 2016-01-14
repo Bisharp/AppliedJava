@@ -44,9 +44,14 @@ public abstract class NPC extends Sprite {
 	protected String hiChar;
 	protected String lastI;
 	protected String lastChar;
-	private String lastICut;
-	private String lastCharCut;
+	protected String lastICut;
+	protected String lastCharCut;
 
+	protected String hiCutSceneChar;
+	protected String hiCutSceneI;
+	protected String byeCutSceneChar;
+	protected String byeCutSceneI;
+	
 	protected boolean isObstacle=true;
 	
 	protected static final NPCOption BLANK = new NPCOption("", "",
@@ -145,9 +150,39 @@ public abstract class NPC extends Sprite {
 					.length() * 10 + 10, buttonHeight);
 			length += buttons[i].width + 10;
 		}
-
 		NPCOption.resetId();
-	}
+		}
+		public NPC(int x, int y, String loc, Board owner, String[] dialogs,
+				String s, String location, NPCOption[] options, String hiChar,
+				String byeI, String byeChar,boolean isObstacle,String hiCutSceneChar,String hiCutSceneI,String byeCutSceneChar,String byeCutSceneI) {//Note NO hiI because that is s.
+			super(x, y, loc, owner);
+			this.hiCutSceneChar=hiCutSceneChar;
+			this.hiCutSceneI=hiCutSceneI;
+			this.byeCutSceneChar=byeCutSceneChar;
+			this.byeCutSceneI=byeCutSceneI;
+			this.isObstacle=isObstacle;
+			this.byeI = byeI;
+			this.hiChar = hiChar;
+			this.byeChar = byeChar;
+			this.greetingDialogs = dialogs;
+			this.location = location;
+			gif = newImage("images/npcs/talking/" + s + ".gif");
+			this.currentOptions = options.clone();
+			this.options = options;
+			buttons = new Rectangle[options.length];
+
+			int length = 0;
+			for (int i = 0; i < options.length; i++) {
+				buttons[i] = new Rectangle(length + 10, Statics.BOARD_HEIGHT
+						- (int) (boxHeight / 2) + 50, options[i].question()
+						.length() * 10 + 10, buttonHeight);
+				length += buttons[i].width + 10;
+			}
+
+			NPCOption.resetId();
+		}
+		
+	
 
 	public void animate() {
 		basicAnimate();
@@ -384,13 +419,13 @@ if (iTalk)
 	public void setLine() {
 		lastI = null;
 		lastChar = hiChar;
+		lastICut = hiCutSceneI;
+		lastCharCut = hiCutSceneChar;
 		line = greetingDialogs[Statics.RAND.nextInt(greetingDialogs.length)];
 		wait = true;
 		iTalk = false;
 		inDialogue = true;
 		index = -1;
-		lastCharCut=null;
-		lastICut=null;
 	}
 
 	public void setLine(NPCOption option) {
@@ -456,8 +491,8 @@ if (iTalk)
 			inDialogue = true;
 			lastI = byeI;
 			lastChar = byeChar;
-			lastCharCut=null;
-			lastICut=null;
+			lastCharCut=byeCutSceneChar;
+			lastICut=byeCutSceneI;
 		} else {
 			wait = false;
 		}

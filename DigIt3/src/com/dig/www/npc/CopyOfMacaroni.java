@@ -45,7 +45,7 @@ private boolean exitingA;
 										new NPCOption[] {
 												new NPCOption(
 														"Where do we fit into this?",
-														"Can I have a donut? Please *anster| yes.",
+														"If you turn the power off, they will be distracted trying to fix it. Can you press the big red button to   shut it off? Please *anster| yes.",
 														new String[] {
 																"Where do we fit into this?.",
 																"Is there anything to smash?",
@@ -108,7 +108,7 @@ private boolean exitingA;
 	public void animate() {
 		super.animate();
 		if (!once) {
-			owner.getData().setAppearPhase(this, 1);
+			owner.getData().setAppearPhase(this, 10);
 			once = true;
 		}
 	}
@@ -132,15 +132,13 @@ private boolean exitingA;
 					setAcceptedVals(1);
 				}
 				break;
-			case 1:
-				if (option.question().equals("Let's check our standings.")) {
-					if (GameCharacter.getInventory().contains(item)) {
-						GameCharacter.getInventory().decrementItem(item);
+			case 2:
+				if (option.question().equals("I've done it.")) {
 						owner.getData().completeQuest(this);
 						line = "Oh! Thank you so!";
 						questCompleted = true;
 						setCompletedVals();
-					}
+					
 				}
 				break;
 			}
@@ -203,7 +201,7 @@ private boolean exitingA;
 				"*Curds| I was saving the day!", new String[] {
 						"Why were you in there, anyway?",
 						"How did you get yourself stuck?", "...",
-						"How did you get in that situation?",
+						"How did you get in that frightful situation?",
 						"How did you find yourself in that predicament?" },
 				false, owner);
 		options[1] = new NPCOption("Will you join us now?",
@@ -234,12 +232,12 @@ private boolean exitingA;
 			greetingDialogs = new String[1];
 			greetingDialogs[0] = "*Teleme| you have the Donut.";
 			options = new NPCOption[1];
-			options[0] = new NPCOption("Let's check our standings.",
-					quest.getIncompleteLine(), new String[] {
-							"Let's check our standings.",
-							"Let's check our standings.", "...",
-							"Let's check our standings.",
-							"Let's check our standings." }, true, owner);
+			options[0] = new NPCOption("I've done it.",
+					"Either I'm seeing things *orda| power is still on. Can you look again?", new String[] {
+							"I've done it.",
+							"I've done it.", "...",
+							"I've done it.",
+							"I've done it." }, true, owner);
 		} else if (phase == 0) {
 			greetingDialogs = new String[1];
 			greetingDialogs[0] = "Oh, it's you. Will you hear the problem I *herve| now?";

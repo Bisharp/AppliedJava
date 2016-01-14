@@ -19,8 +19,8 @@ protected boolean activated;
 	public void acivate(){
 		activated=true;
 		for(Objects o:owner.getObjects())
-			if(o.getClass().toString().equals(this.getClass().toString()))
-				owner.getNPCs().remove(o);
+			if(o.getClass().toString().equals(this.getClass().toString())&& o instanceof SensorObject)
+				((SensorObject)o).setActivated(true);
 		action();
 	}
 	public abstract void action();
@@ -28,5 +28,8 @@ protected boolean activated;
 	@Override
 	public boolean interact(){
 		return false;
+	}
+	public void setActivated(boolean activated) {
+		this.activated = activated;
 	}
 }
