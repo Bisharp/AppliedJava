@@ -51,8 +51,7 @@ public class SideToPlayer extends Enemy {
 		g2d.rotate(Math.toRadians(dir * 90), x + image.getWidth(owner) / 2, y + image.getHeight(owner) / 2);
 		g2d.drawImage(image, x, y, owner);
 
-		if (owner.darkenWorld())
-			g2d.drawImage(shadow, x, y, owner);
+		drawShadow(g2d);
 
 		g2d.rotate(-Math.toRadians(dir * 90), x + image.getWidth(owner) / 2, y + image.getHeight(owner) / 2);
 

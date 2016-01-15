@@ -38,8 +38,7 @@ public class Block extends Sprite {
 
 	@Override
 	public void animate() {
-		x += owner.getScrollX();
-		y += owner.getScrollY();
+		basicAnimate();
 	}
 
 	public Blocks getType() {
@@ -538,7 +537,7 @@ public class Block extends Sprite {
 
 	public Color computeColor(Color c) {
 
-		if (!owner.thunderStrike())
+		if (!owner.thunderStrike() && !illuminated)
 			if (owner.darkenWorld())
 				if (owner.lighterDark())
 					c = Statics.sunriseColor(c, Statics.HALF_DARK);

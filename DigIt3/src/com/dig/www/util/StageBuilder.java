@@ -601,7 +601,7 @@ public class StageBuilder {
 				}
 
 				try {
-					time = DayNight.valueOf(array[4]);
+					time = DayNight.translate(array[4]);
 				} catch (Exception ex) {
 					time = DayNight.ANY;
 				}

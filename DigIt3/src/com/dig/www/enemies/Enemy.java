@@ -94,12 +94,10 @@ public abstract class Enemy extends Sprite {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
-			if (owner.darkenWorld())
-				g2d.drawImage(hitstunRenders() ? shadow : null, x, y, owner);
+			drawShadow(g2d, x, y);
 		} else {
 			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
-			if (owner.darkenWorld())
-				g2d.drawImage(hitstunRenders() ? shadow : null, x, y, owner);
+			drawShadow(g2d);
 		}
 
 		drawStatus(g2d);
@@ -110,6 +108,11 @@ public abstract class Enemy extends Sprite {
 			// g2d.drawString("" + health, x, y - 10);
 			drawBar((double) health / (double) maxHealth, g2d);
 		}
+	}
+	
+	protected void drawShadow(Graphics2D g2d, int x, int y) {
+		if (owner.darkenWorld() && !illuminated)
+			g2d.drawImage(shadow, x, y, owner);
 	}
 
 	protected void drawStatus(Graphics2D g2d) {
@@ -251,6 +254,18 @@ public abstract class Enemy extends Sprite {
 				takeDamage(character.getSpecialDamage());
 				character.endAction();
 			}
+			break;
+			
+		case MAC_M:
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage());
+				character.endAction();
+			}
+			break;
+			
+		case MAC_R:
+			if (fromP)
+				takeDamage(character.getRangedDamage());
 			break;
 
 		case MAC_S:

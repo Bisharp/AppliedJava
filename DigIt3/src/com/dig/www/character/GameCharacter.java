@@ -44,7 +44,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	 * 
 	 */
 	protected GameCharacter healing;
-protected boolean dead;
+	protected boolean dead;
 	protected Enemy enPoint;
 	protected int enUpTimer;
 	protected static final int MAX_ATTACK_DISTANCE = 250;
@@ -75,64 +75,71 @@ protected boolean dead;
 
 	public enum Direction {
 		UP {
-			public Direction getOpposite(){
+			public Direction getOpposite() {
 				return DOWN;
 			}
+
 			public boolean isYAxis() {
 				return true;
 			}
 		},
 		DOWN {
-			public Direction getOpposite(){
+			public Direction getOpposite() {
 				return UP;
 			}
+
 			public boolean isYAxis() {
 				return true;
 			}
 		},
-		LEFT{
-			public Direction getOpposite(){
+		LEFT {
+			public Direction getOpposite() {
 				return RIGHT;
 			}
-		}, RIGHT{
-			public Direction getOpposite(){
+		},
+		RIGHT {
+			public Direction getOpposite() {
 				return LEFT;
 			}
-		}, DIAG_DR {
-			public Direction getOpposite(){
+		},
+		DIAG_DR {
+			public Direction getOpposite() {
 				return DIAG_UL;
 			}
-		
+
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_DL {
-			public Direction getOpposite(){
+			public Direction getOpposite() {
 				return DIAG_UR;
 			}
+
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_UR {
-			public Direction getOpposite(){
+			public Direction getOpposite() {
 				return DIAG_DL;
 			}
+
 			public boolean isDiag() {
 				return true;
 			}
 		},
 		DIAG_UL {
-			public Direction getOpposite(){
+			public Direction getOpposite() {
 				return DIAG_DR;
 			}
+
 			public boolean isDiag() {
 				return true;
 			}
 		},
-		NONE{
-			public Direction getOpposite(){
+		NONE {
+			public Direction getOpposite() {
 				return RIGHT;
 			}
 		};
@@ -158,6 +165,7 @@ protected boolean dead;
 		public boolean isDiag() {
 			return false;
 		}
+
 		public abstract Direction getOpposite();
 	}
 
@@ -312,7 +320,7 @@ protected boolean dead;
 	protected transient int rangedTimer = -1;
 	protected transient int specialTimer = -1;
 	protected transient float energy;
-	
+
 	private int SPEED;
 
 	private int counter = 0;
@@ -321,7 +329,7 @@ protected boolean dead;
 	private static final int ANIMAX = 7;
 	private static final int MAX = 4;
 	private String charName;
-	
+
 	private int HP_TIMER_MAX = 50;
 	private int HITSTUN_MAX = 10;
 
@@ -331,7 +339,7 @@ protected boolean dead;
 	protected int TIMER_MELEE;
 	protected int TIMER_RANGED;
 	protected int TIMER_SPECIAL;
-	
+
 	private int hpTimer;
 	private int hitstunTimer = 0;
 	private boolean isPlayerCollide;
@@ -339,24 +347,24 @@ protected boolean dead;
 	protected int REnC;
 	protected int SEnC;
 	protected int pathUpdateTimer;
-	
+
 	protected int BHP_MAX;
 	protected int BMAX_ENERGY;
 	protected int BmeleeDamage;
 	protected int BrangedDamage;
 	protected int BspecialDamage;
-	protected static final float HP_MAX_M=1;
-	protected static final float MAX_ENERGY_M=1;
-	protected static final float meleeDamage_M=1;
-	protected static final float rangedDamage_M=1;
-	protected static final float specialDamage_M=1;
-	
+	protected static final float HP_MAX_M = 1;
+	protected static final float MAX_ENERGY_M = 1;
+	protected static final float meleeDamage_M = 1;
+	protected static final float rangedDamage_M = 1;
+	protected static final float specialDamage_M = 1;
+
 	protected float HP_MAX;
 	protected float MAX_ENERGY;
 	protected float meleeDamage;
 	protected float rangedDamage;
 	protected float specialDamage;
-	
+
 	protected float health = HP_MAX;
 	protected Hashtable<Direction, Boolean> collisionFlags;
 
@@ -367,6 +375,7 @@ protected boolean dead;
 
 	protected int itemTimer = 0;
 	protected static final int ITEM_MAX = 20;
+
 	public GameCharacter(int x, int y, Board owner, Types type, String charName, boolean player, int NEG_TIMER_MELEE, int NEG_TIMER_RANGED,
 			int NEG_TIMER_SPECIAL, int TIMER_MELEE, int TIMER_RANGED, int TIMER_SPECIAL, int HP_MAX, int SPEED, int MAX_ENERGY, int MEnC, int REnC,
 			int SEnC, int meleeDamage, int rangedDamage, int specialDamage, int strength) {
@@ -383,7 +392,7 @@ protected boolean dead;
 		this.HP_MAX = HP_MAX;
 		this.BHP_MAX = HP_MAX;
 		this.SPEED = SPEED;
-		
+
 		this.MAX_ENERGY = MAX_ENERGY;
 		this.BMAX_ENERGY = MAX_ENERGY;
 		energy = MAX_ENERGY;
@@ -394,11 +403,11 @@ protected boolean dead;
 		this.meleeDamage = meleeDamage;
 		this.rangedDamage = rangedDamage;
 		this.specialDamage = specialDamage;
-		
+
 		this.BmeleeDamage = Math.max(meleeDamage, 10);
 		this.BrangedDamage = Math.max(rangedDamage, 10);
 		this.BspecialDamage = Math.max(specialDamage, 10);
-		
+
 		meleeTimer = this.NEG_TIMER_MELEE;
 		rangedTimer = this.NEG_TIMER_RANGED;
 		specialTimer = this.NEG_TIMER_SPECIAL;
@@ -412,94 +421,93 @@ protected boolean dead;
 
 	@Override
 	public void animate() {
-if(dead){
-	basicAnimate();
-	if(owner.getCharacter()!=this&&!owner.getCharacter().isDead()&&getBounds().intersects(owner.getCharacter().getBounds()))
-		dead=false;
-	onScreen = getBounds().intersects(owner.getScreen());
-}else{
-		collisionFlagged = false;
-		if (poisonTimer > 0) {
-			if (poisonHurtTimer <= 0) {
-				health -= 1;
-				hpTimer = 100;
-				if (health <= 0)
-					takeDamage(0, false);
-				poisonHurtTimer = 15;
-			} else
-				poisonHurtTimer--;
-		}
-
-		if (player) {
-
+		if (dead) {
+			basicAnimate();
+			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
+				dead = false;
+			onScreen = getBounds().intersects(owner.getScreen());
 		} else {
+			collisionFlagged = false;
+			if (poisonTimer > 0) {
+				if (poisonHurtTimer <= 0) {
+					health -= 1;
+					hpTimer = 100;
+					if (health <= 0)
+						takeDamage(0, false);
+					poisonHurtTimer = 15;
+				} else
+					poisonHurtTimer--;
+			}
 
-			x += owner.getScrollX();
-			y += owner.getScrollY();
-			if (me == -1) {
-				for (int c = 0; c < owner.getFriends().size(); c++) {
-					if (owner.getFriends().get(c) == this) {
-						me = c;
-						break;
+			if (player) {
+
+			} else {
+
+				x += owner.getScrollX();
+				y += owner.getScrollY();
+				if (me == -1) {
+					for (int c = 0; c < owner.getFriends().size(); c++) {
+						if (owner.getFriends().get(c) == this) {
+							me = c;
+							break;
+						}
 					}
 				}
-			}
-			if (waiting && (owner.getCharPoint().distance(x, y) < 250 || owner.pointedPoint != null)) {
-				waiting = false;
-			}
-			if (path != null) {
-				path.update();
-				if (pointTimer <= 0 && path.getPoints().size() > 0) {
-					if (path.getPoints().size() < 4) {
-						path.removeLast();
+				if (waiting && (owner.getCharPoint().distance(x, y) < 250 || owner.pointedPoint != null)) {
+					waiting = false;
+				}
+				if (path != null) {
+					path.update();
+					if (pointTimer <= 0 && path.getPoints().size() > 0) {
+						if (path.getPoints().size() < 4) {
+							path.removeLast();
+						} else {
+							path.findPath();
+						}
+						pointTimer = 18;
 					} else {
-						path.findPath();
+						pointTimer--;
 					}
-					pointTimer = 18;
-				} else {
-					pointTimer--;
+					if (path.getPoints().size() > 0 && new Point(x, y).distance(path.getCurrentFind()) < 11// &&JOptionPane.showConfirmDialog(owner,
+																											// getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION
+					) {
+						pointTimer = 18;
+						path.removeLast();
+					}
+					if (new Point(x, y).distance(owner.getCharPoint()) < 100 && owner.pointedPoint == null) {
+						// System.out.println(getType().charName()+" CLOSE:"+new
+						// Date());
+						path = null;
+					}
 				}
-				if (path.getPoints().size() > 0 && new Point(x, y).distance(path.getCurrentFind()) < 11// &&JOptionPane.showConfirmDialog(owner,
-																										// getType().charName()+" wants to remove PathPoint")==JOptionPane.YES_OPTION
-				) {
-					pointTimer = 18;
-					path.removeLast();
-				}
-				if (new Point(x, y).distance(owner.getCharPoint()) < 100 && owner.pointedPoint == null) {
-					// System.out.println(getType().charName()+" CLOSE:"+new
-					// Date());
-					path = null;
-				}
-			}
-			if (path == null && owner.pointedPoint == null&&type==Types.HEART) {
+				if (path == null && owner.pointedPoint == null && type == Types.HEART) {
 					if (healing == null && enUpTimer <= 0) {
 						int chosenNum = -2;
 						int theDis = Integer.MAX_VALUE;
-						if (owner.getCharacter()!=this
-								&& owner.getCharPoint().distance(new Point(x, y)) < MAX_ATTACK_DISTANCE*1.75
-								&& owner.getCharacter().health<(owner.getCharacter().HP_MAX*0.75)&&theDis>owner.getCharacter().health) {
-							theDis = (int)owner.getCharacter().health;
+						if (owner.getCharacter() != this && owner.getCharPoint().distance(new Point(x, y)) < MAX_ATTACK_DISTANCE * 1.75
+								&& owner.getCharacter().health < (owner.getCharacter().HP_MAX * 0.75) && theDis > owner.getCharacter().health) {
+							theDis = (int) owner.getCharacter().health;
 							chosenNum = -1;
 						}
 						for (int c = 0; c < owner.getFriends().size(); c++) {
 							Point currentEn = new Point(owner.getFriends().get(c).getX(), owner.getFriends().get(c).getY());
-							if (owner.getFriends().get(c)!=this
-									&& currentEn.distance(new Point(x, y)) < MAX_ATTACK_DISTANCE*1.75
-									&& owner.getFriends().get(c).health<(owner.getFriends().get(c).HP_MAX*0.75)&&theDis>owner.getFriends().get(c).health) {
-								theDis = (int)owner.getFriends().get(c).health;
+							if (owner.getFriends().get(c) != this && currentEn.distance(new Point(x, y)) < MAX_ATTACK_DISTANCE * 1.75
+									&& owner.getFriends().get(c).health < (owner.getFriends().get(c).HP_MAX * 0.75)
+									&& theDis > owner.getFriends().get(c).health) {
+								theDis = (int) owner.getFriends().get(c).health;
 								chosenNum = c;
 							}
 						}
 
-						if (chosenNum>-1) {
+						if (chosenNum > -1) {
 							healing = owner.getFriends().get(chosenNum);
-						}else if(chosenNum==-1)
-							healing=owner.getCharacter();
+						} else if (chosenNum == -1)
+							healing = owner.getCharacter();
 					}
 				} else {
 					healing = null;
 				}
-				if (path == null && owner.pointedPoint == null&&healing==null) {
+				if (path == null && owner.pointedPoint == null && healing == null) {
 					if (enPoint == null && enUpTimer <= 0) {
 						int chosenNum = -1;
 						int theDis = MAX_ATTACK_DISTANCE;
@@ -515,10 +523,11 @@ if(dead){
 
 						if (chosenNum != -1) {
 							enPoint = owner.getEnemies().get(chosenNum);
-						
-						goTo = true;
-						if (this instanceof Diamond || this instanceof Heart || health < HP_MAX / 2)
-							goTo = false;}
+
+							goTo = true;
+							if (this instanceof Diamond || this instanceof Heart || health < HP_MAX / 2)
+								goTo = false;
+						}
 					} else if (enUpTimer > 0) {
 						enUpTimer--;
 					}
@@ -530,496 +539,476 @@ if(dead){
 								.isAlive()) || new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || (health < HP_MAX / 2 && goTo))) {
 					enPoint = null;
 				}
-				if(healing!=null&&((
-						new Point(healing.getX(), healing.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 
-						|| healing
-								.isDead())
-								||
-								new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 2.75
-								||healing.health>healing.HP_MAX*0.75)
-								){
-					healing=null;
+				if (healing != null
+						&& ((new Point(healing.getX(), healing.getY()).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 1.75 || healing
+								.isDead()) || new Point(x, y).distance(owner.getCharPoint()) > MAX_ATTACK_DISTANCE * 2.75 || healing.health > healing.HP_MAX * 0.75)) {
+					healing = null;
 				}
-			if (!wallBound && !waiting) {
-				// System.out.println(path);
-				
+				if (!wallBound && !waiting) {
+					// System.out.println(path);
 
-				
+					if (path != null) {
 
-				if (path != null) {
+						if (path.getPoints().size() > 0) {
+							getToPoint = path.getCurrentFind();
 
-					if (path.getPoints().size() > 0) {
-						getToPoint = path.getCurrentFind();
+							meleePress = false;
 
-						meleePress = false;
+							goTo = true;
+						} else {
+							path = null;
+							getToPoint = owner.getCharacter().getBounds().getLocation();
 
+							goTo = true;
+						}
+
+					} else if (owner.pointedPoint != null) {
+						getToPoint = owner.pointedPoint;
+						goTo = true;
+					} else if (enPoint != null) {
+						if (goTo == false)
+							getToPoint = owner.getCharPoint();
+						else
+							getToPoint = new Point(enPoint.getX(), enPoint.getY());
+
+					} else if (healing != null) {
+						getToPoint = new Point(healing.getX(), healing.getY());
 						goTo = true;
 					} else {
-						path = null;
-						getToPoint = owner.getCharacter().getBounds().getLocation();
-
+						getToPoint = owner.getCharPoint();
 						goTo = true;
 					}
+					if (
 
-				} else if (owner.pointedPoint != null) {
-					getToPoint = owner.pointedPoint;
-					goTo = true;
-				} else if (enPoint != null) {
-					if (goTo == false)
-						getToPoint = owner.getCharPoint();
-					else
-						getToPoint = new Point(enPoint.getX(), enPoint.getY());
+					path != null
+							|| ((enPoint == null && healing == null && getToPoint.distance(x, y) > 125)
+									|| (enPoint != null && !getActBounds().intersects(enPoint.getBounds()) && !rangedPress) || (healing != null
+									&& !getBounds().intersects(healing.getBounds()) && new Point(x, y).distance(healing.getX(), healing.getY()) > 50)
 
-				}
-				else if (healing != null) {
-						getToPoint = new Point(healing.getX(), healing.getY());
-goTo=true;
-				}else {
-					getToPoint = owner.getCharPoint();
-					goTo = true;
-				}
-				if (
-						
-						path != null || 
-						(
-								(
-										enPoint == null && healing==null 
-						&& getToPoint.distance(x, y) > 125
-						)
-						|| (
-								enPoint != null && !getActBounds().intersects(
-						enPoint.getBounds()
-						)&&!rangedPress
-						)|| (
-								healing != null
-								&& !getBounds().intersects(
-								healing.getBounds())
-								&&new Point(x,y).distance(healing.getX(),healing.getY())>50
-								)
-						
-						)
-						
-						) {
-					int amount = 2;
-					if (path != null) {
-						if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
-							amount = 0;
+							)
+
+					) {
+						int amount = 2;
+						if (path != null) {
+							if (Math.abs(x - getToPoint.x) > Math.abs(y - getToPoint.y)) {
+								amount = 0;
+							} else {
+								amount = 1;
+							}
+						}
+						// if(path!=null)
+						// System.out.println("walking");
+						if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
+
+							deltaX = -SPEED;
+							moveX = true;
+
+						} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
+
+							deltaX = SPEED;
+							moveX = true;
+
 						} else {
-							amount = 1;
+							deltaX = 0;
+							moveX = false;
+						}
+						if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
+
+							deltaY = -SPEED;
+							moveY = true;
+							// if (||y > getToPoint.y + 50)
+
+						} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
+
+							deltaY = SPEED;
+							moveY = true;
+							// if (y < getToPoint.y - 50)
+
+						} else {
+							moveY = false;
+							deltaY = 0;
+						}
+
+					}
+
+					else {
+						deltaX = 0;
+						deltaY = 0;
+						moveX = false;
+						moveY = false;
+						// if(type==Types.HEART)
+						// {
+						// System.out.println(deltaX);
+						// System.out.println(deltaY);
+						// }
+					}
+
+					if (!goTo && enPoint != null) {
+						if (moveX && moveY) {
+							deltaY = 0;
+							moveY = false;
+						} else if (moveX) {
+							if (y < enPoint.getY()) {
+								deltaY = -10;
+								moveY = true;
+								moveU = false;
+							} else {
+								deltaY = 10;
+								moveY = true;
+								moveU = true;
+							}
+
+						} else {
+							if (x < enPoint.getX()) {
+								deltaY = -10;
+								moveX = true;
+								moveL = true;
+							} else {
+								deltaX = 10;
+								moveX = true;
+								moveL = false;
+							}
+						}
+
+					}
+					// if(enPoint==null||!goTo){
+					// if (deltaX == 0) {
+					// if (deltaY != 0) {
+					// if (deltaY < 0)
+					// direction = Direction.UP;
+					// else
+					// direction = Direction.DOWN;
+					// }} else {
+					// if (deltaX > 0)
+					// direction = Direction.RIGHT;
+					// else
+					// direction = Direction.LEFT;
+					// }
+					//
+					//
+					if (deltaX != 0 || deltaY != 0) {
+						if (deltaX == 0) {
+							if (deltaY > 0)
+								direction = Direction.DOWN;
+							else
+								direction = Direction.UP;
+						} else if (deltaY == 0) {
+							if (deltaX > 0)
+								direction = Direction.RIGHT;
+							else
+								direction = Direction.LEFT;
+						} else {
+							if (deltaX > 0) {
+								if (deltaY > 0) {
+									direction = Direction.DIAG_DR;
+								} else {
+									direction = Direction.DIAG_UR;
+								}
+							} else {
+								if (deltaY > 0) {
+									direction = Direction.DIAG_DL;
+								} else {
+									direction = Direction.DIAG_UL;
+								}
+							}
 						}
 					}
-					// if(path!=null)
-					// System.out.println("walking");
-					if (amount != 1 && x > getToPoint.x + (path == null ? (SPEED * 2) : 0)) {
-
-						deltaX = -SPEED;
-						moveX = true;
-
-					} else if (amount != 1 && x < getToPoint.x - (path == null ? (SPEED * 2) : 0)) {
-
-						deltaX = SPEED;
-						moveX = true;
-
-					} else {
-						deltaX = 0;
-						moveX = false;
+					// }
+					// else{
+					// if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
+					// if(y<enPoint.getY())
+					// direction=Direction.UP;
+					// else
+					// direction=Direction.DOWN;
+					// }
+					// else{
+					// if(x<enPoint.getX())
+					// direction=Direction.RIGHT;
+					// else
+					// direction=Direction.LEFT;
+					// }
+					//
+					// }
+					boolean shouldPressMelee = false;
+					boolean shouldRangedPress = false;
+					Rectangle rect;
+					switch (direction) {
+					case UP:
+						rect = new Rectangle(x + rangedAddX(), y + rangedAddY() - Statics.BOARD_HEIGHT, 20, Statics.BOARD_HEIGHT);
+						break;
+					case DOWN:
+						rect = new Rectangle(x + rangedAddX(), y + rangedAddY(), 20, Statics.BOARD_HEIGHT);
+						break;
+					case LEFT:
+						rect = new Rectangle(x + rangedAddX() - Statics.BOARD_WIDTH, y + rangedAddY(), Statics.BOARD_WIDTH, 20);
+						break;
+					case RIGHT:
+						rect = new Rectangle(x + rangedAddX(), y + rangedAddY(), Statics.BOARD_WIDTH, 20);
+						break;
+					default:
+						rect = new Rectangle();
 					}
-					if (amount != 0 && y > getToPoint.y + (path == null ? (SPEED * 2) : 0)) {
 
-						deltaY = -SPEED;
-						moveY = true;
-						// if (||y > getToPoint.y + 50)
+					for (int c = 0; c < owner.getEnemies().size(); c++) {
+						if (((this instanceof Diamond && owner.getEnemies().get(c) instanceof Projectile && new Point(getMidX(), getMidY()).distance(
+								owner.getEnemies().get(c).getMidX(), owner.getEnemies().get(c).getMidY()) < 750) || getActBounds().intersects(
+								owner.getEnemies().get(c).getBounds()))
+								&& !owner.getEnemies().get(c).isInvincible()
+								&& (!(owner.getEnemies().get(c) instanceof Projectile) || this instanceof Diamond)) {
+							shouldPressMelee = true;
 
-					} else if (amount != 0 && y < getToPoint.y - (path == null ? (SPEED * 2) : 0)) {
-
-						deltaY = SPEED;
-						moveY = true;
-						// if (y < getToPoint.y - 50)
-
-					} else {
-						moveY = false;
-						deltaY = 0;
+							break;
+						} else {
+							if (!shouldRangedPress && rect.intersects(owner.getEnemies().get(c).getBounds())
+									&& !owner.getEnemies().get(c).isInvincible() && !(owner.getEnemies().get(c) instanceof Projectile)) {
+								shouldRangedPress = true;
+							}
+						}
 					}
-					
-					
-					
-				
+					if (type == Types.HEART) {
+						if (owner.getCharacter().getBounds().intersects(getActBounds()) && owner.getCharacter() != this
+								&& owner.getCharacter().health < owner.getCharacter().HP_MAX * 0.75)
+							shouldPressMelee = true;
+						else {
+							for (GameCharacter g : owner.getFriends()) {
+								if (g != this && g.getBounds().intersects(getActBounds()) && g.health < g.HP_MAX * 0.75) {
+									shouldPressMelee = true;
+									break;
+								}
+
+							}
+						}
+					}
+					meleePress = shouldPressMelee;
+
+					if (meleePress)
+						shouldRangedPress = false;
+					rangedPress = shouldRangedPress;
+
+					// if (enPoint != null) {
+					// boolean xway = false;
+					// if (Math.abs(enPoint.getX() - x) >
+					// Math.abs(enPoint.getY() -
+					// y)) {
+					// xway = true;
+					// }
+					// if (xway) {
+					// if (x > enPoint.getX()) {
+					// direction = Direction.LEFT;
+					// } else {
+					// direction = Direction.RIGHT;
+					// }
+					// } else {
+					// if (y > enPoint.getY()) {
+					// direction = Direction.UP;
+					// } else {
+					// direction = Direction.DOWN;
+					//
+					// }
+					// }
+					// if (getActBounds().intersects(enPoint.getBounds())) {
+					// meleePress = true;
+					// } else {
+					// meleePress = false;
+					// }
+					// }
 				}
-
-				else {
+				if (waiting) {
 					deltaX = 0;
 					deltaY = 0;
 					moveX = false;
 					moveY = false;
-//					if(type==Types.HEART)
-//				{
-//					System.out.println(deltaX);
-//					System.out.println(deltaY);
-//				}
-				}
-				
-				if (!goTo&&enPoint!=null) {
-					if (moveX && moveY) {
-						deltaY = 0;
-						moveY = false;
-					} else if (moveX) {
-						if (y < enPoint.getY()) {
-							deltaY = -10;
-							moveY = true;
-							moveU = false;
-						} else {
-							deltaY = 10;
-							moveY = true;
-							moveU = true;
-						}
-
-					} else {
-						if (x < enPoint.getX()) {
-							deltaY = -10;
-							moveX = true;
-							moveL = true;
-						} else {
-							deltaX = 10;
-							moveX = true;
-							moveL = false;
-						}
-					}
-
-				}
-				// if(enPoint==null||!goTo){
-//				if (deltaX == 0) {
-//					if (deltaY != 0) {
-//					if (deltaY < 0)
-//						direction = Direction.UP;
-//					else
-//						direction = Direction.DOWN;
-//				}} else {
-//						if (deltaX > 0)
-//							direction = Direction.RIGHT;
-//						else
-//							direction = Direction.LEFT;
-//					}
-//					
-//				
-if(deltaX!=0||deltaY!=0){
-	if(deltaX==0){
-		if(deltaY>0)
-			direction=Direction.DOWN;
-		else
-			direction=Direction.UP;
-	}
-	else if(deltaY==0){
-		if(deltaX>0)
-			direction=Direction.RIGHT;
-		else
-			direction=Direction.LEFT;
-	}
-	else{
-		if(deltaX>0){
-			if(deltaY>0){
-				direction=Direction.DIAG_DR;
-			}else{
-				direction=Direction.DIAG_UR;
-			}
-		}else{
-			if(deltaY>0){
-				direction=Direction.DIAG_DL;
-			}else{
-				direction=Direction.DIAG_UL;
-			}
-		}
-	}
-}
-				// }
-				// else{
-				// if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
-				// if(y<enPoint.getY())
-				// direction=Direction.UP;
-				// else
-				// direction=Direction.DOWN;
-				// }
-				// else{
-				// if(x<enPoint.getX())
-				// direction=Direction.RIGHT;
-				// else
-				// direction=Direction.LEFT;
-				// }
-				//
-				// }
-				boolean shouldPressMelee = false;
-				boolean shouldRangedPress=false;
-				Rectangle rect;
-	switch(direction){
-	case UP:
-		rect=new Rectangle(x+rangedAddX(),y+rangedAddY()-Statics.BOARD_HEIGHT,20,Statics.BOARD_HEIGHT);
-		break;
-	case DOWN:
-		rect=new Rectangle(x+rangedAddX(),y+rangedAddY(),20,Statics.BOARD_HEIGHT);
-		break;
-	case LEFT:
-		rect=new Rectangle(x+rangedAddX()-Statics.BOARD_WIDTH,y+rangedAddY(),Statics.BOARD_WIDTH,20);
-		break;
-	case RIGHT:
-		rect=new Rectangle(x+rangedAddX(),y+rangedAddY(),Statics.BOARD_WIDTH,20);
-		break;
-	default:
-		rect=new Rectangle();
-	}
-	
-				for (int c = 0; c < owner.getEnemies().size(); c++) {
-					if (((this instanceof Diamond && owner.getEnemies().get(c) instanceof Projectile && new Point(getMidX(), getMidY()).distance(
-							owner.getEnemies().get(c).getMidX(), owner.getEnemies().get(c).getMidY()) < 750) || getActBounds().intersects(
-							owner.getEnemies().get(c).getBounds()))
-							&& !owner.getEnemies().get(c).isInvincible()
-							&& (!(owner.getEnemies().get(c) instanceof Projectile) || this instanceof Diamond)) {
-						shouldPressMelee = true;
-
-						break;
-					}else{
-						if(!shouldRangedPress&&rect.intersects(owner.getEnemies().get(c).getBounds())&& !owner.getEnemies().get(c).isInvincible()
-								&& !(owner.getEnemies().get(c) instanceof Projectile)){
-						shouldRangedPress=true;
-					}}
-				}
-				if(type==Types.HEART){
-					if(owner.getCharacter().getBounds().intersects(getActBounds())&&owner.getCharacter()!=this&&owner.getCharacter().health<owner.getCharacter().HP_MAX*0.75)
-						shouldPressMelee=true;
-					else{
-						for(GameCharacter g:owner.getFriends()){
-							if(g!=this&&g.getBounds().intersects(getActBounds())&&g.health<g.HP_MAX*0.75){
-								shouldPressMelee=true;
-								break;
-							}
-								
-						}
-					}
-				}
-				meleePress = shouldPressMelee;
-
-				if(meleePress)
-					shouldRangedPress=false;
-	rangedPress=shouldRangedPress;
-
-				// if (enPoint != null) {
-				// boolean xway = false;
-				// if (Math.abs(enPoint.getX() - x) > Math.abs(enPoint.getY() -
-				// y)) {
-				// xway = true;
-				// }
-				// if (xway) {
-				// if (x > enPoint.getX()) {
-				// direction = Direction.LEFT;
-				// } else {
-				// direction = Direction.RIGHT;
-				// }
-				// } else {
-				// if (y > enPoint.getY()) {
-				// direction = Direction.UP;
-				// } else {
-				// direction = Direction.DOWN;
-				//
-				// }
-				// }
-				// if (getActBounds().intersects(enPoint.getBounds())) {
-				// meleePress = true;
-				// } else {
-				// meleePress = false;
-				// }
-				// }
-			}
-			if (waiting) {
-				deltaX = 0;
-				deltaY = 0;
-				moveX = false;
-				moveY = false;
-				image = newImage("n");
-			}
-
-		}
-
-		if (hitstunTimer > 0) {
-			hitstunTimer--;
-			flicker();
-
-			if (hitstunTimer == 0) {
-				visible = true;
-			}
-		}
-
-		if (hpTimer > 0) {
-			hpTimer--;
-
-		}
-		if (hpTimer <= 0 && health < HP_MAX) {
-			health += 3;
-			if (health > HP_MAX) {
-				health = HP_MAX;
-			}
-			hpTimer = HP_TIMER_MAX;
-		}
-
-		if (!wallBound) {
-
-			if (animationTimer >= ANIMAX) {
-
-				if (moveX || moveY) {
-					animationTimer = 0;
-					image = newImage("w" + counter);
-
-					counter++;
-
-					if (counter == MAX)
-						counter = 0;
-				} else
 					image = newImage("n");
-			} else
-				animationTimer++;
-			if (player) {
-				if (move) {
-					if (moveX) {
-						// if (moveL ? collisionFlags.get(Direction.LEFT) :
-						// collisionFlags.get(Direction.RIGHT))
-						if (moveL) {
-							deltaX++;
-							if (deltaX > SPEED)
-								deltaX = SPEED;
-						} else {
-							deltaX--;
-							if (deltaX < -SPEED)
-								deltaX = -SPEED;
-						}
-					} else {
-						if (deltaX > 0)
-							deltaX--;
-						else if (deltaX < 0)
-							deltaX++;
-					}
+				}
 
-					if (moveY) {
-						// if (moveU ? collisionFlags.get(Direction.UP) :
-						// collisionFlags.get(Direction.DOWN))
-						if (!moveU) {
-							deltaY--;
-							if (deltaY < -SPEED)
-								deltaY = -SPEED;
-						} else {
-							deltaY++;
-							if (deltaY > SPEED)
-								deltaY = SPEED;
-						}
-					} else {
-						if (deltaY > 0)
-							deltaY--;
-						else if (deltaY < 0)
-							deltaY++;
-					}
+			}
 
-					owner.setScrollX(deltaX);
-					owner.setScrollY(deltaY);
+			if (hitstunTimer > 0) {
+				hitstunTimer--;
+				flicker();
+
+				if (hitstunTimer == 0) {
+					visible = true;
+				}
+			}
+
+			if (hpTimer > 0) {
+				hpTimer--;
+
+			}
+			if (hpTimer <= 0 && health < HP_MAX) {
+				health += 3;
+				if (health > HP_MAX) {
+					health = HP_MAX;
+				}
+				hpTimer = HP_TIMER_MAX;
+			}
+
+			if (!wallBound) {
+
+				if (animationTimer >= ANIMAX) {
+
+					if (moveX || moveY) {
+						animationTimer = 0;
+						image = newImage("w" + counter);
+
+						counter++;
+
+						if (counter == MAX)
+							counter = 0;
+					} else
+						image = newImage("n");
+				} else
+					animationTimer++;
+				if (player) {
+					if (move) {
+						if (moveX) {
+							// if (moveL ? collisionFlags.get(Direction.LEFT) :
+							// collisionFlags.get(Direction.RIGHT))
+							if (moveL) {
+								deltaX++;
+								if (deltaX > SPEED)
+									deltaX = SPEED;
+							} else {
+								deltaX--;
+								if (deltaX < -SPEED)
+									deltaX = -SPEED;
+							}
+						} else {
+							if (deltaX > 0)
+								deltaX--;
+							else if (deltaX < 0)
+								deltaX++;
+						}
+
+						if (moveY) {
+							// if (moveU ? collisionFlags.get(Direction.UP) :
+							// collisionFlags.get(Direction.DOWN))
+							if (!moveU) {
+								deltaY--;
+								if (deltaY < -SPEED)
+									deltaY = -SPEED;
+							} else {
+								deltaY++;
+								if (deltaY > SPEED)
+									deltaY = SPEED;
+							}
+						} else {
+							if (deltaY > 0)
+								deltaY--;
+							else if (deltaY < 0)
+								deltaY++;
+						}
+
+						owner.setScrollX(deltaX);
+						owner.setScrollY(deltaY);
+					} else {
+						move = true;
+					}
 				} else {
-					move = true;
+					x += deltaX;
+					y += deltaY;
 				}
 			} else {
-				x += deltaX;
-				y += deltaY;
-			}
-		} else {
 
-			if (player) {
-				double tempD = Statics.pointTowards(new Point(wallX, wallY), owner.getCharPoint()) + 180;
-				if (tempD > 360)
-					tempD -= 360;
-				owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED));
-				owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED));
-
-				owner.reAnimate();
-				wallBound = false;
-			} else {
-				if (onceNotCollidePlayer) {
-					enPoint = null;
-					healing=null;
-					enUpTimer = 25;
-					// if (new Point(getMidX(), getMidY()).distance(new
-					// Point(wallX, getMidY())) < 100) {
-					// deltaX = -deltaX;
-					// x += deltaX;
-					// }
-					// if (new Point(getMidX(), getMidY()).distance(new
-					// Point(getMidX(), wallY)) < 100) {
-					// deltaY = -deltaY;
-					// y += deltaY;
-					// }
-
-					double tempD = Statics.pointTowards(new Point(wallX, wallY), new Point(x, y)) + 180;
+				if (player) {
+					double tempD = Statics.pointTowards(new Point(wallX, wallY), owner.getCharPoint()) + 180;
 					if (tempD > 360)
 						tempD -= 360;
-					x -= (int) (Math.cos(Math.toRadians((double) tempD)) * SPEED);
-					y -= (int) (Math.sin(Math.toRadians((double) tempD)) * SPEED);
+					owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED));
+					owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED));
 
-					// x += deltaX;
-					// y += deltaY;
-				} else if(healing==null&&enPoint==null){
-					deltaX = 0;
-					deltaY = 0;
-					moveX = false;
-					moveY = false;
-					image = newImage("n");
-				}
-				if (pathUpdateTimer > 0)
-					pathUpdateTimer--;
-				// if(onceNotCollidePlayer)
-				// JOptionPane.showMessageDialog(owner, "try");
-				if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null
-				// && new Point(x, y).distance(owner.getCharPoint()) > 50
-				) {
-					// JOptionPane.showMessageDialog(owner, "work");
-					for (int c = 0; c < owner.getFriends().size(); c++) {
-						if (owner.getFriends().get(c) == this) {
-							me = c;
-							break;
+					owner.reAnimate();
+					wallBound = false;
+				} else {
+					if (onceNotCollidePlayer) {
+						enPoint = null;
+						healing = null;
+						enUpTimer = 25;
+						// if (new Point(getMidX(), getMidY()).distance(new
+						// Point(wallX, getMidY())) < 100) {
+						// deltaX = -deltaX;
+						// x += deltaX;
+						// }
+						// if (new Point(getMidX(), getMidY()).distance(new
+						// Point(getMidX(), wallY)) < 100) {
+						// deltaY = -deltaY;
+						// y += deltaY;
+						// }
+
+						double tempD = Statics.pointTowards(new Point(wallX, wallY), new Point(x, y)) + 180;
+						if (tempD > 360)
+							tempD -= 360;
+						x -= (int) (Math.cos(Math.toRadians((double) tempD)) * SPEED);
+						y -= (int) (Math.sin(Math.toRadians((double) tempD)) * SPEED);
+
+						// x += deltaX;
+						// y += deltaY;
+					} else if (healing == null && enPoint == null) {
+						deltaX = 0;
+						deltaY = 0;
+						moveX = false;
+						moveY = false;
+						image = newImage("n");
+					}
+					if (pathUpdateTimer > 0)
+						pathUpdateTimer--;
+					// if(onceNotCollidePlayer)
+					// JOptionPane.showMessageDialog(owner, "try");
+					if (pathUpdateTimer <= 0 && onceNotCollidePlayer && path == null
+					// && new Point(x, y).distance(owner.getCharPoint()) > 50
+					) {
+						// JOptionPane.showMessageDialog(owner, "work");
+						for (int c = 0; c < owner.getFriends().size(); c++) {
+							if (owner.getFriends().get(c) == this) {
+								me = c;
+								break;
+							}
 						}
-					}
-					int realX = 0;
-					int realY = 0;
-					boolean changedP = false;
-					if (owner.pointedPoint != null) {
-						changedP = true;
-						realX = owner.getCharacterX();
-						realY = owner.getCharacterY();
-						owner.getCharacter().setX(owner.pointedPoint.x);
-						owner.getCharacter().setY(owner.pointedPoint.y);
+						int realX = 0;
+						int realY = 0;
+						boolean changedP = false;
+						if (owner.pointedPoint != null) {
+							changedP = true;
+							realX = owner.getCharacterX();
+							realY = owner.getCharacterY();
+							owner.getCharacter().setX(owner.pointedPoint.x);
+							owner.getCharacter().setY(owner.pointedPoint.y);
+						}
+
+						path = new PointPath(me, owner);
+						if (changedP) {
+							owner.getCharacter().setX(realX);
+							owner.getCharacter().setY(realY);
+
+						}
+
+						if (path.getPoints().size() > 0) {
+							// x=path.getCurrentFind().x;
+							// y=path.getCurrentFind().y;
+							// JOptionPane.showMessageDialog(owner,
+							// "size greater than 0");
+						} else {
+							// JOptionPane.showMessageDialog(owner, "size 0");
+							pathUpdateTimer = 50;
+						}
+						meleePress = false;
+						pointTimer = 18;
+						path.update();
 					}
 
-					path = new PointPath(me, owner);
-					if (changedP) {
-						owner.getCharacter().setX(realX);
-						owner.getCharacter().setY(realY);
-
-					}
-
-					if (path.getPoints().size() > 0) {
-						// x=path.getCurrentFind().x;
-						// y=path.getCurrentFind().y;
-						// JOptionPane.showMessageDialog(owner,
-						// "size greater than 0");
-					} else {
-						// JOptionPane.showMessageDialog(owner, "size 0");
-						pathUpdateTimer = 50;
-					}
-					meleePress = false;
-					pointTimer = 18;
-					path.update();
 				}
-
+				onceNotCollidePlayer = false;
+				wallBound = false;
 			}
-			onceNotCollidePlayer = false;
-			wallBound = false;
-		}
-		setAttacks();
+			setAttacks();
 
-		onScreen = getBounds().intersects(owner.getScreen());
-		resetFlags();
-	}}
+			onScreen = getBounds().intersects(owner.getScreen());
+			resetFlags();
+		}
+		
+		illuminated = false;
+	}
 
 	public void setWaiting(boolean setter) {
 		waiting = setter;
@@ -1278,7 +1267,7 @@ if(deltaX!=0||deltaY!=0){
 		}
 
 		// Melee
-		 if (keyCode == Preferences.ATTACK()) {
+		if (keyCode == Preferences.ATTACK()) {
 			meleePress = false;
 
 		}
@@ -1390,8 +1379,8 @@ if(deltaX!=0||deltaY!=0){
 		if (player)
 			setCollisionFlag(collide);
 		else {
-			if(!isPlayer||!(enPoint!=null||healing!=null))
-			wallBound = true;
+			if (!isPlayer || !(enPoint != null || healing != null))
+				wallBound = true;
 			this.isPlayerCollide = isPlayer;
 			if (!isPlayer) {
 				onceNotCollidePlayer = true;
@@ -1505,11 +1494,11 @@ if(deltaX!=0||deltaY!=0){
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
 
-				if (getType() != Types.SPADE){
+				if (getType() != Types.SPADE) {
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
-					if(getType()==Types.MACARONI)
-					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
-				}else
+					if (getType() == Types.MACARONI)
+						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
+				} else
 					((Spade) this).keyReleased = false;
 				if (this instanceof SirCobalt)
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
@@ -1557,10 +1546,10 @@ if(deltaX!=0||deltaY!=0){
 
 	@Override
 	public void draw(Graphics2D g2d) {
-if(!player){
-	deltaX=-deltaX;
-	deltaY=-deltaY;
-}
+		if (!player) {
+			deltaX = -deltaX;
+			deltaY = -deltaY;
+		}
 		if (deltaX != 0 || deltaY != 0) {
 			dir = 0;
 			boolean changed = false;
@@ -1594,34 +1583,33 @@ if(!player){
 				}
 			}
 		}
-		if(!player){
-			deltaX=-deltaX;
-			deltaY=-deltaY;
+		if (!player) {
+			deltaX = -deltaX;
+			deltaY = -deltaY;
 		}
 		if (player)
 			dir = getCurrentDir();
 		Point p = setAttacks();
 		if (visible && onScreen) {
-			if(this instanceof Macaroni&&meleeTimer>0){
+			if (this instanceof Macaroni && meleeTimer > 0) {
 				g2d.rotate(Math.toRadians((meleeTimer)), getMidX(), getMidY());
 				g2d.drawImage(image, x, y, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(shadow, x, y, owner);
-					
-				g2d.rotate(Math.toRadians(-meleeTimer), getMidX(), getMidY());
-			}else{
- if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
-				g2d.drawImage(image, x + width, y, -width, height, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(shadow, x + width, y, -width, height, owner);
-			}
- else //((direction.isDiag() ? (diagBackup != Direction.LEFT) : (direction != Direction.LEFT)) && direction != Direction.UP) 
-	 {
-				g2d.drawImage(image, x, y, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(shadow, x, y, owner);
+				drawShadow(g2d);
 
-			} 
+				g2d.rotate(Math.toRadians(-meleeTimer), getMidX(), getMidY());
+			} else {
+				if (direction == Direction.LEFT || direction == Direction.DIAG_UL || direction == Direction.DIAG_DL) {
+					g2d.drawImage(image, x + width, y, -width, height, owner);
+					if (owner.darkenWorld() && !illuminated)
+						g2d.drawImage(shadow, x + width, y, -width, height, owner);
+				} else // ((direction.isDiag() ? (diagBackup != Direction.LEFT)
+						// : (direction != Direction.LEFT)) && direction !=
+						// Direction.UP)
+				{
+					g2d.drawImage(image, x, y, owner);
+					drawShadow(g2d);
+
+				}
 			}
 			if (p != null) {
 				g2d.setColor(Color.black);
@@ -1638,11 +1626,11 @@ if(!player){
 			if (!(this instanceof Diamond))
 				drawTool(g2d);
 
-//			if (direction == Direction.UP) {
-//				g2d.drawImage(image, x, y, owner);
-//				if (owner.darkenWorld())
-//					g2d.drawImage(shadow, x, y, owner);
-//			}
+			// if (direction == Direction.UP) {
+			// g2d.drawImage(image, x, y, owner);
+			// if (owner.darkenWorld())
+			// g2d.drawImage(shadow, x, y, owner);
+			// }
 
 			if (this instanceof Diamond)
 				drawTool(g2d);
@@ -1720,11 +1708,11 @@ if(!player){
 			timersCount();
 		}
 
-//		if (player) {
-//			willTalk = true;
-//			g2d.setColor(Color.magenta);
-//			g2d.draw(getTalkBounds());
-//		}
+		// if (player) {
+		// willTalk = true;
+		// g2d.setColor(Color.magenta);
+		// g2d.draw(getTalkBounds());
+		// }
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -1795,12 +1783,13 @@ if(!player){
 	}
 
 	public Image newImage(String name) {
-if(!name.contains("/")){
-		if (isCharacterSkin(name)){
-			shadow = newShadow(name);}
-		return super.newImage(getPath() + name + ".png");}
-		else{
-		return	super.newImage(name);
+		if (!name.contains("/")) {
+			if (isCharacterSkin(name)) {
+				shadow = newShadow(name);
+			}
+			return super.newImage(getPath() + name + ".png");
+		} else {
+			return super.newImage(name);
 		}
 	}
 
@@ -1823,8 +1812,8 @@ if(!name.contains("/")){
 
 		if (direction != null) {
 			Direction direction = this.direction;
-//			if (direction.isDiag())
-//				direction = diagBackup;
+			// if (direction.isDiag())
+			// direction = diagBackup;
 
 			switch (direction) {
 			case UP:
@@ -1869,27 +1858,27 @@ if(!name.contains("/")){
 	public void takeDamage(int amount, boolean poison) {
 		if (poison)
 			poison();
-		if(amount>0)
-		if (hitstunTimer <= 0) {
-			health -= amount;
-			hpTimer = 100;
-			hitstunTimer = HITSTUN_MAX;
-}
-			if (health <= 0){
-				
-				if(owner.getAliveFriends().size()==0)
-				owner.setState(Board.State.DEAD);
-				else{
-				x=owner.getSpawnLoc().x;
-				y=owner.getSpawnLoc().y;
-				health=(float)0.01;
-					dead=true;
-					image=newImage("n");
-					if(player)
-						owner.setSwitching(true);
-				}
+		if (amount > 0)
+			if (hitstunTimer <= 0) {
+				health -= amount;
+				hpTimer = 100;
+				hitstunTimer = HITSTUN_MAX;
 			}
-		
+		if (health <= 0) {
+
+			if (owner.getAliveFriends().size() == 0)
+				owner.setState(Board.State.DEAD);
+			else {
+				x = owner.getSpawnLoc().x;
+				y = owner.getSpawnLoc().y;
+				health = (float) 0.01;
+				dead = true;
+				image = newImage("n");
+				if (player)
+					owner.setSwitching(true);
+			}
+		}
+
 	}
 
 	public abstract boolean canAct();
@@ -2206,7 +2195,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						meleeDamage+=BmeleeDamage/10*meleeDamage_M;
+						meleeDamage += BmeleeDamage / 10 * meleeDamage_M;
 						myLevel++;
 						melee.setText("Melee: " + meleeDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2220,7 +2209,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						rangedDamage+=BrangedDamage/10*rangedDamage_M;
+						rangedDamage += BrangedDamage / 10 * rangedDamage_M;
 						myLevel++;
 						ranged.setText("Ranged: " + rangedDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2234,7 +2223,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						specialDamage+=BspecialDamage/10*specialDamage_M;
+						specialDamage += BspecialDamage / 10 * specialDamage_M;
 						myLevel++;
 						special.setText("Special: " + specialDamage);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2248,7 +2237,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						HP_MAX += BHP_MAX/10*HP_MAX_M;
+						HP_MAX += BHP_MAX / 10 * HP_MAX_M;
 						myLevel++;
 						mHealth.setText("Health: " + HP_MAX);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2263,7 +2252,7 @@ if(!name.contains("/")){
 				public void actionPerformed(ActionEvent e) {
 
 					if (myLevel < level) {
-						MAX_ENERGY += BMAX_ENERGY/10*MAX_ENERGY_M;
+						MAX_ENERGY += BMAX_ENERGY / 10 * MAX_ENERGY_M;
 						myLevel++;
 						mEn.setText("Energy: " + MAX_ENERGY);
 						levelLabel.setText("Skill Points: " + (level - myLevel) + "  |  " + "Level: " + level + "  |  " + "XP: " + xp + "  |  "
@@ -2338,15 +2327,15 @@ if(!name.contains("/")){
 	}
 
 	public int getMeleeDamage() {
-		return (int)meleeDamage;
+		return (int) meleeDamage;
 	}
 
 	public int getRangedDamage() {
-		return (int)rangedDamage;
+		return (int) rangedDamage;
 	}
 
 	public int getSpecialDamage() {
-		return (int)specialDamage;
+		return (int) specialDamage;
 	}
 
 	public int getStrength() {
@@ -2403,9 +2392,12 @@ if(!name.contains("/")){
 		if (this instanceof Spade)
 			((Spade) this).keyReleased = true;
 	}
-	public boolean isDead(){
+
+	public boolean isDead() {
 		return dead;
 	}
-	public void setDead(boolean setter){
-	dead=setter;}
+
+	public void setDead(boolean setter) {
+		dead = setter;
+	}
 }

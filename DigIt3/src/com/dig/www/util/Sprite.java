@@ -28,6 +28,7 @@ public abstract class Sprite implements Serializable {
 	protected int height;
 	protected boolean visible;
 	protected boolean onScreen = true;
+	protected boolean illuminated = false;
 	protected transient Image image;
 	protected transient Image shadow;
 
@@ -80,6 +81,14 @@ public abstract class Sprite implements Serializable {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	
+	public boolean isIlluminated() {
+		return illuminated;
+	}
+
+	public void setIlluminated(boolean illuminated) {
+		this.illuminated = illuminated;
+	}
 
 	public Image getImage() {
 		return image;
@@ -95,6 +104,11 @@ public abstract class Sprite implements Serializable {
 	
 	public Image getShadow() {
 		return shadow;
+	}
+	
+	public void drawShadow(Graphics2D g2d) {
+		if (owner.darkenWorld() && !illuminated)
+			g2d.drawImage(shadow, x, y, owner);
 	}
 
 	public Rectangle getBounds() {
@@ -136,6 +150,7 @@ public abstract class Sprite implements Serializable {
 	public void basicAnimate() {
 		x += owner.getScrollX();
 		y += owner.getScrollY();
+		illuminated = false;
 	}
 
 	public void initialAnimate(int sX, int sY) {

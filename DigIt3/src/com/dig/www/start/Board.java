@@ -32,46 +32,14 @@ import java.util.Collections;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import com.dig.www.blocks.Block;
 import com.dig.www.blocks.Block.Blocks;
-import com.dig.www.blocks.Door;
-import com.dig.www.blocks.Portal;
-import com.dig.www.blocks.SpecialDoor;
-import com.dig.www.blocks.TexturePack;
-import com.dig.www.character.CharData;
-import com.dig.www.character.Club;
-import com.dig.www.character.Diamond;
-import com.dig.www.character.FProjectile;
-import com.dig.www.character.Field;
-import com.dig.www.character.GameCharacter;
+import com.dig.www.blocks.*;
+import com.dig.www.character.*;
 import com.dig.www.character.GameCharacter.Types;
-import com.dig.www.character.Heart;
-import com.dig.www.character.Inventory;
-import com.dig.www.character.Items;
-import com.dig.www.character.Moves;
-import com.dig.www.character.PathPoint;
-import com.dig.www.character.Spade;
-import com.dig.www.enemies.Boss;
-import com.dig.www.enemies.Enemy;
-import com.dig.www.enemies.Projectile;
-import com.dig.www.npc.Chest;
-import com.dig.www.npc.NPC;
-import com.dig.www.npc.TouchNPC;
-import com.dig.www.objects.CheckPoint;
-import com.dig.www.objects.Collectible;
-import com.dig.www.objects.CollectibleCharacter;
-import com.dig.www.objects.CollectibleObject;
-import com.dig.www.objects.Dispenser;
-import com.dig.www.objects.DropPoint;
-import com.dig.www.objects.MoneyObject;
-import com.dig.www.objects.Objects;
-import com.dig.www.objects.SpecialCollectible;
-import com.dig.www.objects.ThrownObject;
-import com.dig.www.util.Irregular;
-import com.dig.www.util.Preferences;
-import com.dig.www.util.StageBuilder;
-import com.dig.www.util.Statics;
-import com.dig.www.util.Time;
+import com.dig.www.enemies.*;
+import com.dig.www.npc.*;
+import com.dig.www.objects.*;
+import com.dig.www.util.*;
 
 public class Board extends MPanel implements ActionListener {
 
@@ -126,8 +94,8 @@ public class Board extends MPanel implements ActionListener {
 
 	public enum DayNight {
 		DAY, NIGHT, ANY;
-		
-		public DayNight translate(String name) {
+
+		public static DayNight translate(String name) {
 			for (DayNight d : DayNight.values())
 				if (d.name().equalsIgnoreCase(name))
 					return d;
@@ -247,8 +215,6 @@ public class Board extends MPanel implements ActionListener {
 		timer.start();
 		time.start();
 		Collections.sort(friends);
-		
-		time.setTime(7.0f, false);
 	}
 
 	public void changeArea() {
@@ -352,6 +318,9 @@ public class Board extends MPanel implements ActionListener {
 
 		for (Objects n : objects)
 			n.initialAnimate(spawnX, spawnY);
+
+		// TODO lightspot
+		//objects.add(new Lamp(character.getX() - 100, character.getY() - 500, "images/objects/floweryLamp.png", this, 5));
 
 		if (spawnLoc != null) {
 			spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
@@ -497,6 +466,10 @@ public class Board extends MPanel implements ActionListener {
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(obj.getX(), obj.getY())) {
+
+								if (obj instanceof Mirror)
+									((Mirror) obj).drawLight(g2d);
+
 								g2d.drawImage(obj.getShadow(), obj.getX(), obj.getY(), this);
 								break;
 							}
@@ -1348,10 +1321,19 @@ public class Board extends MPanel implements ActionListener {
 				}
 				// end of enemy loop
 
-				if (movingObjects.size() > 0)
-					for (Objects o0 : movingObjects)
-						if (o0.getBounds().intersects(b.getBounds()) && !b.traversable())
-							o0.collideWall();
+				if (movingObjects.size() > 0) {
+
+					Shape s;
+					for (Objects o0 : movingObjects) {
+						s = o0 instanceof Irregular ? ((Irregular) o0).getIrregularBounds() : o0.getBounds();
+						if (s.intersects(b.getBounds())) {
+							if (!b.traversable())
+								o0.collideWall();
+							if (o0 instanceof Light)
+								b.setIlluminated(true);
+						}
+					}
+				}
 			}
 
 		}
@@ -1431,21 +1413,6 @@ public class Board extends MPanel implements ActionListener {
 			if (rB.intersects(character.getBounds()))
 				character.heal(Heart.FIELD_HEAL);
 		}
-		// end
-
-		// Moving objects colliding stuff
-		if (movingObjects.size() > 0)
-			for (Objects o0 : movingObjects) {
-				for (Objects o1 : objects)
-					if (o0.getBounds().intersects(o1.getBounds()) && o1.isWall() && o0 != o1)
-						o0.collideWall();
-				for (NPC n : npcs)
-					if (o0.getBounds().intersects(n.getBounds()))
-						o0.collideWall();
-				for (Portal n : portals)
-					if (o0.getBounds().intersects(n.getBounds()))
-						o0.collideWall();
-			}
 		// end
 
 		Portal p;
@@ -1587,6 +1554,50 @@ public class Board extends MPanel implements ActionListener {
 			}
 		}
 
+		// Moving objects colliding stuff
+				if (movingObjects.size() > 0) {
+					Shape s0;
+					for (Objects o0 : movingObjects) {
+						s0 = o0 instanceof Irregular ? ((Irregular) o0).getIrregularBounds() : o0.getBounds();
+						for (Objects o1 : objects)
+							if (s0.intersects(o1.getBounds()) && o0 != o1) {
+								if (o1.isWall())
+									o0.collideWall();
+								if (o0 instanceof Light)
+									o1.setIlluminated(true);
+							}
+						for (NPC n2 : npcs) {
+							if (s0.intersects(n2.getBounds())) {
+								o0.collideWall();
+								if (o0 instanceof Light)
+									n2.setIlluminated(true);
+							}
+						}
+						for (Portal n2 : portals)
+							if (s0.intersects(n2.getBounds()))
+								o0.collideWall();
+
+						for (GameCharacter f : friends)
+							if (s0.intersects(f.getBounds())) {
+								o0.collideWall();
+								if (o0 instanceof Light)
+									f.setIlluminated(true);
+							}
+						for (Enemy e : enemies)
+							if (s0.intersects(e.getBounds())) {
+								o0.collideWall();
+								if (o0 instanceof Light)
+									e.setIlluminated(true);
+							}
+						
+						if (s0.intersects(character.getBounds())) {
+							o0.collideWall();
+							if (o0 instanceof Light)
+								character.setIlluminated(true);
+						}
+					}
+				}
+				// end
 	}
 
 	@Override
@@ -2126,7 +2137,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	protected void updateRain() {
-		if ((time.getGeneralTime() == Time.DAY && texturePack != TexturePack.HAUNTED) || dN == DayNight.DAY)
+		if ((time.getGeneralTime() == Time.DAY || dN == DayNight.DAY) && dN != DayNight.NIGHT)
 			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
 			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
@@ -2135,7 +2146,15 @@ public class Board extends MPanel implements ActionListener {
 	protected void updateNormal() {
 
 		switch (dN) {
-		case ANY:
+		case DAY:
+			setBackground(getTextureBack());
+			break;
+
+		case NIGHT:
+			setBackground(Statics.darkenColor(getTextureBack()));
+			break;
+
+		default:
 			switch (time.getGeneralTime()) {
 			case Time.DAY:
 				setBackground(getTextureBack());
@@ -2153,14 +2172,6 @@ public class Board extends MPanel implements ActionListener {
 				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
-			break;
-
-		case DAY:
-			setBackground(getTextureBack());
-			break;
-
-		case NIGHT:
-			setBackground(Statics.darkenColor(getTextureBack()));
 			break;
 		}
 	}
@@ -2223,7 +2234,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public boolean lighterDark() {
-		return weather == Weather.RAIN && time.getGeneralTime() == Time.DAY;
+		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY)) && dN != DayNight.NIGHT;
 	}
 
 	public int getSpawnNum() {

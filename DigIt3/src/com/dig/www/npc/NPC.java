@@ -455,8 +455,7 @@ if (iTalk)
 	@Override
 	public void draw(Graphics2D g2d) {
 		g2d.drawImage(image, x, y, owner);
-		if (owner.darkenWorld())
-			g2d.drawImage(shadow, x, y, owner);
+		drawShadow(g2d);
 	}
 
 	public void act(NPCOption option) {
