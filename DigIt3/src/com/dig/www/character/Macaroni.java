@@ -11,7 +11,7 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public class Macaroni extends GameCharacter {
-
+Direction lastDirection;
 	/**
 	 * 
 	 */
@@ -21,13 +21,6 @@ public class Macaroni extends GameCharacter {
 		super(x, y, owner, Types.MACARONI, "macaroni", player, -20, -25, -50, 360, 55, 10, 80, 10, 100, 10, 20, 50, 10, 30, 0, Statics.STRENGTH - 1);
 		// TODO Auto-generated constructor stub
 	}
-
-	
-
-	
-
-	
-
 	@Override
 	public Moves getMove() {
 		// TODO Auto-generated method stub
@@ -37,7 +30,7 @@ public class Macaroni extends GameCharacter {
 		case 2:
 			return Moves.ARROW;
 		case 3:
-			return Moves.PIT;
+			return Moves.BASH;
 		default:
 			return Moves.NONE;
 		}
@@ -51,128 +44,138 @@ public class Macaroni extends GameCharacter {
 		case 2:
 			return null;
 		case 3:
-			return getType().toString();
+			return null;
 		default:
 
 			return null;
 		}
 	}
+
 @Override
 public void animate() {
 	super.animate();
-	if(rangedTimer>=0){
-		image=newImage("s");
+	if(meleeTimer>=0){
+		if(lastDirection==null)
+			lastDirection=getDirection();
 		stop();
-	}else if(meleeTimer>=0){
-		stop();
-		image=newImage("n");
+		image=newImage("spin");
 		direction=Direction.RIGHT;
 //		if(meleeTimer>=TIMER_MELEE-1)
 //		direction=Direction.LEFT;
 //		if(meleeTimer==TIMER_MELEE/2||meleeTimer==TIMER_MELEE/2-1)
 //			direction=Direction.RIGHT;
 		
+	}else{
+		lastDirection=null;
+	if(rangedTimer>=0){
+		image=newImage("s");
+		stop();
+	}
+	else if(specialTimer>=0){
+		stop();
+		image=newImage("s");
+	}
 	}
 };
 	@Override
 	public void drawTool(Graphics2D g2d) {
 
-		int dX = 0;
-		int dY = 0;
-		if(meleeTimer>=0){
-			if(meleeTimer>TIMER_MELEE/2){
-				switch (direction) {
-				case UP:
-					dX = x + 13;
-					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-					break;
-
-				case DOWN:
-					dX = x + 12;
-					dY = y + Statics.BLOCK_HEIGHT - 50;
-					break;
-
-				case RIGHT:
-				case DIAG_UR:
-				case DIAG_DR:
-					dX = x + Statics.BLOCK_HEIGHT - 70;
-					dY = y + 13;
-					break;
-
-				case LEFT:
-				case DIAG_UL:
-				case DIAG_DL:
-					dX = x + 70;
-					dY = y + 12;
-					break;
-				}
-			}
-			else{
-				switch (direction) {
-				case UP:
-					dX = x + 13;
-					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-					break;
-
-				case DOWN:
-					dX = x + 12;
-					dY = y + Statics.BLOCK_HEIGHT - 50;
-					break;
-
-				case RIGHT:
-				case DIAG_UR:
-				case DIAG_DR:
-					dX = x + Statics.BLOCK_HEIGHT - 70;
-					dY = y + 13;
-					break;
-
-				case LEFT:
-				case DIAG_UL:
-				case DIAG_DL:
-					dX = x + 70;
-					dY = y + 12;
-					break;
-				}
-			}
-		}else
-			switch (direction) {
-			case UP:
-				dX = x + 13;
-				dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-				break;
-
-			case DOWN:
-				dX = x + 12;
-				dY = y + Statics.BLOCK_HEIGHT - 50;
-				break;
-
-			case RIGHT:
-			case DIAG_UR:
-			case DIAG_DR:
-				dX = x + Statics.BLOCK_HEIGHT - 70;
-				dY = y + 13;
-				break;
-
-			case LEFT:
-			case DIAG_UL:
-			case DIAG_DL:
-				dX = x + 70;
-				dY = y + 12;
-				break;
-			}
-		if (toMoveString() != null) {
-
-			if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
-				Image anImg = newImage(toMoveString());
-				g2d.drawImage(anImg, dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(newShadow(toMoveString()), dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
-			} else {
-				g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-				if (owner.darkenWorld())
-					g2d.drawImage(newShadow(toMoveString()), dX, dY, owner);
-			}
-		}
+		//int dX = 0;
+		//int dY = 0;
+//		if(meleeTimer>=0){
+//			if(meleeTimer>TIMER_MELEE/2){
+//				switch (direction) {
+//				case UP:
+//					dX = x + 13;
+//					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
+//					break;
+//
+//				case DOWN:
+//					dX = x + 12;
+//					dY = y + Statics.BLOCK_HEIGHT - 50;
+//					break;
+//
+//				case RIGHT:
+//				case DIAG_UR:
+//				case DIAG_DR:
+//					dX = x + Statics.BLOCK_HEIGHT - 70;
+//					dY = y + 13;
+//					break;
+//
+//				case LEFT:
+//				case DIAG_UL:
+//				case DIAG_DL:
+//					dX = x + 70;
+//					dY = y + 12;
+//					break;
+//				}
+//			}
+//			else{
+//				switch (direction) {
+//				case UP:
+//					dX = x + 13;
+//					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
+//					break;
+//
+//				case DOWN:
+//					dX = x + 12;
+//					dY = y + Statics.BLOCK_HEIGHT - 50;
+//					break;
+//
+//				case RIGHT:
+//				case DIAG_UR:
+//				case DIAG_DR:
+//					dX = x + Statics.BLOCK_HEIGHT - 70;
+//					dY = y + 13;
+//					break;
+//
+//				case LEFT:
+//				case DIAG_UL:
+//				case DIAG_DL:
+//					dX = x + 70;
+//					dY = y + 12;
+//					break;
+//				}
+//			}
+//		}else
+//			switch (direction) {
+//			case UP:
+//				dX = x + 13;
+//				dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
+//				break;
+//
+//			case DOWN:
+//				dX = x + 12;
+//				dY = y + Statics.BLOCK_HEIGHT - 50;
+//				break;
+//
+//			case RIGHT:
+//			case DIAG_UR:
+//			case DIAG_DR:
+//				dX = x + Statics.BLOCK_HEIGHT - 70;
+//				dY = y + 13;
+//				break;
+//
+//			case LEFT:
+//			case DIAG_UL:
+//			case DIAG_DL:
+//				dX = x + 70;
+//				dY = y + 12;
+//				break;
+//			}
+//		if (toMoveString() != null) {
+//
+//			if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
+//				Image anImg = newImage(toMoveString());
+//				g2d.drawImage(anImg, dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
+//				if (owner.darkenWorld())
+//					g2d.drawImage(newShadow(toMoveString()), dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
+//			} else {
+//				g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
+//				if (owner.darkenWorld())
+//					g2d.drawImage(newShadow(toMoveString()), dX, dY, owner);
+//			}
+//		}
 
 	}
 
@@ -194,7 +197,7 @@ public void animate() {
 
 	@Override
 	public String getRangedString() {
-		return "arrow.png";
+		return "cheese.png";
 	}
 
 	public Rectangle getActBounds() {
@@ -255,26 +258,9 @@ public void animate() {
 		// TODO Auto-generated method stub
 		
 	}
-
 @Override
-	public Image newImage(String name) {
-	if(!name.contains("/")){
-		if (isCharacterSkin(name)){
-			shadow = newShadow(name);}
-		return super.newImage(getPath() + name + ".gif");}
-		else{
-		return	super.newImage(name);
-		}
-	}
-	@Override
-	public Image newShadow(String name) {
-		return Statics.newImage(getPath()+ name + ".gif");//Temp
-	
-}
-	
-
 	public boolean isCharacterSkin(String name) {
-		String[] playerSkinsM = new String[] { "n", "w0", "w1", "w2", "w3", "g","s" };
+		String[] playerSkinsM = new String[] { "n", "w0", "w1", "w2", "w3", "g","s","spin" };
 		for (String s : playerSkinsM)
 			if (s.equals(name))
 				return true;

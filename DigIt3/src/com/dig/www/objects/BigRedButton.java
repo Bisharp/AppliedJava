@@ -37,7 +37,7 @@ public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		if(!exploded){
 		boolean b = false;
-		boolean macaroniAcc = macaroni.getAccepted()&&macaroni.getPhase()==1;
+		boolean macaroniAcc = macaroni!=null&&macaroni.getAccepted()&&macaroni.getPhase()==1;
 		String[] options;
 		String desc;
 		if (macaroniAcc) {
