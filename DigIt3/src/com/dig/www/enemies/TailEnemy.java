@@ -26,6 +26,8 @@ public class TailEnemy extends ChainEnemy {
 
 		if (!myFollows.isAlive()) {
 			alive = false;
+			for (Enemy e : linkList)
+				e.setAlive(false);
 		}
 
 		basicAnimate();

@@ -5,14 +5,17 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-
 import javax.swing.JOptionPane;
 
 import com.dig.www.npc.NPC;
@@ -63,6 +66,9 @@ public final class Statics {
 	public static final Color SAND_BLUE = new Color(48, 65, 88);
 	public static final Color DARK_SAND_BLUE = new Color(32, 44, 60);
 	public static final Color SAND_RED = new Color(155, 36, 36);
+	
+	// This is for light stuff, still unfinished.
+	public static final Color LIGHT = new Color(255, 255, 255, 50);
 
 	private static HashMap<Color, Color> darkColors = new HashMap<Color, Color>();
 	private static HashMap<Float, HashMap<Color, Color>> sunriseColors = new HashMap<Float, HashMap<Color, Color>>();
@@ -239,4 +245,54 @@ public static String getRandomItem(String folderLoc){
 	public static double dist(int x1, int y1, int x2, int y2) {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
+	
+	public static String getBasedir()
+	{
+		if (basedir != null)
+		{
+			return basedir;
+		}
+
+		// use basedir property if set
+		basedir = System.getProperty("digit3.basedir");
+		if (basedir != null)
+		{
+			if (!basedir.endsWith("/"))
+				basedir = basedir + "/";
+
+			return basedir;
+		}
+
+		URL applicationRootPathURL = DigIt.class.getProtectionDomain().getCodeSource().getLocation();
+		File applicationRootPath = new File(applicationRootPathURL.getPath());
+		if (!applicationRootPath.isDirectory())
+		{ // for deployed jar this will be the jar file. so need to get the
+			// parent
+			// in Eclipse this will be the bin dir
+			applicationRootPath = applicationRootPath.getParentFile();
+		}
+		basedir = applicationRootPath.getAbsolutePath();
+		if (!basedir.endsWith("/"))
+			basedir = basedir + "/";
+		return basedir;
+	}
+
+	public static String readFromJarFile(String filename) throws Exception
+	{
+		InputStream is = filename.getClass().getResourceAsStream(filename);
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		StringBuffer sb = new StringBuffer();
+		String line;
+		while ((line = br.readLine()) != null)
+		{
+			sb.append(line);
+		}
+		br.close();
+		isr.close();
+		is.close();
+		return sb.toString();
+	}
+
+	private static String basedir = null;
 }
