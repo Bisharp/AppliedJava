@@ -1589,15 +1589,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 		if (player)
 			dir = getCurrentDir();
+		
+		if(this instanceof Macaroni)
+		if (toMoveString() != null) {
+			g2d.drawImage(newImage(toMoveString()), x-20, y-20, owner);
+			if (owner.darkenWorld())
+				g2d.drawImage(newShadow(toMoveString()), x-20, y-20, owner);
+		}
 		Point p = setAttacks();
 		if (visible && onScreen) {
-			if (this instanceof Macaroni && meleeTimer > 0) {
-				g2d.rotate(Math.toRadians((meleeTimer)), getMidX(), getMidY());
-				g2d.drawImage(image, x, y, owner);
-				drawShadow(g2d);
-
-				g2d.rotate(Math.toRadians(-meleeTimer), getMidX(), getMidY());
-			} else {
+			
 				if (direction == Direction.LEFT || direction == Direction.DIAG_UL || direction == Direction.DIAG_DL) {
 					g2d.drawImage(image, x + width, y, -width, height, owner);
 					if (owner.darkenWorld() && !illuminated)
@@ -1609,7 +1610,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					g2d.drawImage(image, x, y, owner);
 					drawShadow(g2d);
 
-				}
+				
 			}
 			if (p != null) {
 				g2d.setColor(Color.black);
@@ -1891,11 +1892,15 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public void stop() {
-
+if(!player){
+			x-=deltaX;
+			y-=deltaY;
+		}
 		moveX = false;
 		moveY = false;
 		deltaX = 0;
 		deltaY = 0;
+		
 	}
 
 	protected void timersCount() {

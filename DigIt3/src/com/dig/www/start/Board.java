@@ -35,6 +35,7 @@ import javax.swing.Timer;
 import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.blocks.*;
 import com.dig.www.character.*;
+import com.dig.www.character.Macaroni;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
@@ -196,6 +197,7 @@ public class Board extends MPanel implements ActionListener {
 		friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 - 50, this, false));
 		friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150, Statics.BOARD_HEIGHT / 2 + 50, this, false));
 		friends.add(new Club(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
+		friends.add(new Macaroni(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT / 2 + 150, this, false));
 
 		this.addMouseListener(new PersonalMouse());
 

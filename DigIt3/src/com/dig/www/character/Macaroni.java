@@ -11,26 +11,31 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public class Macaroni extends GameCharacter {
-Direction lastDirection;
+	Direction lastDirection;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	protected boolean keyReleased;
+
 	public Macaroni(int x, int y, Board owner, boolean player) {
-		super(x, y, owner, Types.MACARONI, "macaroni", player, -20, -25, -50, 360, 55, 10, 80, 10, 100, 10, 20, 50, 10, 30, 0, Statics.STRENGTH - 1);
+		super(x, y, owner, Types.MACARONI, "macaroni", player, -20, -25, -50,
+				50, 55, 50, 80, 10, 100, 10, 20, 50, 
+				30, 25, 35,
+				Statics.STRENGTH - 1);
 		// TODO Auto-generated constructor stub
 	}
+
 	@Override
 	public Moves getMove() {
 		// TODO Auto-generated method stub
 		switch (getActing()) {
 		case 1:
-			return Moves.SPADE;
+			return Moves.MAC_M;
 		case 2:
-			return Moves.ARROW;
+			return Moves.MAC_R;
 		case 3:
-			return Moves.BASH;
+			return Moves.MAC_S;
 		default:
 			return Moves.NONE;
 		}
@@ -44,139 +49,49 @@ Direction lastDirection;
 		case 2:
 			return null;
 		case 3:
-			return null;
+			return "splotch";
 		default:
 
 			return null;
 		}
 	}
 
-@Override
-public void animate() {
-	super.animate();
-	if(meleeTimer>=0){
-		if(lastDirection==null)
-			lastDirection=getDirection();
-		stop();
-		image=newImage("spin");
-		direction=Direction.RIGHT;
-//		if(meleeTimer>=TIMER_MELEE-1)
-//		direction=Direction.LEFT;
-//		if(meleeTimer==TIMER_MELEE/2||meleeTimer==TIMER_MELEE/2-1)
-//			direction=Direction.RIGHT;
-		
-	}else{
-		lastDirection=null;
-	if(rangedTimer>=0){
-		image=newImage("s");
-		stop();
-	}
-	else if(specialTimer>=0){
-		stop();
-		image=newImage("s");
-	}
-	}
-};
+	@Override
+	public void animate() {
+		super.animate();
+		if (meleeTimer >= 0) {
+			if (lastDirection == null)
+				lastDirection = getDirection();
+			stop();
+			image = newImage("spin");
+			if (meleeTimer >= TIMER_MELEE * 0.75)
+				direction = Direction.RIGHT;
+			else if (meleeTimer >= TIMER_MELEE * 0.5)
+				direction = Direction.DOWN;
+			else if (meleeTimer >= TIMER_MELEE * 0.25)
+				direction = Direction.LEFT;
+			else
+				direction = Direction.UP;
+
+		} else {
+			lastDirection = null;
+			if (rangedTimer >= 0) {
+				image = newImage("s");
+				stop();
+			} else if (specialTimer >= 0) {
+				stop();
+				image = newImage("s");
+			}
+		}
+	};
+
 	@Override
 	public void drawTool(Graphics2D g2d) {
-
-		//int dX = 0;
-		//int dY = 0;
-//		if(meleeTimer>=0){
-//			if(meleeTimer>TIMER_MELEE/2){
-//				switch (direction) {
-//				case UP:
-//					dX = x + 13;
-//					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-//					break;
-//
-//				case DOWN:
-//					dX = x + 12;
-//					dY = y + Statics.BLOCK_HEIGHT - 50;
-//					break;
-//
-//				case RIGHT:
-//				case DIAG_UR:
-//				case DIAG_DR:
-//					dX = x + Statics.BLOCK_HEIGHT - 70;
-//					dY = y + 13;
-//					break;
-//
-//				case LEFT:
-//				case DIAG_UL:
-//				case DIAG_DL:
-//					dX = x + 70;
-//					dY = y + 12;
-//					break;
-//				}
-//			}
-//			else{
-//				switch (direction) {
-//				case UP:
-//					dX = x + 13;
-//					dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-//					break;
-//
-//				case DOWN:
-//					dX = x + 12;
-//					dY = y + Statics.BLOCK_HEIGHT - 50;
-//					break;
-//
-//				case RIGHT:
-//				case DIAG_UR:
-//				case DIAG_DR:
-//					dX = x + Statics.BLOCK_HEIGHT - 70;
-//					dY = y + 13;
-//					break;
-//
-//				case LEFT:
-//				case DIAG_UL:
-//				case DIAG_DL:
-//					dX = x + 70;
-//					dY = y + 12;
-//					break;
-//				}
-//			}
-//		}else
-//			switch (direction) {
-//			case UP:
-//				dX = x + 13;
-//				dY = y - Statics.BLOCK_HEIGHT + 50 + 13;
-//				break;
-//
-//			case DOWN:
-//				dX = x + 12;
-//				dY = y + Statics.BLOCK_HEIGHT - 50;
-//				break;
-//
-//			case RIGHT:
-//			case DIAG_UR:
-//			case DIAG_DR:
-//				dX = x + Statics.BLOCK_HEIGHT - 70;
-//				dY = y + 13;
-//				break;
-//
-//			case LEFT:
-//			case DIAG_UL:
-//			case DIAG_DL:
-//				dX = x + 70;
-//				dY = y + 12;
-//				break;
-//			}
 //		if (toMoveString() != null) {
-//
-//			if (direction == Direction.LEFT||direction == Direction.DIAG_UL||direction == Direction.DIAG_DL) {
-//				Image anImg = newImage(toMoveString());
-//				g2d.drawImage(anImg, dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
-//				if (owner.darkenWorld())
-//					g2d.drawImage(newShadow(toMoveString()), dX, dY, -anImg.getWidth(owner), anImg.getHeight(owner), owner);
-//			} else {
-//				g2d.drawImage(newImage(toMoveString()), dX, dY, owner);
-//				if (owner.darkenWorld())
-//					g2d.drawImage(newShadow(toMoveString()), dX, dY, owner);
-//			}
+//			g2d.drawImage(newImage(toMoveString()), x, y, owner);
+//			if (owner.darkenWorld())
+//				g2d.drawImage(newShadow(toMoveString()), x, y, owner);
 //		}
-
 	}
 
 	@Override
@@ -194,52 +109,23 @@ public void animate() {
 		return height / 2 - 14;
 	}
 
-
 	@Override
 	public String getRangedString() {
 		return "cheese.png";
 	}
 
+	private static final int RANGE = 20;
+
 	public Rectangle getActBounds() {
-		if (1 == getActing()) {
-			switch (direction) {
-			case UP:
-				return new Rectangle(x + 45, y - 50, 19, 60);
-			case DOWN:
-				return new Rectangle(x + 35, y + Statics.BLOCK_HEIGHT - 10, 19, 60);
-			case RIGHT:
-				return new Rectangle(x + 70, y + 45, 60, 19);
-			case LEFT:
-			default:
-				return new Rectangle(x - 30, y + 45, 60, 19);
-			}
-		} else
-			switch (direction) {
-			case UP:
-				return new Rectangle(x + 47, y - 30, 6, 6);
-			case DOWN:
-				return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
-			case RIGHT:
-				return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-			case LEFT:
-			default:
-				return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
-			}
+		return new Rectangle(x - RANGE, y - RANGE, width + RANGE * 2, height
+				+ RANGE * 2);
 	}
-
-
-
-
 
 	@Override
 	protected void drawCSHUD(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
-
 
 	@Override
 	public boolean canAct() {
@@ -247,20 +133,16 @@ public void animate() {
 		return true;
 	}
 
-
-
-
-
-
-
 	@Override
 	public void getsActor() {
 		// TODO Auto-generated method stub
-		
+
 	}
-@Override
+
+	@Override
 	public boolean isCharacterSkin(String name) {
-		String[] playerSkinsM = new String[] { "n", "w0", "w1", "w2", "w3", "g","s","spin" };
+		String[] playerSkinsM = new String[] { "n", "w0", "w1", "w2", "w3",
+				"g", "s", "spin" };
 		for (String s : playerSkinsM)
 			if (s.equals(name))
 				return true;
