@@ -37,6 +37,7 @@ import com.dig.www.blocks.*;
 import com.dig.www.character.*;
 import com.dig.www.character.Macaroni;
 import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.character.SirCobalt;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
 import com.dig.www.objects.*;
@@ -1845,14 +1846,14 @@ public class Board extends MPanel implements ActionListener {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
 				writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
 				writer.newLine();
-				if (normalPlayer(character.getType()))
+				//if (normalPlayer(character.getType()))
 					writer.write(character.getSave());
 				for (int c = 0; c < friends.size(); c++) {
-					if (normalPlayer(friends.get(c).getType())) {
+					//if (normalPlayer(friends.get(c).getType())) {
 
 						writer.newLine();
 						writer.write(friends.get(c).getSave());
-					}
+					//}
 				}
 				// writer.newLine();
 				// writer.write(character != null ? "" +
@@ -1922,7 +1923,7 @@ public class Board extends MPanel implements ActionListener {
 					}
 				}
 
-				for (int c = 1; c < 5; c++) {
+				for (int c = 1; c < lines.size(); c++) {
 					// int pos=-1;
 					String name = "spade";
 					if (lines.get(c).startsWith("shovel"))
@@ -1933,14 +1934,33 @@ public class Board extends MPanel implements ActionListener {
 						name = "diamond";
 					else if (lines.get(c).startsWith("club"))
 						name = "club";
-
+					else if (lines.get(c).startsWith("sirCobalt"))
+						name = "sirCobalt";
+					else if (lines.get(c).startsWith("wizard"))
+						name = "wizard";
+					else if (lines.get(c).startsWith("macaroni"))
+						name = "macaroni";
 					if (character.getType().toString().equals(name)) {
 						character.load(lines.get(c).substring(name.length() + 1));
-
 					} else {
+						boolean b=false;
 						for (int cA = 0; cA < friends.size(); cA++) {
 							if (friends.get(cA).getType().toString().equals(name)) {
 								friends.get(cA).load(lines.get(c).substring(name.length() + 1));
+							b=true;
+								break;
+							}
+						}
+						if(!b){
+							switch(name){
+							case"sirCobalt":
+								friends.add(new SirCobalt(0, 0, this, false));
+								break;
+							case"wizard":
+								friends.add(new Wizard(0, 0, this, false));
+								break;
+							case"macaroni":
+								friends.add(new Macaroni(0, 0, this, false));
 								break;
 							}
 						}

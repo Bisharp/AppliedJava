@@ -96,8 +96,9 @@ public abstract class Enemy extends Sprite {
 			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
 			drawShadow(g2d, x, y);
 		} else {
-			g2d.drawImage(hitstunRenders() ? image : null, x, y, owner);
-			drawShadow(g2d);
+			if(hitstunRenders()){
+			g2d.drawImage(image, x, y, owner);
+			drawShadow(g2d);}
 		}
 
 		drawStatus(g2d);
