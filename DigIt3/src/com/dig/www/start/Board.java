@@ -96,6 +96,7 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private ArrayList<String>goneFriends=new ArrayList<String>();
 	private static final long serialVersionUID = 1L;
 	ArrayList<GameState> states = new ArrayList<GameState>();
 	IChatServer theServer;
@@ -2218,13 +2219,16 @@ if(currentState!=null)
 							+ GameCharacter.getXP() + "," + spawnNum);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
-					writer.write(character.getSave());
+					writer.write(character.getSave()+",true");
 					for (int c = 0; c < friends.size(); c++) {
 						// if (normalPlayer(friends.get(c).getType())) {
 
 						writer.newLine();
-						writer.write(friends.get(c).getSave());
+						writer.write(friends.get(c).getSave()+",true");
 						// }
+					}
+					for(int c=0;c<goneFriends.size();c++){
+						writer.write(goneFriends.get(c)+",false");
 					}
 					// writer.newLine();
 					// writer.write(character != null ? "" +
@@ -2249,7 +2253,11 @@ if(currentState!=null)
 			}
 		}
 	}
-
+public String withoutFalse(String without){
+	if(without.endsWith(",false"))
+		without.replaceAll(",false", "");
+	return without;
+}
 	public void loadSave() {
 		level = DEFAULT;
 		try {
@@ -2301,6 +2309,9 @@ if(currentState!=null)
 				}
 
 				for (int c = 1; c < lines.size(); c++) {
+					if(lines.get(c).endsWith("false")){
+						goneFriends.add(withoutFalse(lines.get(c)));
+						continue;}
 					// int pos=-1;
 					String name = "spade";
 					if (lines.get(c).startsWith("shovel"))

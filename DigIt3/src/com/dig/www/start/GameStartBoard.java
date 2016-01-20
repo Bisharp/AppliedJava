@@ -145,10 +145,7 @@ private GameStartBoard gameStartBoard=this;
 
 	public void newGame(String s) {
 
-		if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s + ".txt").exists()) {
-			if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
-				return;
-		}
+		
 
 		if (s != null && !s.equals("")) {
 String[] packs = new File(Statics.getBasedir() + "/maps").list();
@@ -156,6 +153,11 @@ String[] packs = new File(Statics.getBasedir() + "/maps").list();
 					Statics.MAIN));
 			if(pack==null)
 				return;
+			
+			if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s + ".txt").exists()) {
+			if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
+				return;
+		}
 			// new
 			// File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 			// .getLocation().getFile()
