@@ -208,7 +208,16 @@ public class Board extends MPanel implements ActionListener {
 
 	private int startPoint = 0;
 	private Time time;
-
+public ArrayList<String>getGoneFriends(){
+	return goneFriends;
+}
+public void heyIaddedAFriendBack(String typeToString){
+	for(int c=0;c<goneFriends.size();c++){
+		if(goneFriends.get(c).equals(typeToString)){
+			goneFriends.remove(c);
+		}
+	}
+}
 	public int getStartPoint() {
 		return startPoint;
 	}
