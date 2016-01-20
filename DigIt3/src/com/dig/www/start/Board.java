@@ -2317,34 +2317,18 @@ if(currentState!=null)
 						name = "wizard";
 					else if (lines.get(c).startsWith("macaroni"))
 						name = "macaroni";
-					if (character.getType().toString().equals(name)) {
+					
+					
+					if (character==null) {
+						character=getACharacter(name);
+						character.setPlayer(true);
 						character.load(lines.get(c)
 								.substring(name.length() + 1));
 					} else {
-						boolean b = false;
-						for (int cA = 0; cA < friends.size(); cA++) {
-							if (friends.get(cA).getType().toString()
-									.equals(name)) {
-								friends.get(cA).load(
+						friends.add(getACharacter(name));
+								friends.get(friends.size()-1).load(
 										lines.get(c).substring(
 												name.length() + 1));
-								b = true;
-								break;
-							}
-						}
-						if (!b) {
-							switch (name) {
-							case "sirCobalt":
-								friends.add(new SirCobalt(0, 0, this, false));
-								break;
-							case "wizard":
-								friends.add(new Wizard(0, 0, this, false));
-								break;
-							case "macaroni":
-								friends.add(new Macaroni(0, 0, this, false));
-								break;
-							}
-						}
 					}
 				}
 				reader.close();
@@ -2402,21 +2386,8 @@ if(currentState!=null)
 						lines.add(line);
 					if (lines.size() > 1) {
 						for (int c = 0; c < lines.size(); c++) {
-							GameCharacter chara = null;
-							switch (lines.get(c)) {
-							case "club":
-								chara = new Club(0, 0, this, false);
-								break;
-							case "heart":
-								chara = new Heart(0, 0, this, false);
-								break;
-							case "shovel":
-								chara = new Spade(0, 0, this, false);
-								break;
-							case "diamond":
-								chara = new Diamond(0, 0, this, false);
-								break;
-							}
+							GameCharacter chara = getACharacter(lines.get(c));
+							
 							if (chara != null) {
 								if (character == null) {
 									character = chara;
@@ -2735,24 +2706,8 @@ if(currentState!=null)
 			try {
 				if (state.getPlayerStates().size() > 0) {
 					for (int c = 0; c < state.getPlayerStates().size(); c++) {
-						GameCharacter chara = null;
-						
-							
-						switch (state.getPlayerStates().get(c)
-								.getTypeToString()) {
-						case "club":
-							chara = new Club(0, 0, this, false);
-							break;
-						case "heart":
-							chara = new Heart(0, 0, this, false);
-							break;
-						case "shovel":
-							chara = new Spade(0, 0, this, false);
-							break;
-						case "diamond":
-							chara = new Diamond(0, 0, this, false);
-							break;
-						}
+						GameCharacter chara = getACharacter(state.getPlayerStates().get(c)
+								.getTypeToString());
 						if (chara != null) {
 							if (character == null&&!state.getPlayerStates().get(c).isPlayer()) {
 								character = chara;
@@ -2794,5 +2749,32 @@ if(currentState!=null)
 	}
 	public ChatClient getClient(){
 		return me;
+	}
+	public GameCharacter getACharacter(String typeString){
+		GameCharacter chara=null;
+		switch (typeString) {
+		case "club":
+			chara = new Club(0, 0, this, false);
+			break;
+		case "heart":
+			chara = new Heart(0, 0, this, false);
+			break;
+		case "shovel":
+			chara = new Spade(0, 0, this, false);
+			break;
+		case "diamond":
+			chara = new Diamond(0, 0, this, false);
+			break;
+		case "sirCobalt":
+			chara=(new SirCobalt(0, 0, this, false));
+			break;
+		case "wizard":
+			chara=(new Wizard(0, 0, this, false));
+			break;
+		case "macaroni":
+			chara=(new Macaroni(0, 0, this, false));
+			break;
+		}
+		return chara;
 	}
 }
