@@ -22,7 +22,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import com.dig.www.character.GameCharacter;
 import com.dig.www.util.Statics;
 
 public class GameStartBoard extends MPanel {
@@ -49,24 +47,31 @@ public class GameStartBoard extends MPanel {
 	// private JButton loadGame;
 
 	// private boolean knobMoved = false;
+	
+	// private MapMakerPanel mapMaker;
 	private GameSavePanel game1;
 	private GameSavePanel game2;
 	private GameSavePanel game3;
 	private GameSavePanel game4;
-	//private GameSavePanel game5;
+	
 	private MultiPlayerPanel multiplayer;
-	// private GameSavePanel game6;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
-	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
-private GameStartBoard gameStartBoard=this;
+	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>',
+			'|' };
+	private GameStartBoard gameStartBoard = this;
+
 	public GameStartBoard(DigIt dM) {
 
 		setLayout(new BorderLayout());
 
-		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/";
+		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource()
+				.getLocation().getFile()
+				+ "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
-		File dir = new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles");
+		File dir = new File(GameStartBoard.class.getProtectionDomain()
+				.getCodeSource().getLocation().getFile()
+				+ "saveFiles");
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -75,22 +80,22 @@ private GameStartBoard gameStartBoard=this;
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
 		buttonPanel.setFocusable(false);
-
+		// mapMaker=new MapMakerPanel(Color.YELLOW?)//this is probably where
+		// MapMaker will go to center the game saves
 		game1 = new GameSavePanel(1, Color.RED);
 		game2 = new GameSavePanel(2, new Color(127, 127, 127));
 		game3 = new GameSavePanel(3, new Color(34, 177, 76));
-		game4 = new GameSavePanel(4, new Color(255,128,255));
-		multiplayer=new MultiPlayerPanel(Color.BLUE);
-		// game6 = new GameSavePanel(6,Color.MAGENTA);
+		game4 = new GameSavePanel(4, new Color(255, 128, 255));
+		multiplayer = new MultiPlayerPanel(Color.BLUE);
+		
+		// buttonPanel.add(mapMaker);
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
 		buttonPanel.add(game4);
-		//buttonPanel.add(game5);
+		
 		buttonPanel.add(multiplayer);
-		// buttonPanel.add(game6);
 		add(buttonPanel, BorderLayout.SOUTH);
-		// setOpaque(false);
 		setBackground(Color.BLACK);
 		setDoubleBuffered(true);
 
@@ -110,7 +115,8 @@ private GameStartBoard gameStartBoard=this;
 
 		if (firstRun) {
 			((Graphics2D) g).setXORMode(Color.white);
-			((Graphics2D) g).drawImage(Statics.ICON.getImage(), -200, -200, this);
+			((Graphics2D) g).drawImage(Statics.ICON.getImage(), -200, -200,
+					this);
 			firstRun = false;
 		}
 
@@ -144,19 +150,21 @@ private GameStartBoard gameStartBoard=this;
 
 	public void newGame(String s) {
 
-		
-
 		if (s != null && !s.equals("")) {
-String[] packs = new File(Statics.getBasedir() + "/maps").list();
-			String pack = ((String) JOptionPane.showInputDialog(this, "Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs,
-					Statics.MAIN));
-			if(pack==null)
+			String[] packs = new File(Statics.getBasedir() + "/maps").list();
+			String pack = ((String) JOptionPane.showInputDialog(this,
+					"Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
+					Statics.ICON, packs, Statics.MAIN));
+			if (pack == null)
 				return;
-			
-			if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s + ".txt").exists()) {
-			if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
-				return;
-		}
+
+			if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s
+					+ ".txt").exists()) {
+				if (JOptionPane
+						.showConfirmDialog(owner,
+								"Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
+					return;
+			}
 			// new
 			// File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 			// .getLocation().getFile()
@@ -168,15 +176,16 @@ String[] packs = new File(Statics.getBasedir() + "/maps").list();
 				if (!f.exists())
 					f.mkdirs();
 
-				BufferedWriter writer = new BufferedWriter(new FileWriter((loc + s + ".txt")));
+				BufferedWriter writer = new BufferedWriter(new FileWriter((loc
+						+ s + ".txt")));
 				writer.write("");
 				writer.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			
+
 			// System.out.println("Save name accepted");
-		
+
 			owner.setUserName(s);
 			owner.setPack(pack);
 			try {
@@ -184,7 +193,8 @@ String[] packs = new File(Statics.getBasedir() + "/maps").list();
 				File saveFile = new File(location + "info.txt");
 
 				if (saveFile.exists()) {
-					BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+					BufferedReader reader = new BufferedReader(new FileReader(
+							saveFile));
 					String line;
 					ArrayList<String> lines = new ArrayList<String>();
 
@@ -228,9 +238,13 @@ String[] packs = new File(Statics.getBasedir() + "/maps").list();
 
 	public void deleteGame(String s) {
 		// TODO deleteGame(String s)
-		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to delete this file?\n(Deleted data cannot be restored.)") == JOptionPane.YES_OPTION) {
-			new File(GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "saveFiles/" + s + "/" + s + ".txt")
-					.delete();
+		if (JOptionPane
+				.showConfirmDialog(
+						owner,
+						"Are you sure you want to delete this file?\n(Deleted data cannot be restored.)") == JOptionPane.YES_OPTION) {
+			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
+					.getLocation().getFile()
+					+ "saveFiles/" + s + "/" + s + ".txt").delete();
 
 			switch (s.charAt(s.length() - 1)) {
 			case '1':
@@ -254,128 +268,130 @@ String[] packs = new File(Statics.getBasedir() + "/maps").list();
 
 		load(file);
 	}
-public class MultiPlayerPanel extends JPanel{
-	private Color color;
-	private JButton join;
-	private JButton getIP;
-	public MultiPlayerPanel(Color color){
-		this.color = color;
 
-		this.setPreferredSize(new Dimension(200, 150));
-		this.setBackground(color);
-		this.setLayout(new BorderLayout());
-		this.setFocusable(false);
-		
-		join = new JButton("Join Game");
-		getIP = new JButton("Get Host Code");
+	public class MultiPlayerPanel extends JPanel {
+		private Color color;
+		private JButton join;
+		private JButton getIP;
 
-		join.setFocusable(false);
-		getIP.setFocusable(false);
+		public MultiPlayerPanel(Color color) {
+			this.color = color;
 
-		join.addActionListener(new ActionListener() {
+			this.setPreferredSize(new Dimension(200, 150));
+			this.setBackground(color);
+			this.setLayout(new BorderLayout());
+			this.setFocusable(false);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				owner.newMPGame();
-			}
-		});
-		getIP.addActionListener(new ActionListener() {
+			join = new JButton("Join Game");
+			getIP = new JButton("Get Host Code");
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-			new IPView();
-			}
-		});
-		
-		
-		
-		
-		
-		JLabel label = new JLabel("Multiplayer", SwingConstants.CENTER);
-		label.setPreferredSize(new Dimension(200, 20));
-		label.setFocusable(false);
-		this.add(label, BorderLayout.NORTH);
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBackground(color);
-		buttonPanel.add(join);
-		buttonPanel.add(getIP);
-		buttonPanel.setFocusable(false);
-		this.add(buttonPanel, BorderLayout.CENTER);
-	}
-	public class IPView extends JFrame{
-		public IPView(){
-			setSize(500, 100);
-			setAlwaysOnTop(true);
-			setResizable(false);
-			setFocusable(true);
-			setLocation(Statics.BOARD_WIDTH/2-250, Statics.BOARD_HEIGHT/2-100);
-			this.addWindowListener(new WindowListener() {
-				
+			join.setFocusable(false);
+			getIP.setFocusable(false);
+
+			join.addActionListener(new ActionListener() {
+
 				@Override
-				public void windowOpened(WindowEvent arg0) {
+				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void windowIconified(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void windowDeiconified(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void windowDeactivated(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void windowClosing(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					gameStartBoard.requestFocus();
-				}
-				
-				@Override
-				public void windowClosed(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void windowActivated(WindowEvent arg0) {
-					// TODO Auto-generated method stub
-					
+					owner.newMPGame();
 				}
 			});
-			this.setLayout(new
-	              BorderLayout());
-			
-			this.add(new JLabel("Your Host Code is below. You can copy it to your clipboard.", SwingConstants.CENTER),BorderLayout.NORTH);
-		String s="Could not get Host Code.";
-			try {
-		s=InetAddress
-			.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			getIP.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					new IPView();
+				}
+			});
+
+			JLabel label = new JLabel("Multiplayer", SwingConstants.CENTER);
+			label.setPreferredSize(new Dimension(200, 20));
+			label.setFocusable(false);
+			this.add(label, BorderLayout.NORTH);
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBackground(color);
+			buttonPanel.add(join);
+			buttonPanel.add(getIP);
+			buttonPanel.setFocusable(false);
+			this.add(buttonPanel, BorderLayout.CENTER);
 		}
-		JTextField tf=new JTextField(s, 1);
-		
-		//tf.setFocusable(false);
-		tf.setEditable(false);
-		this.add(tf,BorderLayout.SOUTH);
-		setVisible(true);
+
+		public class IPView extends JFrame {
+			public IPView() {
+				setSize(500, 100);
+				setAlwaysOnTop(true);
+				setResizable(false);
+				setFocusable(true);
+				setLocation(Statics.BOARD_WIDTH / 2 - 250,
+						Statics.BOARD_HEIGHT / 2 - 100);
+				this.addWindowListener(new WindowListener() {
+
+					@Override
+					public void windowOpened(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowIconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeiconified(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowDeactivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowClosing(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+						gameStartBoard.requestFocus();
+					}
+
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void windowActivated(WindowEvent arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+				this.setLayout(new BorderLayout());
+
+				this.add(
+						new JLabel(
+								"Your Host Code is below. You can copy it to your clipboard.",
+								SwingConstants.CENTER), BorderLayout.NORTH);
+				String s = "Could not get Host Code.";
+				try {
+					s = InetAddress.getLocalHost().getHostAddress();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				JTextField tf = new JTextField(s, 1);
+
+				// tf.setFocusable(false);
+				tf.setEditable(false);
+				this.add(tf, BorderLayout.SOUTH);
+				setVisible(true);
+			}
 		}
 	}
-}
+
 	public class GameSavePanel extends JPanel {
 		/**
 		 * 
@@ -438,7 +454,8 @@ public class MultiPlayerPanel extends JPanel{
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
 			buttonPanel.setFocusable(false);
-			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/" + fileS() + ".txt")).exists()) {
+			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/"
+					+ fileS() + ".txt")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}
@@ -456,7 +473,8 @@ public class MultiPlayerPanel extends JPanel{
 			buttonPanel.setBackground(color);
 			buttonPanel.add(create);
 			buttonPanel.setFocusable(false);
-			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/" + fileS() + ".txt")).exists()) {
+			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/"
+					+ fileS() + ".txt")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}
