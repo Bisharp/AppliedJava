@@ -2,6 +2,7 @@ package com.dig.www.npc;
 
 import java.awt.Rectangle;
 
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.start.Board;
 
 public class SirCobalt extends BlockerNPC {
@@ -37,6 +38,7 @@ public class SirCobalt extends BlockerNPC {
 		if (willJoin && !iTalk) {
 			isWall = false;
 			owner.getFriends().add(new com.dig.www.character.SirCobalt(x, y, owner, false));
+		owner.heyIaddedAFriendBack(Types.SIR_COBALT.toString());
 		}
 	}
 

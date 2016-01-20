@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
 import com.dig.www.character.Macaroni;
+import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.start.Board;
 import com.dig.www.util.Quest;
 
@@ -145,6 +146,7 @@ private boolean exitingA;
 		}else if(option.question().equals("Will you join us now?")){
 			isWall=false;
 			owner.getFriends().add(new Macaroni(x, y, owner, false));
+			owner.heyIaddedAFriendBack(Types.MACARONI.toString());
 		exitingA=true;
 		exiting=true;
 		}
