@@ -187,7 +187,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public boolean hasSpecialed() {
 		return specialHit;
 	}
-
+public boolean isPlayer(){
+	return player;
+}
 	public enum Types {
 
 		CLUB {
@@ -367,7 +369,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	protected float health = HP_MAX;
 	protected Hashtable<Direction, Boolean> collisionFlags;
-
 	// TODO strength stuff
 	protected int strength;
 	// private int strengthIncrementer = 0;
@@ -421,6 +422,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	@Override
 	public void animate() {
+		if(!(this==owner.getCharacter()||(owner.getClient()==null&&!player))){
+			basicAnimate();
+			onScreen = getBounds().intersects(owner.getScreen());
+		}else{
 		if (dead) {
 			basicAnimate();
 			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
@@ -866,38 +871,60 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 							// if (moveL ? collisionFlags.get(Direction.LEFT) :
 							// collisionFlags.get(Direction.RIGHT))
 							if (moveL) {
+								if(deltaX<0)
+									deltaX+=2;
 								deltaX++;
 								if (deltaX > SPEED)
 									deltaX = SPEED;
 							} else {
+								if(deltaX>0)
+									deltaX-=2;
 								deltaX--;
 								if (deltaX < -SPEED)
 									deltaX = -SPEED;
 							}
-						} else {
-							if (deltaX > 0)
-								deltaX--;
-							else if (deltaX < 0)
-								deltaX++;
+						}
+						else {
+							if (deltaX > 0){
+								deltaX-=3;
+							if(deltaX<0)
+								deltaX=0;
+							}
+							if (deltaX < 0){
+								deltaX+=3;
+							if(deltaX>0)
+								deltaX=0;
+							}
 						}
 
 						if (moveY) {
 							// if (moveU ? collisionFlags.get(Direction.UP) :
 							// collisionFlags.get(Direction.DOWN))
 							if (!moveU) {
+								if(deltaY>0)
+									deltaY-=2;
 								deltaY--;
 								if (deltaY < -SPEED)
 									deltaY = -SPEED;
 							} else {
+								if(deltaY<0)
+								deltaY+=2;
 								deltaY++;
 								if (deltaY > SPEED)
 									deltaY = SPEED;
 							}
-						} else {
-							if (deltaY > 0)
-								deltaY--;
-							else if (deltaY < 0)
-								deltaY++;
+						}
+							else {
+								if (deltaY > 0){
+									deltaY-=3;
+								if(deltaY<0)
+									deltaY=0;
+								}
+								if (deltaY < 0){
+									deltaY+=3;
+								if(deltaY>0)
+									deltaY=0;
+								}
 						}
 
 						owner.setScrollX(deltaX);
@@ -1008,7 +1035,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 		
 		illuminated = false;
-	}
+	}}
 
 	public void setWaiting(boolean setter) {
 		waiting = setter;
@@ -1241,7 +1268,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					direction = Direction.DOWN;
 
 			diagBackup = Direction.NONE;
-			deltaX = 0;
+			//deltaX = 0;
 			moveX = false;
 		}
 
@@ -1262,7 +1289,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 
 			diagBackup = Direction.NONE;
-			deltaY = 0;
+			//deltaY = 0;
 			moveY = false;
 		}
 
@@ -1651,7 +1678,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			g2d.drawImage(Statics.newImage("images/characters/" + (charName != null ? charName : "spade") + "/icon.png"), xI, yI, owner);
 		}
 
-		if (player) {
+		if (owner.getCharacter()==this) {
 			g2d.setColor(Color.BLACK);
 			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
 			// if (normWidth < (int) Math.ceil((double) 75//HP_MAX
@@ -2404,5 +2431,8 @@ if(!player){
 
 	public void setDead(boolean setter) {
 		dead = setter;
+	}
+	public void setDirection(Direction setter){
+		direction=setter;
 	}
 }

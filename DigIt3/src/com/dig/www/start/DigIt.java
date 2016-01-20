@@ -64,14 +64,24 @@ private String level=Board.DEFAULT;
 
 		getContentPane().add(BorderLayout.CENTER, activePanel);
 	}
-
 	public void newGame() {
 		newBoard();
 		if (activePanel instanceof Board) {
 			((Board) activePanel).newGame(level);
 		}
+	}public void newMPBoard() {
+		soundPlayer.stopMusic();
+		nullBoards();
+		activePanel = null;
+		activePanel = new Board(this);
+		getContentPane().add(BorderLayout.CENTER, activePanel);
 	}
-
+	public void newMPGame() {
+		newMPBoard();
+//		if (activePanel instanceof Board) {
+//			((Board) activePanel).newGame(level);
+//		}
+	}
 	public void loadSave() {
 		newBoard();
 		if (activePanel instanceof Board) {

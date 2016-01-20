@@ -11,17 +11,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.dig.www.character.GameCharacter;
@@ -45,13 +52,14 @@ public class GameStartBoard extends MPanel {
 	private GameSavePanel game1;
 	private GameSavePanel game2;
 	private GameSavePanel game3;
-	private GameSavePanel game4;
-	private GameSavePanel game5;
+	//private GameSavePanel game4;
+	//private GameSavePanel game5;
+	private MultiPlayerPanel multiplayer;
 	// private GameSavePanel game6;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
 	private char[] invalidChars = { '\\', '/', '?', '*', ':', '"', '<', '>', '|' };
-
+private GameStartBoard gameStartBoard=this;
 	public GameStartBoard(DigIt dM) {
 
 		setLayout(new BorderLayout());
@@ -71,14 +79,16 @@ public class GameStartBoard extends MPanel {
 		game1 = new GameSavePanel(1, Color.RED);
 		game2 = new GameSavePanel(2, Color.BLUE);
 		game3 = new GameSavePanel(3, Color.YELLOW);
-		game4 = new GameSavePanel(4, Color.GREEN);
-		game5 = new GameSavePanel(5, Color.CYAN);
+		//game4 = new GameSavePanel(4, Color.GREEN);
+		//game5 = new GameSavePanel(5, Color.CYAN);
+		multiplayer=new MultiPlayerPanel(Color.GREEN);
 		// game6 = new GameSavePanel(6,Color.MAGENTA);
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
-		buttonPanel.add(game4);
-		buttonPanel.add(game5);
+		//buttonPanel.add(game4);
+		//buttonPanel.add(game5);
+		buttonPanel.add(multiplayer);
 		// buttonPanel.add(game6);
 		add(buttonPanel, BorderLayout.SOUTH);
 		// setOpaque(false);
@@ -141,7 +151,11 @@ public class GameStartBoard extends MPanel {
 		}
 
 		if (s != null && !s.equals("")) {
-
+String[] packs = new File(Statics.getBasedir() + "/maps").list();
+			String pack = ((String) JOptionPane.showInputDialog(this, "Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs,
+					Statics.MAIN));
+			if(pack==null)
+				return;
 			// new
 			// File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 			// .getLocation().getFile()
@@ -159,10 +173,9 @@ public class GameStartBoard extends MPanel {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			String[] packs = new File(Statics.getBasedir() + "/maps").list();
-			String pack = ((String) JOptionPane.showInputDialog(this, "Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, packs,
-					Statics.MAIN));
+			
 			// System.out.println("Save name accepted");
+		
 			owner.setUserName(s);
 			owner.setPack(pack);
 			try {
@@ -240,7 +253,128 @@ public class GameStartBoard extends MPanel {
 
 		load(file);
 	}
+public class MultiPlayerPanel extends JPanel{
+	private Color color;
+	private JButton join;
+	private JButton getIP;
+	public MultiPlayerPanel(Color color){
+		this.color = color;
 
+		this.setPreferredSize(new Dimension(200, 150));
+		this.setBackground(color);
+		this.setLayout(new BorderLayout());
+		this.setFocusable(false);
+		
+		join = new JButton("Join Game");
+		getIP = new JButton("Get Host Code");
+
+		join.setFocusable(false);
+		getIP.setFocusable(false);
+
+		join.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				owner.newMPGame();
+			}
+		});
+		getIP.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			new IPView();
+			}
+		});
+		
+		
+		
+		
+		
+		JLabel label = new JLabel("Multiplayer", SwingConstants.CENTER);
+		label.setPreferredSize(new Dimension(200, 20));
+		label.setFocusable(false);
+		this.add(label, BorderLayout.NORTH);
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(color);
+		buttonPanel.add(join);
+		buttonPanel.add(getIP);
+		buttonPanel.setFocusable(false);
+		this.add(buttonPanel, BorderLayout.CENTER);
+	}
+	public class IPView extends JFrame{
+		public IPView(){
+			setSize(500, 100);
+			setAlwaysOnTop(true);
+			setResizable(false);
+			setFocusable(true);
+			setLocation(Statics.BOARD_WIDTH/2-250, Statics.BOARD_HEIGHT/2-100);
+			this.addWindowListener(new WindowListener() {
+				
+				@Override
+				public void windowOpened(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowIconified(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowDeiconified(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowDeactivated(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowClosing(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					gameStartBoard.requestFocus();
+				}
+				
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void windowActivated(WindowEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			this.setLayout(new
+	              BorderLayout());
+			
+			this.add(new JLabel("Your Host Code is below. You can copy it to your clipboard.", SwingConstants.CENTER),BorderLayout.NORTH);
+		String s="Could not get Host Code.";
+			try {
+		s=InetAddress
+			.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JTextField tf=new JTextField(s, 1);
+		
+		//tf.setFocusable(false);
+		tf.setEditable(false);
+		this.add(tf,BorderLayout.SOUTH);
+		setVisible(true);
+		}
+	}
+}
 	public class GameSavePanel extends JPanel {
 		/**
 		 * 
