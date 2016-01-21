@@ -287,7 +287,7 @@ public void heyIaddedAFriendBack(String typeToString){
 		try {
 
 			me = new ChatClient(this, JOptionPane.showInputDialog(
-					"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.", InetAddress
+					"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.", InetAddress
 							.getLocalHost().getHostAddress()), mpName);
 		} catch (HeadlessException | RemoteException | AlreadyBoundException
 				| NotBoundException e) {
@@ -1271,6 +1271,9 @@ if(currentState!=null)
 			repaint();
 			break;
 		case DOOROPEN:
+			if(me!=null){
+				state=State.INGAME;
+				break;}
 			if (doorStateTimer <= 0) {
 
 				timer.stop();
@@ -1286,7 +1289,11 @@ if(currentState!=null)
 		default:
 			break;
 		}
+//		character.setMpName(null);
+//			for(int c=0;c<friends.size();c++)
+//				friends.get(c).setMpName(null);
 		if (server != null) {
+			
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
@@ -1298,6 +1305,7 @@ if(currentState!=null)
 								friend.setPlayer(true);
 								friend.setDirection(playerState.getDir());
 								friend.setImage(friend.newImage(playerState.getS()));
+								friend.setMpName(playerState.getMpName());
 							}
 						}
 					}
@@ -1308,6 +1316,7 @@ if(currentState!=null)
 							for(GameCharacter chara:friends){
 								if(chara.getType().charName().equals(realState.getFrom())){
 									chara.setPlayer(false);
+									chara.setMpName(null);
 								}
 							}
 							break;
@@ -1322,23 +1331,30 @@ if(currentState!=null)
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
 								character.getDirection(), "n", true, character
-										.getType().toString()));
+										.getType().toString(),mpName));
 				for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), 0, character
 											.getDirection(), "n", character.isPlayer(),
-									character.getType().toString()));}
+									character.getType().toString(),character.getMpName()));}
 				server.broadcast(mpName, currentState);
-				currentState.clear();
+				currentState.clear(level);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else if (me != null) {
+		} else if (me != null&&character!=null) {
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
+					if(states.get(s).isServer())
+						if(!states.get(s).getLevel().equals(level)){
+							level=states.get(s).getLevel();
+							changeArea();
+						}
+							
+					
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
 						for(GameCharacter friend:friends){
 							if(friend.getType().toString().equals(playerState.getTypeToString())){
@@ -1347,6 +1363,7 @@ if(currentState!=null)
 								friend.setPlayer(playerState.isPlayer());
 								friend.setDirection(playerState.getDir());
 								friend.setImage(friend.newImage(playerState.getS()));
+								friend.setMpName(playerState.getMpName());
 							}
 						}
 					}
@@ -1372,9 +1389,9 @@ if(currentState!=null)
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
 								character.getDirection(), "n", true, character
-										.getType().toString()));
+										.getType().toString(),mpName));
 				theServer.broadcast(mpName, currentState);
-				currentState.clear();
+				currentState.clear(level);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();
@@ -1382,7 +1399,8 @@ if(currentState!=null)
 						"Lost connection to server. Leaving game.");
 				System.exit(0);
 			}
-		}
+		}else
+			states.clear();
 		// if(server!=null||me!=null)
 		// currentState=new GameState(mode, level);
 	}
@@ -1962,7 +1980,7 @@ if(currentState!=null)
 		if (key == KeyEvent.VK_M) {
 			System.out.println("server");
 			server = new ChatServer(this);
-			currentState = new GameState(mode, level);
+			currentState = new GameState(mode, level,true);
 		} else if (key == KeyEvent.VK_T) {
 			if (me != null && theServer != null) {
 				currentState.addTalk(JOptionPane.showInputDialog("Hi"));
@@ -1985,7 +2003,7 @@ if(currentState!=null)
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
-			if (state != State.DEAD)
+			if (state != State.DEAD&&state!=State.LOADING)
 				setState(State.PAUSED);
 			if (me != null && theServer != null)
 				try {
@@ -2718,10 +2736,10 @@ public String withoutFalse(String without){
 	}
 
 	public void getTold(GameState state) {
-		if (mode == null) {
+		if (state.isServer()&&mode == null) {
 			mode = state.getPack();
 			level = state.getLevel();
-			currentState = new GameState(mode, level);
+			currentState = new GameState(mode, level,false);
 			// timer=new Timer(delay, listener)
 			try {
 				if (state.getPlayerStates().size() > 0) {
@@ -2747,8 +2765,13 @@ public String withoutFalse(String without){
 				setState(State.INGAME);
 				timer.start();
 				timer.start();
+			}else{
+				mode = state.getPack();
+				level = state.getLevel();
+				currentState = null;
+				friends.clear();
 			}
-		} else
+		} else if(mode!=null)
 			states.add(state);
 
 		if (state.getTalks().size() > 0)
@@ -2796,5 +2819,8 @@ public String withoutFalse(String without){
 			break;
 		}
 		return chara;
+	}
+	public GameState getCurrentState(){
+		return currentState;
 	}
 }

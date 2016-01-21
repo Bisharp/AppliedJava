@@ -43,6 +43,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	protected String nameDraw;
 	protected GameCharacter healing;
 	protected boolean dead;
 	protected Enemy enPoint;
@@ -2116,6 +2117,8 @@ if(!player){
 		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
+		if(nameDraw!=null)
+		g2d.drawString(nameDraw, x, y-25);
 
 	}
 
@@ -2434,5 +2437,11 @@ if(!player){
 	}
 	public void setDirection(Direction setter){
 		direction=setter;
+	}
+	public void setMpName(String setter){
+		nameDraw=setter;
+	}
+	public String getMpName(){
+		return nameDraw;
 	}
 }

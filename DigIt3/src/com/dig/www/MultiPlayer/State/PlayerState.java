@@ -10,13 +10,15 @@ protected Direction dir;
 protected String s;
 protected boolean isPlayer;
 protected String typeToString;
-	public PlayerState(int x, int y,int attackNum,Direction dir,String s,boolean isPlayer,String typeToString) {
+protected String mpName;
+	public PlayerState(int x, int y,int attackNum,Direction dir,String s,boolean isPlayer,String typeToString,String mpName) {
 		super(x, y);
 		this.s=s;
 		this.dir=dir;
 		this.isPlayer=isPlayer;
 		this.attackNum=attackNum;
 		this.typeToString=typeToString;
+		this.mpName=mpName;
 	}
 public int getAttackNum(){
 	return attackNum;
@@ -33,5 +35,8 @@ public Direction getDir() {
 }
 public String getS() {
 	return s;
+}
+public String getMpName() {
+	return mpName;
 }
 }
