@@ -151,7 +151,7 @@ public class GameStartBoard extends MPanel {
 	public void newGame(String s) {
 
 		if (s != null && !s.equals("")) {
-			String[] packs = new File(Statics.getBasedir() + "/maps").list();
+			String[] packs = Statics.listFolder(Statics.getBasedir() + "/maps");
 			String pack = ((String) JOptionPane.showInputDialog(this,
 					"Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
 					Statics.ICON, packs, Statics.MAIN));
