@@ -1,1 +1,0 @@
-Walking,300,2150,images/enemies/unique/tv.png,f,6

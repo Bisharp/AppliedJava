@@ -1,4 +1,0 @@
-400,2000,kepler
-700,2000,wizard
-550,1900,sirCobalt,t
-2100,1800,shopkeep

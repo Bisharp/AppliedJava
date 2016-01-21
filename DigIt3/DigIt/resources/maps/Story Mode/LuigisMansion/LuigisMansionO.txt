@@ -1,4 +1,0 @@
-500,5000,images/objects/collectibles/special.png,n,-1
-500,5300,images/objects/collectibles/special.png,n,-1
-2500,6000,hi,n,-5
-2000,6200,images/objects/collectibles/special.png,n,-3

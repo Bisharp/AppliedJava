@@ -1,5 +1,0 @@
-Tracking,500,800,images/enemies/unique/ghost.png,t,100
-Look Chase,1200,450,images/enemies/unique/invGhost.png,t,100
-Path,1100,1600,images/enemies/unique/car1Right.png,f,80,0'0'0'-1'1'0'0'-1'0'-1'-1'0'0'-1'-1'0'0'-1'0'1'-1'0'0'1'0'1'1'0'0'1'1'0'0'1,B
-Path,1400,1900,images/enemies/unique/car1Right.png,f,80,0'0'1'0'0'-1'1'0'1'0'1'0'0'1'1'0'0'1'1'0'0'1'1'0'1'0'0'1'0'1'0'1'0'1'0'-1'-1'0'0'-1'-1'0'0'-1'-1'0'-1'0'0'-1'-1'0'0'-1'-1'0'-1'0'0'-1'-1'0,B
-Standing,2100,2500,images/enemies/unique/jello-O.png,f,-10

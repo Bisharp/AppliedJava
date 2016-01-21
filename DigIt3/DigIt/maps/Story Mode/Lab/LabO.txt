@@ -1,9 +1,0 @@
-1485,635,images/objects/table/,true,-2
-1485,985,images/objects/table/,true,-2
-1485,385,images/objects/table/,true,-2
-1085,385,images/objects/table/,true,-2
-785,385,images/objects/table/,true,-2
-385,385,images/objects/table/,true,-2
-335,735,images/objects/table/,true,-2
-1350,1850,images/objects/PTree0.png,true,0
-1200,1200,images/dummy.png,n,-3

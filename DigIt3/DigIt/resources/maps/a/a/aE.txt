@@ -1,3 +1,0 @@
-PatrolChase,400,700,images/enemies/unique/blob.png,false,100,1'0'1'0'0'-1'1'0,B
-Path Security,400,400,images/enemies/unique/security.png,false,100,images/enemies/unique/cop.png,1'0'0'-1'1'0'1'0'1'0'1'0'0'-1,B
-Path,200,1000,images/enemies/unique/fishbowl.png,false,100,0'-1'0'-1'0'-1'0'-1'0'-1'0'-1'0'-1'1'0'0'1'0'1'1'0'1'0'1'0'0'-1'1'0'1'0'0'1'0'1'0'1'-1'0'0'1'-1'0'-1'0'-1'0'0'1'0'1'-1'0'-1'0,L
