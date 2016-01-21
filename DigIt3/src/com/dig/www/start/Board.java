@@ -1252,8 +1252,8 @@ if(currentState!=null)
 								&& !friends.get(c2).getWallBound()) {
 
 							if (friends.get(c).getBounds()
-									.intersects(friends.get(c2).getBounds())) {
-								friends.get(c).collision(friends.get(c2), !friends.get(c2).isPlayer());
+									.intersects(friends.get(c2).getBounds())&&!friends.get(c2).isPlayer()) {
+								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
 					}
