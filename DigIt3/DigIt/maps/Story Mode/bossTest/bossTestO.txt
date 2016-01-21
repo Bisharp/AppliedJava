@@ -1,0 +1,4 @@
+1300,2800,images/dummy.png,false,-3
+1200,600,images/objects/Wood.png,true,-4
+1300,600,images/objects/Wood.png,true,-4
+1400,600,images/objects/Wood.png,true,-4

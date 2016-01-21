@@ -1,0 +1,1 @@
+java -jar resources/DigIt.jar
