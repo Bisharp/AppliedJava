@@ -64,6 +64,8 @@ import com.dig.www.character.Items;
 import com.dig.www.character.Macaroni;
 import com.dig.www.character.Moves;
 import com.dig.www.character.PathPoint;
+import com.dig.www.character.Puddle;
+import com.dig.www.character.Shield;
 import com.dig.www.character.SirCobalt;
 import com.dig.www.character.Spade;
 import com.dig.www.character.Wizard;
@@ -1168,48 +1170,51 @@ if(currentState!=null)
 				spawnLoc.y += scrollY;
 			}
 			for (int i = 0; i < fP.size(); i++) {
-				if (!fP.get(i).isOnScreen()) {
-
-					if (fP.get(i).getMove() == Moves.CHAIN) {
-						if (fP.get(i).getCharNum() == -2) {
-							fP.add(new FProjectile(fP.get(i).getD() - 180, fP
-									.get(i).getX(), fP.get(i).getY(), fP.get(i)
-									.getSpeed(), fP.get(i).getMaker(), fP
-									.get(i).getLoc(), fP.get(i).getOwner(),
-									Moves.CHAIN, -1, false));
-							fP.remove(i);
-						} else {
-							fP.get(i).setCharNum(-1);
-							fP.get(i).basicAnimate();
-						}
-					} else {
-						fP.remove(i);
-						i--;
-						continue;
-					}
-
-				} else if (fP.get(i).getCharNum() != -2) {
-					GameCharacter chara;
-					int charNum = fP.get(i).getCharNum();
-					if (charNum == -1) {
-						chara = character;
-					} else {
-						chara = friends.get(charNum);
-
-					}
-					if (fP.get(i)
-							.getBounds()
-							.contains(
-									new Point(chara.getMidX(), chara.getMidY()))) {
-						fP.remove(i);
-						i--;
-						continue;
-					}
-				}
-
-				fP.get(i).animate();
-				fP.get(i).setOnScreen(
-						fP.get(i).getBounds().intersects(getScreen()));
+				if (fP.get(i).isDead()) {
+fP.remove(i);
+i--;
+continue;}
+		fP.get(i).animate();
+//					if (fP.get(i).getMove() == Moves.CHAIN) {
+//						if (fP.get(i).getCharNum() == -2) {
+//							fP.add(new FProjectile(fP.get(i).getD() - 180, fP
+//									.get(i).getX(), fP.get(i).getY(), fP.get(i)
+//									.getSpeed(), fP.get(i).getMaker(), fP
+//									.get(i).getLoc(), fP.get(i).getOwner(),
+//									Moves.CHAIN, -1, false));
+//							fP.remove(i);
+//						} else {
+//							fP.get(i).setCharNum(-1);
+//							fP.get(i).basicAnimate();
+//						}
+//					} else {
+//						fP.remove(i);
+//						i--;
+//						continue;
+//					}
+//
+//				} else if (fP.get(i).getCharNum() != -2) {
+//					GameCharacter chara;
+//					int charNum = fP.get(i).getCharNum();
+//					if (charNum == -1) {
+//						chara = character;
+//					} else {
+//						chara = friends.get(charNum);
+//
+//					}
+//					if (fP.get(i)
+//							.getBounds()
+//							.contains(
+//									new Point(chara.getMidX(), chara.getMidY()))) {
+//						fP.remove(i);
+//						i--;
+//						continue;
+//					}
+//				}
+//
+//				fP.get(i).animate();
+//				fP.get(i).setOnScreen(
+//						fP.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -1623,12 +1628,15 @@ if(currentState!=null)
 
 							if (o.intersects(e.getBounds())
 									&& character.isOnScreen()
-									&& character.getHarming()) {
-								if (!(e instanceof Projectile)
-										|| (character instanceof Field)) {
+									//&& character.getHarming()
+									) {
+								if ((!(e instanceof Projectile)
+										|| (character instanceof Field))&&(!(fP.get(c)instanceof Shield)||(((Shield)fP.get(c)).isHarming()))) {
+									
 									e.interact(character.getMove(),
 											character.getMaker(), true);
 									fP.get(c).setOnScreen(false);
+										
 								}
 							}
 						}
@@ -2822,5 +2830,12 @@ public String withoutFalse(String without){
 	}
 	public GameState getCurrentState(){
 		return currentState;
+	}
+	public void puddleTimers(){
+		for(int c=0;c<fP.size();c++){
+			if(fP.get(c) instanceof Puddle){
+				((Puddle)fP.get(c)).timerGo();
+			}
+		}
 	}
 }

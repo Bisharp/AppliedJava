@@ -16,16 +16,17 @@ import com.dig.www.util.Statics;
 
 public class FProjectile extends Sprite {
 	protected boolean onScreen = true;
+	protected boolean dead=false;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private double d;
 	private int speed;
-	private int charHoming = -2;
-	private boolean harming = true;
-	private ArrayList<HookObject> hooks = new ArrayList<HookObject>();
-	private boolean collideHook;
+	//private int charHoming = -2;
+	//private boolean harming = true;
+	//private ArrayList<HookObject> hooks = new ArrayList<HookObject>();
+	//private boolean collideHook;
 	private Moves move;
 	// half height of image
 	private int hImgX = image.getWidth(null) / 2;
@@ -50,38 +51,11 @@ public class FProjectile extends Sprite {
 		// This is the move
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-		for (int c = 0; c < owner.getObjects().size(); c++) {
-			if (owner.getObjects().get(c) instanceof HookObject)
-				hooks.add((HookObject) owner.getObjects().get(c));
-		}
+//		for (int c = 0; c < owner.getObjects().size(); c++) {
+//			if (owner.getObjects().get(c) instanceof HookObject)
+//				hooks.add((HookObject) owner.getObjects().get(c));
+//		}
 	}
-
-	public FProjectile(double dir, int x, int y, int speed, GameCharacter maker, String loc, Board owner, Moves move, int charHoming, boolean harming) {
-		super(x, y, loc, owner);
-		this.maker = maker;
-		this.harming = harming;
-		this.charHoming = charHoming;
-		this.setMove(move);
-		d = dir;
-		this.speed = speed;
-
-		Image img = maker.getImage();
-		int aSpeed;
-		// Moves the ball away from center of launcher's image
-		if (img.getWidth(null) >= img.getHeight(null)) {
-			aSpeed = (int) (img.getWidth(null) / 2);
-		} else {
-			aSpeed = (int) (img.getHeight(null) / 2);
-		}
-		// This is the move
-		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
-		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
-		for (int c = 0; c < owner.getObjects().size(); c++) {
-			if (owner.getObjects().get(c) instanceof HookObject)
-				hooks.add((HookObject) owner.getObjects().get(c));
-		}
-	}
-
 	public void setTurning(boolean b) {
 		isTurning = b;
 	}
@@ -89,6 +63,12 @@ public class FProjectile extends Sprite {
 	public void animate() {
 
 		basicAnimate();
+		x += Math.cos((double) Math.toRadians((double) d)) * speed;
+		y += Math.sin((double) Math.toRadians((double) d)) * speed;
+		if(onScreen){
+		setOnScreen(
+				getBounds().intersects(owner.getScreen()));}
+		dead=!onScreen;
 	}
 
 	public boolean isOnScreen() {
@@ -103,32 +83,31 @@ public class FProjectile extends Sprite {
 	@Override
 	public void draw(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-
-		if (!collideHook) {
-			if (move == Moves.CHAIN)
-				for (HookObject hook : hooks) {
-					if (hook.getBounds().intersects(getBounds())) {
-						collideHook = true;
-						charHoming = -1;
-						x = hook.getX();
-						y = hook.getY();
-						break;
-
-					}
-				}
-			if (move != Moves.CHAIN || !collideHook) {
-				if (charHoming == -2) {
-
-				} else if (charHoming == -1) {
-					d = Statics.pointTowards(new Point(x, y), new Point(owner.getCharacter().getX(), owner.getCharacter().getY()));
-				} else {
-					d = Statics.pointTowards(new Point(x, y), new Point(owner.getFriends().get(charHoming).getX(), owner.getFriends().get(charHoming)
-							.getY()));
-				}
-				x += Math.cos((double) Math.toRadians((double) d)) * speed;
-				y += Math.sin((double) Math.toRadians((double) d)) * speed;
-			}
-		}
+		//dead=!onScreen;
+//		if (!collideHook) {
+//			if (move == Moves.CHAIN)
+//				for (HookObject hook : hooks) {
+//					if (hook.getBounds().intersects(getBounds())) {
+//						collideHook = true;
+//						charHoming = -1;
+//						x = hook.getX();
+//						y = hook.getY();
+//						break;
+//
+//					}
+//				}
+			//if (move != Moves.CHAIN || !collideHook) {
+//				if (charHoming == -2) {
+//
+//				} else if (charHoming == -1) {
+//					d = Statics.pointTowards(new Point(x, y), new Point(owner.getCharacter().getX(), owner.getCharacter().getY()));
+//				} else {
+//					d = Statics.pointTowards(new Point(x, y), new Point(owner.getFriends().get(charHoming).getX(), owner.getFriends().get(charHoming)
+//							.getY()));
+//				}
+			
+			//}
+		//}
 
 		if (isTurning)
 			g2d.rotate(Math.toRadians(d), x + width / 2, y + height / 2);
@@ -164,24 +143,30 @@ public class FProjectile extends Sprite {
 		return owner;
 	}
 
-	public int getCharNum() {
-		return charHoming;
-	}
-
-	public boolean getHarming() {
-		return harming;
-	}
+//	public int getCharNum() {
+//		return charHoming;
+//	}
+//
+//	public boolean getHarming() {
+//		return harming;
+//	}
 
 	public GameCharacter getMaker() {
 		return maker;
 	}
 
-	public boolean collideWithHook() {
-		return collideHook;
-	}
-
-	public void setCharNum(int setter) {
-		this.charHoming = setter;
-	}
-
+//	public boolean collideWithHook() {
+//		return collideHook;
+//	}
+//
+//	public void setCharNum(int setter) {
+//		this.charHoming = setter;
+//	}
+public boolean isDead(){
+	return dead;
+}
+protected void setD(double pointTowards) {
+	// TODO Auto-generated method stub
+	d=pointTowards;
+}
 }

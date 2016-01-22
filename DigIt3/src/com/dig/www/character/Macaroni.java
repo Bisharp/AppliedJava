@@ -19,9 +19,9 @@ public class Macaroni extends GameCharacter {
 	protected boolean keyReleased;
 
 	public Macaroni(int x, int y, Board owner, boolean player) {
-		super(x, y, owner, Types.MACARONI, "macaroni", player, -20, -25, -50,
+		super(x, y, owner, Types.MACARONI, "macaroni", player, -20, -25, -2000,
 				50, 55, 50, 80, 10, 100, 10, 20, 50, 
-				30, 25, 35,
+				30, 25, 50,
 				Statics.STRENGTH - 1);
 		// TODO Auto-generated constructor stub
 	}
@@ -43,17 +43,17 @@ public class Macaroni extends GameCharacter {
 
 	@Override
 	public String toMoveString() {
-		switch (getActing()) {
-		case 1:
-			return null;
-		case 2:
-			return null;
-		case 3:
-			return "splotch";
-		default:
+//		switch (getActing()) {
+//		case 1:
+//			return null;
+//		case 2:
+//			return null;
+//		case 3:
+//			return "splotch";
+//		default:
 
 			return null;
-		}
+		//}
 	}
 
 	@Override

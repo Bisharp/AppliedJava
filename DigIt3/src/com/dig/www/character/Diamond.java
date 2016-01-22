@@ -14,7 +14,7 @@ public class Diamond extends GameCharacter {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private FProjectile shield;
+	private Shield shield;
 
 	public Diamond(int x, int y, Board owner, boolean player) {
 		super(x, y, owner, Types.DIAMOND, "diamond", player, -50, -50, -50, 10,
@@ -34,15 +34,16 @@ public class Diamond extends GameCharacter {
 
 	@Override
 	public void animate() {
-		if (shield == null || !shield.collideWithHook()){
-			super.animate();}
-		else if (owner.getCharacter() != this)
-				basicAnimate();
+		//if (shield == null || !shield.collideWithHook()){
+			super.animate();
+			//}
+		//else if (owner.getCharacter() != this)
+		//		basicAnimate();
 		
 		if (shield == null) {
 			for (int c = 0; c < owner.getfP().size(); c++) {
-				if (owner.getfP().get(c).getMove() == Moves.CHAIN) {
-					shield = owner.getfP().get(c);
+				if (owner.getfP().get(c)instanceof Shield) {
+					shield = ((Shield)owner.getfP().get(c));
 					break;
 				}
 			}
@@ -55,19 +56,19 @@ public class Diamond extends GameCharacter {
 
 				int xP = 0;
 				int yP = 0;
-				if (x + 12 < shield.getX()) {
-
-					xP = -15;
-				} else if (x - 12 > shield.getX()) {
-
-					xP = 15;
-				}
+				
 				if (y + 12 < shield.getY()) {
-
+direction=Direction.DOWN;
 					yP = -15;
 				} else if (y - 12 > shield.getY()) {
-
+direction=Direction.UP;
 					yP = 15;
+				}if (x + 12 < shield.getX()) {
+direction=Direction.RIGHT;
+					xP = -15;
+				} else if (x - 12 > shield.getX()) {
+direction=Direction.LEFT;
+					xP = 15;
 				}
 
 				if (owner.getCharacter() == this) {
@@ -82,7 +83,16 @@ public class Diamond extends GameCharacter {
 				
 			
 		}
-			if (!owner.getfP().contains(shield)) {
+			
+			if (shield!=null&&!owner.getfP().contains(shield)) {
+				if(shield.collideWithHook()){
+					if(this==owner.getCharacter()){
+						owner.setScrollX(x-shield.getX());
+						owner.setScrollY(y-shield.getY());
+					}else{
+					x=shield.getX();
+					y=shield.getY();}
+				}
 				shield = null;
 			}
 	}
@@ -165,5 +175,8 @@ public class Diamond extends GameCharacter {
 	@Override
 	public String getRangedString() {
 		return "diamond.png";
+	}
+	public Shield getShield(){
+		return shield;
 	}
 }

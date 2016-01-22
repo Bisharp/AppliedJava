@@ -36,7 +36,7 @@ public abstract class Enemy extends Sprite {
 	protected int SLOW_MAX = 10;
 
 	protected boolean slipped = false;
-	protected static final int SLIP_MAX = 50;
+	protected static final int SLIP_MAX = 75;
 
 	protected boolean invincible = false;
 	protected boolean collisionFlagged = false;
@@ -195,7 +195,9 @@ public abstract class Enemy extends Sprite {
 				alive = false;
 			break;
 		case CHAIN:
+			if(fromP){
 			takeDamage(character.getRangedDamage());
+			}
 			break;
 		case BASH:
 			if (!character.hasSpecialed()) {
@@ -270,9 +272,10 @@ public abstract class Enemy extends Sprite {
 			break;
 
 		case MAC_S:
-			if (!character.hasSpecialed()) {
-				takeDamage(character.getSpecialDamage());
-				character.endAction();
+			if (fromP) {
+				//takeDamage(character.getSpecialDamage());
+				//character.endAction();
+				owner.puddleTimers();
 				stunTimer = SLIP_MAX;
 				slipped = true;
 			}

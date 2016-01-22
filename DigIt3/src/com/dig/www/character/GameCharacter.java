@@ -933,7 +933,7 @@ public boolean isPlayer(){
 					} else {
 						move = true;
 					}
-				} else {
+				} else if(!(this instanceof Diamond)||((Diamond)this).getShield()==null||!((Diamond)this).getShield().collideWithHook()){
 					x += deltaX;
 					y += deltaY;
 				}
@@ -1502,6 +1502,11 @@ public boolean isPlayer(){
 
 				specialTimer = TIMER_SPECIAL;
 				specialHit = false;
+				if (getType() == Types.MACARONI) {
+					owner.getfP().add(new Puddle(x, y, this, owner));
+					if (getType() == Types.MACARONI)
+						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
+				}
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
@@ -1521,8 +1526,10 @@ public boolean isPlayer(){
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
-
-				if (getType() != Types.SPADE) {
+if(getType()==Types.DIAMOND){
+	owner.getfP().add(new Shield(dir, x+rangedAddX(), y+rangedAddY(), 25, this, owner));
+}
+else if (getType() != Types.SPADE) {
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
 					if (getType() == Types.MACARONI)
 						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
@@ -1689,7 +1696,7 @@ public boolean isPlayer(){
 			// }
 
 			int normWidth = 300;
-			g2d.fillRect(10, 20, normWidth, 130);
+			g2d.fillRect(-10, 0, normWidth, 130);
 
 			// for (int i = 1; i <= (int) Math.ceil((double) HP_MAX/ (double)
 			// 10); i++) {
@@ -1702,25 +1709,25 @@ public boolean isPlayer(){
 			// g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i
 			// ? Color.RED : Color.DARK_GRAY);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 70 + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 50 + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 70, 20, 20);
+			g2d.drawRect(normWidth - 50, 50, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 95 + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 75 + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 95, 20, 20);
+			g2d.drawRect(normWidth - 50, 75, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 120 + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 100 + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 120, 20, 20);
+			g2d.drawRect(normWidth - 50, 100, 20, 20);
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
 			// g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(),
 			// 30, 50);
-			g2d.drawString("MONEY: " + inventory.getMoney(), 30, 50);
+			g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30);
 			drawTHBar((double) health / (double) HP_MAX, normWidth - 75, g2d);
 			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth - 75, g2d);
 
@@ -2125,22 +2132,22 @@ if(!player){
 	public void drawTHBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 72, total, 16);
+		g2d.fillRect(10, 52, total, 16);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(30, 72, (int) ((double) total * (double) per), 16);
+		g2d.fillRect(10, 52, (int) ((double) total * (double) per), 16);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 72 - 1, total + 1, 17);
+		g2d.drawRect(10 - 1, 52 - 1, total + 1, 17);
 
 	}
 
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 100, total, 10);
+		g2d.fillRect(10, 80, total, 10);
 		g2d.setColor(Color.BLUE);
-		g2d.fillRect(30, 100, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 80, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 80 - 1, total + 1, 11);
 
 	}
 
@@ -2148,11 +2155,11 @@ if(!player){
 		total -= 10;
 		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 125, total, 10);
+		g2d.fillRect(10, 105, total, 10);
 		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(30, 125, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 105, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 125 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 105 - 1, total + 1, 11);
 
 	}
 
