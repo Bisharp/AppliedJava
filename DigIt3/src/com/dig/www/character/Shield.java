@@ -42,9 +42,9 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 			y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();
 			
 			}
-			if(collideWithHook)
+			if(collideWithHook){
 				if(getBounds().intersects(getMaker().getBounds()))
-					dead=true;
+					dead=true;}
 			else
 			if(getBounds().intersects(getMaker().getActBounds()))
 				dead=true;
