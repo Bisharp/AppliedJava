@@ -194,18 +194,65 @@ public final class Statics {
 		return DigIt.lib.checkLibrary("/" + loc);
 	}
 public static String getRandomItem(String folderLoc){
-	FilenameFilter dirFilter = new FilenameFilter() {
-		@Override
-		public boolean accept(File dir, String name) {
-			if (name.endsWith(".png") || name.endsWith(".gif")|| name.endsWith(".jpg"))
-				return true;
-			return false;
-		}
-	};
-	String[]items=new File(folderLoc).list(dirFilter);
+//	FilenameFilter dirFilter = new FilenameFilter() {
+//		@Override
+//		public boolean accept(File dir, String name) {
+//			if (name.endsWith(".png") || name.endsWith(".gif")|| name.endsWith(".jpg"))
+//				return true;
+//			return false;
+//		}
+//	};
+	String[]items=listFolder(folderLoc);
 	
 	return items[RAND.nextInt(items.length)];
 }
+public static String[] listFolder(String defaultDir,FilenameFilter ff) {//Outdated and will be removed. new ^
+	// TODO Auto-generated method stub
+	try {
+
+		File projectDir = new File(defaultDir);
+		FilenameFilter dirFilter = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.startsWith(".") || name.endsWith(".log"))
+					return false;
+				if (dir.isDirectory())
+					return true;
+				return false;
+			}
+		};
+
+		String[] results = projectDir.list(dirFilter);
+		return results;
+
+	} catch (Exception ex) {
+		return new String[0];
+	}
+}
+public static String[] listFolder(String defaultDir) {//Outdated and will be removed. new ^
+	// TODO Auto-generated method stub
+	try {
+
+		File projectDir = new File(defaultDir);
+		FilenameFilter dirFilter = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				if (name.startsWith(".") || name.endsWith(".log"))
+					return false;
+				if (dir.isDirectory())
+					return true;
+				return false;
+			}
+		};
+
+		String[] results = projectDir.list(dirFilter);
+		return results;
+
+	} catch (Exception ex) {
+		return new String[0];
+	}
+}
+
 	public static int getFolderCont(String defaultDir) {//Outdated and will be removed. new ^
 		// TODO Auto-generated method stub
 		try {

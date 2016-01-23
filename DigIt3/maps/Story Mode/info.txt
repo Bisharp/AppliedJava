@@ -1,1 +1,5 @@
 hauntedTest
+shovel
+club
+heart
+diamond

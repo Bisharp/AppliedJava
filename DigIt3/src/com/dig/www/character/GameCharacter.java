@@ -43,6 +43,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	protected String nameDraw;
 	protected GameCharacter healing;
 	protected boolean dead;
 	protected Enemy enPoint;
@@ -187,7 +188,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	public boolean hasSpecialed() {
 		return specialHit;
 	}
-
+public boolean isPlayer(){
+	return player;
+}
 	public enum Types {
 
 		CLUB {
@@ -367,7 +370,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	protected float health = HP_MAX;
 	protected Hashtable<Direction, Boolean> collisionFlags;
-
 	// TODO strength stuff
 	protected int strength;
 	// private int strengthIncrementer = 0;
@@ -421,6 +423,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	@Override
 	public void animate() {
+		if(!(this==owner.getCharacter()||(owner.getClient()==null&&!player))){
+			basicAnimate();
+			onScreen = getBounds().intersects(owner.getScreen());
+		}else{
 		if (dead) {
 			basicAnimate();
 			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
@@ -866,38 +872,60 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 							// if (moveL ? collisionFlags.get(Direction.LEFT) :
 							// collisionFlags.get(Direction.RIGHT))
 							if (moveL) {
+								if(deltaX<0)
+									deltaX+=2;
 								deltaX++;
 								if (deltaX > SPEED)
 									deltaX = SPEED;
 							} else {
+								if(deltaX>0)
+									deltaX-=2;
 								deltaX--;
 								if (deltaX < -SPEED)
 									deltaX = -SPEED;
 							}
-						} else {
-							if (deltaX > 0)
-								deltaX--;
-							else if (deltaX < 0)
-								deltaX++;
+						}
+						else {
+							if (deltaX > 0){
+								deltaX-=3;
+							if(deltaX<0)
+								deltaX=0;
+							}
+							if (deltaX < 0){
+								deltaX+=3;
+							if(deltaX>0)
+								deltaX=0;
+							}
 						}
 
 						if (moveY) {
 							// if (moveU ? collisionFlags.get(Direction.UP) :
 							// collisionFlags.get(Direction.DOWN))
 							if (!moveU) {
+								if(deltaY>0)
+									deltaY-=2;
 								deltaY--;
 								if (deltaY < -SPEED)
 									deltaY = -SPEED;
 							} else {
+								if(deltaY<0)
+								deltaY+=2;
 								deltaY++;
 								if (deltaY > SPEED)
 									deltaY = SPEED;
 							}
-						} else {
-							if (deltaY > 0)
-								deltaY--;
-							else if (deltaY < 0)
-								deltaY++;
+						}
+							else {
+								if (deltaY > 0){
+									deltaY-=3;
+								if(deltaY<0)
+									deltaY=0;
+								}
+								if (deltaY < 0){
+									deltaY+=3;
+								if(deltaY>0)
+									deltaY=0;
+								}
 						}
 
 						owner.setScrollX(deltaX);
@@ -905,7 +933,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					} else {
 						move = true;
 					}
-				} else {
+				} else if(!(this instanceof Diamond)||((Diamond)this).getShield()==null||!((Diamond)this).getShield().collideWithHook()){
 					x += deltaX;
 					y += deltaY;
 				}
@@ -1008,7 +1036,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 		
 		illuminated = false;
-	}
+	}}
 
 	public void setWaiting(boolean setter) {
 		waiting = setter;
@@ -1241,7 +1269,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					direction = Direction.DOWN;
 
 			diagBackup = Direction.NONE;
-			deltaX = 0;
+			//deltaX = 0;
 			moveX = false;
 		}
 
@@ -1262,7 +1290,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			}
 
 			diagBackup = Direction.NONE;
-			deltaY = 0;
+			//deltaY = 0;
 			moveY = false;
 		}
 
@@ -1474,6 +1502,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 				specialTimer = TIMER_SPECIAL;
 				specialHit = false;
+				if (getType() == Types.MACARONI) {
+					owner.getfP().add(new Puddle(x, y, this, owner));
+					if (getType() == Types.MACARONI)
+						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
+				}
 				if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
@@ -1493,8 +1526,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				rangedTimer = TIMER_RANGED;
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
-
-				if (getType() != Types.SPADE) {
+if(getType()==Types.DIAMOND){
+	owner.getfP().add(new Shield(dir, x+rangedAddX(), y+rangedAddY(), 25, this, owner));
+}
+else if (getType() != Types.SPADE) {
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
 					if (getType() == Types.MACARONI)
 						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
@@ -1651,7 +1686,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			g2d.drawImage(Statics.newImage("images/characters/" + (charName != null ? charName : "spade") + "/icon.png"), xI, yI, owner);
 		}
 
-		if (player) {
+		if (owner.getCharacter()==this) {
 			g2d.setColor(Color.BLACK);
 			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
 			// if (normWidth < (int) Math.ceil((double) 75//HP_MAX
@@ -1661,7 +1696,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			// }
 
 			int normWidth = 300;
-			g2d.fillRect(10, 20, normWidth, 130);
+			g2d.fillRect(-10, 0, normWidth, 130);
 
 			// for (int i = 1; i <= (int) Math.ceil((double) HP_MAX/ (double)
 			// 10); i++) {
@@ -1674,29 +1709,40 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			// g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i
 			// ? Color.RED : Color.DARK_GRAY);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 70 + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 50 + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 70, 20, 20);
+			g2d.drawRect(normWidth - 50, 50, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 95 + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 75 + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 95, 20, 20);
+			g2d.drawRect(normWidth - 50, 75, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 120 + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 100 + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 120, 20, 20);
+			g2d.drawRect(normWidth - 50, 100, 20, 20);
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
 			// g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(),
 			// 30, 50);
-			g2d.drawString("MONEY: " + inventory.getMoney(), 30, 50);
+			g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30);
 			drawTHBar((double) health / (double) HP_MAX, normWidth - 75, g2d);
 			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth - 75, g2d);
 
 			drawTLBar(normWidth - 75, g2d);
+			//int normWidth2 = 280;
+			String colectibleName="Trolls";
+					int baseWidth=100;
+				//	boolean b=getInventory().items.contains(Items.SPECIAL_COLLECTIBLE);
+int collectibles =0;
+//if(b)
+//	collectibles=getInventory().itemNums.get(Items.SPECIAL_COLLECTIBLE);
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(normWidth-20, 0, baseWidth + (13 * numOfDigits(collectibles)), 50);
+			g2d.setColor(Statics.BROWN);
+			g2d.drawString(colectibleName+": " + collectibles, normWidth-10-25, 30);
 			drawCSHUD(g2d);
 			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
@@ -2089,28 +2135,31 @@ if(!player){
 		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
+		if(nameDraw!=null){
+		g2d.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+		g2d.drawString(nameDraw, x+width/2-(int)((nameDraw.length())*3.4), y-25);}
 
 	}
 
 	public void drawTHBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 72, total, 16);
+		g2d.fillRect(10, 52, total, 16);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(30, 72, (int) ((double) total * (double) per), 16);
+		g2d.fillRect(10, 52, (int) ((double) total * (double) per), 16);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 72 - 1, total + 1, 17);
+		g2d.drawRect(10 - 1, 52 - 1, total + 1, 17);
 
 	}
 
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 100, total, 10);
+		g2d.fillRect(10, 80, total, 10);
 		g2d.setColor(Color.BLUE);
-		g2d.fillRect(30, 100, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 80, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 100 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 80 - 1, total + 1, 11);
 
 	}
 
@@ -2118,11 +2167,11 @@ if(!player){
 		total -= 10;
 		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(30, 125, total, 10);
+		g2d.fillRect(10, 105, total, 10);
 		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(30, 125, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 105, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(30 - 1, 125 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 105 - 1, total + 1, 11);
 
 	}
 
@@ -2404,5 +2453,14 @@ if(!player){
 
 	public void setDead(boolean setter) {
 		dead = setter;
+	}
+	public void setDirection(Direction setter){
+		direction=setter;
+	}
+	public void setMpName(String setter){
+		nameDraw=setter;
+	}
+	public String getMpName(){
+		return nameDraw;
 	}
 }

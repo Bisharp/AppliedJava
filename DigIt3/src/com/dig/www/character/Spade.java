@@ -27,12 +27,12 @@ public class Spade extends GameCharacter {
 	@Override
 	protected void drawCSHUD(Graphics2D g2d) {
 		// TODO Auto-generated method stub
-		int normWidth = 300;
+		int normWidth = 280;
 
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(normWidth, 20, 150 + (g2d.getFont().getSize() / 2 * numOfDigits(dirt)), 50);
+		g2d.fillRect(normWidth, 50, 125 + (13 * numOfDigits(dirt)), 50);
 		g2d.setColor(Statics.BROWN);
-		g2d.drawString("DIRT: " + dirt, normWidth + 20, 55);
+		g2d.drawString("DIRT: " + dirt, normWidth + 10, 85);
 	}
 
 	public boolean canAct() {
@@ -170,7 +170,6 @@ public class Spade extends GameCharacter {
 	public int rangedAddY() {
 		return height / 2 - 14;
 	}
-
 	public void resetDirt() {
 		// TODO Auto-generated method stub
 		dirt = 0;

@@ -145,18 +145,18 @@ public class Mirror extends PushCube {
 			image = newImage(d + ".png");
 			shadow = newShadow(d + ".png");
 			hasSwitched = true;
-			// ArrayList<Block> walls = owner.getWallList();
+			 ArrayList<Block> walls = owner.getWallList();
 			ArrayList<NPC> npcs = owner.getNPCs();
 			ArrayList<Objects> objects = owner.getObjects();
 			switch (d) {
 			case "r":
 				lightRect = new Rectangle(x + 24, y + 10, 5000, 51);
-				// for (int i = 0; i < walls.size(); i++) {
-				// if (walls.get(i).getBounds().intersects(lightRect)) {
-				// lightRect.width = walls.get(i).getX() - lightRect.x;
-				// break;
-				// }
-				// }
+				 for (int i = 0; i < walls.size(); i++) {
+				 if (walls.get(i).getBounds().intersects(lightRect)) {
+				 lightRect.width = walls.get(i).getX() - lightRect.x;
+				 break;
+				 }
+				 }
 				for (int i = 0; i < npcs.size(); i++) {
 					if (npcs.get(i).isObstacle() && npcs.get(i).getBounds().intersects(lightRect)) {
 						lightRect.width = npcs.get(i).getBounds().x - lightRect.x;
@@ -173,12 +173,12 @@ public class Mirror extends PushCube {
 				break;
 			case "d":
 				lightRect = new Rectangle(x + 10, y + 10, 55, 5000);
-				// for (int i = 0; i < walls.size(); i++) {
-				// if (walls.get(i).getBounds().intersects(lightRect)) {
-				// lightRect.height = walls.get(i).getY() - lightRect.y;
-				// break;
-				// }
-				// }
+				 for (int i = 0; i < walls.size(); i++) {
+				 if (walls.get(i).getBounds().intersects(lightRect)) {
+				 lightRect.height = walls.get(i).getY() - lightRect.y;
+				 break;
+				 }
+				 }
 				for (int i = 0; i < npcs.size(); i++) {
 					if (npcs.get(i).isObstacle() && npcs.get(i).getBounds().intersects(lightRect)) {
 						lightRect.height = npcs.get(i).getBounds().y - lightRect.y;
@@ -195,13 +195,13 @@ public class Mirror extends PushCube {
 				break;
 			case "l":
 				lightRect = new Rectangle(x + 51 - 5000, y + 10, 5000, 51);
-				// for (int i = walls.size()-1; i >= 0; i--) {
-				// if (walls.get(i).getBounds().intersects(lightRect)) {
-				// lightRect.x =walls.get(i).getX()+Statics.BLOCK_HEIGHT;
-				// lightRect.width=x-(lightRect.x);
-				// break;
-				// }
-				// }
+				 for (int i = walls.size()-1; i >= 0; i--) {
+				 if (walls.get(i).getBounds().intersects(lightRect)) {
+				 lightRect.x =walls.get(i).getX()+Statics.BLOCK_HEIGHT;
+				 lightRect.width=x-(lightRect.x);
+				 break;
+				 }
+				 }
 				for (int i = npcs.size() - 1; i >= 0; i--) {
 					if (npcs.get(i).isObstacle() && npcs.get(i).getBounds().intersects(lightRect)) {
 						lightRect.x = (int) npcs.get(i).getBounds().getMaxX();
@@ -221,13 +221,13 @@ public class Mirror extends PushCube {
 				break;
 			case "u":
 				lightRect = new Rectangle(x + 10, y + 10 - 5000, 55, 5000);
-				// for (int i = walls.size()-1; i >= 0; i--) {
-				// if (walls.get(i).getBounds().intersects(lightRect)) {
-				// lightRect.y =walls.get(i).getY()+Statics.BLOCK_HEIGHT;
-				// lightRect.height=y-(lightRect.y);
-				// break;
-				// }
-				// }
+				 for (int i = walls.size()-1; i >= 0; i--) {
+				 if (walls.get(i).getBounds().intersects(lightRect)) {
+				 lightRect.y =walls.get(i).getY()+Statics.BLOCK_HEIGHT;
+				 lightRect.height=y-(lightRect.y);
+				 break;
+				 }
+				 }
 				for (int i = npcs.size() - 1; i >= 0; i--) {
 					if (npcs.get(i).isObstacle() && npcs.get(i).getBounds().intersects(lightRect)) {
 						lightRect.y = (int) npcs.get(i).getBounds().getMaxY();

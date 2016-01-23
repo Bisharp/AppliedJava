@@ -78,13 +78,13 @@ public class Time implements ActionListener {
 		this.time = time / 100;
 	}
 
-	private static final int X = 10;
-	private static final int Y = 200;
+	private static final int X = 0;
+	private static final int Y = 120;
 
 	public void draw(Graphics2D g2d) {
 
 		g2d.setColor(Color.black);
-		g2d.fillRect(X, Y, 200, 50);
+		g2d.fillRect(X, Y, 200, 40);
 		g2d.setColor(Statics.PURPLE);
 		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30);
 		g2d.drawString(getColon(), 40 + X + 15, Y + 28);
