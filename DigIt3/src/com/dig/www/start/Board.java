@@ -387,7 +387,11 @@ public void heyIaddedAFriendBack(String typeToString){
 							"images/objects/chestC.png", this, level,
 							((DropPoint) o).type()));
 				}
-
+if(character==null){
+	System.err.println("Character is never intialized. Leaving game.");
+	System.exit(0);
+}
+	
 		if (character.getType() == Types.SPADE) {
 			((Spade) character).resetDirt();
 		}
