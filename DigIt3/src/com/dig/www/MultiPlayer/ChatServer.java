@@ -17,12 +17,15 @@ import com.dig.www.start.Board;
 
 public class ChatServer  implements IChatServer
 {
-	Board owner;
+	private String passWord;
+	private Board owner;
 	private HashMap<String, IChatClient> clientMap = new HashMap<>();
 	
 	@Override
-	public Set<String> enterChatRoom(IChatClient chatClient, String name) throws RemoteException
+	public Set<String> enterChatRoom(IChatClient chatClient, String name,String passWord) throws Exception
 	{
+		if(!passWord.equals(this.passWord))
+			throw new Exception();
 		for (IChatClient client : clientMap.values())
 		{
 			client.addChatClient(name);
@@ -75,9 +78,9 @@ public class ChatServer  implements IChatServer
 		return true;
 	}
 	
-	public ChatServer(Board owner){
+	public ChatServer(Board owner,String passWord){
 		IChatServer stub;
-		
+		this.passWord=passWord;
 		try {
 			stub = (IChatServer) UnicastRemoteObject.exportObject(this, PORT);
 		

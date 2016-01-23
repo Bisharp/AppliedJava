@@ -18,7 +18,7 @@ public class ChatClient implements IChatClient
 {
 	private Board owner;
 	
-	public ChatClient(Board owner,String serverHostName,String myName) throws RemoteException, AlreadyBoundException, NotBoundException
+	public ChatClient(Board owner,String serverHostName,String myName,String passWord) throws RemoteException, AlreadyBoundException, NotBoundException
 	{
 		
 		Registry remoteRegistry = LocateRegistry.getRegistry(serverHostName, ChatServer.PORT + 1);
@@ -31,8 +31,13 @@ public class ChatClient implements IChatClient
 		registry.bind("Chat Client", stub);
 		this.owner=owner;
 		owner.setOtherServer(chatServer);
+		try{
+		chatServer.enterChatRoom(this, myName,passWord);}
+		catch(Exception ex){
+			JOptionPane.showMessageDialog(owner, "Could not connect to server. You probably have the wrong password.");
+		System.exit(0);
+		}
 		System.out.println("Client communications setup");
-		chatServer.enterChatRoom(this, myName);
 	//	ui = new ChatUI(this, chatServer);
 	}
 

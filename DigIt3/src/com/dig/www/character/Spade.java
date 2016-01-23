@@ -30,9 +30,9 @@ public class Spade extends GameCharacter {
 		int normWidth = 280;
 
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(normWidth, 0, 125 + (13 * numOfDigits(dirt)), 50);
+		g2d.fillRect(normWidth, 50, 125 + (13 * numOfDigits(dirt)), 50);
 		g2d.setColor(Statics.BROWN);
-		g2d.drawString("DIRT: " + dirt, normWidth + 10, 35);
+		g2d.drawString("DIRT: " + dirt, normWidth + 10, 85);
 	}
 
 	public boolean canAct() {

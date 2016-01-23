@@ -98,6 +98,7 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private String passWord;
 	private ArrayList<String>goneFriends=new ArrayList<String>();
 	private static final long serialVersionUID = 1L;
 	ArrayList<GameState> states = new ArrayList<GameState>();
@@ -285,12 +286,12 @@ public void heyIaddedAFriendBack(String typeToString){
 		state = State.LOADING;
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
 		this.mpName = JOptionPane.showInputDialog(this,
-				"What is your user name?", System.getProperty("user.name"));
+				"What would you like to be called?", System.getProperty("user.name"));
 		try {
 
 			me = new ChatClient(this, JOptionPane.showInputDialog(
 					"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.", InetAddress
-							.getLocalHost().getHostAddress()), mpName);
+							.getLocalHost().getHostAddress()), mpName,JOptionPane.showInputDialog("What is the server's password?\nNone is the default.","None"));
 		} catch (HeadlessException | RemoteException | AlreadyBoundException
 				| NotBoundException e) {
 			// TODO Auto-generated catch block
@@ -1783,6 +1784,13 @@ continue;}
 			p.setOnScreen(p.getBounds().intersects(getScreen()));
 
 			if (r3.intersects(p.getBounds())) {
+				if(me!=null){
+					character.collision(p, false);
+					for (int rI = 0; rI < character.getDirBounds().length; rI++)
+						if (p.getBounds().intersects(
+								character.getDirBounds()[rI]))
+							character.presetCollisionFlag(rI);
+				}else{
 				if (!(p instanceof Door || p instanceof SpecialDoor)) {
 					timer.stop();
 					time.pause();
@@ -1795,7 +1803,7 @@ continue;}
 					setState(State.DOOROPEN);
 					doorStateLev = p.getArea();
 				}
-			}
+			}}
 		}
 
 		Rectangle bounds = character.getTalkBounds();
@@ -1986,9 +1994,12 @@ continue;}
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
 		if (key == KeyEvent.VK_M) {
+			if(server==null){
 			System.out.println("server");
-			server = new ChatServer(this);
-			currentState = new GameState(mode, level,true);
+			mpName=JOptionPane.showInputDialog("What would you like to be called?","Server");
+			passWord=JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.","None");
+			server = new ChatServer(this,passWord);
+			currentState = new GameState(mode, level,true);}
 		} else if (key == KeyEvent.VK_T) {
 			if (me != null && theServer != null) {
 				currentState.addTalk(JOptionPane.showInputDialog("Hi"));
@@ -2749,6 +2760,8 @@ public String withoutFalse(String without){
 			level = state.getLevel();
 			currentState = new GameState(mode, level,false);
 			// timer=new Timer(delay, listener)
+			int xPos=0;
+			int yPos=0;
 			try {
 				if (state.getPlayerStates().size() > 0) {
 					for (int c = 0; c < state.getPlayerStates().size(); c++) {
@@ -2757,6 +2770,8 @@ public String withoutFalse(String without){
 						if (chara != null) {
 							if (character == null&&!state.getPlayerStates().get(c).isPlayer()) {
 								character = chara;
+								xPos=state.getPlayerStates().get(c).getX();
+								yPos=state.getPlayerStates().get(c).getY();
 								chara.setPlayer(true);
 							} else {
 								friends.add(chara);
@@ -2771,6 +2786,12 @@ public String withoutFalse(String without){
 			if (character != null) {
 				newGame(level);
 				setState(State.INGAME);
+				Block b=world.get(0);
+				int x=character.getX();
+				int y=character.getY();		
+				scroll((character.getX()-b.getX())-(xPos), (character.getY()-b.getY())-(yPos));
+				character.setX(x);
+				character.setY(y);
 				timer.start();
 				timer.start();
 			}else{

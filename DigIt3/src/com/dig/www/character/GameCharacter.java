@@ -1732,6 +1732,17 @@ else if (getType() != Types.SPADE) {
 			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth - 75, g2d);
 
 			drawTLBar(normWidth - 75, g2d);
+			//int normWidth2 = 280;
+			String colectibleName="Trolls";
+					int baseWidth=100;
+				//	boolean b=getInventory().items.contains(Items.SPECIAL_COLLECTIBLE);
+int collectibles =0;
+//if(b)
+//	collectibles=getInventory().itemNums.get(Items.SPECIAL_COLLECTIBLE);
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(normWidth-20, 0, baseWidth + (13 * numOfDigits(collectibles)), 50);
+			g2d.setColor(Statics.BROWN);
+			g2d.drawString(colectibleName+": " + collectibles, normWidth-10-25, 30);
 			drawCSHUD(g2d);
 			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
@@ -2124,8 +2135,9 @@ if(!player){
 		g2d.fillRect(x, y - 10, (int) ((double) width * (double) per2), 10);
 		g2d.setColor(Color.WHITE);
 		g2d.drawRect(x - 1, y - 22, width + 1, 11);
-		if(nameDraw!=null)
-		g2d.drawString(nameDraw, x, y-25);
+		if(nameDraw!=null){
+		g2d.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+		g2d.drawString(nameDraw, x+width/2-(int)((nameDraw.length())*3.4), y-25);}
 
 	}
 
