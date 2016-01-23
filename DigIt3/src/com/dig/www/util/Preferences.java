@@ -113,7 +113,7 @@ public class Preferences implements Serializable {
 	}
 
 	public void finish() {
-		save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/" + owner.getUserName() + "/");
+		save(Statics.getBasedir() + "saveFiles/" + owner.getUserName() + "/");
 		owner = null;
 		GameControllerRunnable.renewKeys();
 	}

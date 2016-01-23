@@ -23,16 +23,17 @@ public class GameControllerRunnable implements Runnable {
 	private float data;
 	private int i;
 
-	private static int UP = Preferences.UP();
-	private static int DOWN = Preferences.DOWN();
-	private static int LEFT = Preferences.LEFT();
-	private static int RIGHT = Preferences.RIGHT();
-	private static int ATTACK = Preferences.ATTACK();
-	private static int PROJECTILE = Preferences.PROJECTILE();
-	private static int SPECIAL = Preferences.SPECIAL();
-	private static int LEVEL_UP_MENU = Preferences.ITEM();
-	private static int PAUSE = Preferences.PAUSE();
-	private static int NPC = Preferences.NPC();
+	protected static int UP = Preferences.UP();
+	protected static int DOWN = Preferences.DOWN();
+	protected static int LEFT = Preferences.LEFT();
+	protected static int RIGHT = Preferences.RIGHT();
+	protected static int ATTACK = Preferences.ATTACK();
+	protected static int PROJECTILE = Preferences.PROJECTILE();
+	protected static int SPECIAL = Preferences.SPECIAL();
+	protected static int SWITCH = Preferences.CHAR_CHANGE();
+	protected static int PAUSE = Preferences.PAUSE();
+	protected static int NPC = Preferences.NPC();
+	protected static int ITEM = Preferences.ITEM();
 
 	public static void renewKeys() {
 
@@ -43,9 +44,10 @@ public class GameControllerRunnable implements Runnable {
 		ATTACK = Preferences.ATTACK();
 		PROJECTILE = Preferences.PROJECTILE();
 		SPECIAL = Preferences.SPECIAL();
-		LEVEL_UP_MENU = Preferences.ITEM();
+		SWITCH = Preferences.CHAR_CHANGE();
 		PAUSE = Preferences.PAUSE();
 		NPC = Preferences.NPC();
+		ITEM = Preferences.ITEM();
 	}
 
 	protected static final int Y_STICK = 0;
@@ -64,10 +66,12 @@ public class GameControllerRunnable implements Runnable {
 	protected static final int STICK_PRESS = 13;
 	protected static final int STICK2_PRESS = 14;
 	protected static final int HAT_SWITCH = 15;
+	
+	protected static final int Z_AXIS_L = 16;
 
 	protected static GameControllerPreferences p;
 
-	private static final float Z_SENSITIVITY = 0.7f;
+	private static final float Z_SENSITIVITY = 0.5f;
 	private final float WALK_SENSITIVITY = 0.4f;
 
 	// private DarkManor3D owner;
@@ -124,76 +128,45 @@ public class GameControllerRunnable implements Runnable {
 				// This code checks for the control stick's changes
 
 				if (((i == p.moveX || i == p.moveY) && !p.isDPad) || (i == HAT_SWITCH && p.isDPad)) {
-					if (p.isDPad)
+					if (!p.isDPad)
 						handleStick();
 					else
 						handleDPad();
 				}
 
 				// TODO Attack
-				else if (i == A) {
-					if (data > 0) {
-						rOB.keyPress(ATTACK);
-						buttonPressed[6] = true;
-					} else if (buttonPressed[6]) {
-						rOB.keyRelease(ATTACK);
-						buttonPressed[6] = false;
-					}
+				else if (i == p.attack) {
+					handleButton(ATTACK, 5, isZAxis(p.attack), p.attack == p.rZAxis);
 				}
 
 				// TODO Projectile
-				else if (i == Z_AXIS) {
-					if (data < -Z_SENSITIVITY) {
-						rOB.keyPress(PROJECTILE);
-						buttonPressed[7] = true;
-					} else if (buttonPressed[7]) {
-						rOB.keyRelease(PROJECTILE);
-						buttonPressed[7] = false;
-					}
+				else if (i == p.projectile) {
+					handleButton(PROJECTILE, 6, isZAxis(p.projectile), p.projectile == p.rZAxis);
 				}
 
 				// TODO Special
-				else if (i == B) {
-					if (data > 0) {
-						rOB.keyPress(SPECIAL);
-						buttonPressed[7] = true;
-					} else if (buttonPressed[7]) {
-						rOB.keyRelease(SPECIAL);
-						buttonPressed[7] = false;
-					}
+				else if (i == p.special) {
+					handleButton(SPECIAL, 7, isZAxis(p.special), p.special == p.rZAxis);
 				}
 
 				// TODO Pause
-				else if (i == BACK) {
-					if (data > 0) {
-						rOB.keyPress(PAUSE);
-						buttonPressed[8] = true;
-					} else if (buttonPressed[8]) {
-						rOB.keyRelease(PAUSE);
-						buttonPressed[8] = false;
-					}
+				else if (i == p.pause) {
+					handleButton(PAUSE, 8, isZAxis(p.special), p.special == p.rZAxis);
 				}
 
 				// TODO LevelUp menu
-				else if (i == START) {
-					if (data > 0) {
-						rOB.keyPress(LEVEL_UP_MENU);
-						buttonPressed[8] = true;
-					} else if (buttonPressed[8]) {
-						rOB.keyRelease(LEVEL_UP_MENU);
-						buttonPressed[8] = false;
-					}
+				else if (i == p.switchC) {
+					handleButton(SWITCH, 9, isZAxis(p.switchC), p.switchC == p.rZAxis);
 				}
 
 				// TODO Talk to NPC
-				else if (i == X) {
-					if (data > 0) {
-						rOB.keyPress(NPC);
-						buttonPressed[8] = true;
-					} else if (buttonPressed[8]) {
-						rOB.keyRelease(NPC);
-						buttonPressed[8] = false;
-					}
+				else if (i == p.npc) {
+					handleButton(NPC, 10, isZAxis(p.npc), p.npc == p.rZAxis);
+				}
+
+				// TODO Talk to NPC
+				else if (i == p.item) {
+					handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis);
 				}
 			}
 		}
@@ -204,6 +177,34 @@ public class GameControllerRunnable implements Runnable {
 		// } catch (NullPointerException ex) {
 		//
 		// }
+	}
+	
+	protected boolean isZAxis(int check) {
+		return check == Z_AXIS || check == Z_AXIS_L;
+	}
+
+	protected void handleButton(int press, int index, boolean isZAxis, boolean rightAxis) {
+
+		if (!isZAxis) {
+			if (data > 0) {
+				rOB.keyPress(press);
+				buttonPressed[index] = true;
+			} else if (buttonPressed[index]) {
+				rOB.keyRelease(press);
+				buttonPressed[6] = false;
+			}
+		} else {
+			if (data < -Z_SENSITIVITY) {
+				rOB.keyPress(press);
+				buttonPressed[index] = true;
+			} else if (data > Z_SENSITIVITY) {
+				rOB.keyPress(p.lZAxis);
+				buttonPressed[12] = true;
+			} else if (buttonPressed[index]) {
+				rOB.keyRelease(press);
+				buttonPressed[index] = false;
+			}
+		}
 	}
 
 	protected void handleStick() {
@@ -257,15 +258,15 @@ public class GameControllerRunnable implements Runnable {
 			}
 		}
 	}
-	
-	protected int[] dPadDirs = new int[]{ DOWN, UP, RIGHT, LEFT };
+
+	protected int[] dPadDirs = new int[] { DOWN, UP, RIGHT, LEFT };
 
 	protected void handleDPad() {
-		int padValue = (int) (components[15].getPollData() * 1000);
+		int padValue = (int) (components[HAT_SWITCH].getPollData() * 1000);
 		switch (padValue) {
 		case 1000:
-			rOB.keyPress(UP);
-			buttonPressed[1] = true;
+			rOB.keyPress(LEFT);
+			buttonPressed[3] = true;
 			break;
 		case 125:
 			rOB.keyPress(UP);
@@ -274,8 +275,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[3] = true;
 			break;
 		case 250:
-			rOB.keyPress(LEFT);
-			buttonPressed[3] = true;
+			rOB.keyPress(UP);
+			buttonPressed[1] = true;
 			break;
 		case 375:
 			rOB.keyPress(UP);
@@ -284,8 +285,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[2] = true;
 			break;
 		case 500:
-			rOB.keyPress(DOWN);
-			buttonPressed[0] = true;
+			rOB.keyPress(RIGHT);
+			buttonPressed[2] = true;
 			break;
 		case 625:
 			rOB.keyPress(RIGHT);
@@ -294,8 +295,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[0] = true;
 			break;
 		case 750:
-			rOB.keyPress(RIGHT);
-			buttonPressed[2] = true;
+			rOB.keyPress(DOWN);
+			buttonPressed[0] = true;
 			break;
 		case 875:
 			rOB.keyPress(LEFT);
@@ -337,5 +338,9 @@ public class GameControllerRunnable implements Runnable {
 				offValues[i] = components[i].getPollData();
 			}
 		}
+	}
+	
+	public GameControllerPreferences getP() {
+		return p;
 	}
 }
