@@ -9,7 +9,8 @@ public class GameControllerPreferences implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int moveX = GameControllerRunnable.X_STICK;
-	private int moveY = GameControllerRunnable.Y_STICK;
+	protected int moveX = GameControllerRunnable.X_STICK;
+	protected int moveY = GameControllerRunnable.Y_STICK;
+	protected boolean isDPad = true;
 	
 }
