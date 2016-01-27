@@ -1862,6 +1862,17 @@ continue;}
 								character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 			}
+			for (int c = 0; c < friends.size(); c++) {
+
+				if (n.getBounds().intersects(
+						friends.get(c).getCollisionBounds())) {
+				
+						if (n.isObstacle())
+							friends.get(c).collision(n, false);
+
+					
+				}
+			}
 		}
 
 		Objects n;

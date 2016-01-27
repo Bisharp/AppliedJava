@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.dig.www.blocks.Block;
 import com.dig.www.enemies.Enemy;
+import com.dig.www.npc.NPC;
 import com.dig.www.objects.Objects;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -83,7 +84,10 @@ Rectangle bBo=b.getBounds();
 			if(e.isWall()&&bBo.intersects(e.getBounds()))
 				notWall=-1;
 		}
-
+		for(NPC e:owner.getNPCs()){
+			if(e.isObstacle()&bBo.intersects(e.getBounds()))
+				notWall=-1;
+		}
 		for(Point p:points){
 			if(p==getCurrentFind()){
 			continue;
