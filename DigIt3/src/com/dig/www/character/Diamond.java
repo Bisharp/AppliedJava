@@ -5,7 +5,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import com.dig.www.blocks.Block;
+import com.dig.www.blocks.Block.Blocks;
 import com.dig.www.start.Board;
+import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
 public class Diamond extends GameCharacter {
@@ -179,4 +182,10 @@ direction=Direction.LEFT;
 	public Shield getShield(){
 		return shield;
 	}
-}
+	// TODO collision
+		public void collision(Sprite collide, boolean isPlayer) {
+			if(shield==null||!shield.collideWithHook()||!(collide instanceof Block)|| (((Block)collide).getType()!=Blocks.LIQUID&&((Block)collide).getType()!=Blocks.PIT))
+				super.collision(collide, isPlayer);
+			
+		
+}}

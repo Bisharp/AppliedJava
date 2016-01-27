@@ -39,4 +39,8 @@ public String getS() {
 public String getMpName() {
 	return mpName;
 }
+public void left(){
+	isPlayer=(false);
+	mpName=("I love cake");
+}
 }

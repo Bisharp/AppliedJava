@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,8 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import com.dig.www.MultiPlayer.State.GameState;
+import com.dig.www.MultiPlayer.State.PlayerState;
+import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 
 
@@ -42,9 +45,24 @@ public class ChatServer  implements IChatServer
 	}
 	
 	@Override
-	public void leaveChatRoom(String name) throws RemoteException
+	public void leaveChatRoom(String name,String playerName) throws RemoteException
 	{
 		clientMap.remove(name);
+		for(GameCharacter chara:owner.getFriends()){
+			if(chara.getType().charName().equals(playerName)){
+				System.out.println(chara.getType().charName());
+				chara.setPlayer(false);
+				chara.setMpName("I love cake");
+				for(int c=0;c<owner.getCurrentState().getPlayerStates().size();c++){
+					if(owner.getCurrentState().getPlayerStates().get(c).getMpName().equals(playerName)){
+//						owner.getCurrentState().getPlayerStates().remove(c);
+//					c--;
+						System.out.println(name);
+					owner.getCurrentState().getPlayerStates().get(c).left();	
+					}
+				}
+			}
+		}
 		for (IChatClient client: clientMap.values())
 		{
 			client.removeChatClient(name);
@@ -70,9 +88,9 @@ public class ChatServer  implements IChatServer
 		//JOptionPane.showMessageDialog(owner,""+clientMap.size());
 //		if(sender.equals("CakeA"))
 //		owner
-		for(IChatClient client: clientMap.values())
+		for(int c=0;c<clientMap.size();c++)
 		{
-			client.receiveMessage(message, sender);
+			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 		}
 		getTold(message);
 		return true;
@@ -97,5 +115,18 @@ public class ChatServer  implements IChatServer
 	public void getTold(GameState state) throws RemoteException {
 		// TODO Auto-generated method stub
 	owner.getTold(state);
+	}
+	public boolean contains(ArrayList<PlayerState>players){
+		for(int c=0;c<players.size();c++){
+			if(clientMap.containsKey(players.get(c).getMpName()))
+					return true;
+		}
+		for(int c=0;c<players.size();c++){
+			for(GameCharacter chara:owner.getFriends()){
+				chara.setMpName(null);
+				chara.setPlayer(false);
+			}
+		}
+		return false;
 	}
 }
