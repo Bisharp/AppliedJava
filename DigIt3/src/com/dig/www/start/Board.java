@@ -1332,6 +1332,7 @@ continue;}
 								if(chara.getType().charName().equals(realState.getFrom())){
 									chara.setPlayer(false);
 									chara.setMpName(null);
+									chara.setWaiting(false);
 								}
 							}
 							break;
@@ -1345,13 +1346,13 @@ continue;}
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
-								character.getDirection(), "n", true, character
+								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName));
 				for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), 0, character
-											.getDirection(), "n", character.isPlayer(),
+											.getDirection(), character.getS(), character.isPlayer(),
 									character.getType().toString(),character.getMpName()));}
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);
@@ -1405,7 +1406,7 @@ continue;}
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
-								character.getDirection(), "n", true, character
+								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName));
 				theServer.broadcast(mpName, currentState);
 				currentState.clear(level);

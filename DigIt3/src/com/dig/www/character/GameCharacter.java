@@ -43,6 +43,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	protected String s="n";
 	protected String nameDraw;
 	protected GameCharacter healing;
 	protected boolean dead;
@@ -417,7 +418,7 @@ public boolean isPlayer(){
 		this.strength = strength;
 		direction = Direction.DOWN;
 		image = newImage("n");
-
+		s="n";
 		resetFlags();
 	}
 
@@ -825,6 +826,7 @@ public boolean isPlayer(){
 					moveX = false;
 					moveY = false;
 					image = newImage("n");
+					s="n";
 				}
 
 			}
@@ -856,14 +858,16 @@ public boolean isPlayer(){
 
 					if (moveX || moveY) {
 						animationTimer = 0;
+						s="w" + counter;
 						image = newImage("w" + counter);
 
 						counter++;
 
 						if (counter == MAX)
 							counter = 0;
-					} else
+					} else{
 						image = newImage("n");
+						s="n";}
 				} else
 					animationTimer++;
 				if (player) {
@@ -978,6 +982,7 @@ public boolean isPlayer(){
 						moveX = false;
 						moveY = false;
 						image = newImage("n");
+						s="n";
 					}
 					if (pathUpdateTimer > 0)
 						pathUpdateTimer--;
@@ -1921,6 +1926,7 @@ int collectibles =0;
 				health = (float) 0.01;
 				dead = true;
 				image = newImage("n");
+				s="n";
 				if (player)
 					owner.setSwitching(true);
 			}
@@ -2462,5 +2468,8 @@ if(!player){
 	}
 	public String getMpName(){
 		return nameDraw;
+	}
+	public String getS(){
+		return s;
 	}
 }

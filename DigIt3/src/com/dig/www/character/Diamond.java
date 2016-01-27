@@ -56,7 +56,7 @@ public class Diamond extends GameCharacter {
 			if (shield!=null&&shield.collideWithHook()) {
 
 				image = newImage("g");
-
+				s="g";
 				int xP = 0;
 				int yP = 0;
 				
