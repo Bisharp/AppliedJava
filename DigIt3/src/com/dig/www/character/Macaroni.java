@@ -64,6 +64,7 @@ public class Macaroni extends GameCharacter {
 				lastDirection = getDirection();
 			stop();
 			image = newImage("spin");
+			s="spin";
 			if (meleeTimer >= TIMER_MELEE * 0.75)
 				direction = Direction.RIGHT;
 			else if (meleeTimer >= TIMER_MELEE * 0.5)
@@ -77,10 +78,12 @@ public class Macaroni extends GameCharacter {
 			lastDirection = null;
 			if (rangedTimer >= 0) {
 				image = newImage("s");
+				s="s";
 				stop();
 			} else if (specialTimer >= 0) {
 				stop();
 				image = newImage("s");
+				s="s";
 			}
 		}
 	};

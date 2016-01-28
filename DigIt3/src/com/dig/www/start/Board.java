@@ -98,6 +98,8 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	protected ArrayList<String>chats=new ArrayList<String>();
+	protected ChatBox chatBox;
 	private String passWord;
 	private ArrayList<String>goneFriends=new ArrayList<String>();
 	private static final long serialVersionUID = 1L;
@@ -387,7 +389,11 @@ public void heyIaddedAFriendBack(String typeToString){
 							"images/objects/chestC.png", this, level,
 							((DropPoint) o).type()));
 				}
-
+if(character==null){
+	System.err.println("Character is never intialized. Leaving game.");
+	System.exit(0);
+}
+	
 		if (character.getType() == Types.SPADE) {
 			((Spade) character).resetDirt();
 		}
@@ -1303,6 +1309,9 @@ continue;}
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
+					if(states.get(s).getPlayerStates()==null)
+						System.out.println("null");
+					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
 						for(GameCharacter friend:friends){
 							if(playerState.isPlayer()&&friend.getType().toString().equals(playerState.getTypeToString())){
@@ -1323,6 +1332,7 @@ continue;}
 								if(chara.getType().charName().equals(realState.getFrom())){
 									chara.setPlayer(false);
 									chara.setMpName(null);
+									chara.setWaiting(false);
 								}
 							}
 							break;
@@ -1336,13 +1346,13 @@ continue;}
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
-								character.getDirection(), "n", true, character
+								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName));
 				for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), 0, character
-											.getDirection(), "n", character.isPlayer(),
+											.getDirection(), character.getS(), character.isPlayer(),
 									character.getType().toString(),character.getMpName()));}
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);
@@ -1360,7 +1370,9 @@ continue;}
 							changeArea();
 						}
 							
-					
+					if(states.get(s).getPlayerStates()==null)
+						System.out.println("null");
+					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
 						for(GameCharacter friend:friends){
 							if(friend.getType().toString().equals(playerState.getTypeToString())){
@@ -1394,7 +1406,7 @@ continue;}
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), 0,
-								character.getDirection(), "n", true, character
+								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName));
 				theServer.broadcast(mpName, currentState);
 				currentState.clear(level);
@@ -1407,6 +1419,13 @@ continue;}
 			}
 		}else
 			states.clear();
+		
+		if(chatBox!=null){
+			while(chats.size()>6){
+				chats.remove(0);
+			}
+			chatBox.set(chats);
+		}
 		// if(server!=null||me!=null)
 		// currentState=new GameState(mode, level);
 	}
@@ -1843,6 +1862,17 @@ continue;}
 								character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 			}
+			for (int c = 0; c < friends.size(); c++) {
+
+				if (n.getBounds().intersects(
+						friends.get(c).getCollisionBounds())) {
+				
+						if (n.isObstacle())
+							friends.get(c).collision(n, false);
+
+					
+				}
+			}
 		}
 
 		Objects n;
@@ -1999,15 +2029,19 @@ continue;}
 			mpName=JOptionPane.showInputDialog("What would you like to be called?","Server");
 			passWord=JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.","None");
 			server = new ChatServer(this,passWord);
-			currentState = new GameState(mode, level,true);}
-		} else if (key == KeyEvent.VK_T) {
-			if (me != null && theServer != null) {
-				currentState.addTalk(JOptionPane.showInputDialog("Hi"));
-			} else if (server != null) {
-				System.out.println("talked");
-				currentState.addTalk(JOptionPane.showInputDialog("Server hi"));
+			currentState = new GameState(mode, level,true);
+			chatBox=new ChatBox(this);
 			}
-		} else if (key == KeyEvent.VK_J) {
+		} 
+//		else if (key == KeyEvent.VK_T) {
+//			if (me != null && theServer != null) {
+//				currentState.addTalk(JOptionPane.showInputDialog("Hi"));
+//			} else if (server != null) {
+//				System.out.println("talked");
+//				currentState.addTalk(JOptionPane.showInputDialog("Server hi"));
+//			}
+//		} 
+		else if (key == KeyEvent.VK_J) {
 			if (pointedPoint == null) {
 
 				pointedPoint = MouseInfo.getPointerInfo().getLocation();
@@ -2026,7 +2060,10 @@ continue;}
 				setState(State.PAUSED);
 			if (me != null && theServer != null)
 				try {
-					theServer.leaveChatRoom(mpName);
+					String s=null;
+					if(character!=null)
+							s=character.getType().charName();
+					theServer.leaveChatRoom(mpName,s);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -2794,18 +2831,43 @@ public String withoutFalse(String without){
 				character.setY(y);
 				timer.start();
 				timer.start();
+				chatBox=new ChatBox(this);
 			}else{
 				mode = state.getPack();
 				level = state.getLevel();
 				currentState = null;
 				friends.clear();
 			}
-		} else if(mode!=null)
+		} else if(mode!=null&&(state.isServer()||(server!=null&&server.contains(state.getPlayerStates()))||(me!=null&&me.contains(state.getPlayerStates()))))
 			states.add(state);
 
-		if (state.getTalks().size() > 0)
+		if (state.getTalks().size() > 0){
+			//if(me!=null){
+				int length=30;
+				int nameLength=10;
+				if(nameLength>state.getPlayerStates().get(0).getMpName().length())
+					nameLength=state.getPlayerStates().get(0).getMpName().length();
+				String name=state.getPlayerStates().get(0).getMpName().substring(0, nameLength);
+				//ArrayList<String>s=new ArrayList<String>();
+				for(int c=0;c<state.getTalks().size();c++){
+					for(int c2=0;c2<state.getTalks().get(c).length();c2+=length){
+						int i=length;
+						if(c2+i>state.getTalks().get(c).length())
+							i=state.getTalks().get(c).length()-c2;
+						chats.add(name+":"+state.getTalks().get(c).substring(c2, c2+i)+"\n");
+					}
+				//}
+//				(state.getPlayerStates().get(0).getMpName()+":"+
+//						state.getTalks()+"\n").
+//				for(String i:s)
+//				chats.add(state.getPlayerStates().get(0).getMpName()+":"+
+//						state.getTalks()+"\n");
+//				chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
+//						state.getTalks()
+//					.get(state.getTalks().size() - 1));
+			}
 			System.out.println(state.getTalks()
-					.get(state.getTalks().size() - 1));
+					.get(state.getTalks().size() - 1));}
 	}
 
 	public void setOtherServer(IChatServer server) {

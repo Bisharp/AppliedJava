@@ -7,17 +7,21 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
 import com.dig.www.MultiPlayer.State.GameState;
+import com.dig.www.MultiPlayer.State.PlayerState;
+import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 
 
 public class ChatClient implements IChatClient
 {
 	private Board owner;
-	
+	private ArrayList<String> clientMap = new ArrayList<String>();
 	public ChatClient(Board owner,String serverHostName,String myName,String passWord) throws RemoteException, AlreadyBoundException, NotBoundException
 	{
 		
@@ -50,6 +54,7 @@ public class ChatClient implements IChatClient
 	@Override
 	public void addChatClient(String name) throws RemoteException
 	{
+		clientMap.add(name);
 		//owner.addChatClient(name);
 	}
 
@@ -58,6 +63,20 @@ public class ChatClient implements IChatClient
 	{
 		//owner.removeChatClient(name);
 	}
-	
-
+	public boolean contains(ArrayList<PlayerState>players){
+		for(int c=0;c<players.size();c++){
+			if(clientMap.contains(players.get(c).getMpName()))
+					return true;
+			else{
+				
+			}
+		}
+//		for(int c=0;c<players.size();c++){
+//			for(GameCharacter chara:owner.getFriends()){
+//				chara.setMpName(null);
+//				chara.setPlayer(false);
+//			}
+//		}
+		return false;
+	}
 } 
