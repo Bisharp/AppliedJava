@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 
 import com.dig.www.MultiPlayer.State.GameState;
 import com.dig.www.MultiPlayer.State.PlayerState;
+import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 
@@ -81,7 +82,10 @@ public class ChatServer  implements IChatServer
 		// no delivered
 		return false;
 	}
-
+@Override
+public StartState getStartState()throws RemoteException{
+return new StartState(owner);
+}
 	@Override
 	public boolean broadcast(String sender,GameState  message) throws RemoteException
 	{

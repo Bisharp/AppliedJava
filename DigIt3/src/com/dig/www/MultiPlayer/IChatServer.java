@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.util.Set;
 
 import com.dig.www.MultiPlayer.State.GameState;
+import com.dig.www.MultiPlayer.State.StartState;
 
 public interface IChatServer extends Remote
 {
@@ -16,5 +17,6 @@ public interface IChatServer extends Remote
 	public boolean sendMessage(String sender, String sendee, GameState message) throws RemoteException;
 	public boolean broadcast(String sender, GameState Message) throws RemoteException;
 	public void getTold(GameState Message) throws RemoteException;
+	public StartState getStartState()throws RemoteException;
 
 }

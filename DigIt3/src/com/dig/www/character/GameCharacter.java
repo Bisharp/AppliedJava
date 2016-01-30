@@ -433,6 +433,8 @@ public boolean isPlayer(){
 			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
 				dead = false;
 			onScreen = getBounds().intersects(owner.getScreen());
+			setActing(0, 0);
+			releaseAll();
 		} else {
 			collisionFlagged = false;
 			if (poisonTimer > 0) {
@@ -1041,7 +1043,11 @@ public boolean isPlayer(){
 		}
 		
 		illuminated = false;
-	}}
+	}
+	if (owner.getState() == State.INGAME&&!dead) {
+		timersCount();
+	}	
+	}
 
 	public void setWaiting(boolean setter) {
 		waiting = setter;
@@ -1538,7 +1544,7 @@ else if (getType() != Types.SPADE) {
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
 					if (getType() == Types.MACARONI)
 						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
-				} else
+				} else if(player)
 					((Spade) this).keyReleased = false;
 				if (this instanceof SirCobalt)
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
@@ -1756,9 +1762,9 @@ int collectibles =0;
 		}
 		if (poisonTimer > 0)
 			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
-		if (owner.getState() == State.INGAME) {
-			timersCount();
-		}
+//		if (owner.getState() == State.INGAME) {
+//			timersCount();
+//		}
 
 		// if (player) {
 		// willTalk = true;
@@ -2010,7 +2016,29 @@ if(!player){
 		else
 			return 0;
 	}
-
+public void setActing(int acting,int timer){
+	meleeTimer=-1;
+	rangedTimer=-1;
+	specialTimer=-1;
+//	if(acting==1)
+//		meleeTimer=timer;
+//	else if(acting==2)
+//		rangedTimer=timer;
+//	else if(acting==3)
+//		specialTimer=timer;
+}
+public int getAttackTimer(){
+	switch(getActing()){
+		case 1:
+			return meleeTimer;
+		case 2:
+			return rangedTimer;
+		case 3:
+			return specialTimer;
+			default:
+				return 0;
+	}
+}
 	public abstract Moves getMove();
 
 	public abstract String toMoveString();
@@ -2472,4 +2500,16 @@ if(!player){
 	public String getS(){
 		return s;
 	}
+	public float getHealth(){
+		return health;
+	}
+	public float getEnergy(){
+		return energy;
+	}
+public void setHealth(float setter){
+	health=setter;
+}
+public void setEnergy(float setter){
+	energy=setter;
+}
 }

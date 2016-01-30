@@ -42,8 +42,10 @@ import com.dig.www.MultiPlayer.ChatClient;
 import com.dig.www.MultiPlayer.ChatServer;
 import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
+import com.dig.www.MultiPlayer.State.BlockState;
 import com.dig.www.MultiPlayer.State.GameState;
 import com.dig.www.MultiPlayer.State.PlayerState;
+import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.MultiPlayer.State.SwitchState;
 import com.dig.www.blocks.Block;
 import com.dig.www.blocks.Block.Blocks;
@@ -473,7 +475,159 @@ if(character==null){
 		spawnNum = sB.getSpawnNum();
 		save();
 	}
+public void changeClientArea(){
+	System.out.println("New Level");
+	//this.level = "hauntedTest";
+	preferences = new Preferences();
+	GameCharacter.setInventory(new Inventory(this));
+	pointedPoint = null;
+	fP.clear();
+	scrollX = 0;
+	scrollY = 0;
+	if (levelChanged) {
+		if (character instanceof Heart)
+			((Heart) character).end();
+		else
+			for (GameCharacter g : friends)
+				if (g instanceof Heart)
+					((Heart) g).end();
+	}
+StartState st=null;
+try {
+	st = theServer.getStartState();
+} catch (RemoteException e1) {
+	// TODO Auto-generated catch block
+	e1.printStackTrace();
+}
+//enemies.clear();
+world.clear();
+objects.clear();
+movingObjects.clear();
+fP.clear();
+//npcs.clear();
+texturePack=st.getTexture();
+for(BlockState b:st.getWorld()){
+	
+	world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this,b.getB()));
+	if(!b.getInv())
+		world.get(world.size() - 1).setVisible(false);
+}
+//for(PlayerState p:st.getPlayers()){
+//	
+//}
+	// TODO finish
+	//StageBuilder sB = StageBuilder.getInstance(mode, level, this, -1);
+	//sB.changeState(mode, level, this, -1);
+	//setTexturePack(sB.readText());
+	//world = sB.read();
+	//enemies = sB.loadEn();
+	//portals = sB.loadPortals();
+	//npcs = sB.loadNPC();
+	//objects = sB.loadObjects();
 
+	//StageBuilder.setTime(this);
+
+	//weather = Weather.translate(sB.readWeather());
+
+	if (data != null)
+		data.enterLevel(level);
+	else
+		data = new CharData(level, this);
+
+	objects = data.filter(objects);
+	npcs = data.filterNPC(npcs);
+
+	for (Objects o : objects)
+		if (o instanceof DropPoint)
+			if (((DropPoint) o).hasDrop()) {
+				npcs.add(new Chest(o.getX(), o.getY(),
+						"images/objects/chestC.png", this, level,
+						((DropPoint) o).type()));
+			}
+if(character==null){
+System.err.println("Character is never intialized. Leaving game.");
+System.exit(0);
+}
+
+	if (character.getType() == Types.SPADE) {
+		((Spade) character).resetDirt();
+	}
+
+	character.setX(Statics.BOARD_WIDTH / 2 - 50);
+	character.setY(Statics.BOARD_HEIGHT / 2 - 50);
+	for (int c = 0; c < friends.size(); c++) {
+		friends.get(c).setDead(false);
+		if (c < 3) {
+			friends.get(c).setX(
+					Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
+			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
+		} else if (c == 3) {
+			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100);
+			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+		} else if (c == 4) {
+			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + 100);
+			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+		} else if (c < 8) {
+			friends.get(c).setX(
+					Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
+			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 + 100);
+		} else {
+			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
+			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+		}
+		if (friends.get(c).getType() == Types.SPADE) {
+			((Spade) friends.get(c)).resetDirt();
+		}
+
+	}
+	for (int c = 0; c < enemies.size(); c++) {
+		enemies.get(c).resetImage(this);
+	}
+
+	wallList = new ArrayList<Block>();
+	for (Block b : world) {
+
+		b.initialAnimate(spawnX, spawnY);
+
+		// Deals with line-of-sight
+		if (b.getType() == Block.Blocks.WALL)
+			wallList.add(b);
+	}
+
+	for (Portal p : portals)
+		p.initialAnimate(spawnX, spawnY);
+
+	for (Enemy e : enemies) {
+		e.initialAnimate(spawnX, spawnY);
+		e.setAlive(true);
+		e.resetImage(this);
+	}
+
+	for (NPC n : npcs)
+		n.initialAnimate(spawnX, spawnY);
+
+	for (Objects n : objects)
+		n.initialAnimate(spawnX, spawnY);
+
+	// TODO lightspot
+	// objects.add(new Lamp(character.getX() - 100, character.getY() - 500,
+	// "images/objects/floweryLamp.png", this, 5));
+
+	if (spawnLoc != null) {
+		spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
+		spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
+	}
+	changeWeather();
+	updateBackground();
+	Statics.wipeColors();
+
+	long freeMem = Runtime.getRuntime().freeMemory();
+	System.gc();
+	System.out.println("Before: " + freeMem + " After: "
+			+ Runtime.getRuntime().freeMemory());
+	//spawnNum = sB.getSpawnNum();
+	save();
+}
 	protected boolean fogCompute(int x, int y) {
 		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG
 				.special()
@@ -1309,7 +1463,7 @@ continue;}
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
-					if(states.get(s).getPlayerStates()==null)
+					if(states.get(s)==null||states.get(s).getPlayerStates()==null)
 						System.out.println("null");
 					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
@@ -1321,9 +1475,13 @@ continue;}
 								friend.setDirection(playerState.getDir());
 								friend.setImage(friend.newImage(playerState.getS()));
 								friend.setMpName(playerState.getMpName());
+								friend.setHealth(playerState.getHealth());
+								friend.setEnergy(playerState.getEnergy());
+								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
 							}
 						}
 					}
+					if(states.get(s)!=null&&states.get(s).getActions()!=null)
 					for(ActionState actionState:states.get(s).getActions()){
 						switch(actionState.getActionType()){
 						case SWITCH:
@@ -1345,15 +1503,15 @@ continue;}
 				states.clear();
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
-								.getY() - b.getY(), 0,
+								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
 				for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
-									character.getY() - b.getY(), 0, character
+									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
 											.getDirection(), character.getS(), character.isPlayer(),
-									character.getType().toString(),character.getMpName()));}
+									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);
 			} catch (RemoteException e1) {
@@ -1364,24 +1522,57 @@ continue;}
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
+					if(states.get(s)==null)
+						continue;
 					if(states.get(s).isServer())
 						if(!states.get(s).getLevel().equals(level)){
 							level=states.get(s).getLevel();
-							changeArea();
+							changeClientArea();
 						}
 							
 					if(states.get(s).getPlayerStates()==null)
 						System.out.println("null");
 					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
+						boolean hasGone=false;
+						if(character.getType().toString().equals(playerState.getTypeToString()))
+							hasGone=true;
+						else
 						for(GameCharacter friend:friends){
 							if(friend.getType().toString().equals(playerState.getTypeToString())){
+								 hasGone=true;
 								friend.setX(playerState.getX()+b.getX());
 								friend.setY(playerState.getY()+b.getY());
 								friend.setPlayer(playerState.isPlayer());
 								friend.setDirection(playerState.getDir());
 								friend.setImage(friend.newImage(playerState.getS()));
 								friend.setMpName(playerState.getMpName());
+								friend.setHealth(playerState.getHealth());
+								friend.setEnergy(playerState.getEnergy());
+								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+							}
+						}
+						if(!hasGone){
+							GameCharacter chara = getACharacter(playerState
+									.getTypeToString());
+							if (chara != null) {
+								if (character == null&&!playerState.isPlayer()) {
+									character = chara;
+									//xPos=playerState.getX();
+									//yPos=state.getPlayerStates().get(c).getY();
+									chara.setPlayer(true);
+								} else {
+									friends.add(chara);
+									chara.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+									chara.setX(playerState.getX()+b.getX());
+									chara.setY(playerState.getY()+b.getY());
+									chara.setPlayer(playerState.isPlayer());
+									chara.setDirection(playerState.getDir());
+									chara.setImage(chara.newImage(playerState.getS()));
+									chara.setMpName(playerState.getMpName());
+									chara.setHealth(playerState.getHealth());
+									chara.setEnergy(playerState.getEnergy());
+								}
 							}
 						}
 					}
@@ -1405,9 +1596,9 @@ continue;}
 				states.clear();
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
-								.getY() - b.getY(), 0,
+								.getY() - b.getY(),character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
 				theServer.broadcast(mpName, currentState);
 				currentState.clear(level);
 			} catch (RemoteException e1) {
@@ -2792,7 +2983,7 @@ public String withoutFalse(String without){
 	}
 
 	public void getTold(GameState state) {
-		if (state.isServer()&&mode == null) {
+		if (server==null&&state.isServer()&&mode == null) {
 			mode = state.getPack();
 			level = state.getLevel();
 			currentState = new GameState(mode, level,false);
@@ -2821,7 +3012,8 @@ public String withoutFalse(String without){
 				ex.printStackTrace();
 			}
 			if (character != null) {
-				newGame(level);
+				//newGame(level);
+				changeClientArea();
 				setState(State.INGAME);
 				Block b=world.get(0);
 				int x=character.getX();
