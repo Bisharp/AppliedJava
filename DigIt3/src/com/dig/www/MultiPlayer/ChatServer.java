@@ -28,7 +28,7 @@ public class ChatServer  implements IChatServer
 	@Override
 	public Set<String> enterChatRoom(IChatClient chatClient, String name,String passWord) throws Exception
 	{
-		if(!passWord.equals(this.passWord))
+		if(!this.passWord.equals("None")&&!passWord.equals(this.passWord))
 			throw new Exception();
 		for (IChatClient client : clientMap.values())
 		{

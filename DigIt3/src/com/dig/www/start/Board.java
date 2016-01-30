@@ -2,6 +2,7 @@ package com.dig.www.start;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
@@ -100,6 +101,11 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private Board board=this;
+	private int times;
+	private int fps;
+	private int fpsT;
+	private long longTime;
 	protected ArrayList<String>chats=new ArrayList<String>();
 	protected ChatBox chatBox;
 	private String passWord;
@@ -626,7 +632,9 @@ System.exit(0);
 	System.out.println("Before: " + freeMem + " After: "
 			+ Runtime.getRuntime().freeMemory());
 	//spawnNum = sB.getSpawnNum();
-	save();
+	//save();
+	longTime=System.currentTimeMillis();
+	fpsT=0;
 }
 	protected boolean fogCompute(int x, int y) {
 		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG
@@ -1110,33 +1118,39 @@ if(GameCharacter.getInventory()!=null)
 		// g2d.drawString("", 100, getHeight() / 3);
 		// break;
 		}
-
+		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
+		g2d.setColor(Color.WHITE);
+g2d.drawString("FPS:"+fps, 3, 170);
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
-
+String decision;
 	public void openSwitchDialogue() {
+character.releaseAll();
+character.stop();
+		//scrollX *= -2;
+		//scrollY *= -2;
+		//reAnimate();
+		//repaint();
 
-		scrollX *= -2;
-		scrollY *= -2;
-		reAnimate();
-		repaint();
+		//timer.stop();
+		//time.pause();
 
-		timer.stop();
-		time.pause();
-
-		character.stop();
-		scrollX = 0;
-		scrollY = 0;
+		//character.stop();
+		//scrollX = 0;
+		//scrollY = 0;
 
 		switching = false;
 
 		// char[] names = {'S', 'C', 'D', 'H'};
-		String decision;
-
-		decision = ((String) JOptionPane
+		
+		Thread t = new Thread(new Runnable(){
+	        public void run(){
+	           // JOptionPane.showMessageDialog(null, "Hello");
+	        	
+	        decision = ((String) JOptionPane
 				.showInputDialog(
-						this,
+						board,
 						(character.isDead() ? "Your current character has been defeated.\n"
 								: "")
 								+ "Please select a character: ", DigIt.NAME,
@@ -1144,8 +1158,8 @@ if(GameCharacter.getInventory()!=null)
 						getCharacters(), null));
 
 		if (decision == null) {
-			timer.restart();
-			time.resume();
+			//timer.restart();
+			//time.resume();
 			if (character.isDead()) {
 				openSwitchDialogue();
 			}
@@ -1167,9 +1181,13 @@ if(currentState!=null)
 			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(),
 					(int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
 			Collections.sort(friends);
-		}
-		timer.restart();
-		time.resume();
+		}}
+	    });
+	  t.start();
+		
+		//timer.restart();
+		//time.resume();
+	  decision=null;
 	}
 
 	private String[] getCharacters() {
@@ -1619,6 +1637,21 @@ continue;}
 		}
 		// if(server!=null||me!=null)
 		// currentState=new GameState(mode, level);
+		fpsT++;
+		if(System.currentTimeMillis()-longTime>=1000){
+			fps=fpsT;
+//			if(fps>30){
+//				times++;
+//				if(times>5){
+//					timer.setDelay(50);
+//				}
+//			}else
+//				times=0;
+			//System.out.println(fps);
+			//System.out.println(tpf());
+			fpsT=0;
+			longTime=System.currentTimeMillis();
+		}
 	}
 
 	// Beginning of checkCollisions()-related code
