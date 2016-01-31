@@ -55,7 +55,7 @@ public class SoundPlayer {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void playWithJL(final String url, BufferedInputStream bis) {
+	private void playWithJL(String url, BufferedInputStream bis) {
 		try {
 			player = new Player(bis);
 			if (playerThread != null && playerThread.isAlive())
