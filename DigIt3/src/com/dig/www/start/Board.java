@@ -101,6 +101,7 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private int sendInt=0;
 	private Board board=this;
 	private int times;
 	private int fps;
@@ -1519,19 +1520,24 @@ continue;}
 					}
 				}
 				states.clear();
+				if(sendInt<=0)
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+				if(sendInt<=0)
 				for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
 											.getDirection(), character.getS(), character.isPlayer(),
 									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
+				if(sendInt<=0){
+					sendInt=1;
 				server.broadcast(mpName, currentState);
-				currentState.clear(level);
+				currentState.clear(level);}
+				else sendInt--;
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1612,13 +1618,18 @@ continue;}
 					}
 				}
 				states.clear();
+				if(sendInt<=0)
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(),character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+				if(sendInt<=0){
+					sendInt=1;
 				theServer.broadcast(mpName, currentState);
-				currentState.clear(level);
+				currentState.clear(level);}
+				else
+					sendInt--;
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();

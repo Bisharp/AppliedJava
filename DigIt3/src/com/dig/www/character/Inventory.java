@@ -194,7 +194,9 @@ public class Inventory implements Serializable {
 			items.add(type);
 
 		if (itemNums.containsKey(type)) {
-			itemNums.replace(type, itemNums.get(type) + num);
+			int i=itemNums.get(type);
+			itemNums.remove(type);
+			itemNums.put(type, i + num);
 		} else
 			itemNums.put(type, num);
 	}
@@ -378,6 +380,8 @@ public class Inventory implements Serializable {
 	}
 
 	public void decrementItem(Items key) {
-		itemNums.replace(key, itemNums.get(key) - 1);
+		int i=itemNums.get(key);
+		itemNums.remove(key);
+		itemNums.put(key, i - 1);
 	}
 }

@@ -54,6 +54,8 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 			if(hook.getBounds().intersects(getBounds())){
 				harming=false;
 				moving=false;
+				//x -= Math.cos((double) Math.toRadians((double) getD())) * getSpeed()*10;
+				//y -= Math.sin((double) Math.toRadians((double) getD())) * getSpeed()*10;
 				collideWithHook=true;
 				x=hook.getX();
 				y=hook.getY();
@@ -81,5 +83,10 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 	}
 	public boolean collideWithHook(){
 		return collideWithHook;
+	}
+	public void pull(){
+		if(!moving)
+			System.out.println("Pull");
+	//	moving=true;
 	}
 }
