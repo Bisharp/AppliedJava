@@ -184,8 +184,8 @@ public class CharData implements Serializable {
 
 			if (specialCollectibles.get(address) == true)
 				return false;
-
-			specialCollectibles.replace(address, true);
+specialCollectibles.remove(address);
+			specialCollectibles.put(address, true);
 			return true;
 		}
 

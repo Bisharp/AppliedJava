@@ -1338,13 +1338,14 @@ public boolean isPlayer(){
 
 		if (collisionFlagged)
 			return;
-
-		collisionFlags.replace(direction, false);
+collisionFlags.remove(direction);
+		collisionFlags.put(direction, false);
 
 		switch (!direction.isDiag() ? direction : getPlacement(wall)) {
 		case UP:
 		case DOWN:
-			collisionFlags.replace(deltaY < 0 ? Direction.UP : Direction.DOWN, false);
+			collisionFlags.remove(deltaY < 0 ? Direction.UP : Direction.DOWN);
+			collisionFlags.put(deltaY < 0 ? Direction.UP : Direction.DOWN, false);
 
 			deltaY = 0;
 			moveY = false;
@@ -1353,7 +1354,8 @@ public boolean isPlayer(){
 
 		case LEFT:
 		case RIGHT:
-			collisionFlags.replace(deltaX < 0 ? Direction.LEFT : Direction.RIGHT, false);
+			collisionFlags.remove(deltaX < 0 ? Direction.LEFT : Direction.RIGHT);
+			collisionFlags.put(deltaX < 0 ? Direction.LEFT : Direction.RIGHT, false);
 
 			deltaX = 0;
 			moveX = false;
@@ -1380,7 +1382,8 @@ public boolean isPlayer(){
 	}
 
 	public void presetCollisionFlag(int i) {
-		collisionFlags.replace(placement[i], false);
+collisionFlags.remove(placement[i]);
+		collisionFlags.put(placement[i], false);
 	}
 
 	// TODO stuff
