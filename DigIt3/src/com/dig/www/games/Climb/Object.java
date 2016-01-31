@@ -47,6 +47,13 @@ public class Object {
 	public int getY() {
 		return y;
 	}
+	
+	public int getDX() {
+		return Math.round(x / 10) * 10;
+	}
+	public int getDY() {
+		return Math.round(y / 10) * 10;
+	}
 
 	public void setY(int y) {
 		this.y = y;

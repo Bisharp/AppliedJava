@@ -103,13 +103,13 @@ public class Character extends Object {
 
 	protected void press(int keyCode) {
 
-		if (keyCode == Preferences.LEFT()) {
+		if (keyCode == KeyEvent.VK_LEFT) {
 			facingRight = false;
 			walking = true;
-		} else if (keyCode == Preferences.RIGHT()) {
+		} else if (keyCode == KeyEvent.VK_RIGHT) {
 			facingRight = true;
 			walking = true;
-		} else if (keyCode == Preferences.ATTACK() && !jumped) {
+		} else if (keyCode == KeyEvent.VK_SPACE && !jumped) {
 			state = States.JUMP;
 			jumped = true;
 			jumpTimer = TIMER;
@@ -119,7 +119,7 @@ public class Character extends Object {
 
 	protected void release(int keyCode) {
 
-		if (keyCode == Preferences.LEFT() || keyCode == Preferences.RIGHT()) {
+		if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) {
 			walking = false;
 		}
 	}
