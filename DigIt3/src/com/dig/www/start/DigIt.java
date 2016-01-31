@@ -20,7 +20,8 @@ public class DigIt extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private MPanel activePanel;
 	private String userName;
-	private Thread controllerThread;
+	private static Thread controllerThread;
+	private static GameControllerRunnable gCR;
 	public static final ImageLibrary lib;
 	public static final SoundPlayer soundPlayer;
 	public static final String NAME = "Quest of Four";
@@ -38,7 +39,8 @@ private String level=Board.DEFAULT;
 
 		JOptionPane.showMessageDialog(this, "Please plug in any game controllers now.\nYou will not be able to later.", NAME, JOptionPane.INFORMATION_MESSAGE);
 
-		controllerThread = new Thread(new GameControllerRunnable(this));
+		gCR = new GameControllerRunnable(this);
+		controllerThread = new Thread(gCR);
 		controllerThread.start();
 
 		setVisible(true);
@@ -146,6 +148,16 @@ public void setPack(String setter){
 	public void keyRelease(int key) {
 		activePanel.keyRelease(key);
 	}
+	
+	public void nullCThread() {
+		controllerThread = null;
+	}
+	public static boolean hasController() {
+		return controllerThread.isAlive();
+	}
+	public static Thread getCT() {
+		return controllerThread;
+	}
 
 	// Incomplete and broken.
 	public static void showMessageDialog(DigIt owner, String message, String name, int informationMessage) {
@@ -165,5 +177,9 @@ public void setPack(String setter){
 	}
 	public String getLevel(){
 		return level;
+	}
+
+	public static GameControllerRunnable getCTR() {
+		return gCR;
 	}
 }

@@ -1,5 +1,9 @@
 package com.dig.www.util;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
@@ -66,25 +70,29 @@ public class GameControllerRunnable implements Runnable {
 	protected static final int STICK_PRESS = 13;
 	protected static final int STICK2_PRESS = 14;
 	protected static final int HAT_SWITCH = 15;
-	
 	protected static final int Z_AXIS_L = 16;
+
+	protected static int[] nums = new int[] { Z_AXIS, A, B, X, Y, LB, RB, BACK, START, STICK_PRESS, STICK2_PRESS, Z_AXIS_L };
 
 	protected static GameControllerPreferences p;
 
-	private static final float Z_SENSITIVITY = 0.5f;
-	private final float WALK_SENSITIVITY = 0.4f;
+	protected static final float Z_SENSITIVITY = 0.5f;
+	protected static final float WALK_SENSITIVITY = 0.4f;
 
 	// private DarkManor3D owner;
 
 	public GameControllerRunnable(DigIt dM) {
 
-		getController();
-		rOB = dM;
+		if (getController()) {
+			rOB = dM;
 
-		if (controller != null)
-			buttonPressed = new boolean[16];
+			if (controller != null)
+				buttonPressed = new boolean[16];
 
-		p = new GameControllerPreferences();
+			p = new GameControllerPreferences();
+		} else {
+			rOB.nullCThread();
+		}
 
 		// owner = dM;
 	}
@@ -122,6 +130,13 @@ public class GameControllerRunnable implements Runnable {
 			data = components[i].getPollData();
 
 			// Checks buttons for changes since the last check
+			// TODO mouse
+			if (((i == p.mouseX || i == p.mouseY) && !p.mouseDPad) || (i == HAT_SWITCH && p.mouseDPad)) {
+				if (!p.mouseDPad)
+					handleSMouse();
+				else
+					handleDPad();
+			}
 
 			if (data != offValues[i]) {
 
@@ -136,38 +151,42 @@ public class GameControllerRunnable implements Runnable {
 
 				// TODO Attack
 				else if (i == p.attack) {
-					handleButton(ATTACK, 5, isZAxis(p.attack), p.attack == p.rZAxis);
+					handleButton(ATTACK, 5, isZAxis(p.attack), p.attack == p.rZAxis, -1);
 				}
 
 				// TODO Projectile
 				else if (i == p.projectile) {
-					handleButton(PROJECTILE, 6, isZAxis(p.projectile), p.projectile == p.rZAxis);
+					handleButton(PROJECTILE, 6, isZAxis(p.projectile), p.projectile == p.rZAxis, -1);
 				}
 
 				// TODO Special
 				else if (i == p.special) {
-					handleButton(SPECIAL, 7, isZAxis(p.special), p.special == p.rZAxis);
+					handleButton(SPECIAL, 7, isZAxis(p.special), p.special == p.rZAxis, -1);
 				}
 
 				// TODO Pause
 				else if (i == p.pause) {
-					handleButton(PAUSE, 8, isZAxis(p.special), p.special == p.rZAxis);
+					handleButton(PAUSE, 8, isZAxis(p.special), p.special == p.rZAxis, -1);
 				}
 
 				// TODO LevelUp menu
 				else if (i == p.switchC) {
-					handleButton(SWITCH, 9, isZAxis(p.switchC), p.switchC == p.rZAxis);
+					handleButton(SWITCH, 9, isZAxis(p.switchC), p.switchC == p.rZAxis, -1);
 				}
 
 				// TODO Talk to NPC
 				else if (i == p.npc) {
-					handleButton(NPC, 10, isZAxis(p.npc), p.npc == p.rZAxis);
+					handleButton(NPC, 10, isZAxis(p.npc), p.npc == p.rZAxis, -1);
 				}
 
 				// TODO Talk to NPC
 				else if (i == p.item) {
-					handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis);
+					handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis, -1);
 				}
+				
+				// TODO Click the Mouse
+				else if (i == p.mouseClick)
+					handleButton(0, 12, isZAxis(p.mouseClick), p.mouseClick == p.rZAxis, InputEvent.BUTTON1_MASK);
 			}
 		}
 
@@ -178,30 +197,49 @@ public class GameControllerRunnable implements Runnable {
 		//
 		// }
 	}
-	
+
 	protected boolean isZAxis(int check) {
 		return check == Z_AXIS || check == Z_AXIS_L;
 	}
 
-	protected void handleButton(int press, int index, boolean isZAxis, boolean rightAxis) {
+	protected void handleButton(int press, int index, boolean isZAxis, boolean rightAxis, int mouseClick) {
 
 		if (!isZAxis) {
 			if (data > 0) {
-				rOB.keyPress(press);
+
+				if (mouseClick == -1)
+					rOB.keyPress(press);
+				else
+					robot.mousePress(mouseClick);
+
 				buttonPressed[index] = true;
 			} else if (buttonPressed[index]) {
-				rOB.keyRelease(press);
+
+				if (mouseClick == -1)
+					rOB.keyRelease(press);
+				else
+					robot.mouseRelease(mouseClick);
+
 				buttonPressed[6] = false;
 			}
 		} else {
-			if (data < -Z_SENSITIVITY) {
-				rOB.keyPress(press);
+			if (data < -p.zSensitivity) {
+				if (mouseClick == -1)
+					rOB.keyPress(press);
+				else
+					robot.mousePress(mouseClick);
 				buttonPressed[index] = true;
-			} else if (data > Z_SENSITIVITY) {
-				rOB.keyPress(p.lZAxis);
+			} else if (data > p.zSensitivity) {
+				if (mouseClick == -1)
+					rOB.keyPress(p.lZAxis);
+				else
+					robot.mousePress(mouseClick);
 				buttonPressed[12] = true;
 			} else if (buttonPressed[index]) {
-				rOB.keyRelease(press);
+				if (mouseClick == -1)
+					rOB.keyRelease(press);
+				else
+					robot.mouseRelease(mouseClick);
 				buttonPressed[index] = false;
 			}
 		}
@@ -210,19 +248,18 @@ public class GameControllerRunnable implements Runnable {
 	protected void handleStick() {
 		// TODO Code run if the control stick is pressed in the Y axis
 		if (i == p.moveY) {
-
 			// Walk
 
-			if (data > WALK_SENSITIVITY) {
+			if (data > p.walkSensitivity) {
 				rOB.keyPress(DOWN);
 				buttonPressed[0] = true;
-			} else if (data < -WALK_SENSITIVITY) {
+			} else if (data < -p.walkSensitivity) {
 				rOB.keyPress(UP);
 				buttonPressed[1] = true;
 
 				// keyRelease
 
-			} else if (data < WALK_SENSITIVITY && data > -WALK_SENSITIVITY) {
+			} else if (data < p.walkSensitivity && data > -p.walkSensitivity) {
 				if (buttonPressed[0]) {
 					rOB.keyRelease(DOWN);
 					buttonPressed[0] = false;
@@ -235,19 +272,18 @@ public class GameControllerRunnable implements Runnable {
 
 		// TODO Code run if the control stick is pressed in the X axis
 		else if (i == p.moveX) {
-
 			// walk
 
-			if (data > WALK_SENSITIVITY) {
+			if (data > p.walkSensitivity) {
 				rOB.keyPress(RIGHT);
 				buttonPressed[2] = true;
-			} else if (data < -WALK_SENSITIVITY) {
+			} else if (data < -p.walkSensitivity) {
 				rOB.keyPress(LEFT);
 				buttonPressed[3] = true;
 
 				// keyRelease
 
-			} else if (data < WALK_SENSITIVITY && data > -WALK_SENSITIVITY) {
+			} else if (data < p.walkSensitivity && data > -p.walkSensitivity) {
 				if (buttonPressed[2]) {
 					rOB.keyRelease(RIGHT);
 					buttonPressed[2] = false;
@@ -261,59 +297,130 @@ public class GameControllerRunnable implements Runnable {
 
 	protected int[] dPadDirs = new int[] { DOWN, UP, RIGHT, LEFT };
 
+	protected void releaseKeys() {
+		for (int i = 0; i < 4; i++)
+			if (buttonPressed[i]) {
+				rOB.keyRelease(dPadDirs[i]);
+				buttonPressed[i] = false;
+			}
+	}
+
+	protected void releaseKeys(int preserve0, int preserve1) {
+		for (int i = 0; i < 4; i++)
+			if (buttonPressed[i] && i != preserve0 && i != preserve1) {
+				rOB.keyRelease(dPadDirs[i]);
+				buttonPressed[i] = false;
+			}
+	}
+
 	protected void handleDPad() {
 		int padValue = (int) (components[HAT_SWITCH].getPollData() * 1000);
 		switch (padValue) {
 		case 1000:
+			releaseKeys();
 			rOB.keyPress(LEFT);
 			buttonPressed[3] = true;
 			break;
 		case 125:
-			rOB.keyPress(UP);
-			buttonPressed[1] = true;
-			rOB.keyPress(LEFT);
-			buttonPressed[3] = true;
+			releaseKeys(1, 3);
+			if (!buttonPressed[1]) {
+				rOB.keyPress(UP);
+				buttonPressed[1] = true;
+			}
+			if (!buttonPressed[3]) {
+				rOB.keyPress(LEFT);
+				buttonPressed[3] = true;
+			}
 			break;
 		case 250:
+			releaseKeys();
 			rOB.keyPress(UP);
 			buttonPressed[1] = true;
 			break;
 		case 375:
-			rOB.keyPress(UP);
-			buttonPressed[1] = true;
-			rOB.keyPress(RIGHT);
-			buttonPressed[2] = true;
+			releaseKeys(1, 2);
+			if (!buttonPressed[1]) {
+				rOB.keyPress(UP);
+				buttonPressed[1] = true;
+			}
+			if (!buttonPressed[2]) {
+				rOB.keyPress(RIGHT);
+				buttonPressed[2] = true;
+			}
 			break;
 		case 500:
+			releaseKeys();
 			rOB.keyPress(RIGHT);
 			buttonPressed[2] = true;
 			break;
 		case 625:
-			rOB.keyPress(RIGHT);
-			buttonPressed[2] = true;
-			rOB.keyPress(DOWN);
-			buttonPressed[0] = true;
+			releaseKeys(2, 0);
+			if (!buttonPressed[2]) {
+				rOB.keyPress(RIGHT);
+				buttonPressed[2] = true;
+			}
+			if (!buttonPressed[1]) {
+				rOB.keyPress(DOWN);
+				buttonPressed[0] = true;
+			}
 			break;
 		case 750:
+			releaseKeys();
 			rOB.keyPress(DOWN);
 			buttonPressed[0] = true;
 			break;
 		case 875:
-			rOB.keyPress(LEFT);
-			buttonPressed[3] = true;
-			rOB.keyPress(DOWN);
-			buttonPressed[0] = true;
+			releaseKeys(3, 0);
+			if (!buttonPressed[3]) {
+				rOB.keyPress(LEFT);
+				buttonPressed[3] = true;
+			}
+			if (!buttonPressed[0]) {
+				rOB.keyPress(DOWN);
+				buttonPressed[0] = true;
+			}
 			break;
 		default:
-			for (int i = 0; i < 4; i++)
-				if (buttonPressed[i]) {
-					rOB.keyRelease(dPadDirs[i]);
-					buttonPressed[i] = false;
-				}
+			releaseKeys();
 		}
 	}
 
-	public void getController() {
+	protected float xAmount = 0, yAmount = 0;
+	protected static final float diag = 0.71f;
+	protected static Robot robot;
+	static {
+		try {
+			robot = new Robot();
+		} catch (Exception ohNo) {
+			ohNo.printStackTrace();
+		}
+	}
+
+	protected void handleSMouse() {
+		// TODO Code run if the control stick is pressed in the Y axis
+		Point mouse = MouseInfo.getPointerInfo().getLocation();
+
+		boolean move = false;
+
+		if (i == p.mouseY) {
+			if (data > p.mouseSensitivity || data < -p.mouseSensitivity) {
+				yAmount = data;
+				move = true;
+			} else
+				yAmount = 0;
+		} else if (i == p.mouseX) {
+			if (data > p.mouseSensitivity || data < -p.mouseSensitivity) {
+				xAmount = data;
+				move = true;
+			} else
+				xAmount = 0;
+		}
+
+		if (move)
+			robot.mouseMove(mouse.x + (int) (xAmount * p.mouseSpeed), mouse.y + (int) (yAmount * p.mouseSpeed));
+	}
+
+	public boolean getController() {
 		ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
 		// retrieve the available controllers
 		Controller[] controllers = ce.getControllers();
@@ -330,6 +437,7 @@ public class GameControllerRunnable implements Runnable {
 		// none found
 		if (controller == null) {
 			System.out.println("Gamepad controller not found ");
+			return false;
 		} else {
 			Component[] components = controller.getComponents();
 			offValues = new float[components.length];
@@ -337,10 +445,12 @@ public class GameControllerRunnable implements Runnable {
 			for (int i = 0; i < components.length; i++) {
 				offValues[i] = components[i].getPollData();
 			}
+
+			return true;
 		}
 	}
-	
-	public GameControllerPreferences getP() {
+
+	public GameControllerPreferences getPreferences() {
 		return p;
 	}
 }
