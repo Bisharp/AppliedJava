@@ -11,8 +11,14 @@ protected String s;
 protected boolean isPlayer;
 protected String typeToString;
 protected String mpName;
-	public PlayerState(int x, int y,int attackNum,Direction dir,String s,boolean isPlayer,String typeToString,String mpName) {
+protected float health;
+protected float energy;
+protected int attackTimer;
+	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy) {
 		super(x, y);
+		this.attackTimer=attackTimer;
+		this.health=health;
+		this.energy=energy;
 		this.s=s;
 		this.dir=dir;
 		this.isPlayer=isPlayer;
@@ -42,5 +48,14 @@ public String getMpName() {
 public void left(){
 	isPlayer=(false);
 	mpName=("I love cake");
+}
+public float getHealth(){
+	return health;
+}
+public float getEnergy(){
+	return energy;
+}
+public int getAttackTimer(){
+	return attackTimer;
 }
 }
