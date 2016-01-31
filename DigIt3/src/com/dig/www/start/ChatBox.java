@@ -16,7 +16,7 @@ public class ChatBox extends JFrame{
 	Board owner;
 	JTextField jf;
 	 JTextArea jt;
-public ChatBox(Board owner){
+public ChatBox(final Board owner){
 	int size=290;
 	this.owner=owner;
 	setSize(size,125);
