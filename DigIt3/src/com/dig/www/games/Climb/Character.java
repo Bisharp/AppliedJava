@@ -13,7 +13,7 @@ public class Character extends Object {
 		GROUND, JUMP, FALL
 	}
 
-	protected States state = States.GROUND;
+	protected States state = States.FALL;
 	protected int jumpTimer = 0;
 	protected int dX = 0, dY = 0, timer = 0;
 
@@ -95,10 +95,16 @@ public class Character extends Object {
 		x += dX;
 		y += dY;
 		
-		if (x > 500)
-			x = 500;
-		else if (x < 0)
-			x = 0;
+		if (x > 600)
+			x = 600;
+		else if (x < width)
+			x = width;
+		
+		if (y + height > Climb.GH - 20 && state == States.FALL) {
+			state = States.GROUND;
+			dY = 0;
+			jumped = false;
+		}
 	}
 
 	protected void press(int keyCode) {

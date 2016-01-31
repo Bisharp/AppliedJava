@@ -49,9 +49,9 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 			Graphics2D g2d = (Graphics2D) g;
 
 			if (player.facingRight)
-				g2d.drawImage(player.getImage(), player.getDX(), player.getDY(), this);
+				g2d.drawImage(player.getImage(), player.getDX() - player.width, player.getDY(), this);
 			else
-				g2d.drawImage(player.getImage(), player.getDX() - player.width, player.getDY(), -player.width, player.height, this);
+				g2d.drawImage(player.getImage(), player.getDX(), player.getDY(), -player.width, player.height, this);
 		}
 	}
 
