@@ -41,6 +41,7 @@ public class ChatServer  implements IChatServer
 		{
 			existingClients.add(client);
 		}
+		//owner.getCurrentState().clear(owner.getLevel());
 		//sendMessage(owner.getMPName(), name, new StartState(owner.getMode(),owner.getLevel()));
 		return(existingClients);
 	}
@@ -68,6 +69,7 @@ public class ChatServer  implements IChatServer
 		{
 			client.removeChatClient(name);
 		}
+		//owner.getCurrentState().clear(owner.getLevel());
 	}
 
 	@Override

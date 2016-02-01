@@ -1553,6 +1553,10 @@ else if (getType() != Types.SPADE) {
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
 			}
 
+		}else if(this instanceof Diamond&&((Diamond)this).getShield()!=null
+				){
+			//System.out.println("Hi");
+			((Diamond)this).getShield().pull();
 		}
 
 		if (this instanceof Club) {
