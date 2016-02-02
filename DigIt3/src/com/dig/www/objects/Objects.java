@@ -140,4 +140,10 @@ public class Objects extends Sprite {
 		// Did not find anything. This still works fine
 		return null;
 	}
+	public String getLoc(){
+		return loc;
+	}
+	public String getIdentifier(){
+		return identifier;
+	}
 }

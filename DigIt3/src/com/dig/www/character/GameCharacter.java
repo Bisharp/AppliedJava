@@ -432,6 +432,11 @@ public boolean isPlayer(){
 			basicAnimate();
 			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
 				dead = false;
+			for(int c=0;c<owner.getFriends().size();c++){{
+				if(owner.getFriends().get(c)!= this && !owner.getFriends().get(c).isDead() && getBounds().intersects(owner.getFriends().get(c).getBounds()))
+					dead=false;
+				break;}
+			}
 			onScreen = getBounds().intersects(owner.getScreen());
 			setActing(0, 0);
 			releaseAll();
@@ -1535,6 +1540,8 @@ collisionFlags.remove(placement[i]);
 				}
 			}
 		}
+		if(rangedPress&&getType()==Types.DIAMOND&&((Diamond)this).getShield()!=null)
+			((Diamond)this).getShield().pull();
 		if (rangedPress && meleeTimer <= 0 && specialTimer <= 0) {
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
@@ -1553,11 +1560,12 @@ else if (getType() != Types.SPADE) {
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
 			}
 
-		}else if(this instanceof Diamond&&((Diamond)this).getShield()!=null
-				){
-			//System.out.println("Hi");
-			((Diamond)this).getShield().pull();
 		}
+		//else if(this instanceof Diamond&&((Diamond)this).getShield()!=null
+//				){
+//			//System.out.println("Hi");
+//			((Diamond)this).getShield().pull();
+//		}
 
 		if (this instanceof Club) {
 			if (specialTimer >= 0 && specialTimer % 50 == 0) {

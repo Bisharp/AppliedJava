@@ -96,8 +96,13 @@ return new StartState(owner);
 //		owner
 		for(int c=0;c<clientMap.size();c++)
 		{
+			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
-		}
+			}catch(Exception ex){
+				ex.printStackTrace();
+				//clientMap.remove(arg0);
+			}
+			}
 		getTold(message);
 		return true;
 	}

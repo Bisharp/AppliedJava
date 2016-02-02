@@ -43,8 +43,13 @@ import com.dig.www.MultiPlayer.ChatClient;
 import com.dig.www.MultiPlayer.ChatServer;
 import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
+import com.dig.www.MultiPlayer.State.ActionState.ActionType;
 import com.dig.www.MultiPlayer.State.BlockState;
 import com.dig.www.MultiPlayer.State.GameState;
+import com.dig.www.MultiPlayer.State.MoneyState;
+import com.dig.www.MultiPlayer.State.ObjectPickUpState;
+import com.dig.www.MultiPlayer.State.ObjectState;
+import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
 import com.dig.www.MultiPlayer.State.PlayerState;
 import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.MultiPlayer.State.SwitchState;
@@ -132,7 +137,8 @@ public class Board extends MPanel implements ActionListener {
 	private Point spawnLoc;
 
 	public enum State {
-		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC, DOOROPEN;
+		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC
+		, DOOROPEN//,SWITCHING;
 	};
 
 	public enum Weather {
@@ -368,7 +374,8 @@ public void heyIaddedAFriendBack(String typeToString){
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
-
+scrollX=0;
+scrollY=0;
 		// TODO finish
 		StageBuilder sB = StageBuilder.getInstance(mode, level, this, num);
 		sB.changeState(mode, level, this, num);
@@ -405,6 +412,8 @@ if(character==null){
 	
 		if (character.getType() == Types.SPADE) {
 			((Spade) character).resetDirt();
+		}else if(character.getType()==Types.DIAMOND){
+			((Diamond)character).newArea();
 		}
 
 		character.setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -431,6 +440,8 @@ if(character==null){
 			}
 			if (friends.get(c).getType() == Types.SPADE) {
 				((Spade) friends.get(c)).resetDirt();
+			}else if(friends.get(c).getType()==Types.DIAMOND){
+				((Diamond)friends.get(c)).newArea();
 			}
 
 		}
@@ -483,6 +494,8 @@ if(character==null){
 		save();
 	}
 public void changeClientArea(){
+	scrollX=0;
+	scrollY=0;
 	System.out.println("New Level");
 	//this.level = "hauntedTest";
 	preferences = new Preferences();
@@ -518,6 +531,15 @@ for(BlockState b:st.getWorld()){
 	world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this,b.getB()));
 	if(!b.getInv())
 		world.get(world.size() - 1).setVisible(false);
+}
+for(ObjectState o:st.getObjects()){
+	switch(o.getType()){
+	case NORMAL:
+		objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), o.isWall(), this, o.getIdent()));
+		break;
+	case MONEY:
+		objects.add(new MoneyObject(o.getX(), o.getY(), o.getLoc(), this, o.getI()));
+	}
 }
 //for(PlayerState p:st.getPlayers()){
 //	
@@ -558,7 +580,10 @@ System.exit(0);
 
 	if (character.getType() == Types.SPADE) {
 		((Spade) character).resetDirt();
+	}else if(character.getType()==Types.DIAMOND){
+		((Diamond)character).newArea();
 	}
+
 
 	character.setX(Statics.BOARD_WIDTH / 2 - 50);
 	character.setY(Statics.BOARD_HEIGHT / 2 - 50);
@@ -584,6 +609,8 @@ System.exit(0);
 		}
 		if (friends.get(c).getType() == Types.SPADE) {
 			((Spade) friends.get(c)).resetDirt();
+		}else if(friends.get(c).getType()==Types.DIAMOND){
+			((Diamond)friends.get(c)).newArea();
 		}
 
 	}
@@ -657,6 +684,7 @@ System.exit(0);
 		case NPC:
 		case INGAME:
 		case DOOROPEN:
+		//case SWITCHING:
 			// Tag boolean part of line-of-sight
 			boolean tag = true;
 			int i;
@@ -1147,6 +1175,7 @@ character.stop();
 		
 		Thread t = new Thread(new Runnable(){
 	        public void run(){
+	        	//state=State.SWITCHING;
 	           // JOptionPane.showMessageDialog(null, "Hello");
 	        	
 	        decision = ((String) JOptionPane
@@ -1182,7 +1211,9 @@ if(currentState!=null)
 			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(),
 					(int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
 			Collections.sort(friends);
-		}}
+		}
+		//state=State.INGAME;
+	        }
 	    });
 	  t.start();
 		
@@ -1513,6 +1544,16 @@ continue;}
 								}
 							}
 							break;
+						case MONEY:
+							MoneyState	realState2=(MoneyState)actionState;
+							GameCharacter.getInventory().addMoney(realState2.getVal());
+							try{
+								if(objects.get(realState2.getI()) instanceof MoneyObject)
+							objects.remove(realState2.getI());
+							}catch(Exception ex){
+								ex.printStackTrace();	
+							}
+							break;
 						default:
 							break;
 						
@@ -1611,6 +1652,23 @@ continue;}
 //								}
 //							}
 							break;
+						case MONEY:
+							MoneyState	realState=(MoneyState)actionState;
+							GameCharacter.getInventory().addMoney(realState.getVal());
+							try{
+								if(objects.get(realState.getI()) instanceof MoneyObject)
+							objects.remove(realState.getI());
+							}catch(Exception ex){
+								ex.printStackTrace();	
+							}
+							break;
+						case PICKUP:
+							ObjectPickUpState realState2=(ObjectPickUpState)actionState;
+							try{
+							objects.remove(realState2.getI());
+							}catch(Exception ex){
+							ex.printStackTrace();	
+							}	
 						default:
 							break;
 						
@@ -2123,12 +2181,13 @@ continue;}
 			if (n.isOnScreen()) {
 				if (o.intersects(character.getCollisionBounds())) {
 					n.collidePlayer(-1);
-
+//if(me==null)
 					if (n instanceof Collectible
-							&& ((Collectible) n).collectible())
+							&& ((Collectible) n).collectible()){
 						if (n instanceof MoneyObject) {
 							Statics.playSound(this,
 									"collectibles/marioCoin.wav");
+							
 							GameCharacter.getInventory().addMoney(
 									((MoneyObject) n).getValue());
 							objects.remove(u);
@@ -2146,6 +2205,8 @@ continue;}
 
 						}
 				}
+					if(!(n instanceof MoneyObject)&&currentState!=null)
+						currentState.getActions().add(new ObjectPickUpState(u));}
 				if (n.isWall())
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
 						if (n.getBounds().intersects(
@@ -2153,7 +2214,8 @@ continue;}
 							character.presetCollisionFlag(rI);
 			}
 
-			if (!beenPicked && state != State.NPC && bounds != null
+			if (!beenPicked && state != State.NPC//&&state!=State.SWITCHING
+					&& bounds != null
 					&& o.intersects(bounds) && !hasTalked
 					&& !(n instanceof DropPoint)) {
 				if (n.interact()) {
@@ -2163,13 +2225,16 @@ continue;}
 						save(((CheckPoint) n).getSpawnNum());
 						System.out.println("SAVED");
 					} else if (n instanceof Collectible
-							&& ((Collectible) n).collectible())
+							&& ((Collectible) n).collectible()){
 						if (n instanceof MoneyObject) {
 							Statics.playSound(this,
 									"collectibles/marioCoin.wav");
 							GameCharacter.getInventory().addMoney(
 									((MoneyObject) n).getValue());
 							objects.remove(u);
+					
+					if(currentState!=null)
+	currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(),u));
 							u--;
 						} else if (n instanceof SpecialCollectible) {
 							Statics.playSound(this,
@@ -2198,12 +2263,39 @@ continue;}
 						}
 
 				}
+					if(!(n instanceof MoneyObject)&&currentState!=null)
+						currentState.getActions().add(new ObjectPickUpState(u));
+								
+				
+				}
 			}
 			for (int c = 0; c < friends.size(); c++) {
 
 				if (n.getBounds().intersects(
 						friends.get(c).getCollisionBounds())) {
 					n.collidePlayer(c);
+//					if (n instanceof Collectible
+//							&& ((Collectible) n).collectible())
+//						if (n instanceof MoneyObject) {
+//							Statics.playSound(this,
+//									"collectibles/marioCoin.wav");
+//							
+//							GameCharacter.getInventory().addMoney(
+//									((MoneyObject) n).getValue());
+//							objects.remove(u);
+//							u--;
+//							beenPicked = true;
+//						} else if (n instanceof SpecialCollectible) {
+//							Statics.playSound(this,
+//									"collectibles/marioCoin.wav");
+//							GameCharacter.getInventory().addItem(
+//									((Collectible) n).getType(), 1);
+//							data.collect(((SpecialCollectible) n).id);
+//							objects.remove(u);
+//							u--;
+//							beenPicked = true;
+//
+//						}
 				}
 			}
 		}
@@ -2366,7 +2458,8 @@ continue;}
 		this.state = state;
 
 		if (state == State.PAUSED || state == State.NPC
-				|| state == State.LOADING)
+				|| state == State.LOADING//||state==State.SWITCHING
+				)
 			time.pause();
 		else if (state == State.INGAME)
 			time.resume();

@@ -12,6 +12,7 @@ public class Shield extends FProjectile{
 protected boolean harming=true;
 protected boolean moving=true;
 protected boolean collideWithHook;
+Point lastP;
 protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 	public Shield(double dir, int x, int y, int speed, GameCharacter maker,
 			 Board owner) {
@@ -38,6 +39,7 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 		if(!harming){
 			if(moving){
 			setD(Statics.pointTowards(new Point(x,y), new Point(getMaker().getX(),getMaker().getY())));
+			lastP=new Point(x,y);
 			x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed();
 			y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();
 			
@@ -71,12 +73,17 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 		if(harming){
 			super.setOnScreen(onScreen);
 			harming=onScreen;
-			setD(Statics.pointTowards(new Point(x,y), new Point(getMaker().getX(),getMaker().getY())));
-			x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed();
-			y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();
+			//setD(Statics.pointTowards(new Point(x,y), new Point(getMaker().getX(),getMaker().getY())));
+			//x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed();
+			//y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();
 			}
-		else
+		else{
+			x=lastP.x;
+			y=lastP.y;
+			//x -= Math.cos((double) Math.toRadians((double) lastD)) * getSpeed();
+			//y -= Math.sin((double) Math.toRadians((double) lastD)) * getSpeed();
 			moving=false;
+			}
 		}
 	public boolean isHarming(){
 		return harming;
@@ -85,8 +92,7 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 		return collideWithHook;
 	}
 	public void pull(){
-		if(!moving)
-			System.out.println("Pull");
-	//	moving=true;
+		if(getBounds().intersects(owner.getScreen()))
+		moving=true;
 	}
 }

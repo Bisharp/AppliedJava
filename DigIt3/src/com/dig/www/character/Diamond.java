@@ -37,11 +37,11 @@ public class Diamond extends GameCharacter {
 
 	@Override
 	public void animate() {
-		//if (shield == null || !shield.collideWithHook()){
+		if (shield == null || !shield.collideWithHook()){
 			super.animate();
-			//}
-		//else if (owner.getCharacter() != this)
-		//		basicAnimate();
+			}
+		else if (owner.getCharacter() != this)
+				basicAnimate();
 		
 		if (shield == null) {
 			for (int c = 0; c < owner.getfP().size(); c++) {
@@ -188,4 +188,8 @@ direction=Direction.LEFT;
 				super.collision(collide, isPlayer);
 			
 		
-}}
+}
+public void newArea(){
+	shield=null;
+}
+}
