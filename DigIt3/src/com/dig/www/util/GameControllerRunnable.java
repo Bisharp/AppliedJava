@@ -91,7 +91,7 @@ public class GameControllerRunnable implements Runnable {
 
 			p = new GameControllerPreferences();
 		} else {
-			rOB.nullCThread();
+			dM.nullCThread();
 		}
 
 		// owner = dM;
