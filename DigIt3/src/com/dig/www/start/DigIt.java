@@ -3,8 +3,6 @@ package com.dig.www.start;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -33,9 +31,8 @@ private String level=Board.DEFAULT;
 		lib = ImageLibrary.getInstance();
 		soundPlayer = new SoundPlayer();
 	}
-GraphicsDevice d;
+
 	public DigIt() {
-		
 		setUndecorated(true);
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
@@ -46,7 +43,7 @@ GraphicsDevice d;
 		controllerThread = new Thread(gCR);
 		controllerThread.start();
 
-		//setVisible(true);
+		setVisible(true);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
@@ -55,15 +52,6 @@ GraphicsDevice d;
 		setResizable(false);
 		setFocusable(false);
 		setVisible(true);
-		try{
-		GraphicsEnvironment env=GraphicsEnvironment.getLocalGraphicsEnvironment();
-		d=env.getDefaultScreenDevice();
-		if(d.isFullScreenSupported())
-	d.setFullScreenWindow(this);
-			}catch(Exception ex){
-		ex.printStackTrace();//Will be removed
-	}
-	//	else
 	}
 
 	public static void main(String[] args) {
