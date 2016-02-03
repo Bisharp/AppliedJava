@@ -28,11 +28,11 @@ public class Spade extends GameCharacter {
 	protected void drawCSHUD(Graphics2D g2d) {
 		// TODO Auto-generated method stub
 		int normWidth = 280;
-
+int macH=Statics.MAC?23:0;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(normWidth, 50, 125 + (13 * numOfDigits(dirt)), 50);
+		g2d.fillRect(normWidth, 50+macH, 125 + (13 * numOfDigits(dirt)), 50);
 		g2d.setColor(Statics.BROWN);
-		g2d.drawString("DIRT: " + dirt, normWidth + 10, 85);
+		g2d.drawString("DIRT: " + dirt, normWidth + 10, 85+macH);
 	}
 
 	public boolean canAct() {

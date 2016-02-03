@@ -33,6 +33,11 @@ private String level=Board.DEFAULT;
 	}
 
 	public DigIt() {
+		try{
+			Statics.MAC=System.getProperty("os.name").startsWith("Mac");
+		}catch(Exception ex){
+			Statics.MAC=false;
+		}
 		setUndecorated(true);
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);

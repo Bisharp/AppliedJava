@@ -45,7 +45,7 @@ public ChatBox(final Board owner){
 	});
      this.add(jf,BorderLayout.SOUTH);
      setVisible(true);
-     setLocation(Statics.BOARD_WIDTH-size, 0);
+     setLocation(Statics.BOARD_WIDTH-size, Statics.MAC?23:0);
      owner.requestFocus();
 }
 //public void add(String s){

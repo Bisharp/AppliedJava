@@ -1722,7 +1722,8 @@ else if (getType() != Types.SPADE) {
 			// }
 
 			int normWidth = 300;
-			g2d.fillRect(-10, 0, normWidth, 130);
+			int macH=Statics.MAC?23:0;
+			g2d.fillRect(-10, 0+macH, normWidth, 130);
 
 			// for (int i = 1; i <= (int) Math.ceil((double) HP_MAX/ (double)
 			// 10); i++) {
@@ -1735,25 +1736,25 @@ else if (getType() != Types.SPADE) {
 			// g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i
 			// ? Color.RED : Color.DARK_GRAY);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 50 + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 50+macH+ + (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 50, 20, 20);
+			g2d.drawRect(normWidth - 50, 50+macH, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 75 + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 75+macH + (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) rangedTimer / (double) NEG_TIMER_RANGED)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 75, 20, 20);
+			g2d.drawRect(normWidth - 50, 75+macH, 20, 20);
 			g2d.setColor(Color.GREEN);
-			g2d.fillRect(normWidth - 50, 100 + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
+			g2d.fillRect(normWidth - 50, 100+macH + (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20), 20,
 					20 - (int) (Math.max(0, ((double) specialTimer / (double) NEG_TIMER_SPECIAL)) * 20));
 			g2d.setColor(Color.WHITE);
-			g2d.drawRect(normWidth - 50, 100, 20, 20);
+			g2d.drawRect(normWidth - 50, 100+macH, 20, 20);
 			g2d.setColor(Color.RED);
 			g2d.setFont(HUD);
 			// g2d.drawString("HEALTH:     |     MONEY: " + wallet.getMoney(),
 			// 30, 50);
-			g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30);
+			g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30+macH);
 			drawTHBar((double) health / (double) HP_MAX, normWidth - 75, g2d);
 			drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth - 75, g2d);
 
@@ -1766,9 +1767,9 @@ int collectibles =0;
 //if(b)
 //	collectibles=getInventory().itemNums.get(Items.SPECIAL_COLLECTIBLE);
 			g2d.setColor(Color.BLACK);
-			g2d.fillRect(normWidth-20, 0, baseWidth + (13 * numOfDigits(collectibles)), 50);
+			g2d.fillRect(normWidth-20, 0+macH, baseWidth + (13 * numOfDigits(collectibles)), 50);
 			g2d.setColor(Statics.BROWN);
-			g2d.drawString(colectibleName+": " + collectibles, normWidth-10-25, 30);
+			g2d.drawString(colectibleName+": " + collectibles, normWidth-10-25, 30+macH);
 			drawCSHUD(g2d);
 			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
@@ -2192,35 +2193,38 @@ public int getAttackTimer(){
 
 	public void drawTHBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
+		int macH=Statics.MAC?23:0;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(10, 52, total, 16);
+		g2d.fillRect(10, 52+macH, total, 16);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(10, 52, (int) ((double) total * (double) per), 16);
+		g2d.fillRect(10, 52+macH, (int) ((double) total * (double) per), 16);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(10 - 1, 52 - 1, total + 1, 17);
+		g2d.drawRect(10 - 1, 52 - 1+macH, total + 1, 17);
 
 	}
 
 	public void drawTEnBar(double per, int total, Graphics2D g2d) {
 		total -= 10;
+		int macH=Statics.MAC?23:0;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(10, 80, total, 10);
+		g2d.fillRect(10, 80+macH, total, 10);
 		g2d.setColor(Color.BLUE);
-		g2d.fillRect(10, 80, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 80+macH, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(10 - 1, 80 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 80+macH - 1, total + 1, 11);
 
 	}
 
 	public void drawTLBar(int total, Graphics2D g2d) {
 		total -= 10;
+		int macH=Statics.MAC?23:0;
 		double per = (double) xp / (double) (Math.pow(level + 1, 2) * 10);
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(10, 105, total, 10);
+		g2d.fillRect(10, 105+macH, total, 10);
 		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(10, 105, (int) ((double) total * (double) per), 10);
+		g2d.fillRect(10, 105+macH, (int) ((double) total * (double) per), 10);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(10 - 1, 105 - 1, total + 1, 11);
+		g2d.drawRect(10 - 1, 105+macH - 1, total + 1, 11);
 
 	}
 

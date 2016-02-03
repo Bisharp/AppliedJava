@@ -1149,7 +1149,7 @@ if(GameCharacter.getInventory()!=null)
 		}
 		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
 		g2d.setColor(Color.WHITE);
-g2d.drawString("FPS:"+fps, 3, 170);
+g2d.drawString("FPS:"+fps, 3, 170+(Statics.MAC?23:0));
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}

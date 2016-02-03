@@ -27,7 +27,7 @@ public final class Statics {
 	public static final String MAIN="Story Mode";
 	public static final int BLOCK_HEIGHT = 100;
 	public static final String FONT = "Trebuchet MS";
-
+public static boolean MAC=false;
 	// static {
 	// if (System.getProperty("os.name").startsWith("Windows"))
 	// FONT = "Trebuchet MS";

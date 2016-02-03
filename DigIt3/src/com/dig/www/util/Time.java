@@ -82,12 +82,12 @@ public class Time implements ActionListener {
 	private static final int Y = 120;
 
 	public void draw(Graphics2D g2d) {
-
+		int macH=Statics.MAC?23:0;
 		g2d.setColor(Color.black);
-		g2d.fillRect(X, Y, 200, 40);
+		g2d.fillRect(X, Y+macH, 200, 40);
 		g2d.setColor(Statics.PURPLE);
-		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30);
-		g2d.drawString(getColon(), 40 + X + 15, Y + 28);
+		g2d.drawString(toString(), 40 + X - (time >= 10 ? 15 : 0), Y + 30+macH);
+		g2d.drawString(getColon(), 40 + X + 15, Y + 28+macH);
 	}
 
 	public void pause() {
