@@ -379,6 +379,8 @@ public void animate(){
 		GameCharacter chara=owner.getCharacter();
 		int dist=(int) Statics.dist(x, y,owner.getCharacterX(), owner.getCharacterY());
 		for(int c=0;c<owner.getFriends().size();c++){
+			if(owner.getFriends().get(c).isDead())
+				continue;
 			int i=(int)Statics.dist(x, y,owner.getFriends().get(c).getX(), owner.getFriends().get(c).getY());
 			if(i<dist){
 				chara=owner.getFriends().get(c);
