@@ -44,9 +44,14 @@ import com.dig.www.MultiPlayer.ChatServer;
 import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
 import com.dig.www.MultiPlayer.State.ActionState.ActionType;
+import com.dig.www.MultiPlayer.State.AddEnemy;
 import com.dig.www.MultiPlayer.State.BlockState;
+import com.dig.www.MultiPlayer.State.BreakCrystal;
+import com.dig.www.MultiPlayer.State.DigPit;
+import com.dig.www.MultiPlayer.State.EnemyState;
 import com.dig.www.MultiPlayer.State.GameState;
 import com.dig.www.MultiPlayer.State.MoneyState;
+import com.dig.www.MultiPlayer.State.MoveObjectState;
 import com.dig.www.MultiPlayer.State.ObjectPickUpState;
 import com.dig.www.MultiPlayer.State.ObjectState;
 import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
@@ -79,7 +84,9 @@ import com.dig.www.character.Spade;
 import com.dig.www.character.Wizard;
 import com.dig.www.enemies.Boss;
 import com.dig.www.enemies.Enemy;
+import com.dig.www.enemies.Launch;
 import com.dig.www.enemies.Projectile;
+import com.dig.www.enemies.StandEnemy;
 import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.TouchNPC;
@@ -93,6 +100,7 @@ import com.dig.www.objects.Light;
 import com.dig.www.objects.Mirror;
 import com.dig.www.objects.MoneyObject;
 import com.dig.www.objects.Objects;
+import com.dig.www.objects.PushCube;
 import com.dig.www.objects.SpecialCollectible;
 import com.dig.www.objects.ThrownObject;
 import com.dig.www.util.Irregular;
@@ -526,6 +534,7 @@ movingObjects.clear();
 fP.clear();
 //npcs.clear();
 texturePack=st.getTexture();
+GameCharacter.getInventory().setMoney(st.getMoney());
 for(BlockState b:st.getWorld()){
 	
 	world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this,b.getB()));
@@ -539,7 +548,18 @@ for(ObjectState o:st.getObjects()){
 		break;
 	case MONEY:
 		objects.add(new MoneyObject(o.getX(), o.getY(), o.getLoc(), this, o.getI()));
+	break;
+	case CUBE:
+		objects.add(new Objects(o.getX(),o.getY(),o.getLoc(),true,this,o.getIdent()));
+	break;
 	}
+}
+for(Enemy e:st.getEnemies()){
+//	switch(e.getType()){
+//	case STAND:
+//		enemies.add(new StandEnemy(e.getX(), e.getY(), e.getLoc(), this, e.isFlying(), e.getHealth()));
+//	}
+	enemies.add(e);
 }
 //for(PlayerState p:st.getPlayers()){
 //	
@@ -1354,6 +1374,7 @@ if(currentState!=null)
 		case INGAME:
 
 			character.animate();
+			boolean notMe=me==null;
 			for (GameCharacter character : friends) {
 				character.animate();
 			}
@@ -1365,8 +1386,10 @@ if(currentState!=null)
 					i--;
 					continue;
 				}
-
+if(notMe)
 				enemies.get(i).animate();
+else
+	enemies.get(i).basicAnimate();
 				enemies.get(i).setOnScreen(
 						enemies.get(i).getBounds().intersects(getScreen()));
 				// /\
@@ -1513,9 +1536,9 @@ continue;}
 			try {
 				Block b=world.get(0);
 				for(int s=0;s<states.size();s++){
-					if(states.get(s)==null||states.get(s).getPlayerStates()==null)
-						System.out.println("null");
-					else
+//					if(states.get(s)==null||states.get(s).getPlayerStates()==null)
+//						System.out.println("null");
+//					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
 						for(GameCharacter friend:friends){
 							if(playerState.isPlayer()&&friend.getType().toString().equals(playerState.getTypeToString())){
@@ -1531,7 +1554,10 @@ continue;}
 							}
 						}
 					}
-					if(states.get(s)!=null&&states.get(s).getActions()!=null)
+					if(//states.get(s)!=null&&states.get(s).getActions()!=null
+							//&&
+							!states.get(s).isServer()
+							)
 					for(ActionState actionState:states.get(s).getActions()){
 						switch(actionState.getActionType()){
 						case SWITCH:
@@ -1547,12 +1573,24 @@ continue;}
 						case MONEY:
 							MoneyState	realState2=(MoneyState)actionState;
 							GameCharacter.getInventory().addMoney(realState2.getVal());
+							Statics.playSound(this, "weapons/whop.wav");
 							try{
-								if(objects.get(realState2.getI()) instanceof MoneyObject)
 							objects.remove(realState2.getI());
 							}catch(Exception ex){
 								ex.printStackTrace();	
 							}
+							break;
+						case BREAK:
+							BreakCrystal breakC=(BreakCrystal)actionState;
+							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							System.out.println(world.get(breakC.getI()).getType());
+							world.get(breakC.getI()).doType(Blocks.ROCK);
+							Statics.playSound(this, "blocks/shatter.wav");
+							break;
+						case DIG:
+							BreakCrystal digC=(BreakCrystal)actionState;
+							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							world.get(digC.getI()).digDo();
 							break;
 						default:
 							break;
@@ -1561,20 +1599,23 @@ continue;}
 					}
 				}
 				states.clear();
-				if(sendInt<=0)
+				if(sendInt<=0){
 				currentState.getPlayerStates().add(
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
-				if(sendInt<=0)
-				for (GameCharacter character : friends){
+				
+					for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
 											.getDirection(), character.getS(), character.isPlayer(),
 									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
-				if(sendInt<=0){
+			
+					for(Enemy en:enemies){
+						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY()));
+					}
 					sendInt=1;
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);}
@@ -1595,9 +1636,9 @@ continue;}
 							changeClientArea();
 						}
 							
-					if(states.get(s).getPlayerStates()==null)
-						System.out.println("null");
-					else
+//					if(states.get(s).getPlayerStates()==null)
+//						System.out.println("null");
+//					else
 					for(PlayerState playerState:states.get(s).getPlayerStates()){
 						boolean hasGone=false;
 						if(character.getType().toString().equals(playerState.getTypeToString()))
@@ -1655,8 +1696,8 @@ continue;}
 						case MONEY:
 							MoneyState	realState=(MoneyState)actionState;
 							GameCharacter.getInventory().addMoney(realState.getVal());
+							Statics.playSound(this, "weapons/whop.wav");
 							try{
-								if(objects.get(realState.getI()) instanceof MoneyObject)
 							objects.remove(realState.getI());
 							}catch(Exception ex){
 								ex.printStackTrace();	
@@ -1669,10 +1710,35 @@ continue;}
 							}catch(Exception ex){
 							ex.printStackTrace();	
 							}	
+							break;
+						case MOVE:
+							MoveObjectState move=(MoveObjectState)actionState;
+							objects.get(move.getI()).setX(world.get(0).getX()+move.getX());
+							objects.get(move.getI()).setY(world.get(0).getY()+move.getY());
+						break;
+						case BREAK:
+							BreakCrystal breakC=(BreakCrystal)actionState;
+							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							world.get(breakC.getI()).doType(Blocks.ROCK);
+							Statics.playSound(this, "blocks/shatter.wav");
+							break;
+						case DIG:
+							DigPit digC=(DigPit)actionState;
+							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							world.get(digC.getI()).digDo();
+							break;
+						case ADDEN:
+							AddEnemy add=(AddEnemy)actionState;
+							enemies.add(add.getEnemy());
+							break;
 						default:
 							break;
 						
 						}
+					}
+					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
+						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
+						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
 					}
 				}
 				states.clear();
@@ -1821,7 +1887,7 @@ continue;}
 										&& !b.getBounds().intersects(
 												character.getCollisionBounds())) {
 
-									b.interact();
+									b.interact(i);
 									character.endAction();
 								}
 						}
@@ -1868,7 +1934,7 @@ continue;}
 							&& !b.getBounds().intersects(
 									character.getCollisionBounds())) {
 
-						b.interact();
+						b.interact(i);
 						character.endAction();
 					}
 				}
@@ -2181,6 +2247,8 @@ continue;}
 			if (n.isOnScreen()) {
 				if (o.intersects(character.getCollisionBounds())) {
 					n.collidePlayer(-1);
+					if(n instanceof PushCube&&currentState!=null)
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX()+n.getX(), -world.get(0).getY()+n.getY(), u));
 //if(me==null)
 					if (n instanceof Collectible
 							&& ((Collectible) n).collectible()){
@@ -2191,6 +2259,8 @@ continue;}
 							GameCharacter.getInventory().addMoney(
 									((MoneyObject) n).getValue());
 							objects.remove(u);
+							if(currentState!=null)
+								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(),u));
 							u--;
 							beenPicked = true;
 						} else if (n instanceof SpecialCollectible) {
@@ -2200,13 +2270,15 @@ continue;}
 									((Collectible) n).getType(), 1);
 							data.collect(((SpecialCollectible) n).id);
 							objects.remove(u);
-							u--;
+							
 							beenPicked = true;
-
+if(currentState!=null)
+						currentState.getActions().add(new ObjectPickUpState(u));
+u--;
 						}
+						
 				}
-					if(!(n instanceof MoneyObject)&&currentState!=null)
-						currentState.getActions().add(new ObjectPickUpState(u));}
+					}
 				if (n.isWall())
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
 						if (n.getBounds().intersects(
@@ -2219,6 +2291,8 @@ continue;}
 					&& o.intersects(bounds) && !hasTalked
 					&& !(n instanceof DropPoint)) {
 				if (n.interact()) {
+					if(n instanceof PushCube&&currentState!=null)
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX()+n.getX(), -world.get(0).getY()+n.getY(), u));
 					hasTalked = true;
 					if (n instanceof CheckPoint) {
 						spawnLoc = new Point(n.getX(), n.getY());
@@ -2261,10 +2335,10 @@ continue;}
 							objects.remove(u);
 							u--;
 						}
-
+if(!(n instanceof MoneyObject)&&currentState!=null)
+						currentState.getActions().add(new ObjectPickUpState(u+1));
+					
 				}
-					if(!(n instanceof MoneyObject)&&currentState!=null)
-						currentState.getActions().add(new ObjectPickUpState(u));
 								
 				
 				}

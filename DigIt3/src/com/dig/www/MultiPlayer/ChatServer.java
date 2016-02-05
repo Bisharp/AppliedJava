@@ -99,6 +99,8 @@ return new StartState(owner);
 			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 			}catch(Exception ex){
+			//String client=	clientMap.get("club");
+				//leaveChatRoom("apl2of2","club");
 				ex.printStackTrace();
 				//clientMap.remove(arg0);
 			}

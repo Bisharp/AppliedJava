@@ -2,6 +2,7 @@ package com.dig.www.enemies;
 
 import java.awt.Point;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 
 public class Launch extends Enemy {
@@ -47,8 +48,9 @@ public class Launch extends Enemy {
 	static final int SPEED = 20;
 
 	public void addBall() {
+		GameCharacter chara=getClosest();
 		owner.addEnemy(new Projectile(pointTowards( new Point(
-				owner.getCharacterX()+(owner.getCharacter().getWidth()/2), owner.getCharacterY()+(owner.getCharacter().getHeight()/2))), x, y, SPEED,
+				chara.getX()+(chara.getWidth()/2), chara.getY()+(chara.getHeight()/2))), x, y, SPEED,
 				this, "images/enemies/blasts/" + identity + ".png", owner, true,10));
 	}
 

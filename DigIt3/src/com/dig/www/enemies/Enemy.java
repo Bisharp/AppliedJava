@@ -301,7 +301,9 @@ public abstract class Enemy extends Sprite {
 
 		return alive;
 	}
-
+public void animate(){
+	
+}
 	public boolean willHarm() {
 		turn = false;
 		return harmTimer <= 0 && alive == true;
@@ -366,5 +368,22 @@ public abstract class Enemy extends Sprite {
 
 	protected boolean hitstunRenders() {
 		return hitstunTimer % 3 == 0 || hitstunTimer == 0;
+	}
+	public int getHealth(){
+		return health;
+	}
+	public String getLoc(){
+		return loc;
+	}
+	public GameCharacter getClosest(){
+		GameCharacter chara=owner.getCharacter();
+		int dist=(int) Statics.dist(x, y,owner.getCharacterX(), owner.getCharacterY());
+		for(int c=0;c<owner.getFriends().size();c++){
+			int i=(int)Statics.dist(x, y,owner.getFriends().get(c).getX(), owner.getFriends().get(c).getY());
+			if(i<dist){
+				chara=owner.getFriends().get(c);
+				dist=i;}
+		}
+		return chara;
 	}
 }

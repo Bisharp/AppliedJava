@@ -63,6 +63,14 @@ public class ChatClient implements IChatClient
 	{
 		//owner.removeChatClient(name);
 	}
+	public String getName(){
+		return owner.getMPName();
+	}
+	public String getPlayerName(){
+		if(owner.getCharacter()!=null)
+		return owner.getCharacter().getType().toString();
+		return "";
+	}
 	public boolean contains(ArrayList<PlayerState>players){
 		for(int c=0;c<players.size();c++){
 			if(clientMap.contains(players.get(c).getMpName()))

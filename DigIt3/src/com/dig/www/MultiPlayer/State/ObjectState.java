@@ -9,7 +9,7 @@ public class ObjectState extends SpriteState implements Serializable{
 	private String ident;
 	private int i;
 public enum ObjectsTypes{
-	NORMAL,MONEY
+	NORMAL,MONEY,CUBE
 }
 	public ObjectState(int x, int y,ObjectsTypes type,String loc,boolean wall,String ident,int i) {
 		super(x, y);

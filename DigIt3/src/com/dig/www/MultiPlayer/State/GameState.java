@@ -3,6 +3,8 @@ package com.dig.www.MultiPlayer.State;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.dig.www.character.GameCharacter;
+
 public class GameState implements Serializable{
 	protected String pack;
 	protected String level;
@@ -42,5 +44,9 @@ public void clear(String level){
 }
 public boolean isServer(){
 	return server;
+}
+public ArrayList<EnemyState> getEnemyStates() {
+	// TODO Auto-generated method stub
+	return enemyStates;
 }
 }

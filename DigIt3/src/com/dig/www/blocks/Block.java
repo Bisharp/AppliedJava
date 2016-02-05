@@ -13,6 +13,8 @@ import java.awt.image.ColorModel;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
+import com.dig.www.MultiPlayer.State.BreakCrystal;
+import com.dig.www.MultiPlayer.State.DigPit;
 import com.dig.www.character.GameCharacter;
 
 public class Block extends Sprite {
@@ -44,7 +46,15 @@ public class Block extends Sprite {
 	public Blocks getType() {
 		return type;
 	}
-
+public void doType(Blocks type){
+	this.type=type;
+}
+public void digDo(){
+	if(type==Blocks.DIRT||type==Blocks.GROUND)
+		type=Blocks.PIT;
+	else if(type==Blocks.PIT)
+		type=Blocks.DIRT;
+}
 	public void setType(Blocks type) {
 
 		if (this.type != Blocks.PIT && this.type != Blocks.CRYSTAL && owner.getCharacter().getType() == GameCharacter.Types.SPADE)
@@ -805,18 +815,24 @@ public class Block extends Sprite {
 		return computeColor(c);
 	}
 
-	public void interact() {
+	public void interact(int mInt) {
 
 		switch (owner.getCharacter().getMove()) {
 		case PIT:
 			setType(Blocks.PIT);
+			if(owner.getCurrentState()!=null)
+				owner.getCurrentState().getActions().add(new DigPit(mInt));
+			
 			break;
 
 		case CLUB:
 			if (type == Blocks.CRYSTAL) {
 				type = Blocks.ROCK;
 				Statics.playSound(owner, "blocks/shatter.wav");
-			}
+				if(owner.getCurrentState()!=null)
+					owner.getCurrentState().getActions().add(new BreakCrystal(mInt));
+				
+				}
 			break;
 
 		default:
