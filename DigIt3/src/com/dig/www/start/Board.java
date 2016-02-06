@@ -1641,6 +1641,7 @@ continue;}
 						if(!states.get(s).getLevel().equals(level)){
 							level=states.get(s).getLevel();
 							changeClientArea();
+							return;
 						}
 							
 //					if(states.get(s).getPlayerStates()==null)
