@@ -545,7 +545,11 @@ public void digDo(){
 		}
 	}
 
+	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK, Color.WHITE };
 	public Color computeColor(Color c) {
+		
+		if (traversable())
+			return list[Statics.RAND.nextInt(list.length)];
 
 		if (!owner.thunderStrike() && !illuminated)
 			if (owner.darkenWorld())

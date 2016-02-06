@@ -7,18 +7,17 @@ import java.awt.Shape;
 import com.dig.www.util.Statics;
 
 public class Object {
-
+	
 	protected int x, y, width, height;
-	protected int health;
 	protected boolean alive, hostile;
 	protected Image image;
 	protected Climb owner;
+	protected boolean onScreen = false;
 	
-	public Object(int x, int y, int health, String loc, Climb owner) {
+	public Object(int x, int y, String loc, Climb owner) {
 		
 		this.x = x;
 		this.y = y;
-		this.health = health;
 		
 		image = Statics.newImage(loc);
 		width = image.getWidth(null);
@@ -27,13 +26,24 @@ public class Object {
 		this.owner = owner;
 	}
 	
-	protected Shape getBounds() {
+	public Object(int x, int y, int width, int height, Climb owner) {
+		
+		this.x = x;
+		this.y = y;
+		
+		image = null;
+		this.width = width;
+		this.height = height;
+		
+		this.owner = owner;
+	}
+	
+	protected Rectangle getBounds() {
 		return new Rectangle(x, y, width, height);
 	}
 	
-	protected void animate(int sX, int sY) {
-		x += sX;
-		y += sY;
+	protected void animate() {
+		
 	}
 
 	public int getX() {
@@ -54,17 +64,20 @@ public class Object {
 	public int getDY() {
 		return Math.round(y / 10) * 10;
 	}
+	
+	protected int getWidth() {
+		return width;
+	}
+	protected int getHeight() {
+		return height;
+	}
 
 	public void setY(int y) {
 		this.y = y;
 	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
+	
+	public void scrollY(int sY) {
+		y += sY;
 	}
 
 	public boolean isAlive() {
@@ -89,5 +102,13 @@ public class Object {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+	
+	public boolean isOnScreen() {
+		return onScreen;
+	}
+	
+	public void setOnScreen(boolean oS) {
+		onScreen = oS;
 	}
 }

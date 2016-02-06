@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.Serializable;
@@ -13,6 +15,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -30,7 +34,7 @@ public class GameControllerPreferences implements Serializable {
 	protected int moveX = GameControllerRunnable.X_STICK;
 	protected int moveY = GameControllerRunnable.Y_STICK;
 	protected boolean isDPad = false;
-	
+
 	protected int mouseX = GameControllerRunnable.X2_STICK;
 	protected int mouseY = GameControllerRunnable.Y2_STICK;
 	protected boolean mouseDPad = false;
@@ -46,8 +50,8 @@ public class GameControllerPreferences implements Serializable {
 	protected int npc = GameControllerRunnable.X;
 	protected int item = GameControllerRunnable.Z_AXIS;
 
-	protected int rZAxis = item;
-	protected int lZAxis = GameControllerRunnable.ITEM;
+	protected int rZAxis = projectile;
+	protected int lZAxis = item;
 
 	protected float zSensitivity = GameControllerRunnable.Z_SENSITIVITY;
 	protected float walkSensitivity = GameControllerRunnable.WALK_SENSITIVITY;
@@ -58,7 +62,7 @@ public class GameControllerPreferences implements Serializable {
 		else
 			return moveX == GameControllerRunnable.X_STICK ? "Left Stick" : "Right Stick";
 	}
-	
+
 	public void setValues() {
 		new SetValues();
 	}
@@ -75,16 +79,19 @@ public class GameControllerPreferences implements Serializable {
 		protected JButton tlkB = new JButton("Talk to NPCs: " + trans(npc));
 		protected JButton itmB = new JButton("Use items: " + trans(item));
 
-		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (walkSensitivity * 10) > 10? 10 : (int) (walkSensitivity * 10));
-		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (zSensitivity * 10) > 10? 10 : (int) (zSensitivity * 10));
+		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (walkSensitivity * 10) > 10 ? 10
+				: (int) (walkSensitivity * 10) < 2 ? 2 : 10 - (int) (walkSensitivity * 10));
+		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (zSensitivity * 10) > 10 ? 10 : (int) (zSensitivity * 10));
 
 		protected JButton reset = new JButton("Reset to Defaults");
+		
+		protected boolean allSet = true;
 
 		public SetValues() {
-			
+
 			initiateSlider(moveS);
 			initiateSlider(zS);
-			
+
 			this.setSize(new Dimension(675, 200));
 			this.setLayout(new BorderLayout());
 
@@ -95,6 +102,56 @@ public class GameControllerPreferences implements Serializable {
 			JPanel pane3 = new JPanel();
 			pane1.setLayout(new BoxLayout(pane1, BoxLayout.Y_AXIS));
 			pane2.setLayout(new BoxLayout(pane2, BoxLayout.Y_AXIS));
+
+			pseB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					pause = getButton("Pause", pause);
+					pseB.setText("Pause: " + trans(pause));
+				}
+			});
+			itmB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					item = getButton("Use items", item);
+					pseB.setText("Use items: " + trans(item));
+				}
+			});
+			swchB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					switchC = getButton("Switch characters", switchC);
+					pseB.setText("Switch characters: " + trans(switchC));
+				}
+			});
+			atkB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					attack = getButton("Attack", attack);
+					pseB.setText("Attack: " + trans(attack));
+				}
+			});
+			projB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					pause = getButton("Projectile", pause);
+					pseB.setText("Projectile: " + trans(projectile));
+				}
+			});
+			specB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					pause = getButton("Special", pause);
+					pseB.setText("Special: " + trans(special));
+				}
+			});
+			tlkB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					pause = getButton("Talk to NPCs", pause);
+					pseB.setText("Talk to NPCs: " + trans(npc));
+				}
+			});
 
 			pane1.setPreferredSize(d);
 			pane2.setPreferredSize(d);
@@ -115,21 +172,23 @@ public class GameControllerPreferences implements Serializable {
 			pane2.add(tlkB);
 
 			pane3.add(reset);
+			pane3.add(new JLabel("Movement Sensitivity:"));
 			pane3.add(moveS);
+			pane3.add(new JLabel("Z-Axis Sensitivity:"));
 			pane3.add(zS);
 
 			add(pane1, BorderLayout.WEST);
 			add(pane2, BorderLayout.EAST);
 			add(pane3, BorderLayout.CENTER);
 
-//			this.addWindowListener(new WindowAdapter() {
-//
-//				@Override
-//				public void windowClosed(WindowEvent e) {
-//					super.windowClosed(e);
-//					finish();
-//				}
-//			});
+			this.addWindowListener(new WindowAdapter() {
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					
+					super.windowClosed(e);
+				}
+			});
 
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setLocationRelativeTo(null);
@@ -147,8 +206,85 @@ public class GameControllerPreferences implements Serializable {
 			framesPerSecond.setMajorTickSpacing(10);
 			framesPerSecond.setMinorTickSpacing(1);
 			framesPerSecond.setPaintTicks(true);
-			framesPerSecond.setPaintLabels(true);
 			framesPerSecond.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+		}
+		
+		protected String[] movementSchemes = new String[]{ "Left Stick", "Right Stick", "D-Pad" };
+		protected void setMovementScheme(JButton source) throws Exception {
+			String s = (String) JOptionPane.showInputDialog(this, "Please select the key you want to be associated with the following action:\nMovement",
+					DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, movementSchemes, null);
+			
+			if (s.equals(movementSchemes[0])) {
+				if (source == moveB && mouseX == GameControllerRunnable.X_STICK)
+					throw new Exception("The stick is already taken.");
+//				else if (source == mouseB && moveX == GameControllerRunnable.X)
+//						throw new Exception("The stick is already taken.");
+				
+				if (source == moveB) {
+					moveX = GameControllerRunnable.X_STICK;
+					moveY = GameControllerRunnable.Y_STICK;
+					isDPad = false;
+				}
+			} else if (s.equals(movementSchemes[1])) {
+				if (source == moveB && mouseX == GameControllerRunnable.X2_STICK)
+					throw new Exception("The stick is already taken.");
+//				else if (source == mouseB && moveX == GameControllerRunnable.X)
+//						throw new Exception("The stick is already taken.");
+				
+				if (source == moveB) {
+					moveX = GameControllerRunnable.X2_STICK;
+					moveY = GameControllerRunnable.Y2_STICK;
+					isDPad = false;
+				}
+			} else if (s.equals(movementSchemes[2])) {
+				if (source == moveB && mouseDPad)
+					throw new Exception("The d-pad is already taken.");
+//				else if (source == mouseB && moveX == GameControllerRunnable.X)
+//						throw new Exception("The d-pad is already taken.");
+				
+				if (source == moveB) {
+					moveX = -1;
+					moveY = -1;
+					isDPad = true;
+				}
+			}
+			
+		}
+
+		protected int getButton(String action, int orig) {
+			String s = null;
+
+			s = (String) JOptionPane.showInputDialog(this, "Please select the key you want to be associated with the following action:\n" + action,
+					DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, names, null);
+
+			if (s == null)
+				return orig;
+			else
+				try {
+					return translate(s);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					return orig;
+				}
+		}
+
+		int[] verCheck;
+
+		protected int translate(String s) throws Exception {
+
+			int verify = -1;
+			for (int i = 0; i < names.length; i++)
+				if (names[i].equals(s)) {
+					verify = nums[i];
+					break;
+				}
+
+			verCheck = new int[] { mouseClick, attack, projectile, special, npc, pause, switchC, item, rZAxis, lZAxis };
+			for (int i : verCheck)
+				if (verify == i) {
+					throw new Exception("The button is already taken.");
+				}
+			return verify;
 		}
 
 		protected class Listener implements ChangeListener {
@@ -157,10 +293,13 @@ public class GameControllerPreferences implements Serializable {
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
 				if (!source.getValueIsAdjusting())
-					if (source == zS)
-						zSensitivity = source.getValue() / 10;
-					else
-						walkSensitivity = source.getValue() / 10;
+					if (source == zS) {
+						zSensitivity = 1 - source.getValue() / 10;
+						System.out.println(zSensitivity);
+					} else {
+						walkSensitivity = 1 - source.getValue() / 10;
+						System.out.println(walkSensitivity);
+					}
 			}
 		}
 	}

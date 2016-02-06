@@ -135,7 +135,7 @@ public class GameControllerRunnable implements Runnable {
 				if (!p.mouseDPad)
 					handleSMouse();
 				else
-					handleDPad();
+					handleDMouse();
 			}
 
 			if (data != offValues[i]) {
@@ -183,7 +183,7 @@ public class GameControllerRunnable implements Runnable {
 				else if (i == p.item) {
 					handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis, -1);
 				}
-				
+
 				// TODO Click the Mouse
 				else if (i == p.mouseClick)
 					handleButton(0, 12, isZAxis(p.mouseClick), p.mouseClick == p.rZAxis, InputEvent.BUTTON1_MASK);
@@ -418,6 +418,30 @@ public class GameControllerRunnable implements Runnable {
 
 		if (move)
 			robot.mouseMove(mouse.x + (int) (xAmount * p.mouseSpeed), mouse.y + (int) (yAmount * p.mouseSpeed));
+	}
+
+	protected void handleDMouse() {
+		if (data == 0.125) {
+			xAmount = -diag;
+			yAmount = -diag;
+		} else if (data == 0.25) {
+			yAmount = -1;
+		} else if (data == 0.375) {
+			xAmount = diag;
+			yAmount = -diag;
+		} else if (data == 0.5) {
+			xAmount = 1;
+		} else if (data == 0.625) {
+			xAmount = diag;
+			yAmount = diag;
+		} else if (data == 0.75) {
+			yAmount = 1;
+		} else if (data == 0.875) {
+			xAmount = -diag;
+			yAmount = diag;
+		} else if (data == 1) {
+			xAmount = -diag;
+		}
 	}
 
 	public boolean getController() {

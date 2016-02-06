@@ -295,7 +295,7 @@ public class Preferences implements Serializable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					char c = getValue("Special");
+					char c = getValue("Talk to NPCs");
 
 					if (c == ESCAPE)
 						return;
