@@ -1604,7 +1604,7 @@ continue;}
 								if(friends.get(c).getType().toString().equals(attack.getCharName())){
 								//	enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
 									
-									friends.get(c).clientAttack(attack.getAttackNum());
+									friends.get(c).clientAttack(attack.getAttackNum(),attack.getDir());
 									break;
 								}
 							break;
