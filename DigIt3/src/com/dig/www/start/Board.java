@@ -1686,6 +1686,7 @@ continue;}
 									chara.setHealth(playerState.getHealth());
 									chara.setEnergy(playerState.getEnergy());
 									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+								System.out.println(playerState.getAttackNum()+","+playerState.getAttackTimer());
 								}
 							}
 						}
