@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
@@ -1506,11 +1507,14 @@ collisionFlags.remove(placement[i]);
 
 	private Point setAttacks() {
 		Point shieldPos = null;
+		boolean me=owner.getClient()!=null;
 		if (meleePress && rangedTimer <= 0 && specialTimer <= 0) {
 			if (meleeTimer <= NEG_TIMER_MELEE && energy >= MEnC// ||this
 																// instanceof
 																// Diamond
 			) {
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(1, getType().toString()));
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
 				meleeHit = false;
@@ -1520,6 +1524,9 @@ collisionFlags.remove(placement[i]);
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString()));
+			
 				specialHit = false;
 				if (getType() == Types.MACARONI) {
 					owner.getfP().add(new Puddle(x, y, this, owner));
@@ -1542,9 +1549,13 @@ collisionFlags.remove(placement[i]);
 		}
 		if(rangedPress&&getType()==Types.DIAMOND&&((Diamond)this).getShield()!=null)
 			((Diamond)this).getShield().pull();
+		
 		if (rangedPress && meleeTimer <= 0 && specialTimer <= 0) {
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(2, getType().toString()));
+			
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
 if(getType()==Types.DIAMOND){
