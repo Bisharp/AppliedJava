@@ -2051,8 +2051,8 @@ continue;}
 //										return;
 									}else{
 									e.interact(character.getMove(),
-											character.getMaker(), true);
-									fP.get(c).setOnScreen(false);}
+											character.getMaker(), true);}
+									fP.get(c).setOnScreen(false);
 										
 								}
 							}
@@ -3362,5 +3362,15 @@ public String withoutFalse(String without){
 				((Puddle)fP.get(c)).timerGo();
 			}
 		}
+	}
+	public boolean atAllOnScreen(Rectangle rect){
+		if(rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+		return true;
+		for(int c=0;c<friends.size();c++){
+			if(rect.intersects(new Rectangle(friends.get(c).getX()-Statics.BOARD_WIDTH/2, friends.get(c).getY()-Statics.BOARD_HEIGHT/2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+				return true;
+		}
+		
+		return false;
 	}
 }
