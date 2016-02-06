@@ -1514,7 +1514,7 @@ collisionFlags.remove(placement[i]);
 																// Diamond
 			) {
 				if(me)
-					owner.getCurrentState().getActions().add(new AttackState(1, getType().toString(),dir));
+					owner.getCurrentState().getActions().add(new AttackState(1, getType().toString()));
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
 				meleeHit = false;
@@ -1525,7 +1525,7 @@ collisionFlags.remove(placement[i]);
 
 				specialTimer = TIMER_SPECIAL;
 				if(me)
-					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString(),dir));
+					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString()));
 			
 				specialHit = false;
 				if (getType() == Types.MACARONI) {
@@ -1554,7 +1554,7 @@ collisionFlags.remove(placement[i]);
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
 				if(me)
-					owner.getCurrentState().getActions().add(new AttackState(2, getType().toString(),dir));
+					owner.getCurrentState().getActions().add(new AttackState(2, getType().toString()));
 			
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
@@ -2043,7 +2043,7 @@ if(!player){
 		else
 			return 0;
 	}
-	public void clientAttack(int acting,int dir){
+	public void clientAttack(int acting){
 		meleePress=acting==1;
 		rangedPress=acting==2;
 		specialPress=acting==3;
@@ -2052,7 +2052,6 @@ if(!player){
 		specialTimer=NEG_TIMER_SPECIAL;
 		float energy=this.getEnergy();
 		this.energy=Integer.MAX_VALUE;
-		this.dir=dir;
 		setAttacks();
 		
 		
@@ -2559,5 +2558,11 @@ public void setHealth(float setter){
 }
 public void setEnergy(float setter){
 	energy=setter;
+}
+public void setDire(int dire){
+	dir=dire;
+}
+public int getDire(){
+	return dir;
 }
 }

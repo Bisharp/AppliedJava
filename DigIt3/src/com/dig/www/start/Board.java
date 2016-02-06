@@ -1556,6 +1556,7 @@ continue;}
 								friend.setMpName(playerState.getMpName());
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
+								friend.setDire(playerState.getDire());
 								//friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
 								}
 						}
@@ -1604,7 +1605,7 @@ continue;}
 								if(friends.get(c).getType().toString().equals(attack.getCharName())){
 								//	enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
 									
-									friends.get(c).clientAttack(attack.getAttackNum(),attack.getDir());
+									friends.get(c).clientAttack(attack.getAttackNum());
 									break;
 								}
 							break;
@@ -1618,14 +1619,14 @@ continue;}
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
 				
 					for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
 											.getDirection(), character.getS(), character.isPlayer(),
-									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
+									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy(),character.getDire()));}
 			
 					for(Enemy en:enemies){
 						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY(),en.getHealth()));
@@ -1678,6 +1679,7 @@ continue;}
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+								friend.setDire(playerState.getDire());
 							}
 						}
 						if(!hasGone){
@@ -1774,7 +1776,7 @@ continue;}
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(),character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
 				if(sendInt<=0){
 					sendInt=5;
 				theServer.getTold(currentState);
