@@ -534,6 +534,7 @@ objects.clear();
 movingObjects.clear();
 enemies.clear();
 fP.clear();
+
 //npcs.clear();
 texturePack=st.getTexture();
 GameCharacter.getInventory().setMoney(st.getMoney());
@@ -673,6 +674,7 @@ System.exit(0);
 		spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
 		spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
 	}
+	spawnLoc=st.getSpawnLoc();
 	changeWeather();
 	updateBackground();
 	Statics.wipeColors();
@@ -1383,13 +1385,15 @@ if(currentState!=null)
 
 			for (int i = 0; i < enemies.size(); i++) {
 
-				if (!enemies.get(i).isAlive()) {
+				
+if(notMe){
+				enemies.get(i).animate();
+			if (!enemies.get(i).isAlive()) {
 					enemies.remove(i);
 					i--;
 					continue;
-				}
-if(notMe)
-				enemies.get(i).animate();
+				}	
+}
 else
 	enemies.get(i).basicAnimate();
 				enemies.get(i).setOnScreen(
@@ -1624,7 +1628,7 @@ continue;}
 					for(Enemy en:enemies){
 						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY(),en.getHealth()));
 					}
-					sendInt=1;
+					sendInt=5;
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);}
 				else sendInt--;
@@ -1770,8 +1774,8 @@ continue;}
 								character.getDirection(), character.getS(), true, character
 										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
 				if(sendInt<=0){
-					sendInt=1;
-				theServer.broadcast(mpName, currentState);
+					sendInt=5;
+				theServer.getTold(currentState);
 				currentState.clear(level);}
 				else
 					sendInt--;
@@ -2013,9 +2017,9 @@ continue;}
 								&& character.getActBounds().intersects(
 										e.getBounds())) {
 							if(me!=null){
-								if(currentState!=null)
-									currentState.getActions().add(new AttackState(u, character.getMove(), false,character.getType().toString()));
-								return;
+//								if(currentState!=null)
+//									currentState.getActions().add(new AttackState(u, character.getMove(), false,character.getType().toString()));
+//								return;
 							}else
 							e.interact(character.getMove(), character, false);
 							if (character.getMove() == Moves.BASH)
@@ -2038,9 +2042,9 @@ continue;}
 								if ((!(e instanceof Projectile)
 										|| (character instanceof Field))&&(!(fP.get(c)instanceof Shield)||(((Shield)fP.get(c)).isHarming()))) {
 									if(me!=null){
-										if(currentState!=null)
-											currentState.getActions().add(new AttackState(u, character.getMove(), true,character.getMaker().getType().toString()));
-										return;
+//										if(currentState!=null)
+//											currentState.getActions().add(new AttackState(u, character.getMove(), true,character.getMaker().getType().toString()));
+//										return;
 									}else{
 									e.interact(character.getMove(),
 											character.getMaker(), true);

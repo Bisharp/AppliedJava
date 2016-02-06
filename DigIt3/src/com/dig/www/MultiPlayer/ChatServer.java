@@ -86,7 +86,7 @@ public class ChatServer  implements IChatServer
 	}
 @Override
 public StartState getStartState()throws RemoteException{
-return new StartState(owner);
+return new StartState(owner,owner.getSpawnLoc());
 }
 	@Override
 	public boolean broadcast(String sender,GameState  message) throws RemoteException
