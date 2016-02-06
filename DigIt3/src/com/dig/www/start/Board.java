@@ -532,6 +532,7 @@ try {
 world.clear();
 objects.clear();
 movingObjects.clear();
+enemies.clear();
 fP.clear();
 //npcs.clear();
 texturePack=st.getTexture();
@@ -1639,8 +1640,15 @@ continue;}
 						continue;
 					if(states.get(s).isServer())
 						if(!states.get(s).getLevel().equals(level)){
-							level=states.get(s).getLevel();
+							
+							timer.stop();
+							time.pause();
+							level = doorStateLev;
 							changeClientArea();
+							setState(State.INGAME);
+							level=states.get(s).getLevel();
+							timer.restart();
+							time.resume();
 							return;
 						}
 							
@@ -1746,8 +1754,9 @@ continue;}
 						}
 					}
 					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
-						if(enemies.size()<=c)
-							return;
+						if(enemies.size()<=c){
+							//changeClientArea();
+							break;}
 						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
 						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
 						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
