@@ -1996,7 +1996,7 @@ continue;}
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
-					if (e.isOnScreen()) {
+					//if (e.isOnScreen()) {
 						if (e.getBounds().intersects(b.getBounds())) {
 							switch (b.getType()) {
 							case PIT:
@@ -2088,7 +2088,7 @@ continue;}
 							}
 						}
 					}
-				}
+				//}
 				if (bashHit) {
 					if (shieldNum == -1)
 						character.endAction();
