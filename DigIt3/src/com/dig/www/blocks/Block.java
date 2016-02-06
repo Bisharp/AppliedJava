@@ -28,8 +28,10 @@ public class Block extends Sprite {
 	 */
 	private static final long serialVersionUID = 1866822784974593245L;
 
+	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK, Color.WHITE };
 	protected boolean canSee;
 	protected Blocks type;
+	protected Color corruptedColor = list[Statics.RAND.nextInt(list.length)];
 
 	protected static Color[] darkColors;
 
@@ -545,11 +547,11 @@ public void digDo(){
 		}
 	}
 
-	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK, Color.WHITE };
 	public Color computeColor(Color c) {
 		
-		if (traversable())
-			return list[Statics.RAND.nextInt(list.length)];
+//		if (traversable() && owner.isCorruptedWorld())
+//			//return list[Statics.RAND.nextInt(list.length)];
+//			return corruptedColor;
 
 		if (!owner.thunderStrike() && !illuminated)
 			if (owner.darkenWorld())
@@ -571,6 +573,10 @@ public void digDo(){
 	}
 
 	public Color getColor() {
+		
+		if (traversable() && owner.isCorruptedWorld())
+			//return list[Statics.RAND.nextInt(list.length)];
+			return corruptedColor;
 
 		Color c;
 		switch (owner.getTexturePack()) {

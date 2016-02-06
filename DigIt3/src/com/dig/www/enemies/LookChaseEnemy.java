@@ -38,6 +38,9 @@ public class LookChaseEnemy extends TrackingEnemy {
 		} else {
 			basicAnimate();
 		}
+
+		if (onScreen && Math.sqrt(Math.pow(x - owner.getCharacterX(), 2) + Math.pow(y - owner.getCharacterY(), 2)) <= sight)
+			owner.setCorruptedWorld(true);
 	}
 
 	@Override
@@ -46,13 +49,13 @@ public class LookChaseEnemy extends TrackingEnemy {
 
 		if (onScreen && Math.sqrt(Math.pow(x - owner.getCharacterX(), 2) + Math.pow(y - owner.getCharacterY(), 2)) <= sight) {
 			g2d.drawImage(cloud, owner.getCharacterX(), owner.getCharacterY(), owner);
-			g2d.drawImage(corruption, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
-			g2d.setXORMode(Color.red);
+			//g2d.drawImage(corruption, 0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT, owner);
+			// g2d.setXORMode(Color.red);
 		}
 	}
-	
+
 	@Override
 	public int getSpeed() {
-		return slowTimer <= 0? 5 : 2;
+		return slowTimer <= 0 ? 5 : 2;
 	}
 }

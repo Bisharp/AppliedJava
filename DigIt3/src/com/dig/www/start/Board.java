@@ -115,16 +115,16 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
-	private int sendInt=0;
-	private Board board=this;
+	private int sendInt = 0;
+	private Board board = this;
 	private int times;
 	private int fps;
 	private int fpsT;
 	private long longTime;
-	protected ArrayList<String>chats=new ArrayList<String>();
+	protected ArrayList<String> chats = new ArrayList<String>();
 	protected ChatBox chatBox;
 	private String passWord;
-	private ArrayList<String>goneFriends=new ArrayList<String>();
+	private ArrayList<String> goneFriends = new ArrayList<String>();
 	private static final long serialVersionUID = 1L;
 	ArrayList<GameState> states = new ArrayList<GameState>();
 	IChatServer theServer;
@@ -144,10 +144,10 @@ public class Board extends MPanel implements ActionListener {
 	private String doorStateLev = "";
 	private int spawnNum;
 	private Point spawnLoc;
+	private boolean corruptedWorld = false;
 
 	public enum State {
-		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC
-		, DOOROPEN//,SWITCHING;
+		INGAME, PAUSED, QUIT, SHOP, LOADING, DEAD, NPC, DOOROPEN// ,SWITCHING;
 	};
 
 	public enum Weather {
@@ -237,16 +237,19 @@ public class Board extends MPanel implements ActionListener {
 
 	private int startPoint = 0;
 	private Time time;
-public ArrayList<String>getGoneFriends(){
-	return goneFriends;
-}
-public void heyIaddedAFriendBack(String typeToString){
-	for(int c=0;c<goneFriends.size();c++){
-		if(goneFriends.get(c).equals(typeToString)){
-			goneFriends.remove(c);
+
+	public ArrayList<String> getGoneFriends() {
+		return goneFriends;
+	}
+
+	public void heyIaddedAFriendBack(String typeToString) {
+		for (int c = 0; c < goneFriends.size(); c++) {
+			if (goneFriends.get(c).equals(typeToString)) {
+				goneFriends.remove(c);
+			}
 		}
 	}
-}
+
 	public int getStartPoint() {
 		return startPoint;
 	}
@@ -311,15 +314,17 @@ public void heyIaddedAFriendBack(String typeToString){
 		setDoubleBuffered(true);
 		state = State.LOADING;
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
-		this.mpName = JOptionPane.showInputDialog(this,
-				"What would you like to be called?", System.getProperty("user.name"));
+		this.mpName = JOptionPane.showInputDialog(this, "What would you like to be called?", System.getProperty("user.name"));
 		try {
 
-			me = new ChatClient(this, JOptionPane.showInputDialog(
-					"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.", InetAddress
-							.getLocalHost().getHostAddress()), mpName,JOptionPane.showInputDialog("What is the server's password?\nNone is the default.","None"));
-		} catch (HeadlessException | RemoteException | AlreadyBoundException
-				| NotBoundException e) {
+			me = new ChatClient(
+					this,
+					JOptionPane
+							.showInputDialog(
+									"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.",
+									InetAddress.getLocalHost().getHostAddress()), mpName, JOptionPane.showInputDialog(
+							"What is the server's password?\nNone is the default.", "None"));
+		} catch (HeadlessException | RemoteException | AlreadyBoundException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
@@ -383,8 +388,8 @@ public void heyIaddedAFriendBack(String typeToString){
 					if (g instanceof Heart)
 						((Heart) g).end();
 		}
-scrollX=0;
-scrollY=0;
+		scrollX = 0;
+		scrollY = 0;
 		// TODO finish
 		StageBuilder sB = StageBuilder.getInstance(mode, level, this, num);
 		sB.changeState(mode, level, this, num);
@@ -410,19 +415,17 @@ scrollY=0;
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(),
-							"images/objects/chestC.png", this, level,
-							((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
 				}
-if(character==null){
-	System.err.println("Character is never intialized. Leaving game.");
-	System.exit(0);
-}
-	
+		if (character == null) {
+			System.err.println("Character is never intialized. Leaving game.");
+			System.exit(0);
+		}
+
 		if (character.getType() == Types.SPADE) {
 			((Spade) character).resetDirt();
-		}else if(character.getType()==Types.DIAMOND){
-			((Diamond)character).newArea();
+		} else if (character.getType() == Types.DIAMOND) {
+			((Diamond) character).newArea();
 		}
 
 		character.setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -430,8 +433,7 @@ if(character==null){
 		for (int c = 0; c < friends.size(); c++) {
 			friends.get(c).setDead(false);
 			if (c < 3) {
-				friends.get(c).setX(
-						Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
 			} else if (c == 3) {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100);
@@ -440,8 +442,7 @@ if(character==null){
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + 100);
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
 			} else if (c < 8) {
-				friends.get(c).setX(
-						Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
 				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 + 100);
 			} else {
 				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
@@ -449,8 +450,8 @@ if(character==null){
 			}
 			if (friends.get(c).getType() == Types.SPADE) {
 				((Spade) friends.get(c)).resetDirt();
-			}else if(friends.get(c).getType()==Types.DIAMOND){
-				((Diamond)friends.get(c)).newArea();
+			} else if (friends.get(c).getType() == Types.DIAMOND) {
+				((Diamond) friends.get(c)).newArea();
 			}
 
 		}
@@ -497,202 +498,196 @@ if(character==null){
 
 		long freeMem = Runtime.getRuntime().freeMemory();
 		System.gc();
-		System.out.println("Before: " + freeMem + " After: "
-				+ Runtime.getRuntime().freeMemory());
+		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
 		spawnNum = sB.getSpawnNum();
 		save();
 	}
-public void changeClientArea(){
-	scrollX=0;
-	scrollY=0;
-	System.out.println("New Level");
-	//this.level = "hauntedTest";
-	preferences = new Preferences();
-	GameCharacter.setInventory(new Inventory(this));
-	pointedPoint = null;
-	fP.clear();
-	scrollX = 0;
-	scrollY = 0;
-	if (levelChanged) {
-		if (character instanceof Heart)
-			((Heart) character).end();
-		else
-			for (GameCharacter g : friends)
-				if (g instanceof Heart)
-					((Heart) g).end();
-	}
-StartState st=null;
-try {
-	st = theServer.getStartState();
-} catch (RemoteException e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-}
-//enemies.clear();
-world.clear();
-objects.clear();
-movingObjects.clear();
-enemies.clear();
-fP.clear();
 
-//npcs.clear();
-texturePack=st.getTexture();
-GameCharacter.getInventory().setMoney(st.getMoney());
-for(BlockState b:st.getWorld()){
-	
-	world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this,b.getB()));
-	if(!b.getInv())
-		world.get(world.size() - 1).setVisible(false);
-}
-for(ObjectState o:st.getObjects()){
-	switch(o.getType()){
-	case NORMAL:
-		objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), o.isWall(), this, o.getIdent()));
-		break;
-	case MONEY:
-		objects.add(new MoneyObject(o.getX(), o.getY(), o.getLoc(), this, o.getI()));
-	break;
-	case CUBE:
-		objects.add(new Objects(o.getX(),o.getY(),o.getLoc(),true,this,o.getIdent()));
-	break;
-	}
-}
-for(Enemy e:st.getEnemies()){
-//	switch(e.getType()){
-//	case STAND:
-//		enemies.add(new StandEnemy(e.getX(), e.getY(), e.getLoc(), this, e.isFlying(), e.getHealth()));
-//	}
-	enemies.add(e);
-}
-//for(PlayerState p:st.getPlayers()){
-//	
-//}
-	// TODO finish
-	//StageBuilder sB = StageBuilder.getInstance(mode, level, this, -1);
-	//sB.changeState(mode, level, this, -1);
-	//setTexturePack(sB.readText());
-	//world = sB.read();
-	//enemies = sB.loadEn();
-	//portals = sB.loadPortals();
-	//npcs = sB.loadNPC();
-	//objects = sB.loadObjects();
+	public void changeClientArea() {
+		scrollX = 0;
+		scrollY = 0;
+		System.out.println("New Level");
+		// this.level = "hauntedTest";
+		preferences = new Preferences();
+		GameCharacter.setInventory(new Inventory(this));
+		pointedPoint = null;
+		fP.clear();
+		scrollX = 0;
+		scrollY = 0;
+		if (levelChanged) {
+			if (character instanceof Heart)
+				((Heart) character).end();
+			else
+				for (GameCharacter g : friends)
+					if (g instanceof Heart)
+						((Heart) g).end();
+		}
+		StartState st = null;
+		try {
+			st = theServer.getStartState();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// enemies.clear();
+		world.clear();
+		objects.clear();
+		movingObjects.clear();
+		enemies.clear();
+		fP.clear();
 
-	//StageBuilder.setTime(this);
+		// npcs.clear();
+		texturePack = st.getTexture();
+		GameCharacter.getInventory().setMoney(st.getMoney());
+		for (BlockState b : st.getWorld()) {
 
-	//weather = Weather.translate(sB.readWeather());
-
-	if (data != null)
-		data.enterLevel(level);
-	else
-		data = new CharData(level, this);
-
-	objects = data.filter(objects);
-	npcs = data.filterNPC(npcs);
-
-	for (Objects o : objects)
-		if (o instanceof DropPoint)
-			if (((DropPoint) o).hasDrop()) {
-				npcs.add(new Chest(o.getX(), o.getY(),
-						"images/objects/chestC.png", this, level,
-						((DropPoint) o).type()));
+			world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this, b.getB()));
+			if (!b.getInv())
+				world.get(world.size() - 1).setVisible(false);
+		}
+		for (ObjectState o : st.getObjects()) {
+			switch (o.getType()) {
+			case NORMAL:
+				objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), o.isWall(), this, o.getIdent()));
+				break;
+			case MONEY:
+				objects.add(new MoneyObject(o.getX(), o.getY(), o.getLoc(), this, o.getI()));
+				break;
+			case CUBE:
+				objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), true, this, o.getIdent()));
+				break;
 			}
-if(character==null){
-System.err.println("Character is never intialized. Leaving game.");
-System.exit(0);
-}
-
-	if (character.getType() == Types.SPADE) {
-		((Spade) character).resetDirt();
-	}else if(character.getType()==Types.DIAMOND){
-		((Diamond)character).newArea();
-	}
-
-
-	character.setX(Statics.BOARD_WIDTH / 2 - 50);
-	character.setY(Statics.BOARD_HEIGHT / 2 - 50);
-	for (int c = 0; c < friends.size(); c++) {
-		friends.get(c).setDead(false);
-		if (c < 3) {
-			friends.get(c).setX(
-					Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
-			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
-		} else if (c == 3) {
-			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100);
-			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
-		} else if (c == 4) {
-			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + 100);
-			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
-		} else if (c < 8) {
-			friends.get(c).setX(
-					Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
-			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 + 100);
-		} else {
-			friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
-			friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
 		}
-		if (friends.get(c).getType() == Types.SPADE) {
-			((Spade) friends.get(c)).resetDirt();
-		}else if(friends.get(c).getType()==Types.DIAMOND){
-			((Diamond)friends.get(c)).newArea();
+		for (Enemy e : st.getEnemies()) {
+			// switch(e.getType()){
+			// case STAND:
+			// enemies.add(new StandEnemy(e.getX(), e.getY(), e.getLoc(), this,
+			// e.isFlying(), e.getHealth()));
+			// }
+			enemies.add(e);
+		}
+		// for(PlayerState p:st.getPlayers()){
+		//
+		// }
+		// TODO finish
+		// StageBuilder sB = StageBuilder.getInstance(mode, level, this, -1);
+		// sB.changeState(mode, level, this, -1);
+		// setTexturePack(sB.readText());
+		// world = sB.read();
+		// enemies = sB.loadEn();
+		// portals = sB.loadPortals();
+		// npcs = sB.loadNPC();
+		// objects = sB.loadObjects();
+
+		// StageBuilder.setTime(this);
+
+		// weather = Weather.translate(sB.readWeather());
+
+		if (data != null)
+			data.enterLevel(level);
+		else
+			data = new CharData(level, this);
+
+		objects = data.filter(objects);
+		npcs = data.filterNPC(npcs);
+
+		for (Objects o : objects)
+			if (o instanceof DropPoint)
+				if (((DropPoint) o).hasDrop()) {
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
+				}
+		if (character == null) {
+			System.err.println("Character is never intialized. Leaving game.");
+			System.exit(0);
 		}
 
+		if (character.getType() == Types.SPADE) {
+			((Spade) character).resetDirt();
+		} else if (character.getType() == Types.DIAMOND) {
+			((Diamond) character).newArea();
+		}
+
+		character.setX(Statics.BOARD_WIDTH / 2 - 50);
+		character.setY(Statics.BOARD_HEIGHT / 2 - 50);
+		for (int c = 0; c < friends.size(); c++) {
+			friends.get(c).setDead(false);
+			if (c < 3) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + (c * 100));
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 - 100);
+			} else if (c == 3) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100);
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+			} else if (c == 4) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 + 100);
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+			} else if (c < 8) {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50 - 100 + ((c - 5) * 100));
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50 + 100);
+			} else {
+				friends.get(c).setX(Statics.BOARD_WIDTH / 2 - 50);
+				friends.get(c).setY(Statics.BOARD_HEIGHT / 2 - 50);
+			}
+			if (friends.get(c).getType() == Types.SPADE) {
+				((Spade) friends.get(c)).resetDirt();
+			} else if (friends.get(c).getType() == Types.DIAMOND) {
+				((Diamond) friends.get(c)).newArea();
+			}
+
+		}
+		for (int c = 0; c < enemies.size(); c++) {
+			enemies.get(c).resetImage(this);
+		}
+
+		wallList = new ArrayList<Block>();
+		for (Block b : world) {
+
+			b.initialAnimate(spawnX, spawnY);
+
+			// Deals with line-of-sight
+			if (b.getType() == Block.Blocks.WALL)
+				wallList.add(b);
+		}
+
+		for (Portal p : portals)
+			p.initialAnimate(spawnX, spawnY);
+
+		for (Enemy e : enemies) {
+			e.initialAnimate(spawnX, spawnY);
+			e.setAlive(true);
+			e.resetImage(this);
+		}
+
+		for (NPC n : npcs)
+			n.initialAnimate(spawnX, spawnY);
+
+		for (Objects n : objects)
+			n.initialAnimate(spawnX, spawnY);
+
+		// TODO lightspot
+		// objects.add(new Lamp(character.getX() - 100, character.getY() - 500,
+		// "images/objects/floweryLamp.png", this, 5));
+
+		if (spawnLoc != null) {
+			spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
+			spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
+		}
+		spawnLoc = st.getSpawnLoc();
+		changeWeather();
+		updateBackground();
+		Statics.wipeColors();
+
+		long freeMem = Runtime.getRuntime().freeMemory();
+		System.gc();
+		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
+		// spawnNum = sB.getSpawnNum();
+		// save();
+		longTime = System.currentTimeMillis();
+		fpsT = 0;
 	}
-	for (int c = 0; c < enemies.size(); c++) {
-		enemies.get(c).resetImage(this);
-	}
 
-	wallList = new ArrayList<Block>();
-	for (Block b : world) {
-
-		b.initialAnimate(spawnX, spawnY);
-
-		// Deals with line-of-sight
-		if (b.getType() == Block.Blocks.WALL)
-			wallList.add(b);
-	}
-
-	for (Portal p : portals)
-		p.initialAnimate(spawnX, spawnY);
-
-	for (Enemy e : enemies) {
-		e.initialAnimate(spawnX, spawnY);
-		e.setAlive(true);
-		e.resetImage(this);
-	}
-
-	for (NPC n : npcs)
-		n.initialAnimate(spawnX, spawnY);
-
-	for (Objects n : objects)
-		n.initialAnimate(spawnX, spawnY);
-
-	// TODO lightspot
-	// objects.add(new Lamp(character.getX() - 100, character.getY() - 500,
-	// "images/objects/floweryLamp.png", this, 5));
-
-	if (spawnLoc != null) {
-		spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
-		spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
-	}
-	spawnLoc=st.getSpawnLoc();
-	changeWeather();
-	updateBackground();
-	Statics.wipeColors();
-
-	long freeMem = Runtime.getRuntime().freeMemory();
-	System.gc();
-	System.out.println("Before: " + freeMem + " After: "
-			+ Runtime.getRuntime().freeMemory());
-	//spawnNum = sB.getSpawnNum();
-	//save();
-	longTime=System.currentTimeMillis();
-	fpsT=0;
-}
 	protected boolean fogCompute(int x, int y) {
-		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG
-				.special()
-				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT
-						- Statics.BLOCK_HEIGHT);
+		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
+				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
 
 	public void paint(Graphics g) {
@@ -708,7 +703,7 @@ System.exit(0);
 		case NPC:
 		case INGAME:
 		case DOOROPEN:
-		//case SWITCHING:
+			// case SWITCHING:
 			// Tag boolean part of line-of-sight
 			boolean tag = true;
 			int i;
@@ -736,20 +731,16 @@ System.exit(0);
 
 			// Enemy draw
 			for (i = 0; i < enemies.size(); i++) {
-				if (enemies.get(i).isOnScreen()
-						|| enemies.get(i) instanceof Boss) {
+				if (enemies.get(i).isOnScreen() || enemies.get(i) instanceof Boss) {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -761,10 +752,8 @@ System.exit(0);
 						switch (weather) {
 
 						case FOG:
-							if (!fogCompute(e.getX(), e.getY())
-									&& !(e instanceof Boss)) {
-								g2d.drawImage(e.getShadow(), e.getX(),
-										e.getY(), this);
+							if (!fogCompute(e.getX(), e.getY()) && !(e instanceof Boss)) {
+								g2d.drawImage(e.getShadow(), e.getX(), e.getY(), this);
 								break;
 							}
 
@@ -783,18 +772,12 @@ System.exit(0);
 					p = fP.get(i);
 					if (!(fP.get(i) instanceof Field)) {
 						// Line-of-sight mechanics
-						int[] xs = { p.getMidX() - 10,
-								character.getMidX() - 10,
-								character.getMidX() + 10, p.getMidX() + 10 };
-						int[] ys = { p.getMidY() - 10,
-								character.getMidY() - 10,
-								character.getMidY() + 10, p.getMidY() + 10 };
+						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
+						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
 						poly = new Polygon(xs, ys, xs.length);
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& poly.intersects(wallList.get(x)
-											.getBounds())) {
+							if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -815,15 +798,12 @@ System.exit(0);
 
 				if (obj.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, obj.getMidX() + 10 };
-					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, obj.getMidY() + 10 };
+					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, obj.getMidX() + 10 };
+					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, obj.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -839,8 +819,7 @@ System.exit(0);
 								if (obj instanceof Mirror)
 									((Mirror) obj).drawLight(g2d);
 
-								g2d.drawImage(obj.getShadow(), obj.getX(),
-										obj.getY(), this);
+								g2d.drawImage(obj.getShadow(), obj.getX(), obj.getY(), this);
 								break;
 							}
 						default:
@@ -852,15 +831,12 @@ System.exit(0);
 			for (Portal p2 : portals)
 				if (p2.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, p2.getMidX() + 10 };
-					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, p2.getMidY() + 10 };
+					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p2.getMidX() + 10 };
+					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p2.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -877,15 +853,12 @@ System.exit(0);
 			for (NPC npc : npcs)
 				if (npc.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10,
-							character.getMidX() + 10, npc.getMidX() + 10 };
-					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10,
-							character.getMidY() + 10, npc.getMidY() + 10 };
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen()
-								&& poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
 							tag = false;
 							break;
 						}
@@ -898,8 +871,7 @@ System.exit(0);
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(npc.getX(), npc.getY())) {
-								g2d.drawImage(npc.getShadow(), npc.getX(),
-										npc.getY(), this);
+								g2d.drawImage(npc.getShadow(), npc.getX(), npc.getY(), this);
 								break;
 							}
 						default:
@@ -926,15 +898,11 @@ System.exit(0);
 			// ;
 			if (pointedPoint != null) {
 				if (pointedPointType == -1)
-					g2d.drawImage(
-							DigIt.lib.checkLibrary("/images/pointed/go.png"),
-							(int) pointedPoint.getX() - 50,
-							(int) pointedPoint.getY() - 50, this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50, (int) pointedPoint.getY() - 50,
+							this);
 				else
-					g2d.drawImage(DigIt.lib
-							.checkLibrary("/images/pointed/attack.png"),
-							(int) pointedPoint.getX() - 50, (int) pointedPoint
-									.getY() - 50, this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"), (int) pointedPoint.getX() - 50,
+							(int) pointedPoint.getY() - 50, this);
 
 			}
 			for (GameCharacter character : friends) {
@@ -985,8 +953,8 @@ System.exit(0);
 				// }
 				// }
 			}
-if(character!=null)
-			character.draw(g2d);
+			if (character != null)
+				character.draw(g2d);
 			// g2d.setColor(Color.BLUE);
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 
@@ -1051,29 +1019,20 @@ if(character!=null)
 					if (weatherList.isEmpty())
 						for (int i2 = 0; i2 < 700; i2++) {
 							weatherList
-									.add(new int[] {
-											Statics.RAND
-													.nextInt(Statics.BOARD_WIDTH - 5),
-											Statics.RAND
-													.nextInt(Statics.BOARD_HEIGHT - 5) });
+									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
 						}
 
 					if (weatherList.size() < 1000 && state != State.NPC)
 						for (int i2 = 0; i2 < Statics.RAND.nextInt(5) + 1; i2++) {
-							weatherList.add(new int[] {
-									Statics.RAND
-											.nextInt(Statics.BOARD_WIDTH - 5),
-									0 });
+							weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), 0 });
 						}
 
 					switch (time.getGeneralTime()) {
 					case Time.SUNRISE:
-						g2d.setColor(Statics.sunriseColor(Color.lightGray,
-								time.getTime()));
+						g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.SUNSET:
-						g2d.setColor(Statics.sunsetColor(Color.lightGray,
-								time.getTime()));
+						g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
 						break;
 					case Time.NIGHT:
 						g2d.setColor(Statics.darkenColor(Color.lightGray));
@@ -1096,12 +1055,10 @@ if(character!=null)
 							g2d.drawRect(x2, y2, 5, 5);
 							switch (time.getGeneralTime()) {
 							case Time.SUNRISE:
-								g2d.setColor(Statics.sunriseColor(
-										Color.lightGray, time.getTime()));
+								g2d.setColor(Statics.sunriseColor(Color.lightGray, time.getTime()));
 								break;
 							case Time.SUNSET:
-								g2d.setColor(Statics.sunsetColor(
-										Color.lightGray, time.getTime()));
+								g2d.setColor(Statics.sunsetColor(Color.lightGray, time.getTime()));
 								break;
 							case Time.DAY:
 							default:
@@ -1113,8 +1070,7 @@ if(character!=null)
 						if (state != State.NPC) {
 							weatherList.remove(runs);
 
-							if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH
-									&& y2 <= Statics.BOARD_HEIGHT) {
+							if (x2 >= 0 && x2 <= Statics.BOARD_WIDTH && y2 <= Statics.BOARD_HEIGHT) {
 								x2 += (Statics.RAND.nextBoolean() ? -3 : 3);
 								y2 += 5;
 								weatherList.add(runs, new int[] { x2, y2 });
@@ -1135,8 +1091,8 @@ if(character!=null)
 			break;
 
 		case PAUSED:
-if(GameCharacter.getInventory()!=null)
-			GameCharacter.getInventory().draw(g2d);
+			if (GameCharacter.getInventory() != null)
+				GameCharacter.getInventory().draw(g2d);
 			break;
 
 		case DEAD:
@@ -1150,7 +1106,7 @@ if(GameCharacter.getInventory()!=null)
 		case LOADING:
 			g2d.setColor(Color.ORANGE);
 			g2d.fill(getScreen());
-			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH-100, Statics.BOARD_HEIGHT-100, this);
+			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH - 100, Statics.BOARD_HEIGHT - 100, this);
 			// g2d.drawImage(new
 			// ImageIcon(getClass().getResource("images/icon.png")).getImage(),
 			// 0, 0, this);
@@ -1173,77 +1129,72 @@ if(GameCharacter.getInventory()!=null)
 		}
 		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
 		g2d.setColor(Color.WHITE);
-g2d.drawString("FPS:"+fps, 3, 170+(Statics.MAC?23:0));
+		g2d.drawString("FPS:" + fps, 3, 170 + (Statics.MAC ? 23 : 0));
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
-String decision;
+
+	String decision;
+
 	public void openSwitchDialogue() {
-character.releaseAll();
-character.stop();
-		//scrollX *= -2;
-		//scrollY *= -2;
-		//reAnimate();
-		//repaint();
+		character.releaseAll();
+		character.stop();
+		// scrollX *= -2;
+		// scrollY *= -2;
+		// reAnimate();
+		// repaint();
 
-		//timer.stop();
-		//time.pause();
+		// timer.stop();
+		// time.pause();
 
-		//character.stop();
-		//scrollX = 0;
-		//scrollY = 0;
+		// character.stop();
+		// scrollX = 0;
+		// scrollY = 0;
 
 		switching = false;
 
 		// char[] names = {'S', 'C', 'D', 'H'};
-		
-		Thread t = new Thread(new Runnable(){
-	        public void run(){
-	        	//state=State.SWITCHING;
-	           // JOptionPane.showMessageDialog(null, "Hello");
-	        	
-	        decision = ((String) JOptionPane
-				.showInputDialog(
-						board,
-						(character.isDead() ? "Your current character has been defeated.\n"
-								: "")
-								+ "Please select a character: ", DigIt.NAME,
-						JOptionPane.PLAIN_MESSAGE, Statics.ICON,
-						getCharacters(), null));
 
-		if (decision == null) {
-			//timer.restart();
-			//time.resume();
-			if (character.isDead()) {
-				openSwitchDialogue();
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				// state=State.SWITCHING;
+				// JOptionPane.showMessageDialog(null, "Hello");
+
+				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
+						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
+
+				if (decision == null) {
+					// timer.restart();
+					// time.resume();
+					if (character.isDead()) {
+						openSwitchDialogue();
+					}
+					return;
+				}
+
+				if (!decision.equals(character.getType().charName())) {
+					character.releaseAll();
+					if (currentState != null)
+						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
+					GameCharacter current = character;
+					int friendNum = getFriend(decision);
+					friends.get(friendNum).releaseAll();
+					character = friends.get(friendNum);
+					friends.set(friendNum, current);
+					character.setPlayer(true);
+					friends.get(friendNum).setPlayer(false);
+					character.stop();
+					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+					Collections.sort(friends);
+				}
+				// state=State.INGAME;
 			}
-			return;
-		}
+		});
+		t.start();
 
-		if (!decision.equals(character.getType().charName())) {
-			character.releaseAll();
-if(currentState!=null)
-	currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
-			GameCharacter current = character;
-			int friendNum = getFriend(decision);
-			friends.get(friendNum).releaseAll();
-			character = friends.get(friendNum);
-			friends.set(friendNum, current);
-			character.setPlayer(true);
-			friends.get(friendNum).setPlayer(false);
-			character.stop();
-			scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(),
-					(int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
-			Collections.sort(friends);
-		}
-		//state=State.INGAME;
-	        }
-	    });
-	  t.start();
-		
-		//timer.restart();
-		//time.resume();
-	  decision=null;
+		// timer.restart();
+		// time.resume();
+		decision = null;
 	}
 
 	private String[] getCharacters() {
@@ -1326,8 +1277,7 @@ if(currentState!=null)
 			b.setY(b.getY() + y);
 		}
 		if (pointedPoint != null)
-			pointedPoint.setLocation(pointedPoint.getX() + x,
-					pointedPoint.getY() + y);
+			pointedPoint.setLocation(pointedPoint.getX() + x, pointedPoint.getY() + y);
 
 		if (spawnLoc != null)
 			spawnLoc.setLocation(spawnLoc.getX() + x, spawnLoc.getY() + y);
@@ -1373,31 +1323,30 @@ if(currentState!=null)
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
+		corruptedWorld = false;
 		switch (state) {
 
 		case INGAME:
 
 			character.animate();
-			boolean notMe=me==null;
+			boolean notMe = me == null;
 			for (GameCharacter character : friends) {
 				character.animate();
 			}
 
 			for (int i = 0; i < enemies.size(); i++) {
 
-				
-if(notMe){
-				enemies.get(i).animate();
-			if (!enemies.get(i).isAlive()) {
-					enemies.remove(i);
-					i--;
-					continue;
-				}	
-}
-else
-	enemies.get(i).basicAnimate();
-				enemies.get(i).setOnScreen(
-						enemies.get(i).getBounds().intersects(getScreen()));
+				if (notMe) {
+					enemies.get(i).animate();
+					if (!enemies.get(i).isAlive()) {
+						enemies.remove(i);
+						i--;
+						continue;
+					}
+				} else
+					enemies.get(i).basicAnimate();
+				enemies.get(i).setOnScreen(enemies.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -1411,50 +1360,51 @@ else
 			}
 			for (int i = 0; i < fP.size(); i++) {
 				if (fP.get(i).isDead()) {
-fP.remove(i);
-i--;
-continue;}
-		fP.get(i).animate();
-//					if (fP.get(i).getMove() == Moves.CHAIN) {
-//						if (fP.get(i).getCharNum() == -2) {
-//							fP.add(new FProjectile(fP.get(i).getD() - 180, fP
-//									.get(i).getX(), fP.get(i).getY(), fP.get(i)
-//									.getSpeed(), fP.get(i).getMaker(), fP
-//									.get(i).getLoc(), fP.get(i).getOwner(),
-//									Moves.CHAIN, -1, false));
-//							fP.remove(i);
-//						} else {
-//							fP.get(i).setCharNum(-1);
-//							fP.get(i).basicAnimate();
-//						}
-//					} else {
-//						fP.remove(i);
-//						i--;
-//						continue;
-//					}
-//
-//				} else if (fP.get(i).getCharNum() != -2) {
-//					GameCharacter chara;
-//					int charNum = fP.get(i).getCharNum();
-//					if (charNum == -1) {
-//						chara = character;
-//					} else {
-//						chara = friends.get(charNum);
-//
-//					}
-//					if (fP.get(i)
-//							.getBounds()
-//							.contains(
-//									new Point(chara.getMidX(), chara.getMidY()))) {
-//						fP.remove(i);
-//						i--;
-//						continue;
-//					}
-//				}
-//
-//				fP.get(i).animate();
-//				fP.get(i).setOnScreen(
-//						fP.get(i).getBounds().intersects(getScreen()));
+					fP.remove(i);
+					i--;
+					continue;
+				}
+				fP.get(i).animate();
+				// if (fP.get(i).getMove() == Moves.CHAIN) {
+				// if (fP.get(i).getCharNum() == -2) {
+				// fP.add(new FProjectile(fP.get(i).getD() - 180, fP
+				// .get(i).getX(), fP.get(i).getY(), fP.get(i)
+				// .getSpeed(), fP.get(i).getMaker(), fP
+				// .get(i).getLoc(), fP.get(i).getOwner(),
+				// Moves.CHAIN, -1, false));
+				// fP.remove(i);
+				// } else {
+				// fP.get(i).setCharNum(-1);
+				// fP.get(i).basicAnimate();
+				// }
+				// } else {
+				// fP.remove(i);
+				// i--;
+				// continue;
+				// }
+				//
+				// } else if (fP.get(i).getCharNum() != -2) {
+				// GameCharacter chara;
+				// int charNum = fP.get(i).getCharNum();
+				// if (charNum == -1) {
+				// chara = character;
+				// } else {
+				// chara = friends.get(charNum);
+				//
+				// }
+				// if (fP.get(i)
+				// .getBounds()
+				// .contains(
+				// new Point(chara.getMidX(), chara.getMidY()))) {
+				// fP.remove(i);
+				// i--;
+				// continue;
+				// }
+				// }
+				//
+				// fP.get(i).animate();
+				// fP.get(i).setOnScreen(
+				// fP.get(i).getBounds().intersects(getScreen()));
 				// /\
 				// || Nightmare Fuel
 			}
@@ -1493,11 +1443,9 @@ continue;}
 					if (c == c2) {
 
 					} else {
-						if (!friends.get(c).getWallBound()
-								&& !friends.get(c2).getWallBound()) {
+						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
 
-							if (friends.get(c).getBounds()
-									.intersects(friends.get(c2).getBounds())&&!friends.get(c2).isPlayer()) {
+							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds()) && !friends.get(c2).isPlayer()) {
 								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
@@ -1516,9 +1464,10 @@ continue;}
 			repaint();
 			break;
 		case DOOROPEN:
-			if(me!=null){
-				state=State.INGAME;
-				break;}
+			if (me != null) {
+				state = State.INGAME;
+				break;
+			}
 			if (doorStateTimer <= 0) {
 
 				timer.stop();
@@ -1534,22 +1483,22 @@ continue;}
 		default:
 			break;
 		}
-//		character.setMpName(null);
-//			for(int c=0;c<friends.size();c++)
-//				friends.get(c).setMpName(null);
+		// character.setMpName(null);
+		// for(int c=0;c<friends.size();c++)
+		// friends.get(c).setMpName(null);
 		if (server != null) {
-			
+
 			try {
-				Block b=world.get(0);
-				for(int s=0;s<states.size();s++){
-//					if(states.get(s)==null||states.get(s).getPlayerStates()==null)
-//						System.out.println("null");
-//					else
-					for(PlayerState playerState:states.get(s).getPlayerStates()){
-						for(GameCharacter friend:friends){
-							if(playerState.isPlayer()&&friend.getType().toString().equals(playerState.getTypeToString())){
-								friend.setX(playerState.getX()+b.getX());
-								friend.setY(playerState.getY()+b.getY());
+				Block b = world.get(0);
+				for (int s = 0; s < states.size(); s++) {
+					// if(states.get(s)==null||states.get(s).getPlayerStates()==null)
+					// System.out.println("null");
+					// else
+					for (PlayerState playerState : states.get(s).getPlayerStates()) {
+						for (GameCharacter friend : friends) {
+							if (playerState.isPlayer() && friend.getType().toString().equals(playerState.getTypeToString())) {
+								friend.setX(playerState.getX() + b.getX());
+								friend.setY(playerState.getY() + b.getY());
 								friend.setPlayer(true);
 								friend.setDirection(playerState.getDir());
 								friend.setImage(friend.newImage(playerState.getS()));
@@ -1557,145 +1506,144 @@ continue;}
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setDire(playerState.getDire());
-								//friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
-								}
+								// friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+							}
 						}
 					}
-					if(//states.get(s)!=null&&states.get(s).getActions()!=null
-							//&&
-							!states.get(s).isServer()
-							)
-					for(ActionState actionState:states.get(s).getActions()){
-						switch(actionState.getActionType()){
-						case SWITCH:
-						SwitchState	realState=(SwitchState)actionState;
-							for(GameCharacter chara:friends){
-								if(chara.getType().charName().equals(realState.getFrom())){
-									chara.setPlayer(false);
-									chara.setMpName(null);
-									chara.setWaiting(false);
+					if (// states.get(s)!=null&&states.get(s).getActions()!=null
+						// &&
+					!states.get(s).isServer())
+						for (ActionState actionState : states.get(s).getActions()) {
+							switch (actionState.getActionType()) {
+							case SWITCH:
+								SwitchState realState = (SwitchState) actionState;
+								for (GameCharacter chara : friends) {
+									if (chara.getType().charName().equals(realState.getFrom())) {
+										chara.setPlayer(false);
+										chara.setMpName(null);
+										chara.setWaiting(false);
+									}
 								}
-							}
-							break;
-						case MONEY:
-							MoneyState	realState2=(MoneyState)actionState;
-							GameCharacter.getInventory().addMoney(realState2.getVal());
-							Statics.playSound(this, "weapons/whop.wav");
-							try{
-							objects.remove(realState2.getI());
-							}catch(Exception ex){
-								ex.printStackTrace();	
-							}
-							break;
-						case BREAK:
-							BreakCrystal breakC=(BreakCrystal)actionState;
-							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
-							System.out.println(world.get(breakC.getI()).getType());
-							world.get(breakC.getI()).doType(Blocks.ROCK);
-							Statics.playSound(this, "blocks/shatter.wav");
-							break;
-						case DIG:
-							BreakCrystal digC=(BreakCrystal)actionState;
-							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
-							world.get(digC.getI()).digDo();
-							break;
-						case ATTACK:
-							AttackState attack=(AttackState)actionState;
-							for(int c=0;c<friends.size();c++)
-								if(friends.get(c).getType().toString().equals(attack.getCharName())){
-								//	enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
-									
-									friends.get(c).clientAttack(attack.getAttackNum());
-									break;
+								break;
+							case MONEY:
+								MoneyState realState2 = (MoneyState) actionState;
+								GameCharacter.getInventory().addMoney(realState2.getVal());
+								Statics.playSound(this, "weapons/whop.wav");
+								try {
+									objects.remove(realState2.getI());
+								} catch (Exception ex) {
+									ex.printStackTrace();
 								}
-							break;
-						
+								break;
+							case BREAK:
+								BreakCrystal breakC = (BreakCrystal) actionState;
+								// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+								System.out.println(world.get(breakC.getI()).getType());
+								world.get(breakC.getI()).doType(Blocks.ROCK);
+								Statics.playSound(this, "blocks/shatter.wav");
+								break;
+							case DIG:
+								BreakCrystal digC = (BreakCrystal) actionState;
+								// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+								world.get(digC.getI()).digDo();
+								break;
+							case ATTACK:
+								AttackState attack = (AttackState) actionState;
+								for (int c = 0; c < friends.size(); c++)
+									if (friends.get(c).getType().toString().equals(attack.getCharName())) {
+										// enemies.get(attack.getI()).interact(attack.getMove(),
+										// friends.get(c), attack.isFromP());
+
+										friends.get(c).clientAttack(attack.getAttackNum());
+										break;
+									}
+								break;
+
+							}
 						}
-					}
 				}
 				states.clear();
-				if(sendInt<=0){
-				currentState.getPlayerStates().add(
-						new PlayerState(character.getX() - b.getX(), character
-								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
-								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
-				
-					for (GameCharacter character : friends){
+				if (sendInt <= 0) {
 					currentState.getPlayerStates().add(
-							new PlayerState(character.getX() - b.getX(),
-									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
-											.getDirection(), character.getS(), character.isPlayer(),
-									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy(),character.getDire()));}
-			
-					for(Enemy en:enemies){
-						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY(),en.getHealth()));
+							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
+									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
+									character.getHealth(), character.getEnergy(), character.getDire()));
+
+					for (GameCharacter character : friends) {
+						currentState.getPlayerStates().add(
+								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
+										.getAttackTimer(), character.getDirection(), character.getS(), character.isPlayer(), character.getType()
+										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire()));
 					}
-					sendInt=5;
-				server.broadcast(mpName, currentState);
-				currentState.clear(level);}
-				else sendInt--;
+
+					for (Enemy en : enemies) {
+						currentState.getEnemyStates().add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
+					}
+					sendInt = 5;
+					server.broadcast(mpName, currentState);
+					currentState.clear(level);
+				} else
+					sendInt--;
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		} else if (me != null&&character!=null) {
+		} else if (me != null && character != null) {
 			try {
-				Block b=world.get(0);
-				for(int s=0;s<states.size();s++){
-					if(states.get(s)==null)
+				Block b = world.get(0);
+				for (int s = 0; s < states.size(); s++) {
+					if (states.get(s) == null)
 						continue;
-					if(states.get(s).isServer())
-						if(!states.get(s).getLevel().equals(level)){
-							
+					if (states.get(s).isServer())
+						if (!states.get(s).getLevel().equals(level)) {
+
 							timer.stop();
 							time.pause();
 							level = doorStateLev;
 							changeClientArea();
 							setState(State.INGAME);
-							level=states.get(s).getLevel();
+							level = states.get(s).getLevel();
 							timer.restart();
 							time.resume();
 							return;
 						}
-							
-//					if(states.get(s).getPlayerStates()==null)
-//						System.out.println("null");
-//					else
-					for(PlayerState playerState:states.get(s).getPlayerStates()){
-						boolean hasGone=false;
-						if(character.getType().toString().equals(playerState.getTypeToString()))
-							hasGone=true;
+
+					// if(states.get(s).getPlayerStates()==null)
+					// System.out.println("null");
+					// else
+					for (PlayerState playerState : states.get(s).getPlayerStates()) {
+						boolean hasGone = false;
+						if (character.getType().toString().equals(playerState.getTypeToString()))
+							hasGone = true;
 						else
-						for(GameCharacter friend:friends){
-							if(friend.getType().toString().equals(playerState.getTypeToString())){
-								 hasGone=true;
-								friend.setX(playerState.getX()+b.getX());
-								friend.setY(playerState.getY()+b.getY());
-								friend.setPlayer(playerState.isPlayer());
-								friend.setDirection(playerState.getDir());
-								friend.setImage(friend.newImage(playerState.getS()));
-								friend.setMpName(playerState.getMpName());
-								friend.setHealth(playerState.getHealth());
-								friend.setEnergy(playerState.getEnergy());
-								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
-								friend.setDire(playerState.getDire());
+							for (GameCharacter friend : friends) {
+								if (friend.getType().toString().equals(playerState.getTypeToString())) {
+									hasGone = true;
+									friend.setX(playerState.getX() + b.getX());
+									friend.setY(playerState.getY() + b.getY());
+									friend.setPlayer(playerState.isPlayer());
+									friend.setDirection(playerState.getDir());
+									friend.setImage(friend.newImage(playerState.getS()));
+									friend.setMpName(playerState.getMpName());
+									friend.setHealth(playerState.getHealth());
+									friend.setEnergy(playerState.getEnergy());
+									friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+									friend.setDire(playerState.getDire());
+								}
 							}
-						}
-						if(!hasGone){
-							GameCharacter chara = getACharacter(playerState
-									.getTypeToString());
+						if (!hasGone) {
+							GameCharacter chara = getACharacter(playerState.getTypeToString());
 							if (chara != null) {
-								if (character == null&&!playerState.isPlayer()) {
+								if (character == null && !playerState.isPlayer()) {
 									character = chara;
-									//xPos=playerState.getX();
-									//yPos=state.getPlayerStates().get(c).getY();
+									// xPos=playerState.getX();
+									// yPos=state.getPlayerStates().get(c).getY();
 									chara.setPlayer(true);
 								} else {
 									friends.add(chara);
-									chara.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
-									chara.setX(playerState.getX()+b.getX());
-									chara.setY(playerState.getY()+b.getY());
+									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+									chara.setX(playerState.getX() + b.getX());
+									chara.setY(playerState.getY() + b.getY());
 									chara.setPlayer(playerState.isPlayer());
 									chara.setDirection(playerState.getDir());
 									chara.setImage(chara.newImage(playerState.getS()));
@@ -1707,94 +1655,93 @@ continue;}
 							}
 						}
 					}
-					
-					for(ActionState actionState:states.get(s).getActions()){
-						switch(actionState.getActionType()){
+
+					for (ActionState actionState : states.get(s).getActions()) {
+						switch (actionState.getActionType()) {
 						case SWITCH:
-//						SwitchState	realState=(SwitchState)actionState;
-//							for(GameCharacter chara:friends){
-//								if(chara.getType().charName().equals(realState.getFrom())){
-//									chara.setPlayer(false);
-//								}
-//							}
+							// SwitchState realState=(SwitchState)actionState;
+							// for(GameCharacter chara:friends){
+							// if(chara.getType().charName().equals(realState.getFrom())){
+							// chara.setPlayer(false);
+							// }
+							// }
 							break;
 						case MONEY:
-							MoneyState	realState=(MoneyState)actionState;
+							MoneyState realState = (MoneyState) actionState;
 							GameCharacter.getInventory().addMoney(realState.getVal());
 							Statics.playSound(this, "weapons/whop.wav");
-							try{
-							objects.remove(realState.getI());
-							}catch(Exception ex){
-								ex.printStackTrace();	
+							try {
+								objects.remove(realState.getI());
+							} catch (Exception ex) {
+								ex.printStackTrace();
 							}
 							break;
 						case PICKUP:
-							ObjectPickUpState realState2=(ObjectPickUpState)actionState;
-							try{
-							objects.remove(realState2.getI());
-							}catch(Exception ex){
-							ex.printStackTrace();	
-							}	
+							ObjectPickUpState realState2 = (ObjectPickUpState) actionState;
+							try {
+								objects.remove(realState2.getI());
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
 							break;
 						case MOVE:
-							MoveObjectState move=(MoveObjectState)actionState;
-							objects.get(move.getI()).setX(world.get(0).getX()+move.getX());
-							objects.get(move.getI()).setY(world.get(0).getY()+move.getY());
-						break;
+							MoveObjectState move = (MoveObjectState) actionState;
+							objects.get(move.getI()).setX(world.get(0).getX() + move.getX());
+							objects.get(move.getI()).setY(world.get(0).getY() + move.getY());
+							break;
 						case BREAK:
-							BreakCrystal breakC=(BreakCrystal)actionState;
-							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							BreakCrystal breakC = (BreakCrystal) actionState;
+							// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
 							world.get(breakC.getI()).doType(Blocks.ROCK);
 							Statics.playSound(this, "blocks/shatter.wav");
 							break;
 						case DIG:
-							DigPit digC=(DigPit)actionState;
-							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
+							DigPit digC = (DigPit) actionState;
+							// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
 							world.get(digC.getI()).digDo();
 							break;
 						case ADDEN:
-							AddEnemy add=(AddEnemy)actionState;
+							AddEnemy add = (AddEnemy) actionState;
 							enemies.add(add.getEnemy());
 							break;
 						default:
 							break;
-						
+
 						}
 					}
-					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
-						if(enemies.size()<=c){
-							//changeClientArea();
-							break;}
-						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
-						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
+					for (int c = 0; c < states.get(s).getEnemyStates().size(); c++) {
+						if (enemies.size() <= c) {
+							// changeClientArea();
+							break;
+						}
+						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX() + b.getX());
+						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY() + b.getY());
 						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
 					}
 				}
 				states.clear();
-				if(sendInt<=0)
-				currentState.getPlayerStates().add(
-						new PlayerState(character.getX() - b.getX(), character
-								.getY() - b.getY(),character.getActing(),character.getAttackTimer(),
-								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
-				if(sendInt<=0){
-					sendInt=5;
-				theServer.getTold(currentState);
-				currentState.clear(level);}
-				else
+				if (sendInt <= 0)
+					currentState.getPlayerStates().add(
+							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
+									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
+									character.getHealth(), character.getEnergy(), character.getDire()));
+				if (sendInt <= 0) {
+					sendInt = 5;
+					theServer.getTold(currentState);
+					currentState.clear(level);
+				} else
 					sendInt--;
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();
-				JOptionPane.showMessageDialog(this,
-						"Lost connection to server. Leaving game.");
+				JOptionPane.showMessageDialog(this, "Lost connection to server. Leaving game.");
 				System.exit(0);
 			}
-		}else
+		} else
 			states.clear();
-		
-		if(chatBox!=null){
-			while(chats.size()>6){
+
+		if (chatBox != null) {
+			while (chats.size() > 6) {
 				chats.remove(0);
 			}
 			chatBox.set(chats);
@@ -1802,19 +1749,19 @@ continue;}
 		// if(server!=null||me!=null)
 		// currentState=new GameState(mode, level);
 		fpsT++;
-		if(System.currentTimeMillis()-longTime>=1000){
-			fps=fpsT;
-//			if(fps>30){
-//				times++;
-//				if(times>5){
-//					timer.setDelay(50);
-//				}
-//			}else
-//				times=0;
-			//System.out.println(fps);
-			//System.out.println(tpf());
-			fpsT=0;
-			longTime=System.currentTimeMillis();
+		if (System.currentTimeMillis() - longTime >= 1000) {
+			fps = fpsT;
+			// if(fps>30){
+			// times++;
+			// if(times>5){
+			// timer.setDelay(50);
+			// }
+			// }else
+			// times=0;
+			// System.out.println(fps);
+			// System.out.println(tpf());
+			fpsT = 0;
+			longTime = System.currentTimeMillis();
 		}
 	}
 
@@ -1845,18 +1792,11 @@ continue;}
 				// Line-of-sight
 				if (b.isOnScreen())
 					if (b.getType() != Block.Blocks.WALL) {
-						int[] xs = { b.getMidX() - 10,
-								character.getMidX() - 10,
-								character.getMidX() + 10, b.getMidX() + 10 };
-						int[] ys = { b.getMidY() - 10,
-								character.getMidY() - 10,
-								character.getMidY() + 10, b.getMidY() + 10 };
+						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
+						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& new Polygon(xs, ys, xs.length)
-											.intersects(wallList.get(x)
-													.getBounds())) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -1873,8 +1813,7 @@ continue;}
 			for (GameCharacter character : friends) {
 				Rectangle r2 = character.getCollisionBounds();
 
-				if (Statics.dist(b.getX(), b.getY(), character.getX(),
-						character.getY()) < 200) {
+				if (Statics.dist(b.getX(), b.getY(), character.getX(), character.getY()) < 200) {
 					if (!b.traversable() && b.getBounds().intersects(r2)) {
 
 						switch (b.getType()) {
@@ -1893,28 +1832,15 @@ continue;}
 						}
 					}
 
-					if ((character.getMove() == Moves.CLUB
-							&& !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-							|| (character.getMove() == Moves.PIT
-									&& !character.hasSpecialed() && (b
-									.getType() == Blocks.GROUND
-									|| b.getType() == Blocks.DIRT || b
-									.getType() == Blocks.PIT))) {
-						if (b.getBounds().intersects(character.getActBounds())
-								&& !b.getBounds().intersects(
-										character.getCollisionBounds())) {
+					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
-							if ((character.getMove() == Moves.CLUB
-									&& !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-									|| (character.getMove() == Moves.PIT
-											&& !character.hasSpecialed() && (b
-											.getType() == Blocks.GROUND
-											|| b.getType() == Blocks.DIRT || b
-											.getType() == Blocks.PIT)))
-								if (b.getBounds().intersects(
-										character.getActBounds())
-										&& !b.getBounds().intersects(
-												character.getCollisionBounds())) {
+							if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
+								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 									b.interact(i);
 									character.endAction();
@@ -1949,19 +1875,14 @@ continue;}
 					}
 
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
-						if (b.getBounds().intersects(
-								character.getDirBounds()[rI]))
+						if (b.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 				}
 
-				if ((character.getMove() == Moves.CLUB
-						&& !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT
-								&& !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-					if (b.getBounds().intersects(character.getActBounds())
-							&& !b.getBounds().intersects(
-									character.getCollisionBounds())) {
+					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact(i);
 						character.endAction();
@@ -1973,10 +1894,8 @@ continue;}
 
 					p = fP.get(u);
 					if (p.isOnScreen()) {
-						o = p instanceof Irregular ? ((Irregular) p)
-								.getIrregularBounds() : p.getBounds();
-						if (o.getBounds().intersects(b.getBounds())
-								&& p.getMove() != Moves.DISPENSER) {
+						o = p instanceof Irregular ? ((Irregular) p).getIrregularBounds() : p.getBounds();
+						if (o.getBounds().intersects(b.getBounds()) && p.getMove() != Moves.DISPENSER) {
 							switch (b.getType()) {
 
 							case CRYSTAL:
@@ -1996,99 +1915,94 @@ continue;}
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
-					//if (e.isOnScreen()) {
-						if (e.getBounds().intersects(b.getBounds())) {
-							switch (b.getType()) {
-							case PIT:
-								if (!e.flying)
-									e.setAlive(false);
-								break;
+					// if (e.isOnScreen()) {
+					if (e.getBounds().intersects(b.getBounds())) {
+						switch (b.getType()) {
+						case PIT:
+							if (!e.flying)
+								e.setAlive(false);
+							break;
 
-							case CRYSTAL:
-							case WALL:
+						case CRYSTAL:
+						case WALL:
+							e.turnAround(b.getX(), b.getY());
+							break;
+						case LIQUID:
+							if (!e.flying)
 								e.turnAround(b.getX(), b.getY());
-								break;
-							case LIQUID:
-								if (!e.flying)
-									e.turnAround(b.getX(), b.getY());
-								break;
-							default:
-								break;
-							}
+							break;
+						default:
+							break;
 						}
+					}
 
-						if (character.getActing() > 0
-								&& character.getActBounds().intersects(
-										e.getBounds())) {
-							if(me!=null){
-//								if(currentState!=null)
-//									currentState.getActions().add(new AttackState(u, character.getMove(), false,character.getType().toString()));
-//								return;
-							}else
+					if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+						if (me != null) {
+							// if(currentState!=null)
+							// currentState.getActions().add(new AttackState(u,
+							// character.getMove(),
+							// false,character.getType().toString()));
+							// return;
+						} else
 							e.interact(character.getMove(), character, false);
-							if (character.getMove() == Moves.BASH)
-								bashHit = true;
-						}
-						for (int c = 0; c < fP.size(); c++) {
-							FProjectile character = fP.get(c);
-							o = character instanceof Irregular ? ((Irregular) character)
-									.getIrregularBounds() : character
-									.getBounds();
+						if (character.getMove() == Moves.BASH)
+							bashHit = true;
+					}
+					for (int c = 0; c < fP.size(); c++) {
+						FProjectile character = fP.get(c);
+						o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
 
-							// This modification would allow us to make certain
-							// projectiles behave differently with their bounds;
-							// could be implemented with other objects.
+						// This modification would allow us to make certain
+						// projectiles behave differently with their bounds;
+						// could be implemented with other objects.
 
-							if (o.intersects(e.getBounds())
-									&& character.isOnScreen()
-									//&& character.getHarming()
-									) {
-								if ((!(e instanceof Projectile)
-										|| (character instanceof Field))&&(!(fP.get(c)instanceof Shield)||(((Shield)fP.get(c)).isHarming()))) {
-									if(me!=null){
-//										if(currentState!=null)
-//											currentState.getActions().add(new AttackState(u, character.getMove(), true,character.getMaker().getType().toString()));
-//										return;
-									}else{
-									e.interact(character.getMove(),
-											character.getMaker(), true);}
-									fP.get(c).setOnScreen(false);
-										
+						if (o.intersects(e.getBounds()) && character.isOnScreen()
+						// && character.getHarming()
+						) {
+							if ((!(e instanceof Projectile) || (character instanceof Field))
+									&& (!(fP.get(c) instanceof Shield) || (((Shield) fP.get(c)).isHarming()))) {
+								if (me != null) {
+									// if(currentState!=null)
+									// currentState.getActions().add(new
+									// AttackState(u, character.getMove(),
+									// true,character.getMaker().getType().toString()));
+									// return;
+								} else {
+									e.interact(character.getMove(), character.getMaker(), true);
 								}
-							}
-						}
+								fP.get(c).setOnScreen(false);
 
-						for (int c = 0; c < friends.size(); c++) {
-							GameCharacter character = friends.get(c);
-							if (character.getActing() > 0
-									&& character.getActBounds().intersects(
-											e.getBounds())) {
-								if(me==null)
-								e.interact(character.getMove(), character,
-										false);
-								if (character.getMove() == Moves.BASH) {
-									bashHit = true;
-									shieldNum = c;
-								}
-							}
-						}
-
-						if (e.getBounds().intersects(r3) && e.willHarm()) {
-							e.turnAround(character.getX(), character.getY());
-							character.takeDamage(e.getDamage(), e.poisons());
-
-						}
-
-						for (GameCharacter character : friends) {
-							Rectangle r2 = character.getBounds();
-							if (e.getBounds().intersects(r2) && e.willHarm()) {
-								e.turnAround(character.getX(), character.getY());
-								character
-										.takeDamage(e.getDamage(), e.poisons());
 							}
 						}
 					}
-				//}
+
+					for (int c = 0; c < friends.size(); c++) {
+						GameCharacter character = friends.get(c);
+						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+							if (me == null)
+								e.interact(character.getMove(), character, false);
+							if (character.getMove() == Moves.BASH) {
+								bashHit = true;
+								shieldNum = c;
+							}
+						}
+					}
+
+					if (e.getBounds().intersects(r3) && e.willHarm()) {
+						e.turnAround(character.getX(), character.getY());
+						character.takeDamage(e.getDamage(), e.poisons());
+
+					}
+
+					for (GameCharacter character : friends) {
+						Rectangle r2 = character.getBounds();
+						if (e.getBounds().intersects(r2) && e.willHarm()) {
+							e.turnAround(character.getX(), character.getY());
+							character.takeDamage(e.getDamage(), e.poisons());
+						}
+					}
+				}
+				// }
 				if (bashHit) {
 					if (shieldNum == -1)
 						character.endAction();
@@ -2101,8 +2015,7 @@ continue;}
 
 					Shape s;
 					for (Objects o0 : movingObjects) {
-						s = o0 instanceof Irregular ? ((Irregular) o0)
-								.getIrregularBounds() : o0.getBounds();
+						s = o0 instanceof Irregular ? ((Irregular) o0).getIrregularBounds() : o0.getBounds();
 						if (s.intersects(b.getBounds())) {
 							if (!b.traversable())
 								o0.collideWall();
@@ -2171,8 +2084,7 @@ continue;}
 				character.endAction();
 			}
 
-		} else if (character instanceof Heart
-				&& ((Heart) character).usingField()) {
+		} else if (character instanceof Heart && ((Heart) character).usingField()) {
 			// fieldUsed = true;
 			Polygon rB = new Polygon();
 
@@ -2201,26 +2113,26 @@ continue;}
 			p.setOnScreen(p.getBounds().intersects(getScreen()));
 
 			if (r3.intersects(p.getBounds())) {
-				if(me!=null){
+				if (me != null) {
 					character.collision(p, false);
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
-						if (p.getBounds().intersects(
-								character.getDirBounds()[rI]))
+						if (p.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
-				}else{
-				if (!(p instanceof Door || p instanceof SpecialDoor)) {
-					timer.stop();
-					time.pause();
-					level = p.getArea();
-					changeArea();
-					timer.restart();
-					time.resume();
 				} else {
-					spawnNum = p.getSpawnNum();
-					setState(State.DOOROPEN);
-					doorStateLev = p.getArea();
+					if (!(p instanceof Door || p instanceof SpecialDoor)) {
+						timer.stop();
+						time.pause();
+						level = p.getArea();
+						changeArea();
+						timer.restart();
+						time.resume();
+					} else {
+						spawnNum = p.getSpawnNum();
+						setState(State.DOOROPEN);
+						doorStateLev = p.getArea();
+					}
 				}
-			}}
+			}
 		}
 
 		Rectangle bounds = character.getTalkBounds();
@@ -2242,10 +2154,7 @@ continue;}
 						bounds = null;
 					}
 				}
-				if (bounds != null
-						&& n.getBounds().intersects(bounds)
-						&& (!(n instanceof TouchNPC) || ((TouchNPC) n)
-								.buttonTalk()) && n.willTalk()) {
+				if (bounds != null && n.getBounds().intersects(bounds) && (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
 					current = n;
 					current.setLine();
 					state = State.NPC;
@@ -2256,19 +2165,16 @@ continue;}
 				}
 				if (n.isObstacle())
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
-						if (n.getBounds().intersects(
-								character.getDirBounds()[rI]))
+						if (n.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 			}
 			for (int c = 0; c < friends.size(); c++) {
 
-				if (n.getBounds().intersects(
-						friends.get(c).getCollisionBounds())) {
-				
-						if (n.isObstacle())
-							friends.get(c).collision(n, false);
+				if (n.getBounds().intersects(friends.get(c).getCollisionBounds())) {
 
-					
+					if (n.isObstacle())
+						friends.get(c).collision(n, false);
+
 				}
 			}
 		}
@@ -2280,80 +2186,66 @@ continue;}
 			n = objects.get(u);
 			n.animate();
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
-			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds()
-					: n.getBounds();
+			o = n instanceof Irregular ? ((Irregular) n).getIrregularBounds() : n.getBounds();
 
 			if (n.isOnScreen()) {
 				if (o.intersects(character.getCollisionBounds())) {
 					n.collidePlayer(-1);
-					if(n instanceof PushCube&&currentState!=null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX()+n.getX(), -world.get(0).getY()+n.getY(), u));
-//if(me==null)
-					if (n instanceof Collectible
-							&& ((Collectible) n).collectible()){
+					if (n instanceof PushCube && currentState != null)
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
+					// if(me==null)
+					if (n instanceof Collectible && ((Collectible) n).collectible()) {
 						if (n instanceof MoneyObject) {
-							Statics.playSound(this,
-									"collectibles/marioCoin.wav");
-							
-							GameCharacter.getInventory().addMoney(
-									((MoneyObject) n).getValue());
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+
+							GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
 							objects.remove(u);
-							if(currentState!=null)
-								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(),u));
+							if (currentState != null)
+								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(), u));
 							u--;
 							beenPicked = true;
 						} else if (n instanceof SpecialCollectible) {
-							Statics.playSound(this,
-									"collectibles/marioCoin.wav");
-							GameCharacter.getInventory().addItem(
-									((Collectible) n).getType(), 1);
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
 							data.collect(((SpecialCollectible) n).id);
 							objects.remove(u);
-							
+
 							beenPicked = true;
-if(currentState!=null)
-						currentState.getActions().add(new ObjectPickUpState(u));
-u--;
+							if (currentState != null)
+								currentState.getActions().add(new ObjectPickUpState(u));
+							u--;
 						}
-						
-				}
+
 					}
+				}
 				if (n.isWall())
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
-						if (n.getBounds().intersects(
-								character.getDirBounds()[rI]))
+						if (n.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 			}
 
-			if (!beenPicked && state != State.NPC//&&state!=State.SWITCHING
-					&& bounds != null
-					&& o.intersects(bounds) && !hasTalked
-					&& !(n instanceof DropPoint)) {
+			if (!beenPicked && state != State.NPC// &&state!=State.SWITCHING
+					&& bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
 				if (n.interact()) {
-					if(n instanceof PushCube&&currentState!=null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX()+n.getX(), -world.get(0).getY()+n.getY(), u));
+					if (n instanceof PushCube && currentState != null)
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
 					hasTalked = true;
 					if (n instanceof CheckPoint) {
 						spawnLoc = new Point(n.getX(), n.getY());
 						save(((CheckPoint) n).getSpawnNum());
 						System.out.println("SAVED");
-					} else if (n instanceof Collectible
-							&& ((Collectible) n).collectible()){
+					} else if (n instanceof Collectible && ((Collectible) n).collectible()) {
 						if (n instanceof MoneyObject) {
-							Statics.playSound(this,
-									"collectibles/marioCoin.wav");
-							GameCharacter.getInventory().addMoney(
-									((MoneyObject) n).getValue());
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
 							objects.remove(u);
-					
-					if(currentState!=null)
-	currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(),u));
+
+							if (currentState != null)
+								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(), u));
 							u--;
 						} else if (n instanceof SpecialCollectible) {
-							Statics.playSound(this,
-									"collectibles/marioCoin.wav");
-							GameCharacter.getInventory().addItem(
-									((Collectible) n).getType(), 1);
+							Statics.playSound(this, "collectibles/marioCoin.wav");
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
 							data.collect(((SpecialCollectible) n).id);
 							objects.remove(u);
 							u--;
@@ -2364,51 +2256,47 @@ u--;
 							// character following you. You would be able to
 							// switch
 							// to him.
-							friends.add(((CollectibleCharacter) n)
-									.getCharacter());
+							friends.add(((CollectibleCharacter) n).getCharacter());
 							objects.remove(u);
 							u--;
 						} else if (n instanceof CollectibleObject) {
-							GameCharacter.getInventory().addItem(
-									((Collectible) n).getType(), 1);
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
 							objects.remove(u);
 							u--;
 						}
-if(!(n instanceof MoneyObject)&&currentState!=null)
-						currentState.getActions().add(new ObjectPickUpState(u+1));
-					
-				}
-								
-				
+						if (!(n instanceof MoneyObject) && currentState != null)
+							currentState.getActions().add(new ObjectPickUpState(u + 1));
+
+					}
+
 				}
 			}
 			for (int c = 0; c < friends.size(); c++) {
 
-				if (n.getBounds().intersects(
-						friends.get(c).getCollisionBounds())) {
+				if (n.getBounds().intersects(friends.get(c).getCollisionBounds())) {
 					n.collidePlayer(c);
-//					if (n instanceof Collectible
-//							&& ((Collectible) n).collectible())
-//						if (n instanceof MoneyObject) {
-//							Statics.playSound(this,
-//									"collectibles/marioCoin.wav");
-//							
-//							GameCharacter.getInventory().addMoney(
-//									((MoneyObject) n).getValue());
-//							objects.remove(u);
-//							u--;
-//							beenPicked = true;
-//						} else if (n instanceof SpecialCollectible) {
-//							Statics.playSound(this,
-//									"collectibles/marioCoin.wav");
-//							GameCharacter.getInventory().addItem(
-//									((Collectible) n).getType(), 1);
-//							data.collect(((SpecialCollectible) n).id);
-//							objects.remove(u);
-//							u--;
-//							beenPicked = true;
-//
-//						}
+					// if (n instanceof Collectible
+					// && ((Collectible) n).collectible())
+					// if (n instanceof MoneyObject) {
+					// Statics.playSound(this,
+					// "collectibles/marioCoin.wav");
+					//
+					// GameCharacter.getInventory().addMoney(
+					// ((MoneyObject) n).getValue());
+					// objects.remove(u);
+					// u--;
+					// beenPicked = true;
+					// } else if (n instanceof SpecialCollectible) {
+					// Statics.playSound(this,
+					// "collectibles/marioCoin.wav");
+					// GameCharacter.getInventory().addItem(
+					// ((Collectible) n).getType(), 1);
+					// data.collect(((SpecialCollectible) n).id);
+					// objects.remove(u);
+					// u--;
+					// beenPicked = true;
+					//
+					// }
 				}
 			}
 		}
@@ -2417,8 +2305,7 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 		if (movingObjects.size() > 0) {
 			Shape s0;
 			for (Objects o0 : movingObjects) {
-				s0 = o0 instanceof Irregular ? ((Irregular) o0)
-						.getIrregularBounds() : o0.getBounds();
+				s0 = o0 instanceof Irregular ? ((Irregular) o0).getIrregularBounds() : o0.getBounds();
 				for (Objects o1 : objects)
 					if (s0.intersects(o1.getBounds()) && o0 != o1) {
 						if (o1.isWall())
@@ -2464,23 +2351,23 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
 		if (key == KeyEvent.VK_M) {
-			if(server==null){
-			System.out.println("server");
-			mpName=JOptionPane.showInputDialog("What would you like to be called?","Server");
-			passWord=JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.","None");
-			server = new ChatServer(this,passWord);
-			currentState = new GameState(mode, level,true);
-			chatBox=new ChatBox(this);
+			if (server == null) {
+				System.out.println("server");
+				mpName = JOptionPane.showInputDialog("What would you like to be called?", "Server");
+				passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
+				server = new ChatServer(this, passWord);
+				currentState = new GameState(mode, level, true);
+				chatBox = new ChatBox(this);
 			}
-		} 
-//		else if (key == KeyEvent.VK_T) {
-//			if (me != null && theServer != null) {
-//				currentState.addTalk(JOptionPane.showInputDialog("Hi"));
-//			} else if (server != null) {
-//				System.out.println("talked");
-//				currentState.addTalk(JOptionPane.showInputDialog("Server hi"));
-//			}
-//		} 
+		}
+		// else if (key == KeyEvent.VK_T) {
+		// if (me != null && theServer != null) {
+		// currentState.addTalk(JOptionPane.showInputDialog("Hi"));
+		// } else if (server != null) {
+		// System.out.println("talked");
+		// currentState.addTalk(JOptionPane.showInputDialog("Server hi"));
+		// }
+		// }
 		else if (key == KeyEvent.VK_J) {
 			if (pointedPoint == null) {
 
@@ -2491,19 +2378,18 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
-			JOptionPane.showMessageDialog(owner, Preferences.getControls(),
-					DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
-			if (state != State.DEAD&&state!=State.LOADING)
+			if (state != State.DEAD && state != State.LOADING)
 				setState(State.PAUSED);
 			if (me != null && theServer != null)
 				try {
-					String s=null;
-					if(character!=null)
-							s=character.getType().charName();
-					theServer.leaveChatRoom(mpName,s);
+					String s = null;
+					if (character != null)
+						s = character.getType().charName();
+					theServer.leaveChatRoom(mpName, s);
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -2570,9 +2456,8 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 
 		this.state = state;
 
-		if (state == State.PAUSED || state == State.NPC
-				|| state == State.LOADING//||state==State.SWITCHING
-				)
+		if (state == State.PAUSED || state == State.NPC || state == State.LOADING// ||state==State.SWITCHING
+		)
 			time.pause();
 		else if (state == State.INGAME)
 			time.resume();
@@ -2626,10 +2511,8 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 		for (i = 0; i < friends.size(); i++) {
 			friends.get(i).basicAnimate();
 			if (friends.get(i).getPPath() != null)
-				for (int c = 0; c < friends.get(i).getPPath().getPoints()
-						.size(); c++) {
-					friends.get(i).getPPath().getPoints().get(c)
-							.update(scrollX, scrollY);
+				for (int c = 0; c < friends.get(i).getPPath().getPoints().size(); c++) {
+					friends.get(i).getPPath().getPoints().get(c).update(scrollX, scrollY);
 				}
 		}
 		// if(points!=null)
@@ -2729,70 +2612,63 @@ if(!(n instanceof MoneyObject)&&currentState!=null)
 
 	public void save() {
 		if (userName != null) {
-			String location = (GameStartBoard.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile().toString()
-					+ "saveFiles/" + userName + "/");
+			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+					+ userName + "/");
 			File loc = new File(location);
 			if (loc.exists()) {
 				File locFile = new File(location + userName + ".txt");
 				try {
-					BufferedWriter writer = new BufferedWriter(new FileWriter(
-							locFile));
-					writer.write(mode + "," + level + ","
-							+ GameCharacter.getLevel() + ","
-							+ GameCharacter.getXP() + "," + spawnNum);
+					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
+					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
-					writer.write(character.getSave()+",true");
+					writer.write(character.getSave() + ",true");
 					for (int c = 0; c < friends.size(); c++) {
 						// if (normalPlayer(friends.get(c).getType())) {
 
 						writer.newLine();
-						writer.write(friends.get(c).getSave()+",true");
+						writer.write(friends.get(c).getSave() + ",true");
 						// }
 					}
-					for(int c=0;c<goneFriends.size();c++){
-						writer.write(goneFriends.get(c)+",false");
+					for (int c = 0; c < goneFriends.size(); c++) {
+						writer.write(goneFriends.get(c) + ",false");
 					}
 					// writer.newLine();
 					// writer.write(character != null ? "" +
 					// character.getInventory().getMoney() : "0");
 					writer.close();
 
-					ObjectOutputStream os = new ObjectOutputStream(
-							new FileOutputStream(location + "data.ser"));
+					ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
 					os.writeObject(data);
 					os.close();
 
-					os = new ObjectOutputStream(new FileOutputStream(location
-							+ "inventory.ser"));
+					os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
 					os.writeObject(GameCharacter.getInventory());
 					os.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			} else {
-				JOptionPane.showMessageDialog(owner, "Could not save to "
-						+ location);
+				JOptionPane.showMessageDialog(owner, "Could not save to " + location);
 			}
 		}
 	}
-public String withoutFalse(String without){
-	if(without.endsWith(",false"))
-		without.replaceAll(",false", "");
-	return without;
-}
+
+	public String withoutFalse(String without) {
+		if (without.endsWith(",false"))
+			without.replaceAll(",false", "");
+		return without;
+	}
+
 	public void loadSave() {
 		level = DEFAULT;
 		try {
-			String location = (GameStartBoard.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile().toString()
-					+ "saveFiles/" + userName + "/");
+			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+					+ userName + "/");
 			File saveFile = new File(location + userName + ".txt");
 
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(
-						saveFile));
+				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 				String line;
 				ArrayList<String> lines = new ArrayList<String>();
 
@@ -2833,9 +2709,10 @@ public String withoutFalse(String without){
 				}
 
 				for (int c = 1; c < lines.size(); c++) {
-					if(lines.get(c).endsWith("false")){
+					if (lines.get(c).endsWith("false")) {
 						goneFriends.add(withoutFalse(lines.get(c)));
-						continue;}
+						continue;
+					}
 					// int pos=-1;
 					String name = "spade";
 					if (lines.get(c).startsWith("shovel"))
@@ -2852,38 +2729,31 @@ public String withoutFalse(String without){
 						name = "wizard";
 					else if (lines.get(c).startsWith("macaroni"))
 						name = "macaroni";
-					
-					
-					if (character==null) {
-						character=getACharacter(name);
+
+					if (character == null) {
+						character = getACharacter(name);
 						character.setPlayer(true);
-						character.load(lines.get(c)
-								.substring(name.length() + 1));
+						character.load(lines.get(c).substring(name.length() + 1));
 					} else {
 						friends.add(getACharacter(name));
-								friends.get(friends.size()-1).load(
-										lines.get(c).substring(
-												name.length() + 1));
+						friends.get(friends.size() - 1).load(lines.get(c).substring(name.length() + 1));
 					}
 				}
 				reader.close();
 
 				try {
-					ObjectInputStream is = new ObjectInputStream(
-							new FileInputStream(location + "data.ser"));
+					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
 					data = ((CharData) is.readObject());
 					data.setOwner(this);
 					is.close();
 
-					is = new ObjectInputStream(new FileInputStream(location
-							+ "preferences.ser"));
+					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
 					preferences = ((Preferences) is.readObject());
 					is.close();
 
 					// reader = new BufferedReader(new FileReader(location +
 					// "inventory.txt"));
-					is = new ObjectInputStream(new FileInputStream(location
-							+ "inventory.ser"));
+					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
 					Inventory w = (Inventory) is.readObject();
 					is.close();
 					GameCharacter.setInventory(w);
@@ -2912,8 +2782,7 @@ public String withoutFalse(String without){
 				File saveFile = new File(location + "info.txt");
 
 				if (saveFile.exists()) {
-					BufferedReader reader = new BufferedReader(new FileReader(
-							saveFile));
+					BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 					String line;
 					ArrayList<String> lines = new ArrayList<String>();
 
@@ -2922,7 +2791,7 @@ public String withoutFalse(String without){
 					if (lines.size() > 1) {
 						for (int c = 0; c < lines.size(); c++) {
 							GameCharacter chara = getACharacter(lines.get(c));
-							
+
 							if (chara != null) {
 								if (character == null) {
 									character = chara;
@@ -2941,9 +2810,8 @@ public String withoutFalse(String without){
 			}
 		changeArea();
 		if (userName != null)
-			preferences.save(Preferences.class.getProtectionDomain()
-					.getCodeSource().getLocation().getFile().toString()
-					+ "saveFiles/" + owner.getUserName() + "/");
+			preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+					+ owner.getUserName() + "/");
 		// for(Items i:Items.values())
 		// GameCharacter.getInventory().addItem(i, 100);
 	}
@@ -3027,8 +2895,7 @@ public String withoutFalse(String without){
 
 	public void addItem(Items useItem) {
 		if (useItem != Items.NULL) {
-			ThrownObject o = new ThrownObject(character.getX(),
-					character.getY(), useItem.getPath(), this, useItem);
+			ThrownObject o = new ThrownObject(character.getX(), character.getY(), useItem.getPath(), this, useItem);
 			objects.add(o);
 			movingObjects.add(o);
 		}
@@ -3059,6 +2926,10 @@ public String withoutFalse(String without){
 	}
 
 	public void updateBackground() {
+		if (corruptedWorld) {
+			setBackground(Color.BLACK);
+			return;
+		}
 		if (weather == Weather.FOG)
 			updateFog();
 		else if (weather == Weather.RAIN)
@@ -3102,13 +2973,10 @@ public String withoutFalse(String without){
 	}
 
 	protected void updateRain() {
-		if ((time.getGeneralTime() == Time.DAY || dN == DayNight.DAY)
-				&& dN != DayNight.NIGHT)
-			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(
-					getTextureBack(), Statics.HALF_DARK) : getTextureBack());
+		if ((time.getGeneralTime() == Time.DAY || dN == DayNight.DAY) && dN != DayNight.NIGHT)
+			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
-			setBackground(weatherTimer <= 0 ? Statics
-					.darkenColor(getTextureBack()) : getTextureBack());
+			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 	}
 
 	protected void updateNormal() {
@@ -3133,13 +3001,11 @@ public String withoutFalse(String without){
 				break;
 
 			case Time.SUNRISE:
-				setBackground(Statics.sunriseColor(getTextureBack(),
-						time.getTime()));
+				setBackground(Statics.sunriseColor(getTextureBack(), time.getTime()));
 				break;
 
 			case Time.SUNSET:
-				setBackground(Statics.sunsetColor(getTextureBack(),
-						time.getTime()));
+				setBackground(Statics.sunsetColor(getTextureBack(), time.getTime()));
 				break;
 			}
 			break;
@@ -3204,8 +3070,7 @@ public String withoutFalse(String without){
 	}
 
 	public boolean lighterDark() {
-		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY))
-				&& dN != DayNight.NIGHT;
+		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY)) && dN != DayNight.NIGHT;
 	}
 
 	public int getSpawnNum() {
@@ -3223,7 +3088,7 @@ public String withoutFalse(String without){
 	public ArrayList<GameCharacter> getAliveFriends() {
 		ArrayList<GameCharacter> alive = new ArrayList<GameCharacter>();
 		for (GameCharacter c : friends)
-			if (!c.isDead()&&!c.isPlayer())
+			if (!c.isDead() && !c.isPlayer())
 				alive.add(c);
 		return alive;
 	}
@@ -3233,23 +3098,22 @@ public String withoutFalse(String without){
 	}
 
 	public void getTold(GameState state) {
-		if (server==null&&state.isServer()&&mode == null) {
+		if (server == null && state.isServer() && mode == null) {
 			mode = state.getPack();
 			level = state.getLevel();
-			currentState = new GameState(mode, level,false);
+			currentState = new GameState(mode, level, false);
 			// timer=new Timer(delay, listener)
-			int xPos=0;
-			int yPos=0;
+			int xPos = 0;
+			int yPos = 0;
 			try {
 				if (state.getPlayerStates().size() > 0) {
 					for (int c = 0; c < state.getPlayerStates().size(); c++) {
-						GameCharacter chara = getACharacter(state.getPlayerStates().get(c)
-								.getTypeToString());
+						GameCharacter chara = getACharacter(state.getPlayerStates().get(c).getTypeToString());
 						if (chara != null) {
-							if (character == null&&!state.getPlayerStates().get(c).isPlayer()) {
+							if (character == null && !state.getPlayerStates().get(c).isPlayer()) {
 								character = chara;
-								xPos=state.getPlayerStates().get(c).getX();
-								yPos=state.getPlayerStates().get(c).getY();
+								xPos = state.getPlayerStates().get(c).getX();
+								yPos = state.getPlayerStates().get(c).getY();
 								chara.setPlayer(true);
 							} else {
 								friends.add(chara);
@@ -3262,54 +3126,56 @@ public String withoutFalse(String without){
 				ex.printStackTrace();
 			}
 			if (character != null) {
-				//newGame(level);
+				// newGame(level);
 				changeClientArea();
 				setState(State.INGAME);
-				Block b=world.get(0);
-				int x=character.getX();
-				int y=character.getY();		
-				scroll((character.getX()-b.getX())-(xPos), (character.getY()-b.getY())-(yPos));
+				Block b = world.get(0);
+				int x = character.getX();
+				int y = character.getY();
+				scroll((character.getX() - b.getX()) - (xPos), (character.getY() - b.getY()) - (yPos));
 				character.setX(x);
 				character.setY(y);
 				timer.start();
 				timer.start();
-				chatBox=new ChatBox(this);
-			}else{
+				chatBox = new ChatBox(this);
+			} else {
 				mode = state.getPack();
 				level = state.getLevel();
 				currentState = null;
 				friends.clear();
 			}
-		} else if(mode!=null&&(state.isServer()||(server!=null&&server.contains(state.getPlayerStates()))||(me!=null&&me.contains(state.getPlayerStates()))))
+		} else if (mode != null
+				&& (state.isServer() || (server != null && server.contains(state.getPlayerStates())) || (me != null && me.contains(state
+						.getPlayerStates()))))
 			states.add(state);
 
-		if (state.getTalks().size() > 0){
-			//if(me!=null){
-				int length=30;
-				int nameLength=10;
-				if(nameLength>state.getPlayerStates().get(0).getMpName().length())
-					nameLength=state.getPlayerStates().get(0).getMpName().length();
-				String name=state.getPlayerStates().get(0).getMpName().substring(0, nameLength);
-				//ArrayList<String>s=new ArrayList<String>();
-				for(int c=0;c<state.getTalks().size();c++){
-					for(int c2=0;c2<state.getTalks().get(c).length();c2+=length){
-						int i=length;
-						if(c2+i>state.getTalks().get(c).length())
-							i=state.getTalks().get(c).length()-c2;
-						chats.add(name+":"+state.getTalks().get(c).substring(c2, c2+i)+"\n");
-					}
-				//}
-//				(state.getPlayerStates().get(0).getMpName()+":"+
-//						state.getTalks()+"\n").
-//				for(String i:s)
-//				chats.add(state.getPlayerStates().get(0).getMpName()+":"+
-//						state.getTalks()+"\n");
-//				chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
-//						state.getTalks()
-//					.get(state.getTalks().size() - 1));
+		if (state.getTalks().size() > 0) {
+			// if(me!=null){
+			int length = 30;
+			int nameLength = 10;
+			if (nameLength > state.getPlayerStates().get(0).getMpName().length())
+				nameLength = state.getPlayerStates().get(0).getMpName().length();
+			String name = state.getPlayerStates().get(0).getMpName().substring(0, nameLength);
+			// ArrayList<String>s=new ArrayList<String>();
+			for (int c = 0; c < state.getTalks().size(); c++) {
+				for (int c2 = 0; c2 < state.getTalks().get(c).length(); c2 += length) {
+					int i = length;
+					if (c2 + i > state.getTalks().get(c).length())
+						i = state.getTalks().get(c).length() - c2;
+					chats.add(name + ":" + state.getTalks().get(c).substring(c2, c2 + i) + "\n");
+				}
+				// }
+				// (state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()+"\n").
+				// for(String i:s)
+				// chats.add(state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()+"\n");
+				// chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()
+				// .get(state.getTalks().size() - 1));
 			}
-			System.out.println(state.getTalks()
-					.get(state.getTalks().size() - 1));}
+			System.out.println(state.getTalks().get(state.getTalks().size() - 1));
+		}
 	}
 
 	public void setOtherServer(IChatServer server) {
@@ -3323,11 +3189,13 @@ public String withoutFalse(String without){
 	public String getMode() {
 		return mode;
 	}
-	public ChatClient getClient(){
+
+	public ChatClient getClient() {
 		return me;
 	}
-	public GameCharacter getACharacter(String typeString){
-		GameCharacter chara=null;
+
+	public GameCharacter getACharacter(String typeString) {
+		GameCharacter chara = null;
 		switch (typeString) {
 		case "club":
 			chara = new Club(0, 0, this, false);
@@ -3342,35 +3210,47 @@ public String withoutFalse(String without){
 			chara = new Diamond(0, 0, this, false);
 			break;
 		case "sirCobalt":
-			chara=(new SirCobalt(0, 0, this, false));
+			chara = (new SirCobalt(0, 0, this, false));
 			break;
 		case "wizard":
-			chara=(new Wizard(0, 0, this, false));
+			chara = (new Wizard(0, 0, this, false));
 			break;
 		case "macaroni":
-			chara=(new Macaroni(0, 0, this, false));
+			chara = (new Macaroni(0, 0, this, false));
 			break;
 		}
 		return chara;
 	}
-	public GameState getCurrentState(){
+
+	public GameState getCurrentState() {
 		return currentState;
 	}
-	public void puddleTimers(){
-		for(int c=0;c<fP.size();c++){
-			if(fP.get(c) instanceof Puddle){
-				((Puddle)fP.get(c)).timerGo();
+
+	public void puddleTimers() {
+		for (int c = 0; c < fP.size(); c++) {
+			if (fP.get(c) instanceof Puddle) {
+				((Puddle) fP.get(c)).timerGo();
 			}
 		}
 	}
-	public boolean atAllOnScreen(Rectangle rect){
-		if(rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
-		return true;
-		for(int c=0;c<friends.size();c++){
-			if(rect.intersects(new Rectangle(friends.get(c).getX()-Statics.BOARD_WIDTH/2, friends.get(c).getY()-Statics.BOARD_HEIGHT/2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+
+	public boolean atAllOnScreen(Rectangle rect) {
+		if (rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+			return true;
+		for (int c = 0; c < friends.size(); c++) {
+			if (rect.intersects(new Rectangle(friends.get(c).getX() - Statics.BOARD_WIDTH / 2, friends.get(c).getY() - Statics.BOARD_HEIGHT / 2,
+					Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 				return true;
 		}
-		
+
 		return false;
+	}
+
+	public boolean isCorruptedWorld() {
+		return corruptedWorld;
+	}
+
+	public void setCorruptedWorld(boolean corruptedWorld) {
+		this.corruptedWorld = corruptedWorld;
 	}
 }
