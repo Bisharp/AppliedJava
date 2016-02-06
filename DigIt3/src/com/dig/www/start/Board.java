@@ -45,6 +45,7 @@ import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
 import com.dig.www.MultiPlayer.State.ActionState.ActionType;
 import com.dig.www.MultiPlayer.State.AddEnemy;
+import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.MultiPlayer.State.BlockState;
 import com.dig.www.MultiPlayer.State.BreakCrystal;
 import com.dig.www.MultiPlayer.State.DigPit;
@@ -1592,7 +1593,13 @@ continue;}
 							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
 							world.get(digC.getI()).digDo();
 							break;
-						default:
+						case ATTACK:
+							AttackState attack=(AttackState)actionState;
+							for(int c=0;c<friends.size();c++)
+								if(friends.get(c).getType().toString().equals(attack.getCharName())){
+									enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
+									break;
+								}
 							break;
 						
 						}
@@ -1614,7 +1621,7 @@ continue;}
 									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
 			
 					for(Enemy en:enemies){
-						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY()));
+						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY(),en.getHealth()));
 					}
 					sendInt=1;
 				server.broadcast(mpName, currentState);
@@ -1678,6 +1685,7 @@ continue;}
 									chara.setMpName(playerState.getMpName());
 									chara.setHealth(playerState.getHealth());
 									chara.setEnergy(playerState.getEnergy());
+									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
 								}
 							}
 						}
@@ -1739,6 +1747,7 @@ continue;}
 					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
 						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
 						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
+						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
 					}
 				}
 				states.clear();
@@ -1991,6 +2000,11 @@ continue;}
 						if (character.getActing() > 0
 								&& character.getActBounds().intersects(
 										e.getBounds())) {
+							if(me!=null){
+								if(currentState!=null)
+									currentState.getActions().add(new AttackState(u, character.getMove(), false,character.getType().toString()));
+								return;
+							}else
 							e.interact(character.getMove(), character, false);
 							if (character.getMove() == Moves.BASH)
 								bashHit = true;
@@ -2011,10 +2025,14 @@ continue;}
 									) {
 								if ((!(e instanceof Projectile)
 										|| (character instanceof Field))&&(!(fP.get(c)instanceof Shield)||(((Shield)fP.get(c)).isHarming()))) {
-									
+									if(me!=null){
+										if(currentState!=null)
+											currentState.getActions().add(new AttackState(u, character.getMove(), true,character.getMaker().getType().toString()));
+										return;
+									}else{
 									e.interact(character.getMove(),
 											character.getMaker(), true);
-									fP.get(c).setOnScreen(false);
+									fP.get(c).setOnScreen(false);}
 										
 								}
 							}
@@ -2025,6 +2043,7 @@ continue;}
 							if (character.getActing() > 0
 									&& character.getActBounds().intersects(
 											e.getBounds())) {
+								if(me==null)
 								e.interact(character.getMove(), character,
 										false);
 								if (character.getMove() == Moves.BASH) {

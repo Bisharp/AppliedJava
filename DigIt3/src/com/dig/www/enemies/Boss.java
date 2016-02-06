@@ -145,13 +145,13 @@ public abstract class Boss extends Enemy {
 	@Override
 	public void drawBar(double per, Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(Statics.BOARD_WIDTH / 4, 72, Statics.BOARD_WIDTH / 2, 30);
+		g2d.fillRect(Statics.BOARD_WIDTH / 4,101, Statics.BOARD_WIDTH / 2, 30);
 		g2d.setColor(Color.RED);
-		g2d.fillRect(Statics.BOARD_WIDTH / 4, 72, (int) ((double) (per) * (double) (Statics.BOARD_WIDTH / 2)), 30);
+		g2d.fillRect(Statics.BOARD_WIDTH / 4,101, (int) ((double) (per) * (double) (Statics.BOARD_WIDTH / 2)), 30);
 		g2d.setColor(Color.WHITE);
-		g2d.drawRect(Statics.BOARD_WIDTH / 4 - 1, 72 - 1, Statics.BOARD_WIDTH / 2 + 2, 32);
+		g2d.drawRect(Statics.BOARD_WIDTH / 4 - 1, 100, Statics.BOARD_WIDTH / 2 + 2, 32);
 		g2d.setFont(Statics.BOSS);
-		g2d.drawString(name, (Statics.BOARD_WIDTH / 2) - (name.length() * 20 / 2), 72 + 30);
+		g2d.drawString(name, (Statics.BOARD_WIDTH / 2) - (name.length() * 20 / 2), 101 + 30);
 	}
 
 	@Override
