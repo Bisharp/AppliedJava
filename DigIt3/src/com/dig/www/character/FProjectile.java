@@ -67,7 +67,7 @@ public class FProjectile extends Sprite {
 		y += Math.sin((double) Math.toRadians((double) d)) * speed;
 		if(onScreen){
 		setOnScreen(
-				getBounds().intersects(owner.getScreen()));}
+				owner.atAllOnScreen(getBounds()));}
 		dead=!onScreen;
 	}
 
