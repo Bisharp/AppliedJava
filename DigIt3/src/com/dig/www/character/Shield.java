@@ -1,6 +1,7 @@
 package com.dig.www.character;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -31,8 +32,7 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 		y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();}
 		
 		if(harming){
-		onScreen=
-				getBounds().intersects(owner.getScreen());
+		onScreen=getBounds().intersects(new Rectangle(getMaker().getX()-Statics.BOARD_WIDTH/2,getMaker().getY()-Statics.BOARD_HEIGHT/2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT));
 		harming=onScreen;}
 		
 		onScreen=true;

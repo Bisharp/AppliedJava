@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
@@ -1506,11 +1507,14 @@ collisionFlags.remove(placement[i]);
 
 	private Point setAttacks() {
 		Point shieldPos = null;
+		boolean me=owner.getClient()!=null;
 		if (meleePress && rangedTimer <= 0 && specialTimer <= 0) {
 			if (meleeTimer <= NEG_TIMER_MELEE && energy >= MEnC// ||this
 																// instanceof
 																// Diamond
 			) {
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(1, getType().toString()));
 				meleeTimer = TIMER_MELEE;
 				energy -= MEnC;
 				meleeHit = false;
@@ -1520,6 +1524,9 @@ collisionFlags.remove(placement[i]);
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
 
 				specialTimer = TIMER_SPECIAL;
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString()));
+			
 				specialHit = false;
 				if (getType() == Types.MACARONI) {
 					owner.getfP().add(new Puddle(x, y, this, owner));
@@ -1542,9 +1549,13 @@ collisionFlags.remove(placement[i]);
 		}
 		if(rangedPress&&getType()==Types.DIAMOND&&((Diamond)this).getShield()!=null)
 			((Diamond)this).getShield().pull();
+		
 		if (rangedPress && meleeTimer <= 0 && specialTimer <= 0) {
 			if (rangedTimer <= NEG_TIMER_RANGED && energy >= REnC) {
 				rangedTimer = TIMER_RANGED;
+				if(me)
+					owner.getCurrentState().getActions().add(new AttackState(2, getType().toString()));
+			
 				energy -= REnC;
 				String s = "images/characters/projectiles" + "/" + getRangedString();
 if(getType()==Types.DIAMOND){
@@ -1648,7 +1659,7 @@ else if (getType() != Types.SPADE) {
 			deltaX = -deltaX;
 			deltaY = -deltaY;
 		}
-		if (player)
+		if (owner.getCharacter()==this)
 			dir = getCurrentDir();
 		
 		if(this instanceof Macaroni)
@@ -2032,16 +2043,33 @@ if(!player){
 		else
 			return 0;
 	}
+	public void clientAttack(int acting){
+		meleePress=acting==1;
+		rangedPress=acting==2;
+		specialPress=acting==3;
+		meleeTimer=NEG_TIMER_MELEE;
+		rangedTimer=NEG_TIMER_RANGED;
+		specialTimer=NEG_TIMER_SPECIAL;
+		float energy=this.getEnergy();
+		this.energy=Integer.MAX_VALUE;
+		setAttacks();
+		
+		
+		this.energy=energy;
+		meleePress=false;
+		rangedPress=false;
+		specialPress=false;
+	}
 public void setActing(int acting,int timer){
 	meleeTimer=-1;
 	rangedTimer=-1;
 	specialTimer=-1;
-//	if(acting==1)
-//		meleeTimer=timer;
-//	else if(acting==2)
-//		rangedTimer=timer;
-//	else if(acting==3)
-//		specialTimer=timer;
+	if(acting==1)
+		meleeTimer=timer;
+	else if(acting==2)
+		rangedTimer=timer;
+	else if(acting==3)
+		specialTimer=timer;
 }
 public int getAttackTimer(){
 	switch(getActing()){
@@ -2530,5 +2558,11 @@ public void setHealth(float setter){
 }
 public void setEnergy(float setter){
 	energy=setter;
+}
+public void setDire(int dire){
+	dir=dire;
+}
+public int getDire(){
+	return dir;
 }
 }

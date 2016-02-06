@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
+import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
@@ -128,7 +129,6 @@ public abstract class Enemy extends Sprite {
 	}
 
 	public void interact(Moves move, GameCharacter character, boolean fromP) {
-
 		switch (move) {
 
 		// Clark
@@ -387,5 +387,8 @@ public void animate(){
 				dist=i;}
 		}
 		return chara;
+	}
+	public void setHealth(int setter){
+		health=setter;
 	}
 }

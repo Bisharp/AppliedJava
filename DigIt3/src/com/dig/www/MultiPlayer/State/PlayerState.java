@@ -14,8 +14,10 @@ protected String mpName;
 protected float health;
 protected float energy;
 protected int attackTimer;
-	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy) {
+protected int dire;
+	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy,int dire) {
 		super(x, y);
+		this.dire=dire;
 		this.attackTimer=attackTimer;
 		this.health=health;
 		this.energy=energy;
@@ -57,5 +59,8 @@ public float getEnergy(){
 }
 public int getAttackTimer(){
 	return attackTimer;
+}
+public int getDire(){
+	return dire;
 }
 }

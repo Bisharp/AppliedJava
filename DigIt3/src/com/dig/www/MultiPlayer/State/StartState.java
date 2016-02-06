@@ -1,5 +1,6 @@
 package com.dig.www.MultiPlayer.State;
 
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -20,10 +21,12 @@ public class StartState implements Serializable{
 	protected ArrayList<BlockState>blocks=new ArrayList<BlockState>();
 	protected ArrayList<ObjectState>objects=new ArrayList<ObjectState>();
 	protected TexturePack texture;
-public StartState(Board owner){
+	protected Point spawnLoc;
+public StartState(Board owner,Point spawnLoc){
 	this.texture=owner.getTexturePack();
 	Block first=owner.getWorld().get(0);
 	this.money=GameCharacter.getInventory().getMoney();
+	this.spawnLoc=spawnLoc;
 	//players.add(new PlayerState(//first.getX()+
 	//		owner.getCharacter().getX(), //first.getY()+
 	//		owner.getCharacter().getY(), 0,owner.getCharacter().getDirection(), owner.getCharacter().getS(), owner.getCharacter().isPlayer(), owner.getCharacter().getType().toString(),owner.getCharacter().getMpName()));
@@ -70,5 +73,8 @@ public TexturePack getTexture(){
 
 public int getMoney(){
 	return money;
+}
+public Point getSpawnLoc(){
+	return spawnLoc;
 }
 }

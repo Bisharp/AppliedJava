@@ -45,6 +45,7 @@ import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
 import com.dig.www.MultiPlayer.State.ActionState.ActionType;
 import com.dig.www.MultiPlayer.State.AddEnemy;
+import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.MultiPlayer.State.BlockState;
 import com.dig.www.MultiPlayer.State.BreakCrystal;
 import com.dig.www.MultiPlayer.State.DigPit;
@@ -531,7 +532,9 @@ try {
 world.clear();
 objects.clear();
 movingObjects.clear();
+enemies.clear();
 fP.clear();
+
 //npcs.clear();
 texturePack=st.getTexture();
 GameCharacter.getInventory().setMoney(st.getMoney());
@@ -671,6 +674,7 @@ System.exit(0);
 		spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
 		spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
 	}
+	spawnLoc=st.getSpawnLoc();
 	changeWeather();
 	updateBackground();
 	Statics.wipeColors();
@@ -1381,13 +1385,15 @@ if(currentState!=null)
 
 			for (int i = 0; i < enemies.size(); i++) {
 
-				if (!enemies.get(i).isAlive()) {
+				
+if(notMe){
+				enemies.get(i).animate();
+			if (!enemies.get(i).isAlive()) {
 					enemies.remove(i);
 					i--;
 					continue;
-				}
-if(notMe)
-				enemies.get(i).animate();
+				}	
+}
 else
 	enemies.get(i).basicAnimate();
 				enemies.get(i).setOnScreen(
@@ -1550,8 +1556,9 @@ continue;}
 								friend.setMpName(playerState.getMpName());
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
-								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
-							}
+								friend.setDire(playerState.getDire());
+								//friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+								}
 						}
 					}
 					if(//states.get(s)!=null&&states.get(s).getActions()!=null
@@ -1592,7 +1599,15 @@ continue;}
 							//if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
 							world.get(digC.getI()).digDo();
 							break;
-						default:
+						case ATTACK:
+							AttackState attack=(AttackState)actionState;
+							for(int c=0;c<friends.size();c++)
+								if(friends.get(c).getType().toString().equals(attack.getCharName())){
+								//	enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
+									
+									friends.get(c).clientAttack(attack.getAttackNum());
+									break;
+								}
 							break;
 						
 						}
@@ -1604,19 +1619,19 @@ continue;}
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(), character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
 				
 					for (GameCharacter character : friends){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(),
 									character.getY() - b.getY(), character.getActing(),character.getAttackTimer(), character
 											.getDirection(), character.getS(), character.isPlayer(),
-									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy()));}
+									character.getType().toString(),character.getMpName(),character.getHealth(),character.getEnergy(),character.getDire()));}
 			
 					for(Enemy en:enemies){
-						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY()));
+						currentState.getEnemyStates().add(new EnemyState(en.getX()-b.getX(), en.getY()-b.getY(),en.getHealth()));
 					}
-					sendInt=1;
+					sendInt=5;
 				server.broadcast(mpName, currentState);
 				currentState.clear(level);}
 				else sendInt--;
@@ -1632,8 +1647,16 @@ continue;}
 						continue;
 					if(states.get(s).isServer())
 						if(!states.get(s).getLevel().equals(level)){
-							level=states.get(s).getLevel();
+							
+							timer.stop();
+							time.pause();
+							level = doorStateLev;
 							changeClientArea();
+							setState(State.INGAME);
+							level=states.get(s).getLevel();
+							timer.restart();
+							time.resume();
+							return;
 						}
 							
 //					if(states.get(s).getPlayerStates()==null)
@@ -1656,6 +1679,7 @@ continue;}
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+								friend.setDire(playerState.getDire());
 							}
 						}
 						if(!hasGone){
@@ -1678,6 +1702,7 @@ continue;}
 									chara.setMpName(playerState.getMpName());
 									chara.setHealth(playerState.getHealth());
 									chara.setEnergy(playerState.getEnergy());
+									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
 								}
 							}
 						}
@@ -1737,8 +1762,12 @@ continue;}
 						}
 					}
 					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
+						if(enemies.size()<=c){
+							//changeClientArea();
+							break;}
 						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
 						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
+						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
 					}
 				}
 				states.clear();
@@ -1747,10 +1776,10 @@ continue;}
 						new PlayerState(character.getX() - b.getX(), character
 								.getY() - b.getY(),character.getActing(),character.getAttackTimer(),
 								character.getDirection(), character.getS(), true, character
-										.getType().toString(),mpName,character.getHealth(),character.getEnergy()));
+										.getType().toString(),mpName,character.getHealth(),character.getEnergy(),character.getDire()));
 				if(sendInt<=0){
-					sendInt=1;
-				theServer.broadcast(mpName, currentState);
+					sendInt=5;
+				theServer.getTold(currentState);
 				currentState.clear(level);}
 				else
 					sendInt--;
@@ -1967,7 +1996,7 @@ continue;}
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
-					if (e.isOnScreen()) {
+					//if (e.isOnScreen()) {
 						if (e.getBounds().intersects(b.getBounds())) {
 							switch (b.getType()) {
 							case PIT:
@@ -1991,6 +2020,11 @@ continue;}
 						if (character.getActing() > 0
 								&& character.getActBounds().intersects(
 										e.getBounds())) {
+							if(me!=null){
+//								if(currentState!=null)
+//									currentState.getActions().add(new AttackState(u, character.getMove(), false,character.getType().toString()));
+//								return;
+							}else
 							e.interact(character.getMove(), character, false);
 							if (character.getMove() == Moves.BASH)
 								bashHit = true;
@@ -2011,9 +2045,13 @@ continue;}
 									) {
 								if ((!(e instanceof Projectile)
 										|| (character instanceof Field))&&(!(fP.get(c)instanceof Shield)||(((Shield)fP.get(c)).isHarming()))) {
-									
+									if(me!=null){
+//										if(currentState!=null)
+//											currentState.getActions().add(new AttackState(u, character.getMove(), true,character.getMaker().getType().toString()));
+//										return;
+									}else{
 									e.interact(character.getMove(),
-											character.getMaker(), true);
+											character.getMaker(), true);}
 									fP.get(c).setOnScreen(false);
 										
 								}
@@ -2025,6 +2063,7 @@ continue;}
 							if (character.getActing() > 0
 									&& character.getActBounds().intersects(
 											e.getBounds())) {
+								if(me==null)
 								e.interact(character.getMove(), character,
 										false);
 								if (character.getMove() == Moves.BASH) {
@@ -2049,7 +2088,7 @@ continue;}
 							}
 						}
 					}
-				}
+				//}
 				if (bashHit) {
 					if (shieldNum == -1)
 						character.endAction();
@@ -3323,5 +3362,15 @@ public String withoutFalse(String without){
 				((Puddle)fP.get(c)).timerGo();
 			}
 		}
+	}
+	public boolean atAllOnScreen(Rectangle rect){
+		if(rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+		return true;
+		for(int c=0;c<friends.size();c++){
+			if(rect.intersects(new Rectangle(friends.get(c).getX()-Statics.BOARD_WIDTH/2, friends.get(c).getY()-Statics.BOARD_HEIGHT/2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+				return true;
+		}
+		
+		return false;
 	}
 }
