@@ -1746,6 +1746,8 @@ continue;}
 						}
 					}
 					for(int c=0;c<states.get(s).getEnemyStates().size();c++){
+						if(enemies.size()<=c)
+							return;
 						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX()+b.getX());
 						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY()+b.getY());
 						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
