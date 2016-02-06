@@ -1552,7 +1552,7 @@ continue;}
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
-							}
+								}
 						}
 					}
 					if(//states.get(s)!=null&&states.get(s).getActions()!=null
@@ -1686,7 +1686,6 @@ continue;}
 									chara.setHealth(playerState.getHealth());
 									chara.setEnergy(playerState.getEnergy());
 									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-								System.out.println(playerState.getAttackNum()+","+playerState.getAttackTimer());
 								}
 							}
 						}

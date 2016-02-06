@@ -2036,12 +2036,12 @@ public void setActing(int acting,int timer){
 	meleeTimer=-1;
 	rangedTimer=-1;
 	specialTimer=-1;
-//	if(acting==1)
-//		meleeTimer=timer;
-//	else if(acting==2)
-//		rangedTimer=timer;
-//	else if(acting==3)
-//		specialTimer=timer;
+	if(acting==1)
+		meleeTimer=timer;
+	else if(acting==2)
+		rangedTimer=timer;
+	else if(acting==3)
+		specialTimer=timer;
 }
 public int getAttackTimer(){
 	switch(getActing()){
