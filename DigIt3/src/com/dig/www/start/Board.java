@@ -1556,7 +1556,7 @@ continue;}
 								friend.setMpName(playerState.getMpName());
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
-								friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
+								//friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
 								}
 						}
 					}
@@ -1602,7 +1602,9 @@ continue;}
 							AttackState attack=(AttackState)actionState;
 							for(int c=0;c<friends.size();c++)
 								if(friends.get(c).getType().toString().equals(attack.getCharName())){
-									enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
+								//	enemies.get(attack.getI()).interact(attack.getMove(), friends.get(c), attack.isFromP());
+									
+									friends.get(c).clientAttack(attack.getAttackNum());
 									break;
 								}
 							break;

@@ -3,23 +3,17 @@ package com.dig.www.MultiPlayer.State;
 import com.dig.www.character.Moves;
 
 public class AttackState extends ActionState{
-	protected int i;
-	protected boolean fromP;
 	protected String charName;
-public AttackState(int i, Moves move,boolean fromP,String charName){
+	protected int attackNum;
+public AttackState(int move,String charName){
 	super(ActionType.ATTACK);
-	this.i=i;
-	this.move=move;
-	this.fromP=fromP;
+	this.attackNum=move;
 	this.charName=charName;
-}
-public int getI() {
-	return i;
-}
-public boolean isFromP() {
-	return fromP;
 }
 public String getCharName() {
 	return charName;
+}
+public int getAttackNum(){
+	return attackNum;
 }
 }

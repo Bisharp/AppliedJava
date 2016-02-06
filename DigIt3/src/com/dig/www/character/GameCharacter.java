@@ -2032,6 +2032,23 @@ if(!player){
 		else
 			return 0;
 	}
+	public void clientAttack(int acting){
+		meleePress=acting==1;
+		rangedPress=acting==2;
+		specialPress=acting==3;
+		meleeTimer=NEG_TIMER_MELEE;
+		rangedTimer=NEG_TIMER_RANGED;
+		specialTimer=NEG_TIMER_SPECIAL;
+		float energy=this.getEnergy();
+		this.energy=Integer.MAX_VALUE;
+		setAttacks();
+		
+		
+		this.energy=energy;
+		meleePress=false;
+		rangedPress=false;
+		specialPress=false;
+	}
 public void setActing(int acting,int timer){
 	meleeTimer=-1;
 	rangedTimer=-1;
