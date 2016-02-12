@@ -28,11 +28,14 @@ public class Block extends Sprite {
 	 */
 	private static final long serialVersionUID = 1866822784974593245L;
 
-	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK, Color.WHITE };
+	public static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK, Color.WHITE };
 	protected boolean canSee;
 	protected Blocks type;
-	protected Color corruptedColor = list[Statics.RAND.nextInt(list.length)];
-
+	protected Color corruptedColor1 = list[Statics.RAND.nextInt(list.length)];
+//protected Color corruptedColor2=list[Statics.RAND.nextInt(list.length)];
+protected Color current=new Color(0,0,0);
+//private int colorTimer=0;
+//private int maxTimer=Statics.RAND.nextInt(50)+50;
 	protected static Color[] darkColors;
 
 	public Block(int x, int y, String loc, Board owner, Blocks block) {
@@ -574,9 +577,27 @@ public void digDo(){
 
 	public Color getColor() {
 		
-		if (traversable() && owner.isCorruptedWorld())
-			//return list[Statics.RAND.nextInt(list.length)];
-			return corruptedColor;
+		if (traversable() && owner.isCorruptedWorld()){
+//			//System.out.println(colorTimer);
+//			int red=corruptedColor1.getRed()-((corruptedColor1.getRed()-corruptedColor2.getRed())/maxTimer*colorTimer);
+//			int green=corruptedColor1.getGreen()-((corruptedColor1.getGreen()-corruptedColor2.getGreen())/maxTimer*colorTimer);
+//			int blue=corruptedColor1.getBlue()-( (corruptedColor1.getBlue()-corruptedColor2.getBlue())/maxTimer*colorTimer);
+//			//System.out.println(red+","+green+","+blue);
+//			current=new Color(red, green, blue);
+//			
+//			//return list[Statics.RAND.nextInt(list.length)];
+//			
+//			colorTimer++;
+//			if(colorTimer>=maxTimer){
+//				maxTimer=Statics.RAND.nextInt(50)+50;
+//				colorTimer=0;
+//				corruptedColor1=corruptedColor2;
+//				corruptedColor2=list[Statics.RAND.nextInt(list.length)];
+//			}
+//				
+//			return current;
+			return corruptedColor1;
+			}
 
 		Color c;
 		switch (owner.getTexturePack()) {

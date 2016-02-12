@@ -1771,7 +1771,7 @@ else if (getType() != Types.SPADE) {
 
 			drawTLBar(normWidth - 75, g2d);
 			//int normWidth2 = 280;
-			String colectibleName="Trolls";
+			String colectibleName="TDP";
 					int baseWidth=100;
 				//	boolean b=getInventory().items.contains(Items.SPECIAL_COLLECTIBLE);
 int collectibles =0;

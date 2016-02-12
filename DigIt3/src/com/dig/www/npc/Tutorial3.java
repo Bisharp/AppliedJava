@@ -61,7 +61,7 @@ public class Tutorial3 extends InvisibleNormalOnceTouchNPC {
 	@Override
 	public void act(NPCOption option) {
 		owner.getPortals().add(
-				new Portal(x + 100, y - 100, owner, "tutorialTest", 0,
+				new Portal(x + 100, y - 100, owner, "wizardTower", 0,
 						"normal", -1));
 		options = new NPCOption[] {};
 		cantExit = false;
