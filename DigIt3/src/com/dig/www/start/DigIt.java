@@ -75,6 +75,7 @@ private String level=Board.DEFAULT;
 		newBoard();
 		if (activePanel instanceof Board) {
 			((Board) activePanel).newGame(level);
+			GameControllerRunnable.renewKeys();
 		}
 	}public void newMPBoard() {
 		soundPlayer.stopMusic();
