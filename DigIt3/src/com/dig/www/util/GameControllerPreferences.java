@@ -43,7 +43,7 @@ public class GameControllerPreferences implements Serializable {
 	protected int mouseClick = GameControllerRunnable.STICK2_PRESS;
 
 	protected int attack = GameControllerRunnable.A;
-	protected int projectile = GameControllerRunnable.Z_AXIS;
+	protected int projectile = GameControllerRunnable.Z_AXIS_L;
 	protected int special = GameControllerRunnable.B;
 	protected int pause = GameControllerRunnable.BACK;
 	protected int switchC = GameControllerRunnable.START;
@@ -114,42 +114,42 @@ public class GameControllerPreferences implements Serializable {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					item = getButton("Use items", item);
-					pseB.setText("Use items: " + trans(item));
+					itmB.setText("Use items: " + trans(item));
 				}
 			});
 			swchB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					switchC = getButton("Switch characters", switchC);
-					pseB.setText("Switch characters: " + trans(switchC));
+					swchB.setText("Switch characters: " + trans(switchC));
 				}
 			});
 			atkB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					attack = getButton("Attack", attack);
-					pseB.setText("Attack: " + trans(attack));
+					atkB.setText("Attack: " + trans(attack));
 				}
 			});
 			projB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					pause = getButton("Projectile", pause);
-					pseB.setText("Projectile: " + trans(projectile));
+					projectile = getButton("Projectile", projectile);
+					projB.setText("Projectile: " + trans(projectile));
 				}
 			});
 			specB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					pause = getButton("Special", pause);
-					pseB.setText("Special: " + trans(special));
+					special = getButton("Special", special);
+					specB.setText("Special: " + trans(special));
 				}
 			});
 			tlkB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					pause = getButton("Talk to NPCs", pause);
-					pseB.setText("Talk to NPCs: " + trans(npc));
+					npc = getButton("Talk to NPCs", npc);
+					tlkB.setText("Talk to NPCs: " + trans(npc));
 				}
 			});
 
@@ -261,7 +261,7 @@ public class GameControllerPreferences implements Serializable {
 				return orig;
 			else
 				try {
-					return translate(s);
+					return translate(s, orig);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					return orig;
@@ -270,7 +270,7 @@ public class GameControllerPreferences implements Serializable {
 
 		int[] verCheck;
 
-		protected int translate(String s) throws Exception {
+		protected int translate(String s, int orig) throws Exception {
 
 			int verify = -1;
 			for (int i = 0; i < names.length; i++)
@@ -284,6 +284,17 @@ public class GameControllerPreferences implements Serializable {
 				if (verify == i) {
 					throw new Exception("The button is already taken.");
 				}
+			
+			if (orig == lZAxis)
+				lZAxis = -1;
+			else if (orig == rZAxis)
+				rZAxis = -1;
+			
+			if (verify == lZAxis)
+				lZAxis = verify;
+			else if (verify == rZAxis)
+				rZAxis = verify;
+			
 			return verify;
 		}
 
@@ -305,7 +316,7 @@ public class GameControllerPreferences implements Serializable {
 	}
 
 	protected int[] nums = GameControllerRunnable.nums;
-	protected String[] names = new String[] { "Left Trigger", "A Button", "B Button", "X Button", "Y Button", "Left Bumper", "Right Bumper", "Back",
+	protected String[] names = new String[] { "Right Trigger", "A Button", "B Button", "X Button", "Y Button", "Left Bumper", "Right Bumper", "Back",
 			"Start", "Left Stick Press", "Right Stick Press", "Left Trigger" };
 
 	protected String trans(int data) {

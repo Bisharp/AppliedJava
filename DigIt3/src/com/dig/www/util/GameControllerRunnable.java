@@ -52,6 +52,7 @@ public class GameControllerRunnable implements Runnable {
 		PAUSE = Preferences.PAUSE();
 		NPC = Preferences.NPC();
 		ITEM = Preferences.ITEM();
+		synchControllerPrefs();
 	}
 
 	protected static final int Y_STICK = 0;
@@ -79,123 +80,108 @@ public class GameControllerRunnable implements Runnable {
 	protected static final float Z_SENSITIVITY = 0.5f;
 	protected static final float WALK_SENSITIVITY = 0.4f;
 
-	// private DarkManor3D owner;
-
 	public GameControllerRunnable(DigIt dM) {
 
 		if (getController()) {
 			rOB = dM;
-
 			if (controller != null)
 				buttonPressed = new boolean[16];
-
-			p = new GameControllerPreferences();
-		} else {
+			renewKeys();
+		} else
 			dM.nullCThread();
-		}
-
-		// owner = dM;
+	}
+	
+	public static void synchControllerPrefs() {
+		p = Board.preferences.getGCP();
 	}
 
 	@Override
 	public void run() {
-		while (controller != null) {
+		while (controller != null)
 			try {
 				Thread.sleep(15);
 				pollController();
 			} catch (Exception ex) {
-				// if (JOptionPane
-				// .showConfirmDialog(
-				// rOB,
-				// "The game controller was disconnected. If you wish to continue playing with the game controller,\nplug it back in and select the \"yes\" option of this window.\nOtherwise, select \"no\" or close the window.",
-				// "Terra Novus", JOptionPane.YES_NO_OPTION) ==
-				// JOptionPane.YES_OPTION) {
-				// getController();
-				// } else
-				break;
+				ex.printStackTrace();
 			}
-		}
 	}
 
 	public void pollController() {
 		try {
 			controller.poll();
-		} catch (NullPointerException ex) {
+			components = controller.getComponents();
 
-		}
-		components = controller.getComponents();
+			for (i = 0; i < components.length; i++) {
 
-		for (i = 0; i < components.length; i++) {
+				data = components[i].getPollData();
 
-			data = components[i].getPollData();
-
-			// Checks buttons for changes since the last check
-			// TODO mouse
-			if (((i == p.mouseX || i == p.mouseY) && !p.mouseDPad) || (i == HAT_SWITCH && p.mouseDPad)) {
-				if (!p.mouseDPad)
-					handleSMouse();
-				else
-					handleDMouse();
-			}
-
-			if (data != offValues[i]) {
-
-				// This code checks for the control stick's changes
-
-				if (((i == p.moveX || i == p.moveY) && !p.isDPad) || (i == HAT_SWITCH && p.isDPad)) {
-					if (!p.isDPad)
-						handleStick();
+				// Checks buttons for changes since the last check
+				// TODO mouse
+				if (((i == p.mouseX || i == p.mouseY) && !p.mouseDPad) || (i == HAT_SWITCH && p.mouseDPad)) {
+					if (!p.mouseDPad)
+						handleSMouse();
 					else
-						handleDPad();
+						handleDMouse();
 				}
 
-				// TODO Attack
-				else if (i == p.attack) {
-					handleButton(ATTACK, 5, isZAxis(p.attack), p.attack == p.rZAxis, -1);
-				}
+				if (data != offValues[i]) {
 
-				// TODO Projectile
-				else if (i == p.projectile) {
-					handleButton(PROJECTILE, 6, isZAxis(p.projectile), p.projectile == p.rZAxis, -1);
-				}
+					// This code checks for the control stick's changes
 
-				// TODO Special
-				else if (i == p.special) {
-					handleButton(SPECIAL, 7, isZAxis(p.special), p.special == p.rZAxis, -1);
-				}
+					if (((i == p.moveX || i == p.moveY) && !p.isDPad) || (i == HAT_SWITCH && p.isDPad)) {
+						if (!p.isDPad)
+							handleStick();
+						else
+							handleDPad();
+					}
 
-				// TODO Pause
-				else if (i == p.pause) {
-					handleButton(PAUSE, 8, isZAxis(p.special), p.special == p.rZAxis, -1);
-				}
+					// TODO Attack
+					else if (i == p.attack) {
+						handleButton(ATTACK, 5, isZAxis(p.attack), p.attack == p.rZAxis, -1);
+					}
 
-				// TODO LevelUp menu
-				else if (i == p.switchC) {
-					handleButton(SWITCH, 9, isZAxis(p.switchC), p.switchC == p.rZAxis, -1);
-				}
+					// TODO Projectile
+					else if (i == p.projectile) {
+						handleButton(PROJECTILE, 6, isZAxis(p.projectile), p.projectile == p.rZAxis, -1);
+					}
 
-				// TODO Talk to NPC
-				else if (i == p.npc) {
-					handleButton(NPC, 10, isZAxis(p.npc), p.npc == p.rZAxis, -1);
-				}
+					// TODO Special
+					else if (i == p.special) {
+						handleButton(SPECIAL, 7, isZAxis(p.special), p.special == p.rZAxis, -1);
+					}
 
-				// TODO Talk to NPC
-				else if (i == p.item) {
-					handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis, -1);
-				}
+					// TODO Pause
+					else if (i == p.pause) {
+						handleButton(PAUSE, 8, isZAxis(p.special), p.special == p.rZAxis, -1);
+					}
 
-				// TODO Click the Mouse
-				else if (i == p.mouseClick)
-					handleButton(0, 12, isZAxis(p.mouseClick), p.mouseClick == p.rZAxis, InputEvent.BUTTON1_MASK);
+					// TODO LevelUp menu
+					else if (i == p.switchC) {
+						handleButton(SWITCH, 9, isZAxis(p.switchC), p.switchC == p.rZAxis, -1);
+					}
+
+					// TODO Talk to NPC
+					else if (i == p.npc) {
+						handleButton(NPC, 10, isZAxis(p.npc), p.npc == p.rZAxis, -1);
+					}
+
+					// TODO Talk to NPC
+					else if (i == p.item) {
+						handleButton(ITEM, 11, isZAxis(p.item), p.item == p.rZAxis, -1);
+					}
+
+					// TODO Click the Mouse
+					else if (i == p.mouseClick)
+						handleButton(0, 12, isZAxis(p.mouseClick), p.mouseClick == p.rZAxis, InputEvent.BUTTON1_MASK);
+				}
 			}
+
+			for (int i = 0; i < components.length; i++)
+				offValues[i] = components[i].getPollData();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-
-		for (int i = 0; i < components.length; i++)
-			offValues[i] = components[i].getPollData();
-
-		// } catch (NullPointerException ex) {
-		//
-		// }
 	}
 
 	protected boolean isZAxis(int check) {

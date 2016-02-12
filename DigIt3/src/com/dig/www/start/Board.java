@@ -1130,6 +1130,8 @@ public class Board extends MPanel implements ActionListener {
 		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("FPS:" + fps, 3, 170 + (Statics.MAC ? 23 : 0));
+		if (corruptedWorld)
+			drawCorruptedBorder(g2d);
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
@@ -3252,5 +3254,43 @@ public class Board extends MPanel implements ActionListener {
 
 	public void setCorruptedWorld(boolean corruptedWorld) {
 		this.corruptedWorld = corruptedWorld;
+	}
+
+	// protected static final Color c = new Color(255, 96, 0);
+
+	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK,
+			Color.WHITE };
+	protected static final int BH_10 = Statics.BOARD_HEIGHT / 10;
+	protected static final int BW_10 = Statics.BOARD_WIDTH / 10;
+	protected static final int BH_20 = Statics.BOARD_HEIGHT / 20;
+	protected static final int BW_20 = Statics.BOARD_WIDTH / 20;
+
+	protected void drawCorruptedBorder(Graphics2D g2d) {
+
+		g2d.setStroke(new BasicStroke(5));
+		// g2d.setColor(Statics.PURPLE);
+		g2d.setColor(Color.GREEN);
+		g2d.fillRect(0, Statics.BOARD_HEIGHT / 2, BW_10, BH_20);
+		g2d.setColor(Color.BLUE);
+		g2d.fillRect(Statics.BOARD_HEIGHT - BW_10, Statics.BOARD_HEIGHT / 2, BW_10, BH_20);
+		g2d.setColor(Color.RED);
+		g2d.fillRect(Statics.BOARD_WIDTH / 2, 0, BW_20, BH_10);
+		g2d.setColor(Color.YELLOW);
+		g2d.fillRect(Statics.BOARD_WIDTH / 2, Statics.BOARD_HEIGHT - BH_10, BW_20, BH_10);
+		// g2d.setColor(Color.MAGENTA);
+		// g2d.fillRect(Statics.BOARD_WIDTH - BW_10, 0, BW_10, BH_10);
+		// g2d.setColor(Statics.PURPLE);
+		// g2d.fillRect(Statics.BOARD_WIDTH - BW_20, Statics.BOARD_HEIGHT -
+		// BH_10, BW_20, BH_10);
+		g2d.setColor(Statics.ORANGE);
+		g2d.fillRect(BW_10, Statics.BOARD_HEIGHT - BH_10 * 2, BW_20, (int) (BH_10 * 1.5));
+		g2d.setColor(Color.ORANGE);
+		g2d.fillRect(Statics.BOARD_WIDTH - BW_10, Statics.BOARD_HEIGHT / 3, BW_20, BH_10);
+
+		for (int i = 0; i < Statics.RAND.nextInt(8) + 3; i++) {
+			g2d.setColor(list[Statics.RAND.nextInt(list.length)]);
+			g2d.drawLine(Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT),
+					Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT));
+		}
 	}
 }
