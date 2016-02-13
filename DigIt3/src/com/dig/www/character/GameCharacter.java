@@ -712,7 +712,7 @@ public boolean isPlayer(){
 								direction = Direction.RIGHT;
 							else
 								direction = Direction.LEFT;
-						} else {
+						}} else {
 							if (deltaX > 0) {
 								if (deltaY > 0) {
 									direction = Direction.DIAG_DR;
@@ -727,7 +727,7 @@ public boolean isPlayer(){
 								}
 							}
 						}
-					}
+					
 					// }
 					// else{
 					// if(Math.abs(x-enPoint.getX())>Math.abs(y-enPoint.getY())){
