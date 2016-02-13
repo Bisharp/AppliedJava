@@ -13,10 +13,10 @@ protected int boomTimerTimer=2;
 		basicAnimate();
 		if(boomTimerTimer<=0){
 			boomTimerTimer=2;
-		boomTimer++;
+		boomTimer+=owner.mult();
 		image = newImage(loc);}
 		else
-			boomTimerTimer--;
+			boomTimerTimer-=owner.mult();
 		if (boomTimer >= BOOM_MAX)
 			alive = false;
 	}

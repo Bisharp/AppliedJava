@@ -316,7 +316,7 @@ public boolean isPlayer(){
 	private boolean moveU = false;
 
 	private boolean wallBound = false;
-	// private int wallX = 0;
+	 //private int wallX = 0;
 	// private int wallY = 0;
 
 	// protected boolean acting = false;
@@ -451,7 +451,7 @@ public boolean isPlayer(){
 						takeDamage(0, false);
 					poisonHurtTimer = 15;
 				} else
-					poisonHurtTimer--;
+					poisonHurtTimer-=owner.mult();
 			}
 
 			if (player) {
@@ -544,7 +544,7 @@ public boolean isPlayer(){
 								goTo = false;
 						}
 					} else if (enUpTimer > 0) {
-						enUpTimer--;
+						enUpTimer-=owner.mult();
 					}
 				} else {
 					enPoint = null;
@@ -840,7 +840,7 @@ public boolean isPlayer(){
 			}
 
 			if (hitstunTimer > 0) {
-				hitstunTimer--;
+				hitstunTimer-=owner.mult();
 				flicker();
 
 				if (hitstunTimer == 0) {
@@ -849,7 +849,7 @@ public boolean isPlayer(){
 			}
 
 			if (hpTimer > 0) {
-				hpTimer--;
+				hpTimer-=owner.mult();
 
 			}
 			if (hpTimer <= 0 && health < HP_MAX) {
@@ -877,7 +877,7 @@ public boolean isPlayer(){
 						image = newImage("n");
 						s="n";}
 				} else
-					animationTimer++;
+					animationTimer+=owner.mult();
 				if (player) {
 					if (move) {
 						if (moveX) {
@@ -885,26 +885,26 @@ public boolean isPlayer(){
 							// collisionFlags.get(Direction.RIGHT))
 							if (moveL) {
 								if(deltaX<0)
-									deltaX+=2;
-								deltaX++;
+									deltaX+=2*owner.mult();
+								deltaX+=owner.mult();
 								if (deltaX > SPEED)
 									deltaX = SPEED;
 							} else {
 								if(deltaX>0)
-									deltaX-=2;
-								deltaX--;
+									deltaX-=2*owner.mult();
+								deltaX-=owner.mult();
 								if (deltaX < -SPEED)
 									deltaX = -SPEED;
 							}
 						}
 						else {
 							if (deltaX > 0){
-								deltaX-=3;
+								deltaX-=3*owner.mult();
 							if(deltaX<0)
 								deltaX=0;
 							}
 							if (deltaX < 0){
-								deltaX+=3;
+								deltaX+=3*owner.mult();
 							if(deltaX>0)
 								deltaX=0;
 							}
@@ -915,39 +915,39 @@ public boolean isPlayer(){
 							// collisionFlags.get(Direction.DOWN))
 							if (!moveU) {
 								if(deltaY>0)
-									deltaY-=2;
-								deltaY--;
+									deltaY-=2*owner.mult();
+								deltaY-=owner.mult();
 								if (deltaY < -SPEED)
 									deltaY = -SPEED;
 							} else {
 								if(deltaY<0)
-								deltaY+=2;
-								deltaY++;
+								deltaY+=2*owner.mult();
+								deltaY+=owner.mult();
 								if (deltaY > SPEED)
 									deltaY = SPEED;
 							}
 						}
 							else {
 								if (deltaY > 0){
-									deltaY-=3;
+									deltaY-=3*owner.mult();
 								if(deltaY<0)
 									deltaY=0;
 								}
 								if (deltaY < 0){
-									deltaY+=3;
+									deltaY+=3*owner.mult();
 								if(deltaY>0)
 									deltaY=0;
 								}
 						}
 
-						owner.setScrollX(deltaX);
-						owner.setScrollY(deltaY);
+						owner.setScrollX(deltaX*owner.mult());
+						owner.setScrollY(deltaY*owner.mult());
 					} else {
 						move = true;
 					}
 				} else if(!(this instanceof Diamond)||((Diamond)this).getShield()==null||!((Diamond)this).getShield().collideWithHook()){
-					x += deltaX;
-					y += deltaY;
+					x += deltaX*owner.mult();
+					y += deltaY*owner.mult();
 				}
 			} else {
 
@@ -955,8 +955,8 @@ public boolean isPlayer(){
 					double tempD = Statics.pointTowards(new Point(wallX, wallY), owner.getCharPoint()) + 180;
 					if (tempD > 360)
 						tempD -= 360;
-					owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED));
-					owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED));
+					owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED*owner.mult()));
+					owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED*owner.mult()));
 
 					owner.reAnimate();
 					wallBound = false;
@@ -979,8 +979,8 @@ public boolean isPlayer(){
 						double tempD = Statics.pointTowards(new Point(wallX, wallY), new Point(x, y)) + 180;
 						if (tempD > 360)
 							tempD -= 360;
-						x -= (int) (Math.cos(Math.toRadians((double) tempD)) * SPEED);
-						y -= (int) (Math.sin(Math.toRadians((double) tempD)) * SPEED);
+						x -= (int) (Math.cos(Math.toRadians((double) tempD)) * SPEED*owner.mult());
+						y -= (int) (Math.sin(Math.toRadians((double) tempD)) * SPEED*owner.mult());
 
 						// x += deltaX;
 						// y += deltaY;
@@ -1522,7 +1522,6 @@ collisionFlags.remove(placement[i]);
 		}
 		if (specialPress && rangedTimer <= 0 && meleeTimer <= 0) {
 			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
-
 				specialTimer = TIMER_SPECIAL;
 				if(me)
 					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString()));
@@ -1532,8 +1531,7 @@ collisionFlags.remove(placement[i]);
 					owner.getfP().add(new Puddle(x, y, this, owner));
 					if (getType() == Types.MACARONI)
 						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
-				}
-				if (type == Types.HEART) {
+				}else if (type == Types.HEART) {
 					if (!((Heart) this).usingField()) {
 						owner.getObjects().add(new Dispenser(x, y, this, "images/characters/projectiles/dispenser.gif", owner, dir));
 						((Heart) this).start();
@@ -1541,9 +1539,11 @@ collisionFlags.remove(placement[i]);
 					} else {
 						((Heart) this).end();
 					}
-				} else {
+				}
+				else {
 
 					energy -= SEnC;
+					
 				}
 			}
 		}
@@ -1560,13 +1560,16 @@ collisionFlags.remove(placement[i]);
 				String s = "images/characters/projectiles" + "/" + getRangedString();
 if(getType()==Types.DIAMOND){
 	owner.getfP().add(new Shield(dir, x+rangedAddX(), y+rangedAddY(), 25, this, owner));
-}
-else if (getType() != Types.SPADE) {
+}else if(getType()==Types.SPADE){
+	((Spade)this).shot=false;
+	if(player)
+		((Spade) this).keyReleased = false;
+	}
+else {
 					owner.getfP().add(new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner, getRangedMove()));
 					if (getType() == Types.MACARONI)
 						owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
-				} else if(player)
-					((Spade) this).keyReleased = false;
+				} 
 				if (this instanceof SirCobalt)
 					owner.getfP().get(owner.getfP().size() - 1).setTurning(true);
 			}
@@ -1993,23 +1996,26 @@ if(!player){
 			meleeTimer = 0;
 		}
 		if (poisonTimer > 0)
-			poisonTimer--;
-		if (enTimer == 0) {
+			poisonTimer-=owner.mult();
+		if (enTimer <= 0) {
 			energy += 1;
 			enTimer = 5;
 		} else if (specialTimer <= 0)
-			enTimer--;
+			enTimer-=owner.mult();
 		if (energy > MAX_ENERGY) {
 			energy = MAX_ENERGY;
 		}
 		if (meleeTimer > NEG_TIMER_MELEE && (type != Types.DIAMOND || ((type == Types.DIAMOND) && meleeTimer <= 0))) {
-			meleeTimer -= 2;
+			meleeTimer -= 2*owner.mult();
 		}
 		if (rangedTimer > NEG_TIMER_RANGED) {
 			if ((!(type == Types.DIAMOND)) || rangedTimer <= 0)
-				if (getType() == Types.SPADE) {
-					if (rangedTimer == 30 - (TIMER_RANGED % 2)) {
+				if (getType() == Types.SPADE&&!((Spade)this).shot
+				) {
+					if (rangedTimer <= 30// - (TIMER_RANGED % 2)
+							) {
 						if (((Spade) this).keyReleased) {
+							((Spade)this).shot=true;
 							owner.getfP().add(
 									new FProjectile(dir, x + rangedAddX(), y + rangedAddY(), 25, this, "images/characters/projectiles" + "/"
 											+ getRangedString(), owner, getRangedMove()));
@@ -2017,17 +2023,17 @@ if(!player){
 							rangedTimer -= 2;
 						}
 					} else
-						rangedTimer -= 2;
+						rangedTimer -= 2*owner.mult();
 					if (rangedTimer >= 0)
 						enTimer = 5;
 				} else
-					rangedTimer -= 2;
+					rangedTimer -= 2*owner.mult();
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
-			specialTimer -= 2;
+			specialTimer -= 2*owner.mult();
 		}
 		if (itemTimer > 0)
-			itemTimer--;
+			itemTimer-=owner.mult();
 
 	}
 
@@ -2061,9 +2067,9 @@ if(!player){
 		specialPress=false;
 	}
 public void setActing(int acting,int timer){
-	meleeTimer=-1;
-	rangedTimer=-1;
-	specialTimer=-1;
+	meleeTimer=-owner.mult();
+	rangedTimer=-owner.mult();
+	specialTimer=-owner.mult();
 	if(acting==1)
 		meleeTimer=timer;
 	else if(acting==2)

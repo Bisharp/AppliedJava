@@ -36,10 +36,10 @@ public class WalkingEnemy extends Enemy {
 		if (stunTimer <= 0 && onScreen) {
 
 			if (animateTimer > 0) {
-				x += getSpeed() * scrollX;
-				y += getSpeed() * scrollY;
+				x += getSpeed() * scrollX*owner.mult();
+				y += getSpeed() * scrollY*owner.mult();
 
-				animateTimer--;
+				animateTimer-=owner.mult();
 			} else {
 				switch (Statics.RAND.nextInt(9)) {
 

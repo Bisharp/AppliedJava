@@ -115,6 +115,15 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private boolean lagPrevention=false;
+	public boolean lagPre(){
+		return lagPrevention;
+	}
+	public int mult(){
+		if(lagPrevention)
+			return 2;
+		return 1;
+	}
 	private int sendInt = 0;
 	private Board board = this;
 	private int times;
@@ -196,7 +205,9 @@ public class Board extends MPanel implements ActionListener {
 
 	public static final String DEFAULT = "Start";
 	private Timer timer;
-	private static final int TIMER_WAIT = 15;
+	private static final int NORMAL_TIMER=15;
+	private static final int LAG_TIMER=31;
+	private int timerWait = NORMAL_TIMER;
 	protected String userName;
 	protected String mode;
 	protected String level;
@@ -303,7 +314,7 @@ public class Board extends MPanel implements ActionListener {
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
-		timer = new Timer(TIMER_WAIT, this);
+		timer = new Timer(timerWait, this);
 		time = new Time(this);
 
 		owner.setFocusable(false);
@@ -354,7 +365,7 @@ public class Board extends MPanel implements ActionListener {
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
-		timer = new Timer(TIMER_WAIT, this);
+		timer = new Timer(timerWait, this);
 		time = new Time(this);
 
 		owner.setFocusable(false);
@@ -2348,10 +2359,22 @@ public class Board extends MPanel implements ActionListener {
 		}
 		// end
 	}
-
+public void toggleLagPrevention(){
+	lagPrevention=!lagPrevention;
+	if(lagPrevention)
+		timerWait=LAG_TIMER;
+	else
+		timerWait=NORMAL_TIMER;
+	
+	timer.setDelay(timerWait);
+}
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
+		if(key==KeyEvent.VK_8){
+			toggleLagPrevention();
+		}
+		
 		if (key == KeyEvent.VK_M) {
 			if (server == null) {
 				System.out.println("server");

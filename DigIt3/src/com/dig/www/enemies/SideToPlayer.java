@@ -23,18 +23,18 @@ public class SideToPlayer extends Enemy {
 		basicAnimate();
 		if (xAxis) {
 			if (x - speed > owner.getCharacterX()) {
-				x -= speed;
+				x -= speed*owner.mult();
 				dir = 2;
 			} else if (x + speed < owner.getCharacterX()) {
-				x += speed;
+				x += speed*owner.mult();
 				dir = 0;
 			}
 		} else {
 			if (y - speed > owner.getCharacterY()) {
-				y -= speed;
+				y -= speed*owner.mult();
 				dir = 3;
 			} else if (y + speed < owner.getCharacterY()) {
-				y += speed;
+				y += speed*owner.mult();
 				dir = 1;
 			}
 		}

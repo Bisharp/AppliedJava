@@ -75,12 +75,12 @@ direction=Direction.LEFT;
 				}
 
 				if (owner.getCharacter() == this) {
-					owner.setScrollX(xP);
-					owner.setScrollY(yP);
+					owner.setScrollX(xP*owner.mult());
+					owner.setScrollY(yP*owner.mult());
 
 				} else {
-					x -= xP;
-					y -= yP;
+					x -= xP*owner.mult();
+					y -= yP*owner.mult();
 				}
 				
 				
@@ -90,8 +90,8 @@ direction=Direction.LEFT;
 			if (shield!=null&&!owner.getfP().contains(shield)) {
 				if(shield.collideWithHook()){
 					if(this==owner.getCharacter()){
-						owner.setScrollX(x-shield.getX());
-						owner.setScrollY(y-shield.getY());
+						owner.setScrollX((x-shield.getX())*owner.mult());
+						owner.setScrollY((y-shield.getY())*owner.mult());
 					}else{
 					x=shield.getX();
 					y=shield.getY();}

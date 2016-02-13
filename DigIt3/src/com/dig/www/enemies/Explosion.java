@@ -26,7 +26,9 @@ public class Explosion extends Enemy {
 	public void animate() {
 		basicAnimate();
 		
-		boomTimer++;
+		boomTimer+=owner.mult();
+		if(boomTimer>10)
+			boomTimer=10;
 		image = newImage(loc);
 
 		if (boomTimer >= BOOM_MAX)

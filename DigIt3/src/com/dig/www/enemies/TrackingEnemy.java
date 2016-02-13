@@ -23,8 +23,8 @@ public class TrackingEnemy extends Enemy {
 			GameCharacter chara=getClosest();
 			if(new Rectangle(chara.getX()-Statics.BOARD_WIDTH/2, chara.getY()-Statics.BOARD_HEIGHT/2,Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT).intersects(getBounds())){
 			d = Statics.pointTowards(new Point((int) x, (int) y), new Point(chara.getX(), chara.getY()));
-			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
-			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();}
+			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();
+			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();}
 		}
 	}
 }

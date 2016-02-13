@@ -20,8 +20,8 @@ public class HomingProjectile extends Projectile{
 
 		d = Statics.pointTowards(new Point((int) x, (int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40));
 		
-			x += Math.cos((double) Math.toRadians((double) d)) * speed;
-			y += Math.sin((double) Math.toRadians((double) d)) * speed;
+			x += Math.cos((double) Math.toRadians((double) d)) * speed*owner.mult();
+			y += Math.sin((double) Math.toRadians((double) d)) * speed*owner.mult();
 		
 		
 

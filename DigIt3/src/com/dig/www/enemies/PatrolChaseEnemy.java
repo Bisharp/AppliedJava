@@ -41,11 +41,11 @@ protected int currentY;
 		checkForTarget();
 
 		if (!hasTarget) {
-			x += scrollX;
-			y += scrollY;
+			x += scrollX*owner.mult();
+			y += scrollY*owner.mult();
 			currentX=x;
 			currentY=y;
-			moveTimer--;
+			moveTimer-=owner.mult();
 			if (moveTimer <= 0)
 				changePos();
 		} else
@@ -63,8 +63,8 @@ protected int currentY;
 			x = startX;
 			y = startY;
 		}
-		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
-		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
+		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1)*owner.mult();
+		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1)*owner.mult();
 		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
 	}
 	
@@ -106,8 +106,8 @@ protected int currentY;
 		
 //Point p=new Point((int)owner.getCharacter().getBounds().getCenterX(),(int)owner.getCharacter().getBounds().getCenterY());
 double d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
-y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
+x += Math.cos((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();
+y += Math.sin((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();
 	}
 
 	@Override

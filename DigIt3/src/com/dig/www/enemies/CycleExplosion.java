@@ -30,7 +30,7 @@ private Sprite follow;
 			}
 			image=newImage();
 		}else
-			cycleTim--;
+			cycleTim-=owner.mult();
 		
 		boomTimer--;
 		if(boomTimer<0)

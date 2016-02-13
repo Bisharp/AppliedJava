@@ -62,14 +62,14 @@ public class ChainEnemy extends WalkingEnemy {
 				int amount = getSpeed();
 
 				if (follows.getX() < x)
-					x -= amount;
+					x -= amount*owner.mult();
 				else if (follows.getX() > x)
-					x += amount;
+					x += amount*owner.mult();
 
 				if (follows.getY() < y)
-					y -= amount;
+					y -= amount*owner.mult();
 				else if (follows.getY() > y)
-					y += amount;
+					y += amount*owner.mult();
 			}
 		} else {
 			super.animate();

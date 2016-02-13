@@ -35,7 +35,7 @@ public class Launch extends Enemy {
 		if (stunTimer <= 0 && willHarm()) {
 
 			if (onScreen && alive) {
-				timer++;
+				timer+=owner.mult();
 
 				if (timer >= DELAY) {
 					addBall();

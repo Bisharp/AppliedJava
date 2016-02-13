@@ -41,9 +41,9 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 		checkForTarget();
 
 		if (!hasTarget) {
-			x += scrollX;
-			y += scrollY;
-			moveTimer--;
+			x += scrollX*owner.mult();
+			y += scrollY*owner.mult();
+			moveTimer-=owner.mult();
 			if (moveTimer <= 0)
 				changePos();
 		} else
@@ -65,8 +65,8 @@ public class PatrolSecurityEnemy extends SeeEnemy {
 			y = startY;
 		}
 
-		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1);
-		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1);
+		scrollX = points[position][0] * (slowTimer <= 0? 2 : 1)*owner.mult();
+		scrollY = points[position][1] * (slowTimer <= 0? 2 : 1)*owner.mult();
 		moveTimer = slowTimer <= 0? MOVE_MAX : MOVE_MAX * 2;
 	}
 
