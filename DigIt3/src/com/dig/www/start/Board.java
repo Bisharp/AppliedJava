@@ -206,7 +206,7 @@ public class Board extends MPanel implements ActionListener {
 	public static final String DEFAULT = "Start";
 	private Timer timer;
 	private static final int NORMAL_TIMER=15;
-	private static final int LAG_TIMER=31;
+	private static final int LAG_TIMER=32;
 	private int timerWait = NORMAL_TIMER;
 	protected String userName;
 	protected String mode;
