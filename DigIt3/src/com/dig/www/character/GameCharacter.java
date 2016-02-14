@@ -433,8 +433,10 @@ public boolean isPlayer(){
 			basicAnimate();
 			if (owner.getCharacter() != this && !owner.getCharacter().isDead() && getBounds().intersects(owner.getCharacter().getBounds()))
 				dead = false;
-			for(int c=0;c<owner.getFriends().size();c++){{
-				if(owner.getFriends().get(c)!= this && !owner.getFriends().get(c).isDead() && getBounds().intersects(owner.getFriends().get(c).getBounds()))
+			for(int c=0;c<owner.getFriends().size();c++){
+				
+				
+				if(owner.getFriends().get(c)!= this && !owner.getFriends().get(c).isDead() && getBounds().intersects(owner.getFriends().get(c).getBounds())){
 					dead=false;
 				break;}
 			}

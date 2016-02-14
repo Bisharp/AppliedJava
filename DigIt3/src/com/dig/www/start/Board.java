@@ -1519,6 +1519,7 @@ public class Board extends MPanel implements ActionListener {
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setDire(playerState.getDire());
+								friend.setDead(playerState.isDead());
 								// friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
 							}
 						}
@@ -1582,13 +1583,13 @@ public class Board extends MPanel implements ActionListener {
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire()));
+									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 
 					for (GameCharacter character : friends) {
 						currentState.getPlayerStates().add(
 								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 										.getAttackTimer(), character.getDirection(), character.getS(), character.isPlayer(), character.getType()
-										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire()));
+										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 					}
 
 					for (Enemy en : enemies) {
@@ -1666,6 +1667,7 @@ public class Board extends MPanel implements ActionListener {
 									chara.setHealth(playerState.getHealth());
 									chara.setEnergy(playerState.getEnergy());
 									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+								chara.setDead(playerState.isDead());
 								}
 							}
 						}
@@ -1740,7 +1742,7 @@ chats=states.get(s).getTalks();
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire()));
+									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 				if (sendInt <= 0) {
 					sendInt = 5;
 					theServer.getTold(currentState);
