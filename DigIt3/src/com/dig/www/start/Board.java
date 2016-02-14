@@ -1630,27 +1630,18 @@ public class Board extends MPanel implements ActionListener {
 					// System.out.println("null");
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
-//						boolean hasGone = false;
-//						if (character.getType().toString().equals(playerState.getTypeToString()))
-//							hasGone = true;
-//						else
-//							for (GameCharacter friend : friends) {
-//								if (friend.getType().toString().equals(playerState.getTypeToString())) {
-//									hasGone = true;
-//									friend.setX(playerState.getX() + b.getX());
-//									friend.setY(playerState.getY() + b.getY());
-//									friend.setPlayer(playerState.isPlayer());
-//									friend.setDirection(playerState.getDir());
-//									friend.setImage(friend.newImage(playerState.getS()));
-//									friend.setMpName(playerState.getMpName());
-//									friend.setHealth(playerState.getHealth());
-//									friend.setEnergy(playerState.getEnergy());
-//									friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-//									friend.setDire(playerState.getDire());
-//									friend.setDead(playerState.isDead());
-//								}
-//							}
-						if (!character.getType().toString().equals(playerState.getTypeToString())) {
+
+												boolean hasGone = false;
+						if (character.getType().toString().equals(playerState.getTypeToString()))
+							hasGone = true;
+						else
+							for (GameCharacter friend : friends) {
+								if (friend.getType().toString().equals(playerState.getTypeToString())) {
+									hasGone = true;
+									clientFriendStuff(friend, playerState, b);
+								}
+							}
+						if (!hasGone) {
 							GameCharacter chara = getACharacter(playerState.getTypeToString());
 							if (chara != null) {
 								if (character == null && !playerState.isPlayer()) {
@@ -1660,17 +1651,7 @@ public class Board extends MPanel implements ActionListener {
 									chara.setPlayer(true);
 								} else {
 									friends.add(chara);
-									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-									chara.setX(playerState.getX() + b.getX());
-									chara.setY(playerState.getY() + b.getY());
-									chara.setPlayer(playerState.isPlayer());
-									chara.setDirection(playerState.getDir());
-									chara.setImage(chara.newImage(playerState.getS()));
-									chara.setMpName(playerState.getMpName());
-									chara.setHealth(playerState.getHealth());
-									chara.setEnergy(playerState.getEnergy());
-									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-								chara.setDead(playerState.isDead());
+									clientFriendStuff(chara, playerState, b);
 								}
 							}
 						}
@@ -1788,7 +1769,19 @@ chats=states.get(s).getTalks();
 	}
 
 	// Beginning of checkCollisions()-related code
-
+public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block b){
+	friend.setX(playerState.getX() + b.getX());
+	friend.setY(playerState.getY() + b.getY());
+	friend.setPlayer(playerState.isPlayer());
+	friend.setDirection(playerState.getDir());
+	friend.setImage(friend.newImage(playerState.getS()));
+	friend.setMpName(playerState.getMpName());
+	friend.setHealth(playerState.getHealth());
+	friend.setEnergy(playerState.getEnergy());
+	friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+	friend.setDire(playerState.getDire());
+	friend.setDead(playerState.isDead());
+}
 	public void setCharacterStates(Rectangle r3) {
 
 		Block b;
