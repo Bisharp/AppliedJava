@@ -916,7 +916,7 @@ public class Board extends MPanel implements ActionListener {
 							(int) pointedPoint.getY() - 50, this);
 
 			}
-			for (GameCharacter character : friends) {
+			for (int c=0;c<friends.size();c++) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -939,7 +939,7 @@ public class Board extends MPanel implements ActionListener {
 				// +(world.get(0).getY()%100)+100//-11
 				// , 100, 100)
 				// ;
-				character.draw(g2d);
+				friends.get(c).draw(g2d);
 				// if (character.getPPath() != null) {
 				//
 				//
@@ -1605,7 +1605,9 @@ public class Board extends MPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (me != null && character != null) {
+			chats.clear();
 			try {
+				
 				Block b = world.get(0);
 				for (int s = 0; s < states.size(); s++) {
 					if (states.get(s) == null)
@@ -1628,26 +1630,27 @@ public class Board extends MPanel implements ActionListener {
 					// System.out.println("null");
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
-						boolean hasGone = false;
-						if (character.getType().toString().equals(playerState.getTypeToString()))
-							hasGone = true;
-						else
-							for (GameCharacter friend : friends) {
-								if (friend.getType().toString().equals(playerState.getTypeToString())) {
-									hasGone = true;
-									friend.setX(playerState.getX() + b.getX());
-									friend.setY(playerState.getY() + b.getY());
-									friend.setPlayer(playerState.isPlayer());
-									friend.setDirection(playerState.getDir());
-									friend.setImage(friend.newImage(playerState.getS()));
-									friend.setMpName(playerState.getMpName());
-									friend.setHealth(playerState.getHealth());
-									friend.setEnergy(playerState.getEnergy());
-									friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-									friend.setDire(playerState.getDire());
-								}
-							}
-						if (!hasGone) {
+//						boolean hasGone = false;
+//						if (character.getType().toString().equals(playerState.getTypeToString()))
+//							hasGone = true;
+//						else
+//							for (GameCharacter friend : friends) {
+//								if (friend.getType().toString().equals(playerState.getTypeToString())) {
+//									hasGone = true;
+//									friend.setX(playerState.getX() + b.getX());
+//									friend.setY(playerState.getY() + b.getY());
+//									friend.setPlayer(playerState.isPlayer());
+//									friend.setDirection(playerState.getDir());
+//									friend.setImage(friend.newImage(playerState.getS()));
+//									friend.setMpName(playerState.getMpName());
+//									friend.setHealth(playerState.getHealth());
+//									friend.setEnergy(playerState.getEnergy());
+//									friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+//									friend.setDire(playerState.getDire());
+//									friend.setDead(playerState.isDead());
+//								}
+//							}
+						if (!character.getType().toString().equals(playerState.getTypeToString())) {
 							GameCharacter chara = getACharacter(playerState.getTypeToString());
 							if (chara != null) {
 								if (character == null && !playerState.isPlayer()) {
@@ -1672,6 +1675,7 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 					}
+					
 					if(states.get(s).isServer())
 chats=states.get(s).getTalks();
 					for (ActionState actionState : states.get(s).getActions()) {
