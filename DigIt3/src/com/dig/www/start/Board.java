@@ -2410,16 +2410,6 @@ public void toggleLagPrevention(){
 
 			if (state != State.DEAD && state != State.LOADING)
 				setState(State.PAUSED);
-			if (me != null && theServer != null)
-				try {
-					String s = null;
-					if (character != null)
-						s = character.getType().charName();
-					theServer.leaveChatRoom(mpName, s);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			Statics.exit(this);
 		}
 		switch (state) {
@@ -3185,6 +3175,9 @@ for(int c=0;c<state.getTalks().size();c++){
 
 	public void setOtherServer(IChatServer server) {
 		theServer = server;
+	}
+	public IChatServer getOtherServer(){
+		return theServer;
 	}
 
 	public String getLevel() {
