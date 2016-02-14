@@ -24,7 +24,7 @@ public class ChatServer  implements IChatServer
 	private String passWord;
 	private Board owner;
 	private HashMap<String, IChatClient> clientMap = new HashMap<>();
-	
+	private ArrayList<String>keys=new ArrayList<String>();
 	@Override
 	public Set<String> enterChatRoom(IChatClient chatClient, String name,String passWord) throws Exception
 	{
@@ -34,6 +34,7 @@ public class ChatServer  implements IChatServer
 		{
 			client.addChatClient(name);
 		}	
+		keys.add(name);
 		clientMap.put(name, chatClient);
 		// need a HashSet since it is serializable
 		HashSet<String> existingClients = new HashSet<>();
@@ -50,20 +51,29 @@ public class ChatServer  implements IChatServer
 	public void leaveChatRoom(String name,String playerName) throws RemoteException
 	{
 		clientMap.remove(name);
+		keys.remove(name);
 		for(GameCharacter chara:owner.getFriends()){
-			if(chara.getType().charName().equals(playerName)){
-				System.out.println(chara.getType().charName());
+			//if(chara.getType().charName().equals(playerName)){
+				//System.out.println(chara.getType().charName());
+				//chara.setPlayer(false);
+				//chara.setMpName("I love cake");
+			
+			if(chara.getMpName().equals(name)){
+				chara.setMpName(null);
 				chara.setPlayer(false);
-				chara.setMpName("I love cake");
-				for(int c=0;c<owner.getCurrentState().getPlayerStates().size();c++){
-					if(owner.getCurrentState().getPlayerStates().get(c).getMpName().equals(playerName)){
-//						owner.getCurrentState().getPlayerStates().remove(c);
-//					c--;
-						System.out.println(name);
-					owner.getCurrentState().getPlayerStates().get(c).left();	
-					}
-				}
 			}
+			
+//				for(int c=0;c<owner.getFriends().size();c++){
+//					
+//					System.out.println(name+","+owner.getCurrentState().getPlayerStates().get(c).getMpName());
+//					if(name.equals(owner.getCurrentState().getPlayerStates().get(c).getMpName())){
+////						owner.getCurrentState().getPlayerStates().remove(c);
+////					c--;
+//					//	System.out.println(name);
+//					owner.getCurrentState().getPlayerStates().get(c).left();	
+//					}
+//				//}
+//			}
 		}
 		for (IChatClient client: clientMap.values())
 		{
@@ -99,9 +109,26 @@ return new StartState(owner,owner.getSpawnLoc());
 			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 			}catch(Exception ex){
+//				System.out.println(((IChatClient)clientMap.values().toArray()[c]));
+//				HashMap<String, IChatClient> clientMap2 = new HashMap<>();
+//				for(int c2=0;c2<clientMap.size();c2++){
+//					if(c!=c2)
+//						clientMap2.put(keys.get(c2), clientMap.get(keys.get(c2)));
+//				}
+				System.err.println("Left wrong way");
+				String playerName="";
+				for(int c2=0;c2<owner.getFriends().size();c++){
+					if(owner.getFriends().get(c2).getMpName().equals(keys.get(c))){
+						playerName=owner.getFriends().get(c).getType().charName();
+						break;
+					}
+						
+				}
+				leaveChatRoom(keys.get(c), playerName);
+				//clientMap.remove(keys.get(c));
 			//String client=	clientMap.get("club");
 				//leaveChatRoom("apl2of2","club");
-				ex.printStackTrace();
+				//ex.printStackTrace();
 				//clientMap.remove(arg0);
 			}
 			}
