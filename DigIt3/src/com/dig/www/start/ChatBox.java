@@ -38,7 +38,34 @@ public ChatBox(final Board owner){
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			owner.getCurrentState().getTalks().add(jf.getText());
+			int length = 30;
+			int nameLength = 10;
+			if (nameLength > owner.mpName.length())
+				nameLength = owner.mpName.length();
+			String name = owner.mpName.substring(0, nameLength);
+			// ArrayList<String>s=new ArrayList<String>();
+			
+				for (int c2 = 0; c2 < jf.getText().length(); c2 += length) {
+					int i = length;
+					if (c2 + i > jf.getText().length())
+						i = jf.getText().length() - c2;
+					
+					if(owner.server!=null)
+					owner.chats.add(name + ":" + jf.getText().substring(c2, c2 + i) + "\n");
+					else
+						owner.getCurrentState().addTalk(name + ":" + jf.getText().substring(c2, c2 + i) + "\n");
+				}
+				// }
+				// (state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()+"\n").
+				// for(String i:s)
+				// chats.add(state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()+"\n");
+				// chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
+				// state.getTalks()
+				// .get(state.getTalks().size() - 1));
+			
+			//owner.chats.add(jf.getText());
 			jf.setText("");
 			owner.requestFocus();
 		}
@@ -53,7 +80,7 @@ public ChatBox(final Board owner){
 //}
 public void set(ArrayList<String>s){
 	jt.setText("");
-	for(String st:s)
+	for(String st:((ArrayList<String>)s.clone()))
 		jt.append(st);
 }
 }

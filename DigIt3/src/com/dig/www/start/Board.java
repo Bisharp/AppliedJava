@@ -1577,6 +1577,8 @@ public class Board extends MPanel implements ActionListener {
 				}
 				states.clear();
 				if (sendInt <= 0) {
+					currentState.getTalks().clear();
+					currentState.getTalks().addAll(chats);
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
@@ -1668,7 +1670,8 @@ public class Board extends MPanel implements ActionListener {
 							}
 						}
 					}
-
+					if(states.get(s).isServer())
+chats=states.get(s).getTalks();
 					for (ActionState actionState : states.get(s).getActions()) {
 						switch (actionState.getActionType()) {
 						case SWITCH:
@@ -3123,6 +3126,8 @@ public void toggleLagPrevention(){
 	}
 
 	public void getTold(GameState state) {
+		if(server!=null&&state.isServer())
+			return;
 		if (server == null && state.isServer() && mode == null) {
 			mode = state.getPack();
 			level = state.getLevel();
@@ -3174,33 +3179,10 @@ public void toggleLagPrevention(){
 						.getPlayerStates()))))
 			states.add(state);
 
-		if (state.getTalks().size() > 0) {
-			// if(me!=null){
-			int length = 30;
-			int nameLength = 10;
-			if (nameLength > state.getPlayerStates().get(0).getMpName().length())
-				nameLength = state.getPlayerStates().get(0).getMpName().length();
-			String name = state.getPlayerStates().get(0).getMpName().substring(0, nameLength);
-			// ArrayList<String>s=new ArrayList<String>();
-			for (int c = 0; c < state.getTalks().size(); c++) {
-				for (int c2 = 0; c2 < state.getTalks().get(c).length(); c2 += length) {
-					int i = length;
-					if (c2 + i > state.getTalks().get(c).length())
-						i = state.getTalks().get(c).length() - c2;
-					chats.add(name + ":" + state.getTalks().get(c).substring(c2, c2 + i) + "\n");
-				}
-				// }
-				// (state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()+"\n").
-				// for(String i:s)
-				// chats.add(state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()+"\n");
-				// chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()
-				// .get(state.getTalks().size() - 1));
-			}
-			System.out.println(state.getTalks().get(state.getTalks().size() - 1));
-		}
+for(int c=0;c<state.getTalks().size();c++){
+	chats.add(state.getTalks().get(c));
+}
+
 	}
 
 	public void setOtherServer(IChatServer server) {

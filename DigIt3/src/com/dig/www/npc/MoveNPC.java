@@ -56,6 +56,7 @@ public void animate(){
 			movingBack=false;
 			moveAt=0;
 		}
+		int speed=this.speed*owner.mult();
 		if(!movePoints[moveAt].getWaitFirst()||hasWaited){
 		if(x-speed>movePoints[moveAt].getX())
 			x-=speed;
