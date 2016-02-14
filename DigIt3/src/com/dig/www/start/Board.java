@@ -2378,9 +2378,8 @@ public void toggleLagPrevention(){
 		}
 		
 		if (key == KeyEvent.VK_M) {
-			if (server == null) {
-				System.out.println("server");
-				mpName = JOptionPane.showInputDialog("What would you like to be called?", "Server");
+			if (server == null&&me==null) {
+				mpName = JOptionPane.showInputDialog("What would you like to be called?",System.getProperty("user.name"));
 				passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
 				server = new ChatServer(this, passWord);
 				currentState = new GameState(mode, level, true);

@@ -115,7 +115,7 @@ return new StartState(owner,owner.getSpawnLoc());
 //					if(c!=c2)
 //						clientMap2.put(keys.get(c2), clientMap.get(keys.get(c2)));
 //				}
-				System.err.println("Left wrong way");
+				System.err.println(keys.get(c)+" left the wrong way.");
 				String playerName="";
 				for(int c2=0;c2<owner.getFriends().size();c++){
 					if(owner.getFriends().get(c2).getMpName().equals(keys.get(c))){
