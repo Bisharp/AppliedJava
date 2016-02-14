@@ -58,7 +58,7 @@ public class ChatServer  implements IChatServer
 				//chara.setPlayer(false);
 				//chara.setMpName("I love cake");
 			
-			if(chara.getMpName().equals(name)){
+			if(name.equals(chara.getMpName())){
 				chara.setMpName(null);
 				chara.setPlayer(false);
 			}
