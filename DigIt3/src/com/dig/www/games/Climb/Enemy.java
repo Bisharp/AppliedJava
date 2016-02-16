@@ -11,13 +11,15 @@ public class Enemy extends Entity {
 		STAND, WALK, CONTRARY
 	}
 
-	private static final int SHOOT_MAX = 50;
+	protected static final int SHOOT_MAX = 50;
+	protected static final int CONTRARY = 30;
+	
 	protected Type type;
 	protected int mySpeed = SPEED / 2;
 	protected int myFall = 0;
 	protected boolean onGround = true;
 	protected boolean shoots = false;
-	private int shootTimer = SHOOT_MAX;
+	protected int shootTimer = SHOOT_MAX;
 
 	public Enemy(int x, int y, String loc, Climb owner, Type type) {
 		super(x, y, loc, owner);
@@ -42,7 +44,7 @@ public class Enemy extends Entity {
 			case STAND:
 				break;
 			case CONTRARY:
-				if (Statics.RAND.nextInt(30) == 0 && onGround)
+				if (Statics.RAND.nextInt(CONTRARY) == 0 && onGround)
 					switchDir();
 			case WALK:
 				x += mySpeed;
@@ -121,5 +123,9 @@ public class Enemy extends Entity {
 		if ((onGround = oG) == false)
 			return;
 		y = gY - height;
+	}
+	
+	protected boolean isOnGround() {
+		return onGround;
 	}
 }

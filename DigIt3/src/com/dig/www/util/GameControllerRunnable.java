@@ -217,10 +217,10 @@ public class GameControllerRunnable implements Runnable {
 				buttonPressed[index] = true;
 			} else if (data > p.zSensitivity) {
 				if (mouseClick == -1)
-					rOB.keyPress(p.lZAxis);
+					rOB.keyPress(press);
 				else
 					robot.mousePress(mouseClick);
-				buttonPressed[12] = true;
+				buttonPressed[index] = true;
 			} else if (buttonPressed[index]) {
 				if (mouseClick == -1)
 					rOB.keyRelease(press);

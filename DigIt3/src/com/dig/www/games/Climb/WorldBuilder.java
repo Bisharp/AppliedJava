@@ -11,7 +11,7 @@ public class WorldBuilder {
 	public ArrayList<Object> getWorld(Climb owner, int level) {
 		ArrayList<Object> world = new ArrayList<Object>();
 
-		final int width = Climb.GW / BLOCK;
+		final int width = Climb.GW / BLOCK - 4;
 		final int height = Climb.GH * (Statics.RAND.nextInt(5) + 3) / BLOCK;
 		char[][] c = new char[width][height + 1];
 
@@ -25,7 +25,7 @@ public class WorldBuilder {
 
 		for (x = 0; x < width; x++)
 			for (y = 0; y < height; y++)
-				c[x][y] = y != height - 1 ? '0' : '1';
+				c[x][y] = '0';
 
 		final int levels = Statics.RAND.nextInt(3) + 3;
 		final int amount = height / levels;
@@ -97,35 +97,41 @@ public class WorldBuilder {
 			for (x = 0; x < width; x++) {
 
 				if (c[x][y] == '1' && !hasVSwitch) {
-					world.add(new Switch(x * BLOCK, y * BLOCK - 20, owner));
+					world.add(new Switch((x + 2) * BLOCK, y * BLOCK - 20, owner));
 					hasVSwitch = true;
 				}
 
 				switch (c[x][y]) {
 
 				case '1':
-					world.add(new Object(x * BLOCK, y * BLOCK, BLOCK, BLOCK, owner));
+					world.add(new Object((x + 2) * BLOCK, y * BLOCK, BLOCK, BLOCK, owner));
 					break;
 				case 'E':
 					if (Statics.RAND.nextInt(level) > 20)
-						world.add(new Enemy(x * BLOCK, y * BLOCK, "images/climb/evil/tank.gif", owner, Enemy.Type.WALK, true));
+						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/tank.gif", owner, Enemy.Type.WALK, true));
 					else if (Statics.RAND.nextInt(level * 2) > 20)
-						world.add(new Enemy(x * BLOCK, y * BLOCK, "images/climb/evil/nightmare.png", owner, Enemy.Type.CONTRARY));
+						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/nightmare.png", owner, Enemy.Type.CONTRARY));
 					else if (Statics.RAND.nextInt(level * 3) > 20)
-						world.add(new Enemy(x * BLOCK, y * BLOCK, "images/climb/evil/slug.png", owner, Enemy.Type.WALK));
+						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/slug.png", owner, Enemy.Type.WALK));
 					else
-						world.add(new Enemy(x * BLOCK, y * BLOCK, "images/climb/evil/ghostRock.png", owner, Enemy.Type.STAND));
+						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/ghostRock.png", owner, Enemy.Type.STAND));
 					break;
 				case 'L':
-					world.add(new Ladder(x * BLOCK, y * BLOCK, "images/climb/other/ladder.png", owner, c[x][y - 1] == '0'));
+					world.add(new Ladder((x + 2) * BLOCK, y * BLOCK, "images/climb/other/ladder.png", owner, c[x][y - 1] == '0'));
+					if (c[x][y - 1] == '0')
+						world.add(new Object((x + 2) * BLOCK, y * BLOCK, BLOCK, 7, owner));
 					break;
 
 				case 'C':
-					world.add(new Cat(x * BLOCK, y * BLOCK, owner));
+					world.add(new Cat((x + 2) * BLOCK, y * BLOCK, owner));
 				}
 				System.out.print(c[x][y]);
 			}
 			System.out.println();
+			
+			if (y + 1 == height)
+				world.add(new Object(0, y * BLOCK, Climb.GW, BLOCK, owner));
+				
 		}
 
 		// world.add(new Object(0, Climb.GH - 50, 600, 100, owner));

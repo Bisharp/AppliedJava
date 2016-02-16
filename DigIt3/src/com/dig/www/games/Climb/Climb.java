@@ -1,6 +1,7 @@
 package com.dig.www.games.Climb;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -28,11 +29,17 @@ import com.dig.www.util.Statics;
 
 public class Climb extends JFrame implements KeyListener, ActionListener {
 
+	static final int TIMER_REFRAIN = 10;
 	static final int GH = 600;
 	static final int GW = 600;
 	static final int SWITCH_MAX = 50;
+	static final float TIMER_MAX = 30;
+	static final int TIMER_ADD = 10;
+	static final Font CLIMB = new Font("Trebuchet MS", Font.BOLD, 30);
+	
 	private Timer t;
 	private Pane pane;
+	protected float timer = 0;
 
 	private enum GameState {
 		SWITCH, GAME, MAIN, HIGH_SCORES
@@ -68,7 +75,7 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		mainMenu();
 
 		setVisible(true);
-		t = new Timer(10, this);
+		t = new Timer(TIMER_REFRAIN, this);
 		t.start();
 	}
 
@@ -82,6 +89,7 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		toRemove = new ArrayList<Object>();
 		toAdd = new ArrayList<Object>();
 		myState = GameState.GAME;
+		timer = TIMER_MAX;
 		flux = false;
 	}
 
@@ -94,6 +102,11 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		switchTimer = 0;
 		myState = GameState.GAME;
 		flux = false;
+		
+		player.switchArea();
+		
+	//	TODOif (level % 4 == 0)
+			world.add(new Boss("boss", this, true));
 	}
 
 	protected void mainMenu() {
@@ -144,6 +157,9 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 				if (player.fallenTooFar())
 					g2d.drawImage(Statics.newImage("images/climb/other/!.png"), player.getX(), player.getY() - 40, this);
+				
+				g2d.setFont(CLIMB);
+				g2d.drawString("" + (int) timer, GW - GW / 3, GH / 10);
 				break;
 			}
 		}
@@ -181,6 +197,10 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		Object o;
 		Enemy e;
 		int i;
+		
+		timer -= (float) (TIMER_REFRAIN / 1000.0);
+		if (timer <= 0)
+			die();
 
 		while (toRemove.size() > 0) {
 			world.remove(toRemove.get(0));
@@ -199,9 +219,8 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 			o.animate();
 			o.setOnScreen(o.getBounds().intersects(getBounds()));
 			if (o.isOnScreen() && o.getBounds().intersects(player.getBounds())) {
-				if (o instanceof Ladder) {
-
-						player.catchLadder(o.getX(), o.getY());
+				if (o instanceof Ladder && o.getBounds().intersects(player.getCoreBounds())) {
+					player.catchLadder(o.getX(), o.getY());
 					falling = false;
 				} else if (o instanceof Cat) {
 					player.setCat(true);
@@ -213,10 +232,9 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 						player.bump(((Enemy) o).getMidX());
 					} else
 						die();
-				} else if (player.getState() == States.FALL && o instanceof Switch) {
-					((Switch) o).press();
-					myState = GameState.SWITCH;
-					switchTimer = SWITCH_MAX;
+				} else if (o instanceof Switch) {
+					progress(((Switch) o));
+					falling = false;
 				} else {
 					player.breakFall(o.getY());
 					falling = false;
@@ -226,7 +244,7 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 			if (o instanceof Enemy) {
 				e = (Enemy) o;
 				for (Object o2 : world) {
-					if (o2 instanceof Enemy || o2 instanceof Switch || o2 instanceof Cat)
+					if (o2 instanceof Enemy || o2 instanceof Switch || o2 instanceof Cat || o2 instanceof Ladder)
 						continue;
 					if (e.getBounds().intersects(o2.getBounds())) {
 						e.setOnGround(true, o2.getY());
@@ -238,7 +256,7 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 				if (eFall)
 					e.setOnGround(false, 0);
 
-				if (e.onGround) {
+				if (e.isOnGround()) {
 					eFall = true;
 					for (Object o2 : world) {
 						if (o2 instanceof Enemy || o2 instanceof Ladder || o2 instanceof Cat)
@@ -257,6 +275,13 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 		if (falling)
 			player.startFalling();
+	}
+	
+	protected void progress(Switch o) {
+		o.press();
+		myState = GameState.SWITCH;
+		switchTimer = SWITCH_MAX;
+		timer += TIMER_ADD;
 	}
 
 	@Override
@@ -293,7 +318,8 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 	protected void die() {
 		JOptionPane.showMessageDialog(this, "You died.", "Climb", JOptionPane.WARNING_MESSAGE);
-		System.exit(0);
+		// System.exit(0);
+		mainMenu();
 	}
 
 	public static void main(String[] args) {
@@ -420,5 +446,9 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 			}
 		}
 
+	}
+
+	public Character getPlayer() {
+		return player;
 	}
 }

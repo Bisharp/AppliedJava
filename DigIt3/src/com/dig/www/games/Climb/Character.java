@@ -43,15 +43,13 @@ public class Character extends Entity {
 
 		switch (state) {
 		case JUMP:
-			dY--;
-			if (dY < -FALL_SPEED)
-				dY = FALL_SPEED;
+			if (dY >= -FALL_SPEED)
+				dY--;
 			break;
 
 		case FALL:
-			dY++;
-			if (dY > FALL_SPEED)
-				dY = FALL_SPEED;
+			if (dY <= FALL_SPEED)
+				dY++;
 			fallTimer--;
 			break;
 		default:
@@ -169,9 +167,7 @@ public class Character extends Entity {
 				facingRight = true;
 				walking = true;
 			} else if (keyCode == KeyEvent.VK_SPACE && !jumped) {
-				state = States.JUMP;
-				jumped = true;
-				jumpTimer = TIMER;
+				jump(false);
 			} else if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN) {
 				wants2Climb = true;
 				up = keyCode == KeyEvent.VK_UP;
@@ -184,17 +180,20 @@ public class Character extends Entity {
 				walking = true;
 				up = false;
 			} else if (keyCode == KeyEvent.VK_SPACE) {
-				jump();
+				jump(true);
 			}
 		}
 	}
 
-	protected void jump() {
+	protected void jump(boolean fromLadder) {
 		state = States.JUMP;
 		jumped = true;
-		jumpTimer = TIMER;
-		wants2Climb = false;
-		walking = false;
+		jumpTimer = TIMER * 2;
+
+		if (fromLadder) {
+			wants2Climb = false;
+			walking = false;
+		}
 	}
 
 	protected void release(int keyCode) {
@@ -232,11 +231,13 @@ public class Character extends Entity {
 			x = newX;
 			fallTimer = FALL_MAX;
 		}
-		
-		//else if (theY )
+
+		// else if (theY )
 	}
 
 	protected void startFalling() {
+		if (jumpTimer > 0)
+			return;
 		if (state == States.CLIMB)
 			walking = false;
 		if (state != States.JUMP)
@@ -289,6 +290,9 @@ public class Character extends Entity {
 
 		bumped = true;
 		bumpTimer = BUMP_MAX;
+		
+		if (state == States.CLIMB)
+			state = States.FALL;
 	}
 
 	protected boolean fallenTooFar() {
@@ -299,7 +303,12 @@ public class Character extends Entity {
 		return state;
 	}
 
-	public boolean willStandOnLadder(int y2) {
-		return (y > y2 || !wants2Climb) && state != States.CLIMB;
+	public Rectangle getCoreBounds() {
+		return super.getBounds();
+	}
+
+	public void switchArea() {
+		x = Climb.GW / 2;
+		walking = false;
 	}
 }

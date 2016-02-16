@@ -10,6 +10,11 @@ public class Bullet extends Enemy {
 		super(x, y, BULLET_WIDTH, BULLET_WIDTH, owner, Type.WALK);
 		this.facingRight = facingRight;
 	}
+	
+	public Bullet(int x, int y, String loc, Climb owner, boolean facingRight) {
+		super(x, y, loc, owner, Type.WALK);
+		this.facingRight = facingRight;
+	}
 
 	public void animate() {
 		x += SPEED * (facingRight? 1 : -1);

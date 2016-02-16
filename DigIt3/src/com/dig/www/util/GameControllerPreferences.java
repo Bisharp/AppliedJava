@@ -43,12 +43,12 @@ public class GameControllerPreferences implements Serializable {
 	protected int mouseClick = GameControllerRunnable.STICK2_PRESS;
 
 	protected int attack = GameControllerRunnable.A;
-	protected int projectile = GameControllerRunnable.Z_AXIS_L;
+	protected int projectile = GameControllerRunnable.Z_AXIS;
 	protected int special = GameControllerRunnable.B;
 	protected int pause = GameControllerRunnable.BACK;
 	protected int switchC = GameControllerRunnable.START;
 	protected int npc = GameControllerRunnable.X;
-	protected int item = GameControllerRunnable.Z_AXIS;
+	protected int item = GameControllerRunnable.Z_AXIS_L;
 
 	protected int rZAxis = projectile;
 	protected int lZAxis = item;
@@ -321,8 +321,11 @@ public class GameControllerPreferences implements Serializable {
 
 	protected String trans(int data) {
 		for (int i = 0; i < nums.length; i++)
-			if (nums[i] == data)
+			if (nums[i] == data) {
+				if (data == lZAxis)
+					return names[names.length - 1];
 				return names[i];
+			}
 		return "Unassigned";
 	}
 }
