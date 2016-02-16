@@ -25,7 +25,6 @@ public abstract class Enemy extends Sprite {
 	protected int maxHealth;
 	protected int hitstunTimer = 0;
 	protected static final int HITSTUN_MAX = 15;
-	// protected transient boolean stunned = false;
 	protected transient int stunTimer = 0;
 	protected int harmTimer = 0;
 	public static final int STUN_MAX = 100;
@@ -206,8 +205,8 @@ public abstract class Enemy extends Sprite {
 				if (!invincible && !(this instanceof PathEnemy)&&!(this instanceof PatrolChaseEnemy)) {
 					int d = (int) pointTowards(new Point(character.getX(), character.getY()));
 					d += 180;
-					x += Math.cos((double) Math.toRadians((double) d)) * 100;
-					y += Math.sin((double) Math.toRadians((double) d)) * 100;
+					x += Math.cos((double) Math.toRadians((double) d)) * 100*owner.mult();
+					y += Math.sin((double) Math.toRadians((double) d)) * 100*owner.mult();
 				}
 			}
 			// TODO implement launch
@@ -313,19 +312,19 @@ public void animate(){
 		super.basicAnimate();
 
 		if (slowTimer > 0)
-			slowTimer--;
+			slowTimer-=owner.mult();
 
 		if (stunTimer > 0) {
-			stunTimer--;
+			stunTimer-=owner.mult();
 			if (stunTimer <= 0 && slipped)
 				slipped = false;
 		}
 
 		if (harmTimer > 0)
-			harmTimer--;
+			harmTimer-=owner.mult();
 
 		if (hitstunTimer > 0)
-			hitstunTimer--;
+			hitstunTimer-=owner.mult();
 
 		collisionFlagged = false;
 	}
@@ -367,7 +366,7 @@ public void animate(){
 	}
 
 	protected boolean hitstunRenders() {
-		return hitstunTimer % 3 == 0 || hitstunTimer == 0;
+		return hitstunTimer % 3 == 0 || hitstunTimer <= 0;
 	}
 	public int getHealth(){
 		return health;

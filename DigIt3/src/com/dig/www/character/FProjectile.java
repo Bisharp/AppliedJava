@@ -63,8 +63,8 @@ public class FProjectile extends Sprite {
 	public void animate() {
 
 		basicAnimate();
-		x += Math.cos((double) Math.toRadians((double) d)) * speed;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed;
+		x += Math.cos((double) Math.toRadians((double) d)) * speed*owner.mult();
+		y += Math.sin((double) Math.toRadians((double) d)) * speed*owner.mult();
 		if(onScreen){
 		setOnScreen(
 				owner.atAllOnScreen(getBounds()));}

@@ -24,7 +24,7 @@ public class SeeShootEnemy extends SeeEnemy {
 	@Override
 	public void act() {
 		// TODO Auto-generated method stub
-		timer++;
+		timer+=owner.mult();
 
 		if (timer >= DELAY) {
 			addBall();

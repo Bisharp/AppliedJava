@@ -11,6 +11,7 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -19,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.dig.www.npc.NPC;
+import com.dig.www.start.Board;
 //import com.manor.www.start.Board;
 import com.dig.www.start.DigIt;
 
@@ -281,14 +283,29 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		DigIt.soundPlayer.playSound(jC, url);
 	}
 
-	public static void exit(JComponent owner) {
+	public static void exit(Board owner) {
 		// TODO Auto-generated method stub
 
 		if (JOptionPane.showConfirmDialog(owner, "Are you sure you want to quit?\n(Unsaved data will be lost)", DigIt.NAME,
-				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION)
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
+		
+			if (owner.getClient() != null && owner.getOtherServer() != null)
+				try {
+					String s = null;
+					if (owner.getCharacter() != null)
+						s =owner.getCharacter().getType().charName();
+					owner.getOtherServer().leaveChatRoom(owner.getMPName(), s);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			System.exit(0);
+		}
 	}
-
+	//Will be removed because Climb will not System.exit
+	public static void exit(JComponent pane){
+		System.exit(0);
+	}
 	public static double dist(int x1, int y1, int x2, int y2) {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}

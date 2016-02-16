@@ -34,7 +34,7 @@ public class TailEnemy extends ChainEnemy {
 		int dist = (int) Math.pow(myFollows.getX() - x, 2) + (int) Math.pow(myFollows.getY() - y, 2);
 
 		if (Math.sqrt(dist) > FOLLOW) {
-			int amount = getSpeed();
+			int amount = getSpeed()*owner.mult();
 
 			if (myFollows.getX() < x)
 				x -= amount;

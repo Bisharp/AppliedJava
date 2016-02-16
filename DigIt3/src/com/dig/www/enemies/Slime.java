@@ -91,7 +91,7 @@ public class Slime extends WalkingEnemy {
 		}
 
 		if (timer > 0)
-			timer--;
+			timer-=owner.mult();
 		else {
 			timer = Statics.RAND.nextInt(RAND) + MIN;
 			repeats--;

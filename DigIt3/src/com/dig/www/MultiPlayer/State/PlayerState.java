@@ -15,7 +15,8 @@ protected float health;
 protected float energy;
 protected int attackTimer;
 protected int dire;
-	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy,int dire) {
+protected boolean isDead;
+	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy,int dire,boolean isDead) {
 		super(x, y);
 		this.dire=dire;
 		this.attackTimer=attackTimer;
@@ -27,6 +28,7 @@ protected int dire;
 		this.attackNum=attackNum;
 		this.typeToString=typeToString;
 		this.mpName=mpName;
+		this.isDead=isDead;
 	}
 public int getAttackNum(){
 	return attackNum;
@@ -62,5 +64,8 @@ public int getAttackTimer(){
 }
 public int getDire(){
 	return dire;
+}
+public boolean isDead(){
+	return isDead;
 }
 }

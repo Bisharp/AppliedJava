@@ -78,8 +78,8 @@ public abstract class Boss extends Enemy {
 
 	public void moveDForward() {
 
-		x += Math.cos((double) Math.toRadians((double) dir)) * speed * speedMulti;
-		y += Math.sin((double) Math.toRadians((double) dir)) * speed * speedMulti;
+		x += Math.cos((double) Math.toRadians((double) dir)) * speed * speedMulti*owner.mult();
+		y += Math.sin((double) Math.toRadians((double) dir)) * speed * speedMulti*owner.mult();
 	}
 
 	public void pointAndMove() {
@@ -105,7 +105,7 @@ public abstract class Boss extends Enemy {
 				}
 
 			}
-			followTimer--;
+			followTimer-=owner.mult();
 			if (followTimer == 0) {
 				attackNum = -1;
 				speedMulti = 1;
@@ -113,7 +113,7 @@ public abstract class Boss extends Enemy {
 			return true;
 		} else if (attackNum == 1) {
 			pointAndMove();
-			followTimer--;
+			followTimer-=owner.mult();
 			if (followTimer == 0) {
 				attackNum = -1;
 			}

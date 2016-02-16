@@ -42,8 +42,8 @@ public class Projectile extends Enemy {
 			aSpeed = (int) (img.getHeight(null) / 2);
 		}
 		// This is the move
-		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
-		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
+		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
 		this.damage = damage;
 	}
 
@@ -62,8 +62,8 @@ public class Projectile extends Enemy {
 			aSpeed = (int) (img.getHeight(null) / 2);
 		}
 		// This is the move
-		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed;
-		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed;
+		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
+		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
 		this.damage = damage;
 		this.poisons = poisons;
 	}
@@ -83,8 +83,8 @@ public class Projectile extends Enemy {
 		basicAnimate();
 		// Move, This is the code Micah it is also in the ImportantLook class
 
-		x += Math.cos((double) Math.toRadians((double) d)) * speed;
-		y += Math.sin((double) Math.toRadians((double) d)) * speed;
+		x += Math.cos((double) Math.toRadians((double) d)) * speed*owner.mult();
+		y += Math.sin((double) Math.toRadians((double) d)) * speed*owner.mult();
 
 		if (!onScreen)
 			alive = false;

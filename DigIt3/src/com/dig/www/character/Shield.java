@@ -28,8 +28,8 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 
 		basicAnimate();
 		if(harming){
-		x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed();
-		y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();}
+		x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed()*owner.mult();
+		y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed()*owner.mult();}
 		
 		if(harming){
 		onScreen=getBounds().intersects(new Rectangle(getMaker().getX()-Statics.BOARD_WIDTH/2,getMaker().getY()-Statics.BOARD_HEIGHT/2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT));
@@ -40,8 +40,8 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 			if(moving){
 			setD(Statics.pointTowards(new Point(x,y), new Point(getMaker().getX(),getMaker().getY())));
 			lastP=new Point(x,y);
-			x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed();
-			y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed();
+			x += Math.cos((double) Math.toRadians((double) getD())) * getSpeed()*owner.mult();
+			y += Math.sin((double) Math.toRadians((double) getD())) * getSpeed()*owner.mult();
 			
 			}
 			if(collideWithHook){

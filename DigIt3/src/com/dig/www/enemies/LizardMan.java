@@ -166,7 +166,7 @@ int roarTimer;
 		}
 		if(roarTimer>0){
 			image=newImage("r");
-			roarTimer--;
+			roarTimer-=owner.mult();
 		}else{
 		if(!moveActed){
 				
@@ -182,7 +182,7 @@ int roarTimer;
 				}
 				imTimer=IM_TIMER_MAX;
 			}else{
-				imTimer--;
+				imTimer-=owner.mult();
 			}}}
 	}
 	public void  makeDeadExplosion(){

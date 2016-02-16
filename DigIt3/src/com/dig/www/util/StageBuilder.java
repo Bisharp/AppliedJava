@@ -192,6 +192,8 @@ public class StageBuilder {
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
 						int health = (int) (Integer.parseInt(stuff.get(5)) * (double) (1 + (double) ((level - 1) / (double) 10)));
+						//enemies.add(new PopChaseEnemy(enX, enY, owner, health));
+						//if(false)
 						switch (ch) {
 						case "Launch":
 							enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));

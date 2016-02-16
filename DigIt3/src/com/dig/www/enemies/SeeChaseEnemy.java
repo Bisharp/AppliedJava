@@ -18,8 +18,8 @@ public class SeeChaseEnemy extends SeeEnemy {
 	public void act() {
 
 		d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());
-		x += Math.cos((double) Math.toRadians((double) d)) * getSpeed();
-		y += Math.sin((double) Math.toRadians((double) d)) * getSpeed();
+		x += Math.cos((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();
+		y += Math.sin((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();
 	}
 	
 	@Override

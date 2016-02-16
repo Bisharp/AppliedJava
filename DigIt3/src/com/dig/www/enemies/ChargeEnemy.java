@@ -32,12 +32,12 @@ public class ChargeEnemy extends TrackingEnemy {
 		basicAnimate();
 
 		if (onScreen && stunTimer <= 0 && chargeTimer > COOLDOWN) {
-			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed() * speedMult;
-			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed() * speedMult;
+			x += Math.cos((double) Math.toRadians((double) d)) * getSpeed() * speedMult*owner.mult();
+			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed() * speedMult*owner.mult();
 		}
 
 		if (chargeTimer > 0)
-			chargeTimer--;
+			chargeTimer-=owner.mult();
 		else {
 			chargeTimer = CHARGE_MAX;
 			d = Statics.pointTowards(new Point((int) x, (int) y), owner.getCharPoint());

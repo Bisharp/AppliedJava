@@ -115,6 +115,15 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private boolean lagPrevention=false;
+	public boolean lagPre(){
+		return lagPrevention;
+	}
+	public int mult(){
+		if(lagPrevention)
+			return 2;
+		return 1;
+	}
 	private int sendInt = 0;
 	private Board board = this;
 	private int times;
@@ -196,7 +205,9 @@ public class Board extends MPanel implements ActionListener {
 
 	public static final String DEFAULT = "Start";
 	private Timer timer;
-	private static final int TIMER_WAIT = 15;
+	private static final int NORMAL_TIMER=15;
+	private static final int LAG_TIMER=32;
+	private int timerWait = NORMAL_TIMER;
 	protected String userName;
 	protected String mode;
 	protected String level;
@@ -303,7 +314,7 @@ public class Board extends MPanel implements ActionListener {
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
-		timer = new Timer(TIMER_WAIT, this);
+		timer = new Timer(timerWait, this);
 		time = new Time(this);
 
 		owner.setFocusable(false);
@@ -354,7 +365,7 @@ public class Board extends MPanel implements ActionListener {
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
-		timer = new Timer(TIMER_WAIT, this);
+		timer = new Timer(timerWait, this);
 		time = new Time(this);
 
 		owner.setFocusable(false);
@@ -905,7 +916,7 @@ public class Board extends MPanel implements ActionListener {
 							(int) pointedPoint.getY() - 50, this);
 
 			}
-			for (GameCharacter character : friends) {
+			for (int c=0;c<friends.size();c++) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -928,7 +939,7 @@ public class Board extends MPanel implements ActionListener {
 				// +(world.get(0).getY()%100)+100//-11
 				// , 100, 100)
 				// ;
-				character.draw(g2d);
+				friends.get(c).draw(g2d);
 				// if (character.getPPath() != null) {
 				//
 				//
@@ -1508,6 +1519,7 @@ public class Board extends MPanel implements ActionListener {
 								friend.setHealth(playerState.getHealth());
 								friend.setEnergy(playerState.getEnergy());
 								friend.setDire(playerState.getDire());
+								friend.setDead(playerState.isDead());
 								// friend.setActing(playerState.getAttackNum(),playerState.getAttackTimer());
 							}
 						}
@@ -1566,16 +1578,18 @@ public class Board extends MPanel implements ActionListener {
 				}
 				states.clear();
 				if (sendInt <= 0) {
+					currentState.getTalks().clear();
+					currentState.getTalks().addAll(chats);
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire()));
+									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 
 					for (GameCharacter character : friends) {
 						currentState.getPlayerStates().add(
 								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 										.getAttackTimer(), character.getDirection(), character.getS(), character.isPlayer(), character.getType()
-										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire()));
+										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 					}
 
 					for (Enemy en : enemies) {
@@ -1591,7 +1605,9 @@ public class Board extends MPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (me != null && character != null) {
+			chats.clear();
 			try {
+				
 				Block b = world.get(0);
 				for (int s = 0; s < states.size(); s++) {
 					if (states.get(s) == null)
@@ -1614,23 +1630,15 @@ public class Board extends MPanel implements ActionListener {
 					// System.out.println("null");
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
-						boolean hasGone = false;
+
+												boolean hasGone = false;
 						if (character.getType().toString().equals(playerState.getTypeToString()))
 							hasGone = true;
 						else
 							for (GameCharacter friend : friends) {
 								if (friend.getType().toString().equals(playerState.getTypeToString())) {
 									hasGone = true;
-									friend.setX(playerState.getX() + b.getX());
-									friend.setY(playerState.getY() + b.getY());
-									friend.setPlayer(playerState.isPlayer());
-									friend.setDirection(playerState.getDir());
-									friend.setImage(friend.newImage(playerState.getS()));
-									friend.setMpName(playerState.getMpName());
-									friend.setHealth(playerState.getHealth());
-									friend.setEnergy(playerState.getEnergy());
-									friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-									friend.setDire(playerState.getDire());
+									clientFriendStuff(friend, playerState, b);
 								}
 							}
 						if (!hasGone) {
@@ -1643,21 +1651,14 @@ public class Board extends MPanel implements ActionListener {
 									chara.setPlayer(true);
 								} else {
 									friends.add(chara);
-									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-									chara.setX(playerState.getX() + b.getX());
-									chara.setY(playerState.getY() + b.getY());
-									chara.setPlayer(playerState.isPlayer());
-									chara.setDirection(playerState.getDir());
-									chara.setImage(chara.newImage(playerState.getS()));
-									chara.setMpName(playerState.getMpName());
-									chara.setHealth(playerState.getHealth());
-									chara.setEnergy(playerState.getEnergy());
-									chara.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+									clientFriendStuff(chara, playerState, b);
 								}
 							}
 						}
 					}
-
+					
+					if(states.get(s).isServer())
+chats=states.get(s).getTalks();
 					for (ActionState actionState : states.get(s).getActions()) {
 						switch (actionState.getActionType()) {
 						case SWITCH:
@@ -1726,7 +1727,7 @@ public class Board extends MPanel implements ActionListener {
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire()));
+									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 				if (sendInt <= 0) {
 					sendInt = 5;
 					theServer.getTold(currentState);
@@ -1768,7 +1769,19 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	// Beginning of checkCollisions()-related code
-
+public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block b){
+	friend.setX(playerState.getX() + b.getX());
+	friend.setY(playerState.getY() + b.getY());
+	friend.setPlayer(playerState.isPlayer());
+	friend.setDirection(playerState.getDir());
+	friend.setImage(friend.newImage(playerState.getS()));
+	friend.setMpName(playerState.getMpName());
+	friend.setHealth(playerState.getHealth());
+	friend.setEnergy(playerState.getEnergy());
+	friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+	friend.setDire(playerState.getDire());
+	friend.setDead(playerState.isDead());
+}
 	public void setCharacterStates(Rectangle r3) {
 
 		Block b;
@@ -2348,14 +2361,25 @@ public class Board extends MPanel implements ActionListener {
 		}
 		// end
 	}
-
+public void toggleLagPrevention(){
+	lagPrevention=!lagPrevention;
+	if(lagPrevention)
+		timerWait=LAG_TIMER;
+	else
+		timerWait=NORMAL_TIMER;
+	
+	timer.setDelay(timerWait);
+}
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
+		if(key==KeyEvent.VK_8){
+			toggleLagPrevention();
+		}
+		
 		if (key == KeyEvent.VK_M) {
-			if (server == null) {
-				System.out.println("server");
-				mpName = JOptionPane.showInputDialog("What would you like to be called?", "Server");
+			if (server == null&&me==null) {
+				mpName = JOptionPane.showInputDialog("What would you like to be called?",System.getProperty("user.name"));
 				passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
 				server = new ChatServer(this, passWord);
 				currentState = new GameState(mode, level, true);
@@ -2386,16 +2410,6 @@ public class Board extends MPanel implements ActionListener {
 
 			if (state != State.DEAD && state != State.LOADING)
 				setState(State.PAUSED);
-			if (me != null && theServer != null)
-				try {
-					String s = null;
-					if (character != null)
-						s = character.getType().charName();
-					theServer.leaveChatRoom(mpName, s);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			Statics.exit(this);
 		}
 		switch (state) {
@@ -3100,6 +3114,8 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public void getTold(GameState state) {
+		if(server!=null&&state.isServer())
+			return;
 		if (server == null && state.isServer() && mode == null) {
 			mode = state.getPack();
 			level = state.getLevel();
@@ -3151,37 +3167,17 @@ public class Board extends MPanel implements ActionListener {
 						.getPlayerStates()))))
 			states.add(state);
 
-		if (state.getTalks().size() > 0) {
-			// if(me!=null){
-			int length = 30;
-			int nameLength = 10;
-			if (nameLength > state.getPlayerStates().get(0).getMpName().length())
-				nameLength = state.getPlayerStates().get(0).getMpName().length();
-			String name = state.getPlayerStates().get(0).getMpName().substring(0, nameLength);
-			// ArrayList<String>s=new ArrayList<String>();
-			for (int c = 0; c < state.getTalks().size(); c++) {
-				for (int c2 = 0; c2 < state.getTalks().get(c).length(); c2 += length) {
-					int i = length;
-					if (c2 + i > state.getTalks().get(c).length())
-						i = state.getTalks().get(c).length() - c2;
-					chats.add(name + ":" + state.getTalks().get(c).substring(c2, c2 + i) + "\n");
-				}
-				// }
-				// (state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()+"\n").
-				// for(String i:s)
-				// chats.add(state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()+"\n");
-				// chatBox.add(state.getPlayerStates().get(0).getMpName()+":"+
-				// state.getTalks()
-				// .get(state.getTalks().size() - 1));
-			}
-			System.out.println(state.getTalks().get(state.getTalks().size() - 1));
-		}
+for(int c=0;c<state.getTalks().size();c++){
+	chats.add(state.getTalks().get(c));
+}
+
 	}
 
 	public void setOtherServer(IChatServer server) {
 		theServer = server;
+	}
+	public IChatServer getOtherServer(){
+		return theServer;
 	}
 
 	public String getLevel() {
