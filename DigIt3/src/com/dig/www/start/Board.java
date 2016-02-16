@@ -28,7 +28,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
+import java.net.InetAddress;import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -36,6 +36,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -115,6 +116,15 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private ArrayList<String>actionStrings=new ArrayList<String>();
+	private ArrayList<String>actionIcons=new ArrayList<String>();
+	private int actionTimer;
+	private static final int ACTIONMAX=250;
+	public void addAction(String string,String icon){
+		actionStrings.add(string);
+		actionIcons.add(icon);
+		actionTimer=0;
+	}
 	private boolean lagPrevention=false;
 	public boolean lagPre(){
 		return lagPrevention;
@@ -968,8 +978,27 @@ public class Board extends MPanel implements ActionListener {
 				character.draw(g2d);
 			// g2d.setColor(Color.BLUE);
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
-
 			time.draw(g2d);
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 25));
+			int startX=Statics.BOARD_WIDTH-250;
+			int startY=(me!=null||server!=null)?135:10;
+			
+			//System.out.println(actionStrings.size());
+			for(int c=0;c<actionStrings.size();c++){
+				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY+(c*60),50,50,this);
+				g2d.drawString(actionStrings.get(c), startX+55, startY+35+(c*60));
+				
+			}
+			if(actionStrings.size()>0&&state==State.INGAME){
+			if(actionTimer>ACTIONMAX-(actionStrings.size()-1)){
+				actionStrings.remove(0);
+				actionIcons.remove(0);
+				actionTimer=0;
+			}
+			else
+			actionTimer+=mult();}
+			
 
 			switch (weather) {
 			case RAIN:
@@ -1605,7 +1634,6 @@ public class Board extends MPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if (me != null && character != null) {
-			chats.clear();
 			try {
 				
 				Block b = world.get(0);
@@ -1657,8 +1685,10 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 					
-					if(states.get(s).isServer())
+					if(states.get(s).isServer()){
+		chats.clear();				
 chats=states.get(s).getTalks();
+}
 					for (ActionState actionState : states.get(s).getActions()) {
 						switch (actionState.getActionType()) {
 						case SWITCH:

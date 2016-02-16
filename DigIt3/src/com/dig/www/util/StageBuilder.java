@@ -88,10 +88,11 @@ public class StageBuilder {
 
 			if (map.exists()) {
 
-				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				String line;
-
-				while ((line = reader.readLine()) != null) {
+				//BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				//String line;
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+for(String line:lines.split("\n")){
+				//while ((line = reader.readLine()) != null) {
 					// System.out.println(line);
 
 					if (first) {
@@ -145,9 +146,9 @@ public class StageBuilder {
 						}
 					}
 					ln++;
-				}
-				reader.close();
-			}
+				//}
+				//reader.close();
+			}}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -158,28 +159,30 @@ public class StageBuilder {
 	public ArrayList<Enemy> loadEn() {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
-			ArrayList<String> strings = new ArrayList<String>();
+			//ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					strings.add(line);
-				}
-				reader.close();
-				for (int c = 0; c < strings.size(); c++) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"E.txt");
+				for(String line:lines.split("\n")){
 					ArrayList<String> stuff = new ArrayList<String>();// should
 																		// have
 																		// 5
 					String currentS = "";
-					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+					for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (strings.get(c).charAt(c2) == ',') {
+						if (line.charAt(c2) == ',') {
 							stuff.add(currentS);
 							currentS = "";
 
 						} else {
-							currentS += strings.get(c).charAt(c2);
+							currentS += line.charAt(c2);
 						}
 					}
 					if (currentS != "") {
@@ -299,28 +302,30 @@ public class StageBuilder {
 		int blockerCount = 0;
 
 		try {
-			ArrayList<String> strings = new ArrayList<String>();
+			//ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					strings.add(line);
-				}
-				reader.close();
-				for (int c = 0; c < strings.size(); c++) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"N.txt");
+				for(String line:lines.split("\n")){
 					ArrayList<String> stuff = new ArrayList<String>();// should
 																		// have
 																		// 5
 					String currentS = "";
-					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+					for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (strings.get(c).charAt(c2) == ',') {
+						if (line.charAt(c2) == ',') {
 							stuff.add(currentS);
 							currentS = "";
 
 						} else {
-							currentS += strings.get(c).charAt(c2);
+							currentS += line.charAt(c2);
 						}
 					}
 					if (currentS != "") {
@@ -420,25 +425,27 @@ public class StageBuilder {
 			ArrayList<String> strings = new ArrayList<String>();
 			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					strings.add(line);
-				}
-				reader.close();
-				for (int c = 0; c < strings.size(); c++) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"O.txt");
+				for(String line:lines.split("\n")){
 					ArrayList<String> stuff = new ArrayList<String>();// should
 																		// have
 																		// 5
 					String currentS = "";
-					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+					for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (strings.get(c).charAt(c2) == ',') {
+						if (line.charAt(c2) == ',') {
 							stuff.add(currentS);
 							currentS = "";
 
 						} else {
-							currentS += strings.get(c).charAt(c2);
+							currentS += line.charAt(c2);
 						}
 					}
 					if (currentS != "") {
@@ -550,9 +557,12 @@ public class StageBuilder {
 		if (map.exists()) {
 
 			try {
-				String line;
-				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				if ((line = reader.readLine()) != null) {
+			String line;
+//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+				//for(String line:lines.split("\n")){
+				if (lines.split("\n").length!=0) {
+					line=lines.split("\n")[0];
 					switch (line.charAt(0)) {
 					case 'D':
 						pack = TexturePack.DESERT;
@@ -576,8 +586,8 @@ public class StageBuilder {
 					default:
 						pack = TexturePack.GRASSY;
 					}
-					reader.close();
-				}
+				//	reader.close();
+				
 
 				String[] array = line.split(",");
 
@@ -608,7 +618,7 @@ public class StageBuilder {
 					time = DayNight.ANY;
 				}
 				
-			} catch (Exception e) {
+			}} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -628,25 +638,27 @@ public class StageBuilder {
 			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
 					+ "/" + loc + "P.txt");
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					strings.add(line);
-				}
-				reader.close();
-				for (int c = 0; c < strings.size(); c++) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"P.txt");
+				for(String line:lines.split("\n")){
 					ArrayList<String> stuff = new ArrayList<String>();// should
 																		// have
 																		// 5
 					String currentS = "";
-					for (int c2 = 0; c2 < strings.get(c).length(); c2++) {
+					for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (strings.get(c).charAt(c2) == ',') {
+						if (line.charAt(c2) == ',') {
 							stuff.add(currentS);
 							currentS = "";
 
 						} else {
-							currentS += strings.get(c).charAt(c2);
+							currentS += line.charAt(c2);
 						}
 					}
 
@@ -684,18 +696,18 @@ public class StageBuilder {
 		if (map.exists()) {
 
 			try {
-				String line;
-				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				if ((line = reader.readLine()) != null) {
-					reader.close();
-					String weather = line.split(",")[1];
+//				String line;
+//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+				
+				if (lines.split("\n").length!=0) {
+					String weather = lines.split("\n")[0].split(",")[1];
 					System.out.println("Weather: " + weather);
 					if (weather.equals("none"))
 						return null;
 					else
 						return weather;
 				}
-				reader.close();
 			} catch (Exception e) {
 			}
 		}

@@ -959,6 +959,9 @@ public boolean isPlayer(){
 						tempD -= 360;
 					owner.setScrollX((int) (Math.cos(Math.toRadians((double) tempD)) * SPEED*owner.mult()));
 					owner.setScrollY((int) (Math.sin(Math.toRadians((double) tempD)) * SPEED*owner.mult()));
+moveX=false;
+moveY=false;
+move=false;
 
 					owner.reAnimate();
 					wallBound = false;
@@ -1689,17 +1692,6 @@ else {
 
 				
 			}
-			if (p != null) {
-				g2d.setColor(Color.black);
-
-				if (direction == Direction.LEFT || direction == Direction.RIGHT)
-					g2d.drawLine(direction == Direction.LEFT ? x + 39 : x + width - 65, y + 55, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
-							(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
-				else
-					g2d.drawLine(direction == Direction.DOWN ? x + 34 : x + width - 34, y + 59, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
-							(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
-
-			}
 
 			if (!(this instanceof Diamond))
 				drawTool(g2d);
@@ -1727,7 +1719,17 @@ else {
 
 			g2d.drawImage(Statics.newImage("images/characters/" + (charName != null ? charName : "spade") + "/icon.png"), xI, yI, owner);
 		}
+		if (p != null) {
+			g2d.setColor(Color.black);
 
+			if (direction == Direction.LEFT || direction == Direction.RIGHT)
+				g2d.drawLine(direction == Direction.LEFT ? x + 39 : x + width - 65, y + 55, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
+						(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+			else
+				g2d.drawLine(direction == Direction.DOWN ? x + 34 : x + width - 34, y + 59, (int) p.getX() + Statics.BLOCK_HEIGHT / 2,
+						(int) p.getY() + Statics.BLOCK_HEIGHT / 2);
+
+		}
 		if (owner.getCharacter()==this) {
 			g2d.setColor(Color.BLACK);
 			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
@@ -1780,8 +1782,8 @@ else {
 					int baseWidth=100;
 				//	boolean b=getInventory().items.contains(Items.SPECIAL_COLLECTIBLE);
 int collectibles =0;
-//if(b)
-//	collectibles=getInventory().itemNums.get(Items.SPECIAL_COLLECTIBLE);
+if(getInventory().contains(Items.SPECIAL_COLLECTIBLE))
+	collectibles=getInventory().getItemNum(Items.SPECIAL_COLLECTIBLE);
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(normWidth-20, 0+macH, baseWidth + (13 * numOfDigits(collectibles)), 50);
 			g2d.setColor(Statics.BROWN);
@@ -1803,6 +1805,9 @@ int collectibles =0;
 		// g2d.setColor(Color.magenta);
 		// g2d.draw(getTalkBounds());
 		// }
+		g2d.setColor(Color.ORANGE);
+		if(wallBound&&player)
+			g2d.drawString("wallBound", 10, 350);
 	}
 
 	protected void drawTool(Graphics2D g2d) {
@@ -1948,8 +1953,7 @@ int collectibles =0;
 	public void takeDamage(int amount, boolean poison) {
 		if (poison)
 			poison();
-		if (amount > 0)
-			if (hitstunTimer <= 0) {
+		if (amount > 0&&hitstunTimer <= 0){
 				health -= amount;
 				hpTimer = 100;
 				hitstunTimer = HITSTUN_MAX;
@@ -1963,6 +1967,7 @@ int collectibles =0;
 				y = owner.getSpawnLoc().y;
 				health = (float) 0.01;
 				dead = true;
+				owner.addAction("died","images/characters/" + (charName != null ? charName : "spade") + "/icon.png" );
 				image = newImage("n");
 				s="n";
 				if (player)

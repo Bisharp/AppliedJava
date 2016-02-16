@@ -90,8 +90,8 @@ direction=Direction.LEFT;
 			if (shield!=null&&!owner.getfP().contains(shield)) {
 				if(shield.collideWithHook()){
 					if(this==owner.getCharacter()){
-						owner.setScrollX((x-shield.getX())*owner.mult());
-						owner.setScrollY((y-shield.getY())*owner.mult());
+						owner.setScrollX((x-shield.getX()));
+						owner.setScrollY((y-shield.getY()));
 					}else{
 					x=shield.getX();
 					y=shield.getY();}

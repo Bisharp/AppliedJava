@@ -79,7 +79,7 @@ options[0].setAnswer(quest.getLine() + "\nWill you help me?");
 		} else if (!questCompleted) {
 			if (option.question().equals("Let's check our standings.")) {
 				if (GameCharacter.getInventory().contains(item)) {
-					GameCharacter.getInventory().decrementItem(item);
+					GameCharacter.getInventory().decrementItem(item,1);
 					owner.getData().completeQuest(this);
 					line = "Oh! Thank you so!";
 					questCompleted = true;

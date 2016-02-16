@@ -35,6 +35,9 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import com.dig.www.games.Jump.Jump;
+import com.dig.www.objects.Collectible;
+import com.dig.www.objects.Item;
+import com.dig.www.objects.MoneyObject;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.start.GameStartBoard;
@@ -97,12 +100,14 @@ public class Inventory implements Serializable {
 
 	public void addMoney(int money) {
 		this.money += money;
+		owner.addAction("x"+money+" added", "images/objects/collectibles/coin1.png");
 		if (getDigits() > 9) {
 			setMoney(999999999);
 		}
 	}
 
 	public void spendMoney(int money) {
+		owner.addAction("x"+money+" removed", "images/objects/collectibles/coin1.png");
 		this.money -= money;
 	}
 
@@ -189,7 +194,7 @@ public class Inventory implements Serializable {
 		// inventory. These are handled by the Board.
 		if (type == Items.NULL)
 			return;
-
+		owner.addAction("x"+num+" added", type.getPath());
 		if (!items.contains(type))
 			items.add(type);
 
@@ -331,7 +336,9 @@ public class Inventory implements Serializable {
 	public Items getItem() {
 		return items.get(index);
 	}
-
+public int getItemNum(Items key){
+	return itemNums.get(key);
+}
 	public Items useItem() {
 
 		if (index == -1 || getKeys(itemNums, items, false, true).length < 1)
@@ -379,9 +386,10 @@ public class Inventory implements Serializable {
 		return itemNums.get(item2) != null && itemNums.get(item2) > 0;
 	}
 
-	public void decrementItem(Items key) {
+	public void decrementItem(Items key,int by) {
 		int i=itemNums.get(key);
+		owner.addAction("x"+by+" removed", key.getPath());
 		itemNums.remove(key);
-		itemNums.put(key, i - 1);
+		itemNums.put(key, i - by);
 	}
 }
