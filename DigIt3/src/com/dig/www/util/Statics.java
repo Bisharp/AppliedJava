@@ -29,7 +29,7 @@ import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 
 public final class Statics {
-	
+	public static boolean is1024;
 	public static final String MAIN="Story Mode";
 	public static final int BLOCK_HEIGHT = 100;
 	public static final String FONT = "Trebuchet MS";

@@ -284,7 +284,7 @@ try {
 		public MultiPlayerPanel(Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(200, 150));
+			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
 			this.setBackground(color);
 			this.setLayout(new BorderLayout());
 			this.setFocusable(false);
@@ -414,7 +414,7 @@ try {
 		public GameSavePanel(int saveNum, Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(200, 150));
+			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
 			this.setBackground(color);
 			this.saveNum = saveNum;
 			this.setLayout(new BorderLayout());
