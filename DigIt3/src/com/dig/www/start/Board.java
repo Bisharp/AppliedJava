@@ -58,6 +58,7 @@ import com.dig.www.MultiPlayer.State.ObjectPickUpState;
 import com.dig.www.MultiPlayer.State.ObjectState;
 import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
 import com.dig.www.MultiPlayer.State.PlayerState;
+import com.dig.www.MultiPlayer.State.RemoveEnemy;
 import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.MultiPlayer.State.SwitchState;
 import com.dig.www.blocks.Block;
@@ -395,7 +396,9 @@ public class Board extends MPanel implements ActionListener {
 	public void changeArea() {
 		this.changeArea(-1);
 	}
-
+public boolean isServer(){
+	return server!=null;
+}
 	public void changeArea(int num) {
 		pointedPoint = null;
 		fP.clear();
@@ -1385,6 +1388,9 @@ public class Board extends MPanel implements ActionListener {
 					enemies.get(i).animate();
 					if (!enemies.get(i).isAlive()) {
 						enemies.remove(i);
+						if(isServer()){
+							currentState.getActions().add(new RemoveEnemy(i));
+						}
 						i--;
 						continue;
 					}
@@ -1730,6 +1736,10 @@ chats=states.get(s).getTalks();
 							world.get(breakC.getI()).doType(Blocks.ROCK);
 							Statics.playSound(this, "blocks/shatter.wav");
 							break;
+						case REMOVEENN:
+							RemoveEnemy reEnn=((RemoveEnemy)actionState);
+							enemies.remove(reEnn.getI());
+						break;
 						case DIG:
 							DigPit digC = (DigPit) actionState;
 							// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
