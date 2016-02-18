@@ -9,6 +9,7 @@ import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Moves;
+import com.dig.www.character.Wizard;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -133,24 +134,24 @@ public abstract class Enemy extends Sprite {
 		// Clark
 		case SPADE:
 			if (!character.hasMeleed()) {
-				takeDamage(character.getMeleeDamage());
+				takeDamage(character.getMeleeDamage(),character);
 				character.endAction();
 			}
 			break;
 		case ARROW:
 			if (fromP)
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			break;
 		case PIT:
 
-			GameCharacter.plusXP(owner.getCharacter().getSpecialDamage() / 2);
+			GameCharacter.plusXP(owner.getCharacter().getSpecialDamage() / 2,character);
 			break;
 
 		// Carl
 		case CLUB:
 			if (!character.hasMeleed()) {
 				stunTimer = STUN_MAX / 10;
-				takeDamage(character.getMeleeDamage());
+				takeDamage(character.getMeleeDamage(),character);
 				character.endAction();
 				Statics.playSound(owner, "weapons/whop.wav");
 			}
@@ -160,13 +161,13 @@ public abstract class Enemy extends Sprite {
 				stunTimer = (int) ((double) STUN_MAX / (double) 1.5);
 				// owner.getCharacter().endAction();
 				Statics.playSound(owner, "weapons/whop.wav");
-				takeDamage(character.getSpecialDamage());
+				takeDamage(character.getSpecialDamage(),character);
 			}
 			break;
 		case PITCH:
 			if (fromP) {
 
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			}
 			break;
 
@@ -179,7 +180,7 @@ public abstract class Enemy extends Sprite {
 			break;
 		case HAZE:
 			if (fromP) {
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			}
 			break;
 		case DISPENSER:
@@ -195,12 +196,12 @@ public abstract class Enemy extends Sprite {
 			break;
 		case CHAIN:
 			if(fromP){
-			takeDamage(character.getRangedDamage());
+			takeDamage(character.getRangedDamage(),character);
 			}
 			break;
 		case BASH:
 			if (!character.hasSpecialed()) {
-				takeDamage(character.getSpecialDamage());
+				takeDamage(character.getSpecialDamage(),character);
 				stunTimer = STUN_MAX;
 				if (!invincible && !(this instanceof PathEnemy)&&!(this instanceof PatrolChaseEnemy)) {
 					int d = (int) pointTowards(new Point(character.getX(), character.getY()));
@@ -215,22 +216,22 @@ public abstract class Enemy extends Sprite {
 			break;
 		case ITEM:
 			// I need some of the changes pushed, then this will be better
-			takeDamage(100);
+			takeDamage(100,character);
 			break;
 		case STAB:
 			if (!character.hasMeleed()) {
-				takeDamage(character.getMeleeDamage());
+				takeDamage(character.getMeleeDamage(),character);
 				character.endAction();
 			}
 			break;
 		case DIMENSION:
 			if (fromP)
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			break;
 		case WARP:
 			if (!character.hasSpecialed()) {
 				if (this instanceof Boss)
-					takeDamage(character.getSpecialDamage());
+					takeDamage(character.getSpecialDamage(),character);
 
 				else if (!invincible) {
 					owner.getEnemies().add(new CycleExplosion(x, y, "images/portals/normal", owner, 0, 4, 100, null));
@@ -243,31 +244,31 @@ public abstract class Enemy extends Sprite {
 
 		case WIZ_M:
 			if (!character.hasMeleed()) {
-				takeDamage(character.getMeleeDamage());
+				takeDamage(character.getMeleeDamage(),character);
 				character.endAction();
 			}
 			break;
 		case WIZ_R:
 			if (fromP)
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			break;
 		case WIZ_S:
 			if (!character.hasSpecialed()) {
-				takeDamage(character.getSpecialDamage());
-				character.endAction();
+				takeDamage(character.getSpecialDamage()*((Wizard)character).getDamageMult(),character);
+				//character.endAction();
 			}
 			break;
 			
 		case MAC_M:
 			if (!character.hasMeleed()) {
-				takeDamage(character.getMeleeDamage());
+				takeDamage(character.getMeleeDamage(),character);
 				character.endAction();
 			}
 			break;
 			
 		case MAC_R:
 			if (fromP)
-				takeDamage(character.getRangedDamage());
+				takeDamage(character.getRangedDamage(),character);
 			break;
 
 		case MAC_S:
@@ -282,12 +283,12 @@ public abstract class Enemy extends Sprite {
 		}
 	}
 
-	protected boolean takeDamage(int i) {
+	protected boolean takeDamage(int i,GameCharacter chara) {
 		if (!invincible) {
 			int a = health;
 			if (i < a)
 				a = i;
-			GameCharacter.plusXP(a / 10);
+			GameCharacter.plusXP(a / 10,chara);
 		}
 
 		health -= i;
@@ -295,7 +296,7 @@ public abstract class Enemy extends Sprite {
 		// owner.getCharacter().endAction();
 		if (health <= 0 && !invincible) {
 			alive = false;
-			GameCharacter.plusXP(getKillXP());
+			GameCharacter.plusXP(getKillXP(),chara);
 		}
 
 		return alive;

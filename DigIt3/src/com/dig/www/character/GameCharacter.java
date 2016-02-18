@@ -2037,7 +2037,12 @@ if(!player){
 					rangedTimer -= 2*owner.mult();
 		}
 		if (specialTimer > NEG_TIMER_SPECIAL) {
+			boolean greater=false;
+			if(specialTimer>0)
+				greater=true;
 			specialTimer -= 2*owner.mult();
+			if(type==Types.WIZARD&&greater&&specialTimer<=0)
+				((Wizard)this).clearMagic();
 		}
 		if (itemTimer > 0)
 			itemTimer-=owner.mult();
@@ -2269,12 +2274,14 @@ public int getAttackTimer(){
 
 	}
 
-	public static void plusXP(int adder) {
+	public static void plusXP(int adder,GameCharacter chara) {
 		xp += adder;
 		if (xp >= (int) Math.pow(level + 1, 2) * 10) {
 			xp -= (int) Math.pow(level + 1, 2) * 10;
 			level++;
 		}
+		if(chara.getType()==Types.WIZARD)
+			((Wizard)chara).addMagic(adder);
 	}
 
 	public static void setLevel(int setter) {

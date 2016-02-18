@@ -3,6 +3,7 @@ package com.dig.www.enemies;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
@@ -83,8 +84,8 @@ public class ChainEnemy extends WalkingEnemy {
 	}
 
 	@Override
-	public boolean takeDamage(int amount) {
-		if (!super.takeDamage(amount) && follows == null) {
+	public boolean takeDamage(int amount,GameCharacter chara) {
+		if (!super.takeDamage(amount,chara) && follows == null) {
 			for (Enemy e : linkList)
 				e.setAlive(false);
 		}

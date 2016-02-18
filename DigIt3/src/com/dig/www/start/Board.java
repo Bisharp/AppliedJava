@@ -32,7 +32,7 @@ import java.net.InetAddress;import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import java.rmi.RemoteException;import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -447,7 +447,8 @@ public class Board extends MPanel implements ActionListener {
 			((Spade) character).resetDirt();
 		} else if (character.getType() == Types.DIAMOND) {
 			((Diamond) character).newArea();
-		}
+		}else if(character.getType()==Types.WIZARD)
+			((Wizard)character).clearMagic();
 
 		character.setX(Statics.BOARD_WIDTH / 2 - 50);
 		character.setY(Statics.BOARD_HEIGHT / 2 - 50);
@@ -473,7 +474,8 @@ public class Board extends MPanel implements ActionListener {
 				((Spade) friends.get(c)).resetDirt();
 			} else if (friends.get(c).getType() == Types.DIAMOND) {
 				((Diamond) friends.get(c)).newArea();
-			}
+			}else if(friends.get(c).getType()==Types.WIZARD)
+				((Wizard)friends.get(c)).clearMagic();
 
 		}
 		for (int c = 0; c < enemies.size(); c++) {
@@ -1957,6 +1959,8 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 				Enemy e;
 				boolean bashHit = false;
 				int shieldNum = -1;
+				boolean wizHit = false;
+				int wizNum = -1;
 				for (int u = 0; u < enemies.size(); u++) {
 
 					e = enemies.get(u);
@@ -1992,6 +1996,8 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 							e.interact(character.getMove(), character, false);
 						if (character.getMove() == Moves.BASH)
 							bashHit = true;
+						else if (character.getMove() == Moves.WIZ_S)
+							wizHit = true;
 					}
 					for (int c = 0; c < fP.size(); c++) {
 						FProjectile character = fP.get(c);
@@ -2030,6 +2036,10 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 								bashHit = true;
 								shieldNum = c;
 							}
+							else if (character.getMove() == Moves.WIZ_S){
+								wizHit = true;
+							wizNum=c;	
+							}
 						}
 					}
 
@@ -2053,6 +2063,12 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 						character.endAction();
 					else
 						friends.get(shieldNum).endAction();
+				}
+				if (wizHit) {
+					if (wizNum == -1)
+						character.endAction();
+					else
+						friends.get(wizNum).endAction();
 				}
 				// end of enemy loop
 
