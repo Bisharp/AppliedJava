@@ -8,12 +8,16 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -25,7 +29,7 @@ import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 
 public final class Statics {
-	
+	public static boolean is1024;
 	public static final String MAIN="Story Mode";
 	public static final int BLOCK_HEIGHT = 100;
 	public static final String FONT = "Trebuchet MS";
@@ -338,25 +342,64 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		basedir = applicationRootPath.getAbsolutePath();
 		if (!basedir.endsWith("/"))
 			basedir = basedir + "/";
+		System.out.println(basedir);
 		return basedir;
 	}
 
 	public static String readFromJarFile(String filename) throws Exception
 	{
-		InputStream is = filename.getClass().getResourceAsStream(filename);
+		InputStream is = DigIt.class.getResourceAsStream(filename);
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 		StringBuffer sb = new StringBuffer();
 		String line;
 		while ((line = br.readLine()) != null)
 		{
-			sb.append(line);
+			sb.append(line+"\n");
 		}
 		br.close();
 		isr.close();
 		is.close();
 		return sb.toString();
 	}
+	public static String[] listFilesInJar(String path) throws IOException
+	{
+		ArrayList<String> filesList = new ArrayList<String>();
 
+		URL applicationRootPathURL = DigIt.class.getProtectionDomain().getCodeSource().getLocation();
+		File applicationRootPath = new File(applicationRootPathURL.getPath());
+		if (applicationRootPath.isDirectory())
+		{ // this is run when running inside Eclipse
+			if (!path.startsWith("/"))
+				path = "/" + path;
+			File pathFile = new File(applicationRootPath.getAbsoluteFile() + path);
+			return pathFile.list();
+		}
+		// only get here if running from jar file
+		ZipInputStream zip = new ZipInputStream(applicationRootPathURL.openStream());
+		while (true)
+		{
+			ZipEntry e = zip.getNextEntry();
+			if (e == null)
+				break;
+			String name = e.getName();
+			if (name.startsWith(path + "/"))
+			{ // only want files starting with the path specified
+				// strip off the path from the name
+				name = name.substring(path.length() + 1);
+				if (name.length() > 0)
+				{
+					// remove trailing / if there is one
+					if (name.charAt(name.length() - 1) == '/')
+						name = name.substring(0, name.length() - 1);
+					
+					// don't want to dive into subdirs so only list files in immediate dir
+					if (!name.contains("/"))
+						filesList.add(name);
+				}
+			}
+		}
+		return filesList.toArray(new String[filesList.size()]);
+	}
 	private static String basedir = null;
 }

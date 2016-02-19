@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -149,9 +150,12 @@ public class GameStartBoard extends MPanel {
 	}
 
 	public void newGame(String s) {
-
+try {
 		if (s != null && !s.equals("")) {
-			String[] packs = Statics.listFolder(Statics.getBasedir() + "/maps");
+			//String[] packs = Statics.listFolder(Statics.getBasedir() + "/maps");
+			
+				String[]packs=Statics.listFilesInJar("maps");
+		
 			String pack = ((String) JOptionPane.showInputDialog(this,
 					"Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
 					Statics.ICON, packs, Statics.MAIN));
@@ -215,7 +219,10 @@ public class GameStartBoard extends MPanel {
 
 		} else if (s != null)
 			Statics.showError("There is no entered name", this);
-	}
+	} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}}
 
 	public DigIt getOwner() {
 		// TODO Auto-generated method stub
@@ -277,7 +284,7 @@ public class GameStartBoard extends MPanel {
 		public MultiPlayerPanel(Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(200, 150));
+			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
 			this.setBackground(color);
 			this.setLayout(new BorderLayout());
 			this.setFocusable(false);
@@ -407,7 +414,7 @@ public class GameStartBoard extends MPanel {
 		public GameSavePanel(int saveNum, Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(200, 150));
+			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
 			this.setBackground(color);
 			this.saveNum = saveNum;
 			this.setLayout(new BorderLayout());

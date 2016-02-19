@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 import com.dig.www.character.GameCharacter.Types;
+import com.dig.www.MultiPlayer.State.AddEnemy;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
@@ -45,6 +46,8 @@ public class Projectile extends Enemy {
 		this.x += Math.cos((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
 		this.damage = damage;
+		if(owner.isServer())
+			owner.getCurrentState().getActions().add(new AddEnemy(this));
 	}
 
 	public Projectile(double dir, int x, int y, int speed, Enemy maker, String loc, Board owner, boolean flying, int damage, boolean poisons) {
@@ -66,6 +69,8 @@ public class Projectile extends Enemy {
 		this.y += Math.sin((double) Math.toRadians((double) dir)) * aSpeed*owner.mult();
 		this.damage = damage;
 		this.poisons = poisons;
+		if(owner.isServer())
+			owner.getCurrentState().getActions().add(new AddEnemy(this));
 	}
 
 	@Override

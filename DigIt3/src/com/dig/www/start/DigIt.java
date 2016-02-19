@@ -56,6 +56,7 @@ private String level=Board.DEFAULT;
 		setTitle(NAME);
 		setResizable(false);
 		setFocusable(false);
+		Statics.is1024=Statics.BOARD_WIDTH<=1024;
 		setVisible(true);
 	}
 

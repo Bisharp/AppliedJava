@@ -117,7 +117,7 @@ return new StartState(owner,owner.getSpawnLoc());
 //				}
 				System.err.println(keys.get(c)+" left the wrong way.");
 				String playerName="";
-				for(int c2=0;c2<owner.getFriends().size();c++){
+				for(int c2=0;c2<owner.getFriends().size();c2++){
 					if(owner.getFriends().get(c2).getMpName().equals(keys.get(c))){
 						playerName=owner.getFriends().get(c).getType().charName();
 						break;
