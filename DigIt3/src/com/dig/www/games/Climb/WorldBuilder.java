@@ -6,7 +6,7 @@ import com.dig.www.util.Statics;
 
 public class WorldBuilder {
 
-	private static final int BLOCK = 50;
+	static final int BLOCK = 50;
 
 	public ArrayList<Object> getWorld(Climb owner, int level) {
 		ArrayList<Object> world = new ArrayList<Object>();

@@ -106,7 +106,7 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		player.switchArea();
 		
 	//	TODOif (level % 4 == 0)
-			world.add(new Boss("boss", this, true));
+			world.add(new Boss("boss", this, true, level));
 	}
 
 	protected void mainMenu() {

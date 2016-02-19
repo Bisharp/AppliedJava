@@ -188,7 +188,7 @@ public class Character extends Entity {
 	protected void jump(boolean fromLadder) {
 		state = States.JUMP;
 		jumped = true;
-		jumpTimer = TIMER * 2;
+		jumpTimer = (int) (TIMER * 1.5);
 
 		if (fromLadder) {
 			wants2Climb = false;
@@ -231,8 +231,6 @@ public class Character extends Entity {
 			x = newX;
 			fallTimer = FALL_MAX;
 		}
-
-		// else if (theY )
 	}
 
 	protected void startFalling() {
@@ -243,6 +241,8 @@ public class Character extends Entity {
 		if (state != States.JUMP)
 			state = States.FALL;
 	}
+
+	protected static final int WID = 26;
 
 	protected Rectangle getBounds() {
 		switch (state) {
@@ -290,9 +290,14 @@ public class Character extends Entity {
 
 		bumped = true;
 		bumpTimer = BUMP_MAX;
-		
-		if (state == States.CLIMB)
+
+		if (state == States.CLIMB) {
 			state = States.FALL;
+			x += bumpMove < 0 ? -WID :
+				bumpMove > 0 ? WID : 0;
+			wants2Climb = false;
+			walking = false;
+		}
 	}
 
 	protected boolean fallenTooFar() {

@@ -114,9 +114,9 @@ public class Enemy extends Entity {
 
 	protected void draw(Graphics2D g2d) {
 		if (facingRight)
-			g2d.drawImage(image, x, y, owner);
+			g2d.drawImage(getImage(), x, y, owner);
 		else
-			g2d.drawImage(image, x + width, y, -width, height, owner);
+			g2d.drawImage(getImage(), x + width, y, -width, height, owner);
 	}
 
 	protected void setOnGround(boolean oG, int gY) {

@@ -9,14 +9,18 @@ public class Boss extends Enemy {
 	
 	protected String name;
 	protected Image shoot;
+	protected boolean random = false;
 
-	public Boss(String nm, Climb owner, boolean facingRight) {
+	public Boss(String nm, Climb owner, boolean facingRight, int level) {
 		super(0, Climb.GH / 2, "images/climb/evil/" + nm + "N.gif", owner, null);
-		mySpeed = Statics.RAND.nextBoolean()? SPEED / 2 : -SPEED / 2;
+		mySpeed = Statics.RAND.nextBoolean()? getSpeed() : -getSpeed();
 		name = nm;
 		this.facingRight = facingRight;
 		
 		shoot = Statics.newImage("images/climb/evil/" + nm + "A.png");
+		
+		if (level % 4 > 4)
+			random = true;
 	}
 
 	protected int prevDir;
@@ -28,16 +32,20 @@ public class Boss extends Enemy {
 		checkOnScreen();
 		if (mySpeed == prevDir && (Math.abs(y - owner.getPlayer().getY()) > SPEED / 2)) {
 			if (y < owner.getPlayer().getY())
-				mySpeed = SPEED / 2;
+				mySpeed = getSpeed();
 			else if (y > owner.getPlayer().getY())
-				mySpeed = -SPEED / 2;
+				mySpeed = -getSpeed();
 		}
 		
 		shootTimer--;
-		if (shootTimer == 0)
+		if (shootTimer == 0 || shootTimer == -10 || shootTimer == -20)
 			owner.addObj(new Bullet(x + width, y + height / 3, "images/climb/evil/fire.png", owner, facingRight));
-		else if (shootTimer <= -5)
-			shootTimer = Statics.RAND.nextInt(SHOOT_MAX) + 5;
+		else if (shootTimer <= -25)
+			shootTimer = random? Statics.RAND.nextInt(SHOOT_MAX / 2) + SHOOT_MAX / 2 : SHOOT_MAX;
+	}
+	
+	protected int getSpeed() {
+		return random? SPEED * 2 / 3 : SPEED / 2;
 	}
 	
 	@Override
