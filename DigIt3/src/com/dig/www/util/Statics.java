@@ -342,6 +342,7 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		basedir = applicationRootPath.getAbsolutePath();
 		if (!basedir.endsWith("/"))
 			basedir = basedir + "/";
+		System.out.println(basedir);
 		return basedir;
 	}
 

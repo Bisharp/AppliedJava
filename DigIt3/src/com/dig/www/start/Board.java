@@ -2684,7 +2684,7 @@ public void toggleLagPrevention(){
 
 	public void save() {
 		if (userName != null) {
-			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+			String location = (Statics.getBasedir() + "/saveFiles/"
 					+ userName + "/");
 			File loc = new File(location);
 			if (loc.exists()) {
@@ -2882,7 +2882,7 @@ public void toggleLagPrevention(){
 			}
 		changeArea();
 		if (userName != null)
-			preferences.save(Preferences.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+			preferences.save(Statics.getBasedir()+ "/saveFiles/"
 					+ owner.getUserName() + "/");
 		// for(Items i:Items.values())
 		// GameCharacter.getInventory().addItem(i, 100);
