@@ -138,8 +138,12 @@ else{
 			case DOWN:
 				return new Rectangle(x + 35, y + 60, 50, 80);
 			case RIGHT:
+			case DIAG_DR:
+			case DIAG_UR:
 				return new Rectangle(x + 95, y + 5, 80, 50);
 			case LEFT:
+			case DIAG_DL:
+			case DIAG_UL:
 			default:
 				return new Rectangle(x - 75, y + 5, 80, 50);
 			}

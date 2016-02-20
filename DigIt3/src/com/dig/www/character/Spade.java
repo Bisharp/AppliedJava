@@ -189,8 +189,12 @@ int macH=Statics.MAC?23:0;
 			case DOWN:
 				return new Rectangle(x + 35, y + Statics.BLOCK_HEIGHT - 10, 19, 60);
 			case RIGHT:
+			case DIAG_DR:
+			case DIAG_UR:
 				return new Rectangle(x + 70, y + 45, 60, 19);
 			case LEFT:
+			case DIAG_DL:
+			case DIAG_UL:
 			default:
 				return new Rectangle(x - 30, y + 45, 60, 19);
 			}
@@ -201,8 +205,12 @@ int macH=Statics.MAC?23:0;
 			case DOWN:
 				return new Rectangle(x + 47, y + Statics.BLOCK_HEIGHT + 40, 6, 6);
 			case RIGHT:
+			case DIAG_DR:
+			case DIAG_UR:
 				return new Rectangle(x + Statics.BLOCK_HEIGHT + 15, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
 			case LEFT:
+			case DIAG_DL:
+			case DIAG_UL:
 			default:
 				return new Rectangle(x - 40, y + Statics.BLOCK_HEIGHT - 6, 6, 6);
 			}

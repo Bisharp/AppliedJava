@@ -2792,7 +2792,7 @@ public void toggleLagPrevention(){
 						continue;
 					}
 					// int pos=-1;
-					String name = "spade";
+					String name = "shovel";
 					if (lines.get(c).startsWith("shovel"))
 						name = "shovel";
 					else if (lines.get(c).startsWith("heart"))
@@ -2807,7 +2807,8 @@ public void toggleLagPrevention(){
 						name = "wizard";
 					else if (lines.get(c).startsWith("macaroni"))
 						name = "macaroni";
-
+					else if(lines.get(c).startsWith("ryo"))
+						name="ryo";
 					if (character == null) {
 						character = getACharacter(name);
 						character.setPlayer(true);

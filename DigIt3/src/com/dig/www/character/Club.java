@@ -115,8 +115,12 @@ public class Club extends GameCharacter {
 		case DOWN:
 			return new Rectangle(x + 33, y + Statics.BLOCK_HEIGHT - 13, 25, 80);
 		case RIGHT:
+		case DIAG_DR:
+		case DIAG_UR:
 			return new Rectangle(x + 62, y + 43, 80, 25);
 		case LEFT:
+		case DIAG_DL:
+		case DIAG_UL:
 		default:
 			return new Rectangle(x - 40, y + 43, 80, 25);
 		}

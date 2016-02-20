@@ -40,7 +40,7 @@ public class Heart extends GameCharacter {
 	}
 
 	public void decrementEnergy(int amount) {
-		energy -= amount;
+		energy -= amount*owner.mult();
 		enTimer = Integer.MAX_VALUE; // To keep you from restoring energy while
 										// using a field.
 
@@ -96,8 +96,12 @@ public class Heart extends GameCharacter {
 		case DOWN:
 			return new Rectangle(x, y + Statics.BLOCK_HEIGHT - 50, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case RIGHT:
+		case DIAG_DR:
+		case DIAG_UR:
 			return new Rectangle(x + Statics.BLOCK_HEIGHT - 50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		case LEFT:
+		case DIAG_DL:
+		case DIAG_UL:
 		default:
 			return new Rectangle(x - Statics.BLOCK_HEIGHT + 50, y, Statics.BLOCK_HEIGHT, Statics.BLOCK_HEIGHT);
 		}

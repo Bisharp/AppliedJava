@@ -20,7 +20,8 @@ public abstract class Enemy extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+protected int flameHurt;
+protected boolean once;
 	protected transient boolean alive = true;
 	protected transient int health;
 	protected int maxHealth;
@@ -38,11 +39,18 @@ public abstract class Enemy extends Sprite {
 
 	protected boolean slipped = false;
 	protected static final int SLIP_MAX = 75;
-
+protected int burnTimer;
+protected int burnHurtTimer;
 	protected boolean invincible = false;
 	protected boolean collisionFlagged = false;
 	protected boolean turn = true;
-
+public void burn(int amount){
+	burnTimer=amount;
+	burnHurtTimer=4;
+}
+public void burnMore(int by){
+	burnTimer+=by;
+}
 	public Enemy(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner);
 		this.maxHealth = health;
@@ -90,7 +98,8 @@ public abstract class Enemy extends Sprite {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-
+		if(burnTimer>0)
+g2d.drawString(""+burnTimer,10,400);
 		if (stunTimer > 0) {
 			int x = this.x + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
 			int y = this.y + (Statics.RAND.nextInt(5) * (Statics.RAND.nextBoolean() ? 1 : -1));
@@ -101,7 +110,6 @@ public abstract class Enemy extends Sprite {
 			g2d.drawImage(image, x, y, owner);
 			drawShadow(g2d);}
 		}
-
 		drawStatus(g2d);
 
 		if (!(this instanceof Projectile) && !invincible) {
@@ -120,11 +128,13 @@ public abstract class Enemy extends Sprite {
 	protected void drawStatus(Graphics2D g2d) {
 
 		if (harmTimer > 0)
-			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
+			g2d.drawImage(newImage("images/effects/heart.png"), x, y,width,height, owner);
 		if (slowTimer > 0)
-			g2d.drawImage(newImage("images/effects/ice.png"), x, y, owner);
+			g2d.drawImage(newImage("images/effects/ice.png"), x, y,width,height, owner);
+		if(burnTimer>0)
+			g2d.drawImage(newImage("images/effects/explosion.png"), x, y,width,height, owner);
 		if (slipped)
-			g2d.drawImage(newImage("images/effects/slip.png"), x, y - 59, owner);
+			g2d.drawImage(newImage("images/effects/slip.png"), x, y - 59,width,height, owner);
 
 	}
 
@@ -280,6 +290,30 @@ public abstract class Enemy extends Sprite {
 				slipped = true;
 			}
 			break;
+		case KYSERYX:
+			if (!character.hasMeleed()) {
+				takeDamage(character.getMeleeDamage(),character);
+				character.endAction();
+			}
+			break;
+		case FIREBALL:
+			if (fromP) {
+				burnMore(character.getRangedDamage()+5);
+				takeDamage(5,character);
+			}
+			break;
+		case FLAME:
+			if(!once){
+				once=true;
+			if(flameHurt<=0){
+				flameHurt=8;
+				takeDamage(12,character);
+				burnMore(character.getSpecialDamage()/2);}
+			else
+				flameHurt-=owner.mult();
+			}
+			//burnMore(100);
+			break;
 		}
 	}
 
@@ -311,7 +345,7 @@ public void animate(){
 
 	public void basicAnimate() {
 		super.basicAnimate();
-
+once=false;
 		if (slowTimer > 0)
 			slowTimer-=owner.mult();
 
@@ -320,7 +354,13 @@ public void animate(){
 			if (stunTimer <= 0 && slipped)
 				slipped = false;
 		}
-
+if(burnTimer>0){
+	burnHurtTimer-=owner.mult();
+	if(burnHurtTimer<=0){
+		burnHurtTimer=4;
+	takeDamage(1, null);
+	burnTimer--;}
+}
 		if (harmTimer > 0)
 			harmTimer-=owner.mult();
 

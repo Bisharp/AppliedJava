@@ -102,8 +102,12 @@ public class SirCobalt extends GameCharacter {
 		case DOWN:
 			return new Rectangle(x + 40, y - 15 + Statics.BLOCK_HEIGHT, 20, 80);
 		case RIGHT:
+		case DIAG_DR:
+		case DIAG_UR:
 			return new Rectangle(x + Statics.BLOCK_HEIGHT - 35, y + height / 2 - 22, 100, 20);
 		case LEFT:
+		case DIAG_DL:
+		case DIAG_UL:
 		default:
 			return new Rectangle(x - Statics.BLOCK_HEIGHT + 35, y + height / 2 - 22, 100, 20);
 		}

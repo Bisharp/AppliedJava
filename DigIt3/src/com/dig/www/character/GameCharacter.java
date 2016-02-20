@@ -1535,7 +1535,7 @@ collisionFlags.remove(placement[i]);
 			}
 		}
 		if (specialPress && rangedTimer <= 0 && meleeTimer <= 0) {
-			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart)) {
+			if (specialTimer <= NEG_TIMER_SPECIAL && (energy >= SEnC || this instanceof Heart||this instanceof Ryo)) {
 				specialTimer = TIMER_SPECIAL;
 				if(me)
 					owner.getCurrentState().getActions().add(new AttackState(3, getType().toString()));
@@ -1553,6 +1553,11 @@ collisionFlags.remove(placement[i]);
 					} else {
 						((Heart) this).end();
 					}
+				}else if(type==Types.RYO){
+					if(specialHit)
+						specialHit=false;
+					else if(energy >= SEnC)
+						specialHit=true;
 				}
 				else {
 
@@ -2018,6 +2023,7 @@ if(!player){
 			enTimer = 5;
 		} else if (specialTimer <= 0)
 			enTimer-=owner.mult();
+		
 		if (energy > MAX_ENERGY) {
 			energy = MAX_ENERGY;
 		}
@@ -2049,7 +2055,15 @@ if(!player){
 			boolean greater=false;
 			if(specialTimer>0)
 				greater=true;
+			if(getType()!=Types.RYO||specialTimer<=0)
 			specialTimer -= 2*owner.mult();
+			else{
+				energy-=owner.mult();
+				if(energy<0){
+					energy=0;
+					specialTimer=0;
+				}
+			}
 			if(type==Types.WIZARD&&greater&&specialTimer<=0)
 				((Wizard)this).clearMagic();
 		}
@@ -2289,7 +2303,7 @@ public int getAttackTimer(){
 			xp -= (int) Math.pow(level + 1, 2) * 10;
 			level++;
 		}
-		if(chara.getType()==Types.WIZARD)
+		if(chara!=null&&chara.getType()==Types.WIZARD)
 			((Wizard)chara).addMagic(adder);
 	}
 
