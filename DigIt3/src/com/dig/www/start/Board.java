@@ -2741,7 +2741,7 @@ public void toggleLagPrevention(){
 	public void loadSave() {
 		level = DEFAULT;
 		try {
-			String location = (GameStartBoard.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString() + "saveFiles/"
+			String location = (Statics.getBasedir() + "/saveFiles/"
 					+ userName + "/");
 			File saveFile = new File(location + userName + ".txt");
 

@@ -65,10 +65,10 @@ public class StageBuilder {
 	}
 
 	private void setLoc(String loc) {
-		String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
-		File map = new File(tryLoc);
-		if (!map.exists())
-			loc = Board.DEFAULT;
+		//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
+		//File map = new File(tryLoc);
+		//if (!map.exists())
+			//loc = Board.DEFAULT;
 		this.loc = loc;
 	}
 
@@ -82,11 +82,11 @@ public class StageBuilder {
 		try {
 			int ln = 0;
 			boolean first = true;
-			String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
+			//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
 
-			File map = new File(tryLoc);
+			//File map = new File(tryLoc);
 
-			if (map.exists()) {
+//			if (true) {
 
 				//BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
 				//String line;
@@ -148,7 +148,7 @@ for(String line:lines.split("\n")){
 					ln++;
 				//}
 				//reader.close();
-			}}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,8 +160,8 @@ for(String line:lines.split("\n")){
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
 			//ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
-			if (saveFile.exists()) {
+			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
+			//if (saveFile.exists()) {
 //				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 //				String line;
 //				while ((line = reader.readLine()) != null) {
@@ -287,7 +287,7 @@ for(String line:lines.split("\n")){
 					}
 				}
 
-			}
+			//}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -303,8 +303,8 @@ for(String line:lines.split("\n")){
 
 		try {
 			//ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
-			if (saveFile.exists()) {
+			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
+			//if (saveFile.exists()) {
 //				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 //				String line;
 //				while ((line = reader.readLine()) != null) {
@@ -408,7 +408,7 @@ for(String line:lines.split("\n")){
 					}
 				}
 
-			}
+			//}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -422,9 +422,9 @@ for(String line:lines.split("\n")){
 		int count = 0;
 		int spawnCount = 0;
 		try {
-			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
-			if (saveFile.exists()) {
+		//	ArrayList<String> strings = new ArrayList<String>();
+		//	File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
+		//	if (saveFile.exists()) {
 //				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 //				String line;
 //				while ((line = reader.readLine()) != null) {
@@ -514,7 +514,7 @@ for(String line:lines.split("\n")){
 					}
 				}
 
-			}
+			//}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -550,11 +550,11 @@ for(String line:lines.split("\n")){
 	}
 
 	public TexturePack readText() {
-		String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
+		//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
-		File map = new File(tryLoc);
+		//File map = new File(tryLoc);
 
-		if (map.exists()) {
+		//if (map.exists()) {
 
 			try {
 			String line;
@@ -620,7 +620,7 @@ for(String line:lines.split("\n")){
 				
 			}} catch (Exception e) {
 				e.printStackTrace();
-			}
+			//}
 
 		}
 
@@ -634,10 +634,10 @@ for(String line:lines.split("\n")){
 	public ArrayList<Portal> loadPortals() {
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
-			ArrayList<String> strings = new ArrayList<String>();
-			File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
-					+ "/" + loc + "P.txt");
-			if (saveFile.exists()) {
+		//	ArrayList<String> strings = new ArrayList<String>();
+		//	File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
+		//			+ "/" + loc + "P.txt");
+		//	if (saveFile.exists()) {
 //				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 //				String line;
 //				while ((line = reader.readLine()) != null) {
@@ -680,7 +680,7 @@ for(String line:lines.split("\n")){
 
 				}
 
-			}
+			//}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -689,11 +689,11 @@ for(String line:lines.split("\n")){
 	}
 
 	public String readWeather() {
-		String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc + "/" + loc
-				+ ".txt";
-		File map = new File(tryLoc);
+		//String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc + "/" + loc
+		//		+ ".txt";
+		//File map = new File(tryLoc);
 
-		if (map.exists()) {
+		//if (map.exists()) {
 
 			try {
 //				String line;
@@ -709,7 +709,7 @@ for(String line:lines.split("\n")){
 						return weather;
 				}
 			} catch (Exception e) {
-			}
+		//	}
 		}
 
 		return null;
