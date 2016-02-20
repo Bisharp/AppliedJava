@@ -81,6 +81,7 @@ import com.dig.www.character.Macaroni;
 import com.dig.www.character.Moves;
 import com.dig.www.character.PathPoint;
 import com.dig.www.character.Puddle;
+import com.dig.www.character.Ryo;
 import com.dig.www.character.Shield;
 import com.dig.www.character.SirCobalt;
 import com.dig.www.character.Spade;
@@ -1260,7 +1261,7 @@ public boolean isServer(){
 		boolean wizard = false;
 		boolean kepler = false;
 		boolean macaroni = false;
-		;
+		boolean ryo=false;
 		for (String a : s0) {
 			if (a.equals(GameCharacter.Types.SPADE.charName()))
 				clark = true;
@@ -1274,6 +1275,8 @@ public boolean isServer(){
 				sirCobalt = true;
 			else if (a.equals(GameCharacter.Types.WIZARD.charName()))
 				wizard = true;
+			else if (a.equals(GameCharacter.Types.RYO.charName()))
+				ryo = true;
 			// else if(a.equals(GameCharacter.Types.KEPLER.charName()))
 			// kepler=true;
 			else if (a.equals(GameCharacter.Types.MACARONI.charName()))
@@ -1303,6 +1306,9 @@ public boolean isServer(){
 		if (wizard) {
 			s1[c] = GameCharacter.Types.WIZARD.charName();
 			c++;
+		}
+		if(ryo){
+			s1[c]=GameCharacter.Types.RYO.charName();
 		}
 		// if(kepler){
 		// s1[c]=GameCharacter.Types.KEPLER.charName();
@@ -3271,6 +3277,9 @@ for(int c=0;c<state.getTalks().size();c++){
 			break;
 		case "macaroni":
 			chara = (new Macaroni(0, 0, this, false));
+			break;
+		case "ryo":
+			chara=new Ryo(0,0,this,false);
 			break;
 		}
 		return chara;

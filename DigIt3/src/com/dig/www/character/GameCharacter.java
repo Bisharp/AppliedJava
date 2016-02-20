@@ -268,6 +268,15 @@ public boolean isPlayer(){
 			public String toString() {
 				return "macaroni";
 			}
+		},RYO{
+			@Override
+			public String charName() {
+				return "Ryo";
+			}
+
+			public String toString() {
+				return "ryo";
+			}
 		},
 		PROJECTILE {
 			public String toString() {
