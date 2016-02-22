@@ -340,7 +340,7 @@ for(String line:lines.split("\n")){
 
 						switch (identity) {
 						case NPC.WIZARD:
-							npcs.add(new Hi(nX, nY, owner, loc));
+							npcs.add(new WizardGuy(nX, nY, owner, loc));
 							break;
 						case NPC.KEPLER:
 							npcs.add(new Kepler(nX, nY, owner, loc));
