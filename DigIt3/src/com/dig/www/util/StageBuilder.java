@@ -188,6 +188,7 @@ for(String line:lines.split("\n")){
 					if (currentS != "") {
 						stuff.add(currentS);
 					}
+					if(stuff.size()>0)
 					try {
 						int enX = Integer.parseInt(stuff.get(1));
 						int enY = Integer.parseInt(stuff.get(2));
@@ -331,6 +332,7 @@ for(String line:lines.split("\n")){
 					if (currentS != "") {
 						stuff.add(currentS);
 					}
+					if(stuff.size()>0)
 					try {
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
@@ -338,7 +340,7 @@ for(String line:lines.split("\n")){
 
 						switch (identity) {
 						case NPC.WIZARD:
-							npcs.add(new WizardGuy(nX, nY, owner, loc));
+							npcs.add(new Hi(nX, nY, owner, loc));
 							break;
 						case NPC.KEPLER:
 							npcs.add(new Kepler(nX, nY, owner, loc));
@@ -451,6 +453,7 @@ for(String line:lines.split("\n")){
 					if (currentS != "") {
 						stuff.add(currentS);
 					}
+					if(stuff.size()>0)
 					try {
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
@@ -665,7 +668,7 @@ for(String line:lines.split("\n")){
 					if (currentS != "") {
 						stuff.add(currentS);
 					}
-
+					if(stuff.size()>0){
 					int enX = Integer.parseInt(stuff.get(0));
 					int enY = Integer.parseInt(stuff.get(1));
 					String area = stuff.get(2);
@@ -678,7 +681,7 @@ for(String line:lines.split("\n")){
 					else
 						portals.add(new Door(enX, enY, owner, area, collectibleNum, type, type2, spawnNum));
 
-				}
+				}}
 
 			//}
 		} catch (Exception ex) {
