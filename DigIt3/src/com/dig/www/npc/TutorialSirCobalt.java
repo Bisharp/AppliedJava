@@ -4,10 +4,10 @@ import java.awt.Rectangle;
 
 import com.dig.www.start.Board;
 
-public class TutorialSirCobalt extends MoveNPC {
+public class TutorialSirCobalt extends AnimatedMoveNPC {
 
 	public TutorialSirCobalt(int x, int y, Board owner, String location) {
-		super(x, y, "images/npcs/map/stationary/sirCobalt.png", owner,
+		super(x, y, "images/characters/sirCobalt/", owner,
 				new String[] { "Sure, we need to hurry, though." }, NPC.SIR_COBALT, location,
 				new NPCOption[] {}, new MovePoint[] {
 						new MovePoint(x + 1020, y + 200, true),

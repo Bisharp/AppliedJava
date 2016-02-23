@@ -622,6 +622,7 @@ for(String line:lines.split("\n")){
 				}
 				
 			}} catch (Exception e) {
+				System.err.println("ERROR: This map most likely doesn't exist.");
 				e.printStackTrace();
 			//}
 

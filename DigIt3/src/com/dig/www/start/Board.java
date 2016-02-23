@@ -989,7 +989,8 @@ public boolean isServer(){
 			g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 25));
 			int startX=Statics.BOARD_WIDTH-250;
 			int startY=(me!=null||server!=null)?135:10;
-			
+			if(Statics.MAC)
+				startY+=23;
 			//System.out.println(actionStrings.size());
 			for(int c=0;c<actionStrings.size();c++){
 				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY+(c*60),50,50,this);
