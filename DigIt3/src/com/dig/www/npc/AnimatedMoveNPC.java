@@ -65,7 +65,7 @@ private static final int ANIMAX = 7;
 			if((x!=movePoints[moveAt].getX()||y!=movePoints[moveAt].getY())){
 				if(animationTimer>=ANIMAX/speed*10){
 				animationTimer = 0;
-				image=newImage(loc+"/"+direction+"/"+"w" + counter+".png");
+				image=newImage(loc+direction+"/"+"w" + counter+".png");
 				counter++;
 				if (counter == MAX)
 					counter = 0;
