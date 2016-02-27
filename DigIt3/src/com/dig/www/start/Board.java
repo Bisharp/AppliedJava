@@ -2674,6 +2674,10 @@ public void toggleLagPrevention(){
 			return Color.DARK_GRAY;
 		case HAUNTED:
 			return Statics.SAND_BLUE;
+		
+		case EVIL:
+			return Color.black;
+			
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;

@@ -2,5 +2,5 @@ package com.dig.www.blocks;
 
 public enum TexturePack {
 
-	GRASSY,DESERT, SNOWY, ISLAND,VOLCANO, HAUNTED, LAB;
+	GRASSY,DESERT, SNOWY, ISLAND,VOLCANO, HAUNTED, LAB, EVIL;
 }

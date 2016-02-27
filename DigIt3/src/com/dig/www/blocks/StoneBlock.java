@@ -69,6 +69,16 @@ public class StoneBlock extends HardBlock {
 				g2d.fillRect(x + 60, y + 26, 4, 4);
 				g2d.fillRect(x, y + 80, 4, 4);
 				break;
+				
+			// Texture add test
+			case EVIL:
+				g2d.setColor(getColor());
+				g2d.fillRect(x, y, width, height);
+				g2d.setColor(Color.RED);
+				g2d.fillRect(x + 25, y + 25, width - 50, height - 50);
+				break;
+			// End
+				
 			default:
 				g2d.setColor(getColor());
 				g2d.fill(getBounds());
@@ -91,6 +101,13 @@ public class StoneBlock extends HardBlock {
 			case GRASSY:
 				c = Color.LIGHT_GRAY;
 				break;
+			
+			// Adding
+			case EVIL:
+				c = Color.black;
+				break;
+			// end
+			
 			default:
 				c = Color.GRAY;
 				break;

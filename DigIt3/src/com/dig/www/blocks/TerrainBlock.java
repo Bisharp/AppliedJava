@@ -16,7 +16,7 @@ public class TerrainBlock extends Block {
 	protected static Color c;
 
 	public void draw(Graphics2D g2d) {
-		
+
 		if (!canSee(g2d))
 			return;
 
@@ -25,11 +25,11 @@ public class TerrainBlock extends Block {
 		else if (type == Blocks.DIRT)
 			drawDirt(g2d);
 	}
-	
+
 	public boolean canSee(Graphics2D g2d) {
 		if (canSee && type != Blocks.PIT)
 			return true;
-		
+
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x, y, width, height);
 		return false;
@@ -113,6 +113,18 @@ public class TerrainBlock extends Block {
 			g2d.setColor(computeColor(Color.DARK_GRAY));
 			g2d.draw(getBounds());
 			break;
+
+		// Adding texture test
+		case EVIL:
+			g2d.setColor(getColor());
+			g2d.fillRect(x, y, width, height);
+			g2d.setColor(Color.RED);
+			g2d.fillRect(x, y, 10, height);
+			g2d.fillRect(x + width / 2 - 5, y, 10, height);
+			g2d.fillRect(x + width - 10, y, 10, height);
+			break;
+		// End
+
 		case GRASSY:
 		default:
 			g2d.setColor(getColor());
@@ -181,8 +193,20 @@ public class TerrainBlock extends Block {
 			g2d.setColor(computeColor(Color.DARK_GRAY));
 			g2d.draw(getBounds());
 			break;
-		default:
+			
+		// Adding texture test
+		case EVIL:
+			g2d.setColor(getColor());
+			g2d.fillRect(x, y, width, height);
+			g2d.setColor(Color.RED);
+			g2d.fillRect(x, y, width, 10);
+			g2d.fillRect(x, y + height / 2 - 5, width, 10);
+			g2d.fillRect(x, y + height - 10, width, 10);
+			break;
+		// End
+			
 		case GRASSY:
+		default:
 			g2d.setColor(getColor());
 			g2d.fill(getBounds());
 			g2d.setColor(computeColor(Statics.DRAB_BROWN));
@@ -222,6 +246,12 @@ public class TerrainBlock extends Block {
 			return Color.WHITE;
 		case VOLCANO:
 			return Statics.BROWN;
+
+			// Adding texture
+		case EVIL:
+			return Color.BLACK;
+			// end
+
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;
@@ -243,6 +273,12 @@ public class TerrainBlock extends Block {
 			return Statics.BROWN;
 		case VOLCANO:
 			return Statics.BROWN;
+
+		// Adding texture
+		case EVIL:
+			return Color.BLACK;
+		// end
+
 		case GRASSY:
 		default:
 			return Statics.BROWN;

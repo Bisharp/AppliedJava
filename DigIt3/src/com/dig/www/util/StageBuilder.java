@@ -592,6 +592,9 @@ public class StageBuilder {
 				case 'L':
 					pack = TexturePack.LAB;
 					break;
+				case 'E':
+					pack = TexturePack.EVIL;
+					break;
 				case 'G':
 				default:
 					pack = TexturePack.GRASSY;

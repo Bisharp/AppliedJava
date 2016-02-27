@@ -51,6 +51,7 @@ public class WallBlock extends HardBlock {
 		case HAUNTED:
 			c = Statics.DARK_SAND_BLUE;
 			break;
+		
 		default:
 			c = Color.DARK_GRAY;
 			break;

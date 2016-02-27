@@ -85,9 +85,9 @@ public void digDo(){
 
 	public Color computeColor(Color c) {
 		
-//		if (traversable() && owner.isCorruptedWorld())
-//			//return list[Statics.RAND.nextInt(list.length)];
-//			return corruptedColor;
+		if (traversable() && owner.isCorruptedWorld())
+			//return list[Statics.RAND.nextInt(list.length)];
+			return corruptedColor1;
 
 		if (!owner.thunderStrike() && !illuminated)
 			if (owner.darkenWorld())

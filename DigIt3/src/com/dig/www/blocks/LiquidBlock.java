@@ -1,5 +1,6 @@
 package com.dig.www.blocks;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -67,6 +68,16 @@ public class LiquidBlock extends HardBlock {
 			g2d.fillRect(x + 70, y + 65, 10, 10);
 			g2d.fillRect(x + 30, y + 30, 15, 15);
 			break;
+			
+		// Add texture test
+		case EVIL:
+			g2d.setColor(Color.YELLOW);
+			g2d.fillRect(x, y, width, height);
+			g2d.setColor(getColor());
+			g2d.fillRect(x, y + height / 2 - 3, width, 6);
+			break;
+		// end
+			
 		case GRASSY:
 		default:
 			g2d.setColor(getColor());
@@ -94,6 +105,13 @@ public class LiquidBlock extends HardBlock {
 		case ISLAND:
 			c = Color.BLUE;
 			break;
+			
+		// Test
+		case EVIL:
+			c = Color.BLACK;
+			break;
+		// End
+			
 		default:
 			c = Statics.BLUE;
 			break;
