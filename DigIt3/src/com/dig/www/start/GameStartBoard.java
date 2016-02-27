@@ -154,7 +154,7 @@ try {
 		if (s != null && !s.equals("")) {
 			//String[] packs = Statics.listFolder(Statics.getBasedir() + "/maps");
 			
-				String[]packs=Statics.listFilesInJar("maps");
+				String[]packs=Statics.listFilesInNotJar("maps");
 		
 			String pack = ((String) JOptionPane.showInputDialog(this,
 					"Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,

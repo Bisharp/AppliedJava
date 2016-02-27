@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -325,6 +326,7 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		basedir = System.getProperty("digit3.basedir");
 		if (basedir != null)
 		{
+			//from jar
 			if (!basedir.endsWith("/"))
 				basedir = basedir + "/";
 
@@ -346,6 +348,19 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		return basedir;
 	}
 
+	public static String readFromNotJarFile(String filename)throws Exception
+	{
+		String readname=getBasedir()+filename;
+		BufferedReader br=new BufferedReader(new FileReader(readname));
+		String s;
+		StringBuffer sb=new StringBuffer();
+		while((s=br.readLine())!=null){
+			sb.append(s+"\n");
+		}
+		br.close();
+		return sb.toString();
+		
+	}
 	public static String readFromJarFile(String filename) throws Exception
 	{
 		InputStream is = DigIt.class.getResourceAsStream(filename);
@@ -361,6 +376,11 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		isr.close();
 		is.close();
 		return sb.toString();
+	}
+	public static String[] listFilesInNotJar(String path)throws IOException{
+		String dir=getBasedir()+path;
+		File f=new File(dir);
+		return f.list();
 	}
 	public static String[] listFilesInJar(String path) throws IOException
 	{

@@ -1639,11 +1639,11 @@ public boolean isServer(){
 					for (Enemy en : enemies) {
 						currentState.getEnemyStates().add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
 					}
-					sendInt = 5;
+					sendInt = 3;
 					server.broadcast(mpName, currentState);
 					currentState.clear(level);
 				} else
-					sendInt--;
+					sendInt-=mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1778,11 +1778,11 @@ chats=states.get(s).getTalks();
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
 									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 				if (sendInt <= 0) {
-					sendInt = 5;
+					sendInt = 3;
 					theServer.getTold(currentState);
 					currentState.clear(level);
 				} else
-					sendInt--;
+					sendInt-=mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();
