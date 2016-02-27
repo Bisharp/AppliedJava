@@ -66,12 +66,10 @@ public class GameStartBoard extends MPanel {
 
 		setLayout(new BorderLayout());
 
-		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource()
-				.getLocation().getFile()
+		defaultDir = Statics.getBasedir()
 				+ "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
-		File dir = new File(GameStartBoard.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile()
+		File dir = new File(Statics.getBasedir()
 				+ "saveFiles");
 		if (!dir.exists()) {
 			dir.mkdirs();
