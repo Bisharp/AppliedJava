@@ -8,11 +8,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import com.dig.www.blocks.Block;
-import com.dig.www.blocks.Door;
-import com.dig.www.blocks.HardBlock;
-import com.dig.www.blocks.Portal;
-import com.dig.www.blocks.TexturePack;
+import com.dig.www.blocks.*;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Items;
@@ -33,7 +29,7 @@ public class StageBuilder {
 	private Point spawnPoint;
 	private String mode;
 	private DayNight time;
-	
+
 	protected DayNight getTime() {
 		return time;
 	}
@@ -65,10 +61,11 @@ public class StageBuilder {
 	}
 
 	private void setLoc(String loc) {
-		//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
-		//File map = new File(tryLoc);
-		//if (!map.exists())
-			//loc = Board.DEFAULT;
+		// String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc +
+		// "/" + loc + ".txt";
+		// File map = new File(tryLoc);
+		// if (!map.exists())
+		// loc = Board.DEFAULT;
 		this.loc = loc;
 	}
 
@@ -82,72 +79,73 @@ public class StageBuilder {
 		try {
 			int ln = 0;
 			boolean first = true;
-			//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
+			// String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc
+			// + "/" + loc + ".txt";
 
-			//File map = new File(tryLoc);
+			// File map = new File(tryLoc);
 
-//			if (true) {
+			// if (true) {
 
-				//BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				//String line;
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
-for(String line:lines.split("\n")){
-				//while ((line = reader.readLine()) != null) {
-					// System.out.println(line);
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(tryLoc));
+			// String line;
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + ".txt");
+			for (String line : lines.split("\n")) {
+				// while ((line = reader.readLine()) != null) {
+				// System.out.println(line);
 
-					if (first) {
-						first = false;
-					} else {
-						for (int i = 0; i < line.length(); i++) {
-							switch (line.charAt(i)) {
-							case '1':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.GROUND));
-								break;
-							case '2':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.DIRT));
-								break;
-							case 'L':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.LIQUID));
-								break;
-							case 'W':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
-								break;
-							case 'I':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.WALL));
-								world.get(world.size() - 1).setVisible(false);
-								break;
+				if (first) {
+					first = false;
+				} else {
+					for (int i = 0; i < line.length(); i++) {
+						switch (line.charAt(i)) {
+						case '1':
+							world.add(new TerrainBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner, Block.Blocks.GROUND));
+							break;
+						case '2':
+							world.add(new TerrainBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner, Block.Blocks.DIRT));
+							break;
+						case 'L':
+							world.add(new LiquidBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner));
+							break;
+						case 'W':
+							world.add(new WallBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner));
+							break;
+						case 'I':
+							world.add(new WallBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner));
+							world.get(world.size() - 1).setVisible(false);
+							break;
 
-							case 'P':
-								world.add(new Block(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.PIT));
-								break;
+						case 'P':
+							world.add(new TerrainBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner, Block.Blocks.PIT));
+							break;
 
-							case 'R':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner, Block.Blocks.ROCK));
-								break;
+						case 'R':
+							world.add(new StoneBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner, false));
+							break;
 
-							case 'C':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
-										Block.Blocks.CARPET));
-								break;
+						case 'C':
+							world.add(new CarpetBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner));
+							break;
 
-							case '*':
-								world.add(new HardBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
-										Block.Blocks.CRYSTAL));
-								break;
+						case '*':
+							world.add(new StoneBlock(Statics.BLOCK_HEIGHT * i, Statics.BLOCK_HEIGHT * ln, owner, true));
+							break;
 
-							// Someone delete this abomination.
-							// case '>':
-							// world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
-							// Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
-							// Block.Blocks.SWITCH));
-							// break;
+						// Someone delete this abomination.
+						// TODO delete this abomination
+						// case '>':
+						// world.add(new HardBlock(Statics.BLOCK_HEIGHT * i,
+						// Statics.BLOCK_HEIGHT * ln, Statics.DUMMY, owner,
+						// Block.Blocks.SWITCH));
+						// break;
 
-							}
 						}
 					}
-					ln++;
-				//}
-				//reader.close();
+				}
+				ln++;
+				// }
+				// reader.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,36 +157,38 @@ for(String line:lines.split("\n")){
 	public ArrayList<Enemy> loadEn() {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
-			//ArrayList<String> strings = new ArrayList<String>();
-			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
-			//if (saveFile.exists()) {
-//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-//				String line;
-//				while ((line = reader.readLine()) != null) {
-//					strings.add(line);
-//				}
-//				reader.close();
-//				for (int c = 0; c < strings.size(); c++) {
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"E.txt");
-				for(String line:lines.split("\n")){
-					ArrayList<String> stuff = new ArrayList<String>();// should
-																		// have
-																		// 5
-					String currentS = "";
-					for (int c2 = 0; c2 < line.length(); c2++) {
+			// ArrayList<String> strings = new ArrayList<String>();
+			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
+			// "/" + loc + "/" + loc + "E.txt");
+			// if (saveFile.exists()) {
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(saveFile));
+			// String line;
+			// while ((line = reader.readLine()) != null) {
+			// strings.add(line);
+			// }
+			// reader.close();
+			// for (int c = 0; c < strings.size(); c++) {
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + "E.txt");
+			for (String line : lines.split("\n")) {
+				ArrayList<String> stuff = new ArrayList<String>();// should
+																	// have
+																	// 5
+				String currentS = "";
+				for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (line.charAt(c2) == ',') {
-							stuff.add(currentS);
-							currentS = "";
-
-						} else {
-							currentS += line.charAt(c2);
-						}
-					}
-					if (currentS != "") {
+					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
+						currentS = "";
+
+					} else {
+						currentS += line.charAt(c2);
 					}
-					if(stuff.size()>0)
+				}
+				if (currentS != "") {
+					stuff.add(currentS);
+				}
+				if (stuff.size() > 0)
 					try {
 						int enX = Integer.parseInt(stuff.get(1));
 						int enY = Integer.parseInt(stuff.get(2));
@@ -196,8 +196,9 @@ for(String line:lines.split("\n")){
 						String enImg = stuff.get(3);
 						boolean flying = stuff.get(4).charAt(0) == 't';
 						int health = (int) (Integer.parseInt(stuff.get(5)) * (double) (1 + (double) ((level - 1) / (double) 10)));
-						//enemies.add(new PopChaseEnemy(enX, enY, owner, health));
-						//if(false)
+						// enemies.add(new PopChaseEnemy(enX, enY, owner,
+						// health));
+						// if(false)
 						switch (ch) {
 						case "Launch":
 							enemies.add(new Launch(enX, enY, enImg, owner, Integer.parseInt(stuff.get(6)), flying, health));
@@ -286,9 +287,9 @@ for(String line:lines.split("\n")){
 						ex.printStackTrace();
 
 					}
-				}
+			}
 
-			//}
+			// }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -303,36 +304,38 @@ for(String line:lines.split("\n")){
 		int blockerCount = 0;
 
 		try {
-			//ArrayList<String> strings = new ArrayList<String>();
-			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
-			//if (saveFile.exists()) {
-//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-//				String line;
-//				while ((line = reader.readLine()) != null) {
-//					strings.add(line);
-//				}
-//				reader.close();
-//				for (int c = 0; c < strings.size(); c++) {
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"N.txt");
-				for(String line:lines.split("\n")){
-					ArrayList<String> stuff = new ArrayList<String>();// should
-																		// have
-																		// 5
-					String currentS = "";
-					for (int c2 = 0; c2 < line.length(); c2++) {
+			// ArrayList<String> strings = new ArrayList<String>();
+			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
+			// "/" + loc + "/" + loc + "N.txt");
+			// if (saveFile.exists()) {
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(saveFile));
+			// String line;
+			// while ((line = reader.readLine()) != null) {
+			// strings.add(line);
+			// }
+			// reader.close();
+			// for (int c = 0; c < strings.size(); c++) {
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + "N.txt");
+			for (String line : lines.split("\n")) {
+				ArrayList<String> stuff = new ArrayList<String>();// should
+																	// have
+																	// 5
+				String currentS = "";
+				for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (line.charAt(c2) == ',') {
-							stuff.add(currentS);
-							currentS = "";
-
-						} else {
-							currentS += line.charAt(c2);
-						}
-					}
-					if (currentS != "") {
+					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
+						currentS = "";
+
+					} else {
+						currentS += line.charAt(c2);
 					}
-					if(stuff.size()>0)
+				}
+				if (currentS != "") {
+					stuff.add(currentS);
+				}
+				if (stuff.size() > 0)
 					try {
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
@@ -408,9 +411,9 @@ for(String line:lines.split("\n")){
 						ex.printStackTrace();
 
 					}
-				}
+			}
 
-			//}
+			// }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -424,36 +427,38 @@ for(String line:lines.split("\n")){
 		int count = 0;
 		int spawnCount = 0;
 		try {
-		//	ArrayList<String> strings = new ArrayList<String>();
-		//	File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
-		//	if (saveFile.exists()) {
-//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-//				String line;
-//				while ((line = reader.readLine()) != null) {
-//					strings.add(line);
-//				}
-//				reader.close();
-//				for (int c = 0; c < strings.size(); c++) {
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"O.txt");
-				for(String line:lines.split("\n")){
-					ArrayList<String> stuff = new ArrayList<String>();// should
-																		// have
-																		// 5
-					String currentS = "";
-					for (int c2 = 0; c2 < line.length(); c2++) {
+			// ArrayList<String> strings = new ArrayList<String>();
+			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
+			// "/" + loc + "/" + loc + "O.txt");
+			// if (saveFile.exists()) {
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(saveFile));
+			// String line;
+			// while ((line = reader.readLine()) != null) {
+			// strings.add(line);
+			// }
+			// reader.close();
+			// for (int c = 0; c < strings.size(); c++) {
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + "O.txt");
+			for (String line : lines.split("\n")) {
+				ArrayList<String> stuff = new ArrayList<String>();// should
+																	// have
+																	// 5
+				String currentS = "";
+				for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (line.charAt(c2) == ',') {
-							stuff.add(currentS);
-							currentS = "";
-
-						} else {
-							currentS += line.charAt(c2);
-						}
-					}
-					if (currentS != "") {
+					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
+						currentS = "";
+
+					} else {
+						currentS += line.charAt(c2);
 					}
-					if(stuff.size()>0)
+				}
+				if (currentS != "") {
+					stuff.add(currentS);
+				}
+				if (stuff.size() > 0)
 					try {
 						int nX = Integer.parseInt(stuff.get(0));
 						int nY = Integer.parseInt(stuff.get(1));
@@ -515,9 +520,9 @@ for(String line:lines.split("\n")){
 						ex.printStackTrace();
 
 					}
-				}
+			}
 
-			//}
+			// }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -553,44 +558,45 @@ for(String line:lines.split("\n")){
 	}
 
 	public TexturePack readText() {
-		//String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + ".txt";
+		// String tryLoc = Statics.getBasedir() + "maps/" + mode + "/" + loc +
+		// "/" + loc + ".txt";
 		TexturePack pack = TexturePack.GRASSY;
-		//File map = new File(tryLoc);
+		// File map = new File(tryLoc);
 
-		//if (map.exists()) {
+		// if (map.exists()) {
 
-			try {
+		try {
 			String line;
-//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
-				//for(String line:lines.split("\n")){
-				if (lines.split("\n").length!=0) {
-					line=lines.split("\n")[0];
-					switch (line.charAt(0)) {
-					case 'D':
-						pack = TexturePack.DESERT;
-						break;
-					case 'S':
-						pack = TexturePack.SNOWY;
-						break;
-					case 'I':
-						pack = TexturePack.ISLAND;
-						break;
-					case 'V':
-						pack = TexturePack.VOLCANO;
-						break;
-					case 'H':
-						pack = TexturePack.HAUNTED;
-						break;
-					case 'L':
-						pack = TexturePack.LAB;
-						break;
-					case 'G':
-					default:
-						pack = TexturePack.GRASSY;
-					}
-				//	reader.close();
-				
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(tryLoc));
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + ".txt");
+			// for(String line:lines.split("\n")){
+			if (lines.split("\n").length != 0) {
+				line = lines.split("\n")[0];
+				switch (line.charAt(0)) {
+				case 'D':
+					pack = TexturePack.DESERT;
+					break;
+				case 'S':
+					pack = TexturePack.SNOWY;
+					break;
+				case 'I':
+					pack = TexturePack.ISLAND;
+					break;
+				case 'V':
+					pack = TexturePack.VOLCANO;
+					break;
+				case 'H':
+					pack = TexturePack.HAUNTED;
+					break;
+				case 'L':
+					pack = TexturePack.LAB;
+					break;
+				case 'G':
+				default:
+					pack = TexturePack.GRASSY;
+				}
+				// reader.close();
 
 				String[] array = line.split(",");
 
@@ -620,17 +626,18 @@ for(String line:lines.split("\n")){
 				} catch (Exception ex) {
 					time = DayNight.ANY;
 				}
-				
-			}} catch (Exception e) {
-				System.err.println("ERROR: This map most likely doesn't exist.");
-				e.printStackTrace();
-			//}
+
+			}
+		} catch (Exception e) {
+			System.err.println("ERROR: This map most likely doesn't exist.");
+			e.printStackTrace();
+			// }
 
 		}
 
 		return pack;
 	}
-	
+
 	public static void setTime(Board set) {
 		set.setDayNight(me.getTime());
 	}
@@ -638,38 +645,41 @@ for(String line:lines.split("\n")){
 	public ArrayList<Portal> loadPortals() {
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
-		//	ArrayList<String> strings = new ArrayList<String>();
-		//	File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
-		//			+ "/" + loc + "P.txt");
-		//	if (saveFile.exists()) {
-//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-//				String line;
-//				while ((line = reader.readLine()) != null) {
-//					strings.add(line);
-//				}
-//				reader.close();
-//				for (int c = 0; c < strings.size(); c++) {
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+"P.txt");
-				for(String line:lines.split("\n")){
-					ArrayList<String> stuff = new ArrayList<String>();// should
-																		// have
-																		// 5
-					String currentS = "";
-					for (int c2 = 0; c2 < line.length(); c2++) {
+			// ArrayList<String> strings = new ArrayList<String>();
+			// File saveFile = new
+			// File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+			// + "maps/" + mode + "/" + loc
+			// + "/" + loc + "P.txt");
+			// if (saveFile.exists()) {
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(saveFile));
+			// String line;
+			// while ((line = reader.readLine()) != null) {
+			// strings.add(line);
+			// }
+			// reader.close();
+			// for (int c = 0; c < strings.size(); c++) {
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + "P.txt");
+			for (String line : lines.split("\n")) {
+				ArrayList<String> stuff = new ArrayList<String>();// should
+																	// have
+																	// 5
+				String currentS = "";
+				for (int c2 = 0; c2 < line.length(); c2++) {
 
-						if (line.charAt(c2) == ',') {
-							stuff.add(currentS);
-							currentS = "";
-
-						} else {
-							currentS += line.charAt(c2);
-						}
-					}
-
-					if (currentS != "") {
+					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
+						currentS = "";
+
+					} else {
+						currentS += line.charAt(c2);
 					}
-					if(stuff.size()>0){
+				}
+
+				if (currentS != "") {
+					stuff.add(currentS);
+				}
+				if (stuff.size() > 0) {
 					int enX = Integer.parseInt(stuff.get(0));
 					int enY = Integer.parseInt(stuff.get(1));
 					String area = stuff.get(2);
@@ -682,9 +692,10 @@ for(String line:lines.split("\n")){
 					else
 						portals.add(new Door(enX, enY, owner, area, collectibleNum, type, type2, spawnNum));
 
-				}}
+				}
+			}
 
-			//}
+			// }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -693,27 +704,30 @@ for(String line:lines.split("\n")){
 	}
 
 	public String readWeather() {
-		//String tryLoc = StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc + "/" + loc
-		//		+ ".txt";
-		//File map = new File(tryLoc);
+		// String tryLoc =
+		// StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile()
+		// + "maps/" + mode + "/" + loc + "/" + loc
+		// + ".txt";
+		// File map = new File(tryLoc);
 
-		//if (map.exists()) {
+		// if (map.exists()) {
 
-			try {
-//				String line;
-//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
-				String lines=Statics.readFromJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
-				
-				if (lines.split("\n").length!=0) {
-					String weather = lines.split("\n")[0].split(",")[1];
-					System.out.println("Weather: " + weather);
-					if (weather.equals("none"))
-						return null;
-					else
-						return weather;
-				}
-			} catch (Exception e) {
-		//	}
+		try {
+			// String line;
+			// BufferedReader reader = new BufferedReader(new
+			// FileReader(tryLoc));
+			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + ".txt");
+
+			if (lines.split("\n").length != 0) {
+				String weather = lines.split("\n")[0].split(",")[1];
+				System.out.println("Weather: " + weather);
+				if (weather.equals("none"))
+					return null;
+				else
+					return weather;
+			}
+		} catch (Exception e) {
+			// }
 		}
 
 		return null;

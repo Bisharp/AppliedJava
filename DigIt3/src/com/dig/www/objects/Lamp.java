@@ -7,17 +7,17 @@ import javax.swing.JOptionPane;
 
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.util.ActsOnFrameOne;
 import com.dig.www.util.Statics;
 
-public class Lamp extends Objects {
+public class Lamp extends Objects implements ActsOnFrameOne {
 
 	protected LightSpot light;
+	protected int size;
 
 	public Lamp(int x, int y, String loc, Board owner, int size) {
 		super(x, y, loc, true, owner, "");
-		light = new LightSpot(x - (size * 100) / 2 + width / 2, y - (size * 100) / 2 + height / 2, Statics.DUMMY, owner, size);
-		owner.getMovingObjects().add(light);
-		owner.getObjects().add(light);
+		this.size = size;
 	}
 
 	@Override
@@ -31,5 +31,27 @@ public class Lamp extends Objects {
 			light.switchLight();
 		
 		return true;
+	}
+	
+	public void animate() {
+		super.animate();
+		
+		if (frameOne)
+			actFrameOne();
+	}
+
+	protected boolean frameOne = true;
+	@Override
+	public void actFrameOne() {
+		
+		frameOne = false;
+		light = new LightSpot(x - (size * 100) / 2 + width / 2, y - (size * 100) / 2 + height / 2, Statics.DUMMY, owner, size);
+		owner.getMovingObjects().add(light);
+		owner.getObjects().add(light);
+	}
+
+	@Override
+	public boolean isFrameOne() {
+		return frameOne;
 	}
 }

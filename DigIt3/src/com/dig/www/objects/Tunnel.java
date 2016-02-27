@@ -23,7 +23,7 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 
 	protected boolean frameOne = true;
 	protected Direction dir;
-	
+
 	protected Railing[] rails = new Railing[2];
 
 	public Tunnel(int x, int y, int width, int height, Board owner, Direction d, String skin) {
@@ -31,12 +31,16 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 		dir = d;
 		this.width = width * Statics.BLOCK_HEIGHT;
 		this.height = height * Statics.BLOCK_HEIGHT;
-		
+
 		image = createImage(skin, width, height, d);
 	}
 
 	public void actFrameOne() {
-
+		frameOne = false;
+		rails[0] = new Railing(x + rail1X(), y + rail1Y(), width(), height(), owner);
+		rails[1] = new Railing(x + rail2X(), y + rail2Y(), width(), height(), owner);
+		owner.getObjects().add(rails[0]);
+		owner.getObjects().add(rails[1]);
 	}
 
 	public boolean isFrameOne() {
@@ -46,30 +50,21 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 	public void animate() {
 		super.animate();
 
-		if (!frameOne)
-			return;
-		
-		frameOne = false;
-		
-		rails[0] = new Railing(x + rail1X(), y + rail1Y(), width(), height(), owner);
-		rails[1] = new Railing(x + rail2X(), y + rail2Y(), width(), height(), owner);
-		owner.getObjects().add(rails[0]);
-		owner.getObjects().add(rails[1]);
-		
-		System.out.println("Railings");
+		if (frameOne)
+			actFrameOne();
 	}
-	
-//	@Override
-//	public void draw(Graphics2D g2d) {
-//		super.draw(g2d);
-//		
-//		if (frameOne)
-//			return;
-//		
-//		g2d.setColor(Color.magenta);
-//		g2d.fill(rails[0].getBounds());
-//		g2d.fill(rails[1].getBounds());
-//	}
+
+	// @Override
+	// public void draw(Graphics2D g2d) {
+	// super.draw(g2d);
+	//
+	// if (frameOne)
+	// return;
+	//
+	// g2d.setColor(Color.magenta);
+	// g2d.fill(rails[0].getBounds());
+	// g2d.fill(rails[1].getBounds());
+	// }
 
 	protected class Railing extends Objects {
 
@@ -81,11 +76,12 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 
 		@Override
 		public void draw(Graphics2D g2d) {
-			
+
 		}
 	}
 
-	// --------------------This is the Image handling stuff-------------------------------
+	// --------------------This is the Image handling
+	// stuff-------------------------------
 
 	protected int rail1X() {
 		return B_OFFSET;
@@ -148,7 +144,7 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 			int temp = width;
 			width = height;
 			height = temp;
-			
+
 			temp = this.width;
 			this.width = this.height;
 			this.height = temp;
@@ -196,16 +192,16 @@ public class Tunnel extends Objects implements ActsOnFrameOne {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		shadow = createShadow();
 
 		return toReturn;
 	}
-	
+
 	protected Image createShadow() {
 		BufferedImage i = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR_PRE);
 		WritableRaster wr = i.getRaster();
-		
+
 		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
 				wr.setPixel(x, y, ImageLibrary.SHADOW);

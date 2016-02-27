@@ -3,7 +3,7 @@ package com.dig.www.blocks;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
-public class HardBlock extends Block {
+public abstract class HardBlock extends Block {
 
 	/**
 	 * 

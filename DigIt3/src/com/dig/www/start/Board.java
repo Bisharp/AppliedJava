@@ -566,12 +566,12 @@ public boolean isServer(){
 		// npcs.clear();
 		texturePack = st.getTexture();
 		GameCharacter.getInventory().setMoney(st.getMoney());
-		for (BlockState b : st.getWorld()) {
-
-			world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this, b.getB()));
-			if (!b.getInv())
-				world.get(world.size() - 1).setVisible(false);
-		}
+//		for (BlockState b : st.getWorld()) {
+//
+//			world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this, b.getB()));
+//			if (!b.getInv())
+//				world.get(world.size() - 1).setVisible(false);
+//		}
 		for (ObjectState o : st.getObjects()) {
 			switch (o.getType()) {
 			case NORMAL:
