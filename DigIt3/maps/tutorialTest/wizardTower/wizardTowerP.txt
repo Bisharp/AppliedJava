@@ -1,0 +1,2 @@
+1400,900,wizYard,0,doors,0,brown
+1200,400,wizBasement,0,doors,0,brown
