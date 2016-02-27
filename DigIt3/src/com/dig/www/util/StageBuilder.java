@@ -290,7 +290,7 @@ for(String line:lines.split("\n")){
 
 			//}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load Enemies.");
 		}
 
 		return enemies;
@@ -412,7 +412,7 @@ for(String line:lines.split("\n")){
 
 			//}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load NPCs.");
 		}
 
 		return npcs;
@@ -522,7 +522,7 @@ for(String line:lines.split("\n")){
 
 			//}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load objects.");
 		}
 		try {
 			owner.setSpawnLoc(spawnPoint);
@@ -689,7 +689,7 @@ for(String line:lines.split("\n")){
 
 			//}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load Portals.");
 		}
 
 		return portals;
