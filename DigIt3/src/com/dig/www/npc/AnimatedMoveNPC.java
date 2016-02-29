@@ -10,7 +10,7 @@ protected int animationTimer;
 private static final int ANIMAX = 7;
 	public AnimatedMoveNPC(int x, int y, String loc, Board owner, String[] dialogs, String s, String location,
 			NPCOption[] options, MovePoint[] movePoints, int type, int speed) {
-		super(x, y, loc+"/front/n.png", owner, dialogs, s, location, options, movePoints, type, speed);
+		super(x, y, loc+"front/n.png", owner, dialogs, s, location, options, movePoints, type, speed);
 		// TODO Auto-generated constructor stub
 		this.loc=loc;
 	}
@@ -73,7 +73,7 @@ private static final int ANIMAX = 7;
 				else
 					animationTimer+=owner.mult();
 			}else{
-				image=newImage(loc+"/"+direction+"/n.png");
+				image=newImage(loc+direction+"/n.png");
 			}
 //			System.out.println();
 //			System.out.println(y-movePoints[moveAt].getY());

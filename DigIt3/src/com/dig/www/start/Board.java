@@ -107,6 +107,8 @@ import com.dig.www.objects.Objects;
 import com.dig.www.objects.PushCube;
 import com.dig.www.objects.SpecialCollectible;
 import com.dig.www.objects.ThrownObject;
+import com.dig.www.start.Switch.ActionMenu;
+import com.dig.www.start.Switch.SwitchMenu;
 import com.dig.www.util.Irregular;
 import com.dig.www.util.Preferences;
 import com.dig.www.util.StageBuilder;
@@ -118,6 +120,7 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private SwitchMenu switchMenu;
 	private ArrayList<String>actionStrings=new ArrayList<String>();
 	private ArrayList<String>actionIcons=new ArrayList<String>();
 	private int actionTimer;
@@ -1183,8 +1186,10 @@ public boolean isServer(){
 		g.dispose();
 	}
 
-	String decision;
-
+	//String decision;
+public void setCharacter(GameCharacter chara){
+	character=chara;
+}
 	public void openSwitchDialogue() {
 		character.releaseAll();
 		character.stop();
@@ -1201,52 +1206,54 @@ public boolean isServer(){
 		// scrollY = 0;
 
 		switching = false;
-
+new ActionMenu(this);
 		// char[] names = {'S', 'C', 'D', 'H'};
 
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				// state=State.SWITCHING;
-				// JOptionPane.showMessageDialog(null, "Hello");
-
-				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
-						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
-
-				if (decision == null) {
-					// timer.restart();
-					// time.resume();
-					if (character.isDead()) {
-						openSwitchDialogue();
-					}
-					return;
-				}
-
-				if (!decision.equals(character.getType().charName())) {
-					character.releaseAll();
-					if (currentState != null)
-						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
-					GameCharacter current = character;
-					int friendNum = getFriend(decision);
-					friends.get(friendNum).releaseAll();
-					character = friends.get(friendNum);
-					friends.set(friendNum, current);
-					character.setPlayer(true);
-					friends.get(friendNum).setPlayer(false);
-					character.stop();
-					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
-					Collections.sort(friends);
-				}
-				// state=State.INGAME;
-			}
-		});
-		t.start();
+//		Thread t = new Thread(new Runnable() {
+//			public void run() {
+//				// state=State.SWITCHING;
+//				// JOptionPane.showMessageDialog(null, "Hello");
+//
+//				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
+//						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
+//
+//				if (decision == null) {
+//					// timer.restart();
+//					// time.resume();
+//					if (character.isDead()) {
+//						openSwitchDialogue();
+//					}
+//					return;
+//				}
+//
+//				if (!decision.equals(character.getType().charName())) {
+//					character.releaseAll();
+//					if (currentState != null)
+//						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
+//					GameCharacter current = character;
+//					int friendNum = getFriend(decision);
+//					friends.get(friendNum).releaseAll();
+//					character = friends.get(friendNum);
+//					friends.set(friendNum, current);
+//					character.setPlayer(true);
+//					friends.get(friendNum).setPlayer(false);
+//					character.stop();
+//					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+//					Collections.sort(friends);
+//				}
+//				// state=State.INGAME;
+//			}
+//		});
+//		t.start();
 
 		// timer.restart();
 		// time.resume();
-		decision = null;
+		//decision = null;
 	}
-
-	private String[] getCharacters() {
+public void setSwitchingMenu(SwitchMenu switchM){
+	this.switchMenu=switchM;
+}
+	public String[] getCharacters() {
 		ArrayList<GameCharacter> friends = getAliveFriends();
 		ArrayList<String> s0 = new ArrayList<String>();
 
@@ -1539,6 +1546,9 @@ public boolean isServer(){
 			break;
 		default:
 			break;
+		}
+		if(switchMenu!=null){
+			switchMenu.updateList();
 		}
 		// character.setMpName(null);
 		// for(int c=0;c<friends.size();c++)
