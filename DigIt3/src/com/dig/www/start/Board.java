@@ -40,52 +40,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import com.dig.www.MultiPlayer.ChatClient;
-import com.dig.www.MultiPlayer.ChatServer;
-import com.dig.www.MultiPlayer.IChatServer;
-import com.dig.www.MultiPlayer.State.ActionState;
-import com.dig.www.MultiPlayer.State.ActionState.ActionType;
-import com.dig.www.MultiPlayer.State.AddEnemy;
-import com.dig.www.MultiPlayer.State.AttackState;
-import com.dig.www.MultiPlayer.State.BlockState;
-import com.dig.www.MultiPlayer.State.BreakCrystal;
-import com.dig.www.MultiPlayer.State.DigPit;
-import com.dig.www.MultiPlayer.State.EnemyState;
-import com.dig.www.MultiPlayer.State.GameState;
-import com.dig.www.MultiPlayer.State.MoneyState;
-import com.dig.www.MultiPlayer.State.MoveObjectState;
-import com.dig.www.MultiPlayer.State.ObjectPickUpState;
-import com.dig.www.MultiPlayer.State.ObjectState;
-import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
-import com.dig.www.MultiPlayer.State.PlayerState;
-import com.dig.www.MultiPlayer.State.RemoveEnemy;
-import com.dig.www.MultiPlayer.State.StartState;
-import com.dig.www.MultiPlayer.State.SwitchState;
-import com.dig.www.blocks.Block;
+import com.dig.www.MultiPlayer.*;
+import com.dig.www.MultiPlayer.State.*;
+import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
-import com.dig.www.blocks.Door;
-import com.dig.www.blocks.Portal;
-import com.dig.www.blocks.SpecialDoor;
-import com.dig.www.blocks.TexturePack;
-import com.dig.www.character.CharData;
-import com.dig.www.character.Club;
-import com.dig.www.character.Diamond;
-import com.dig.www.character.FProjectile;
-import com.dig.www.character.Field;
-import com.dig.www.character.GameCharacter;
+import com.dig.www.character.*;
 import com.dig.www.character.GameCharacter.Types;
-import com.dig.www.character.Heart;
-import com.dig.www.character.Inventory;
-import com.dig.www.character.Items;
-import com.dig.www.character.Macaroni;
-import com.dig.www.character.Moves;
-import com.dig.www.character.PathPoint;
-import com.dig.www.character.Puddle;
-import com.dig.www.character.Ryo;
-import com.dig.www.character.Shield;
-import com.dig.www.character.SirCobalt;
-import com.dig.www.character.Spade;
-import com.dig.www.character.Wizard;
 import com.dig.www.enemies.Boss;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Launch;
@@ -94,24 +54,8 @@ import com.dig.www.enemies.StandEnemy;
 import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.TouchNPC;
-import com.dig.www.objects.CheckPoint;
-import com.dig.www.objects.Collectible;
-import com.dig.www.objects.CollectibleCharacter;
-import com.dig.www.objects.CollectibleObject;
-import com.dig.www.objects.Dispenser;
-import com.dig.www.objects.DropPoint;
-import com.dig.www.objects.Light;
-import com.dig.www.objects.Mirror;
-import com.dig.www.objects.MoneyObject;
-import com.dig.www.objects.Objects;
-import com.dig.www.objects.PushCube;
-import com.dig.www.objects.SpecialCollectible;
-import com.dig.www.objects.ThrownObject;
-import com.dig.www.util.Irregular;
-import com.dig.www.util.Preferences;
-import com.dig.www.util.StageBuilder;
-import com.dig.www.util.Statics;
-import com.dig.www.util.Time;
+import com.dig.www.objects.*;
+import com.dig.www.util.*;
 
 public class Board extends MPanel implements ActionListener {
 
@@ -566,12 +510,44 @@ public boolean isServer(){
 		// npcs.clear();
 		texturePack = st.getTexture();
 		GameCharacter.getInventory().setMoney(st.getMoney());
-//		for (BlockState b : st.getWorld()) {
-//
+		for (BlockState b : st.getWorld()) {
+
 //			world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this, b.getB()));
-//			if (!b.getInv())
-//				world.get(world.size() - 1).setVisible(false);
-//		}
+			
+			switch (b.getB()) {
+			case CARPET:
+				world.add(new CarpetBlock(b.getX(), b.getY(), this));
+				break;
+			case CRYSTAL:
+				world.add(new StoneBlock(b.getX(), b.getY(), this, true));
+				break;
+			case DIRT:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.DIRT));
+				break;
+			case GROUND:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
+				break;
+			case LIQUID:
+				world.add(new LiquidBlock(b.getX(), b.getY(), this));
+				break;
+			case PIT:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.PIT));
+				break;
+			case ROCK:
+				world.add(new StoneBlock(b.getX(), b.getY(), this, false));
+				break;
+			case WALL:
+				world.add(new WallBlock(b.getX(), b.getY(), this));
+				break;
+			default:
+				System.err.println("Type " + b.getB() + " does not have a creation case. Please add a creation case for " + b.getB() + ".");
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
+				break;
+			}
+			
+			if (!b.getInv())
+				world.get(world.size() - 1).setVisible(false);
+		}
 		for (ObjectState o : st.getObjects()) {
 			switch (o.getType()) {
 			case NORMAL:
