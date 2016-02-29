@@ -54,14 +54,38 @@ import com.dig.www.enemies.StandEnemy;
 import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.TouchNPC;
+<<<<<<< HEAD
 import com.dig.www.objects.*;
 import com.dig.www.util.*;
+=======
+import com.dig.www.objects.CheckPoint;
+import com.dig.www.objects.Collectible;
+import com.dig.www.objects.CollectibleCharacter;
+import com.dig.www.objects.CollectibleObject;
+import com.dig.www.objects.Dispenser;
+import com.dig.www.objects.DropPoint;
+import com.dig.www.objects.Light;
+import com.dig.www.objects.Mirror;
+import com.dig.www.objects.MoneyObject;
+import com.dig.www.objects.Objects;
+import com.dig.www.objects.PushCube;
+import com.dig.www.objects.SpecialCollectible;
+import com.dig.www.objects.ThrownObject;
+import com.dig.www.start.Switch.ActionMenu;
+import com.dig.www.start.Switch.SwitchMenu;
+import com.dig.www.util.Irregular;
+import com.dig.www.util.Preferences;
+import com.dig.www.util.StageBuilder;
+import com.dig.www.util.Statics;
+import com.dig.www.util.Time;
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 public class Board extends MPanel implements ActionListener {
 
 	/**
 	 * 
 	 */
+	private SwitchMenu switchMenu;
 	private ArrayList<String>actionStrings=new ArrayList<String>();
 	private ArrayList<String>actionIcons=new ArrayList<String>();
 	private int actionTimer;
@@ -1159,8 +1183,10 @@ public boolean isServer(){
 		g.dispose();
 	}
 
-	String decision;
-
+	//String decision;
+public void setCharacter(GameCharacter chara){
+	character=chara;
+}
 	public void openSwitchDialogue() {
 		character.releaseAll();
 		character.stop();
@@ -1177,52 +1203,54 @@ public boolean isServer(){
 		// scrollY = 0;
 
 		switching = false;
-
+new ActionMenu(this);
 		// char[] names = {'S', 'C', 'D', 'H'};
 
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				// state=State.SWITCHING;
-				// JOptionPane.showMessageDialog(null, "Hello");
-
-				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
-						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
-
-				if (decision == null) {
-					// timer.restart();
-					// time.resume();
-					if (character.isDead()) {
-						openSwitchDialogue();
-					}
-					return;
-				}
-
-				if (!decision.equals(character.getType().charName())) {
-					character.releaseAll();
-					if (currentState != null)
-						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
-					GameCharacter current = character;
-					int friendNum = getFriend(decision);
-					friends.get(friendNum).releaseAll();
-					character = friends.get(friendNum);
-					friends.set(friendNum, current);
-					character.setPlayer(true);
-					friends.get(friendNum).setPlayer(false);
-					character.stop();
-					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
-					Collections.sort(friends);
-				}
-				// state=State.INGAME;
-			}
-		});
-		t.start();
+//		Thread t = new Thread(new Runnable() {
+//			public void run() {
+//				// state=State.SWITCHING;
+//				// JOptionPane.showMessageDialog(null, "Hello");
+//
+//				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
+//						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
+//
+//				if (decision == null) {
+//					// timer.restart();
+//					// time.resume();
+//					if (character.isDead()) {
+//						openSwitchDialogue();
+//					}
+//					return;
+//				}
+//
+//				if (!decision.equals(character.getType().charName())) {
+//					character.releaseAll();
+//					if (currentState != null)
+//						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
+//					GameCharacter current = character;
+//					int friendNum = getFriend(decision);
+//					friends.get(friendNum).releaseAll();
+//					character = friends.get(friendNum);
+//					friends.set(friendNum, current);
+//					character.setPlayer(true);
+//					friends.get(friendNum).setPlayer(false);
+//					character.stop();
+//					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+//					Collections.sort(friends);
+//				}
+//				// state=State.INGAME;
+//			}
+//		});
+//		t.start();
 
 		// timer.restart();
 		// time.resume();
-		decision = null;
+		//decision = null;
 	}
-
-	private String[] getCharacters() {
+public void setSwitchingMenu(SwitchMenu switchM){
+	this.switchMenu=switchM;
+}
+	public String[] getCharacters() {
 		ArrayList<GameCharacter> friends = getAliveFriends();
 		ArrayList<String> s0 = new ArrayList<String>();
 
@@ -1516,6 +1544,9 @@ public boolean isServer(){
 		default:
 			break;
 		}
+		if(switchMenu!=null){
+			switchMenu.updateList();
+		}
 		// character.setMpName(null);
 		// for(int c=0;c<friends.size();c++)
 		// friends.get(c).setMpName(null);
@@ -1615,11 +1646,11 @@ public boolean isServer(){
 					for (Enemy en : enemies) {
 						currentState.getEnemyStates().add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
 					}
-					sendInt = 5;
+					sendInt = 3;
 					server.broadcast(mpName, currentState);
 					currentState.clear(level);
 				} else
-					sendInt--;
+					sendInt-=mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1754,11 +1785,11 @@ chats=states.get(s).getTalks();
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
 									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
 				if (sendInt <= 0) {
-					sendInt = 5;
+					sendInt = 3;
 					theServer.getTold(currentState);
 					currentState.clear(level);
 				} else
-					sendInt--;
+					sendInt-=mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();

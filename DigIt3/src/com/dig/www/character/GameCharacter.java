@@ -600,7 +600,12 @@ public boolean isPlayer(){
 					} else if (healing != null) {
 						getToPoint = new Point(healing.getX(), healing.getY());
 						goTo = true;
-					} else {
+					}
+					else if(owner.getCharacter().isDead()){
+						getToPoint=new Point(x, y);
+						goTo=true;
+					}
+					else {
 						getToPoint = owner.getCharPoint();
 						goTo = true;
 					}

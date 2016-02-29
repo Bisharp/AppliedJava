@@ -86,6 +86,7 @@ public class StageBuilder {
 
 			// if (true) {
 
+<<<<<<< HEAD
 			// BufferedReader reader = new BufferedReader(new
 			// FileReader(tryLoc));
 			// String line;
@@ -93,6 +94,14 @@ public class StageBuilder {
 			for (String line : lines.split("\n")) {
 				// while ((line = reader.readLine()) != null) {
 				// System.out.println(line);
+=======
+				//BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				//String line;
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+for(String line:lines.split("\n")){
+				//while ((line = reader.readLine()) != null) {
+					// System.out.println(line);
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 				if (first) {
 					first = false;
@@ -157,6 +166,7 @@ public class StageBuilder {
 	public ArrayList<Enemy> loadEn() {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		try {
+<<<<<<< HEAD
 			// ArrayList<String> strings = new ArrayList<String>();
 			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
 			// "/" + loc + "/" + loc + "E.txt");
@@ -176,6 +186,25 @@ public class StageBuilder {
 																	// 5
 				String currentS = "";
 				for (int c2 = 0; c2 < line.length(); c2++) {
+=======
+			//ArrayList<String> strings = new ArrayList<String>();
+			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "E.txt");
+			//if (saveFile.exists()) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+"E.txt");
+				for(String line:lines.split("\n")){
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < line.length(); c2++) {
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
@@ -291,7 +320,7 @@ public class StageBuilder {
 
 			// }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load Enemies.");
 		}
 
 		return enemies;
@@ -304,6 +333,7 @@ public class StageBuilder {
 		int blockerCount = 0;
 
 		try {
+<<<<<<< HEAD
 			// ArrayList<String> strings = new ArrayList<String>();
 			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
 			// "/" + loc + "/" + loc + "N.txt");
@@ -323,6 +353,25 @@ public class StageBuilder {
 																	// 5
 				String currentS = "";
 				for (int c2 = 0; c2 < line.length(); c2++) {
+=======
+			//ArrayList<String> strings = new ArrayList<String>();
+			//File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "N.txt");
+			//if (saveFile.exists()) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+"N.txt");
+				for(String line:lines.split("\n")){
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < line.length(); c2++) {
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
@@ -415,7 +464,7 @@ public class StageBuilder {
 
 			// }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load NPCs.");
 		}
 
 		return npcs;
@@ -427,6 +476,7 @@ public class StageBuilder {
 		int count = 0;
 		int spawnCount = 0;
 		try {
+<<<<<<< HEAD
 			// ArrayList<String> strings = new ArrayList<String>();
 			// File saveFile = new File(Statics.getBasedir() + "maps/" + mode +
 			// "/" + loc + "/" + loc + "O.txt");
@@ -446,6 +496,25 @@ public class StageBuilder {
 																	// 5
 				String currentS = "";
 				for (int c2 = 0; c2 < line.length(); c2++) {
+=======
+		//	ArrayList<String> strings = new ArrayList<String>();
+		//	File saveFile = new File(Statics.getBasedir() + "maps/" + mode + "/" + loc + "/" + loc + "O.txt");
+		//	if (saveFile.exists()) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+"O.txt");
+				for(String line:lines.split("\n")){
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < line.length(); c2++) {
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
@@ -503,13 +572,16 @@ public class StageBuilder {
 								npcs.add(new ActivatedBossWall(nX, nY, owner));
 							} else if (val == -9) {
 								npcs.add(new PushCube(nX, nY, owner, wall));
-							} else if (val == -9) {
-								npcs.add(new PushCube(nX, nY, owner, wall));
-							} else if (val == -10) {
+							}else if (val == -10) {
 								npcs.add(new BombCube(nX, nY, wall, owner));
 							} else if (val == -11) {
 								npcs.add(new CubeButtonMoneyGiver(nX, nY, owner));
-							} else
+							}
+							else if(val==-12)
+								npcs.add(new BigRedButton(nX, nY, owner));
+							else if(val==-13)
+								npcs.add(new Lamp(nX, nY, loc, owner, 9));
+							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
@@ -524,7 +596,7 @@ public class StageBuilder {
 
 			// }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load objects.");
 		}
 		try {
 			owner.setSpawnLoc(spawnPoint);
@@ -567,6 +639,7 @@ public class StageBuilder {
 
 		try {
 			String line;
+<<<<<<< HEAD
 			// BufferedReader reader = new BufferedReader(new
 			// FileReader(tryLoc));
 			String lines = Statics.readFromJarFile("/maps/" + mode + "/" + loc + "/" + loc + ".txt");
@@ -600,6 +673,38 @@ public class StageBuilder {
 					pack = TexturePack.GRASSY;
 				}
 				// reader.close();
+=======
+//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+				//for(String line:lines.split("\n")){
+				if (lines.split("\n").length!=0) {
+					line=lines.split("\n")[0];
+					switch (line.charAt(0)) {
+					case 'D':
+						pack = TexturePack.DESERT;
+						break;
+					case 'S':
+						pack = TexturePack.SNOWY;
+						break;
+					case 'I':
+						pack = TexturePack.ISLAND;
+						break;
+					case 'V':
+						pack = TexturePack.VOLCANO;
+						break;
+					case 'H':
+						pack = TexturePack.HAUNTED;
+						break;
+					case 'L':
+						pack = TexturePack.LAB;
+						break;
+					case 'G':
+					default:
+						pack = TexturePack.GRASSY;
+					}
+				//	reader.close();
+				
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 				String[] array = line.split(",");
 
@@ -648,6 +753,7 @@ public class StageBuilder {
 	public ArrayList<Portal> loadPortals() {
 		ArrayList<Portal> portals = new ArrayList<Portal>();
 		try {
+<<<<<<< HEAD
 			// ArrayList<String> strings = new ArrayList<String>();
 			// File saveFile = new
 			// File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile()
@@ -669,6 +775,26 @@ public class StageBuilder {
 																	// 5
 				String currentS = "";
 				for (int c2 = 0; c2 < line.length(); c2++) {
+=======
+		//	ArrayList<String> strings = new ArrayList<String>();
+		//	File saveFile = new File(StageBuilder.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "maps/" + mode + "/" + loc
+		//			+ "/" + loc + "P.txt");
+		//	if (saveFile.exists()) {
+//				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					strings.add(line);
+//				}
+//				reader.close();
+//				for (int c = 0; c < strings.size(); c++) {
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+"P.txt");
+				for(String line:lines.split("\n")){
+					ArrayList<String> stuff = new ArrayList<String>();// should
+																		// have
+																		// 5
+					String currentS = "";
+					for (int c2 = 0; c2 < line.length(); c2++) {
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 
 					if (line.charAt(c2) == ',') {
 						stuff.add(currentS);
@@ -700,7 +826,7 @@ public class StageBuilder {
 
 			// }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.err.println("ERROR: could not load Portals.");
 		}
 
 		return portals;
@@ -715,6 +841,7 @@ public class StageBuilder {
 
 		// if (map.exists()) {
 
+<<<<<<< HEAD
 		try {
 			// String line;
 			// BufferedReader reader = new BufferedReader(new
@@ -731,6 +858,23 @@ public class StageBuilder {
 			}
 		} catch (Exception e) {
 			// }
+=======
+			try {
+//				String line;
+//				BufferedReader reader = new BufferedReader(new FileReader(tryLoc));
+				String lines=Statics.readFromNotJarFile("/maps/"+mode+"/"+loc+"/"+loc+".txt");
+				
+				if (lines.split("\n").length!=0) {
+					String weather = lines.split("\n")[0].split(",")[1];
+					System.out.println("Weather: " + weather);
+					if (weather.equals("none"))
+						return null;
+					else
+						return weather;
+				}
+			} catch (Exception e) {
+		//	}
+>>>>>>> branch 'master' of https://github.com/Bisharp/AppliedJava.git
 		}
 
 		return null;

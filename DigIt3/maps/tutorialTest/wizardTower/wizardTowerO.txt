@@ -1,0 +1,4 @@
+1150,900,images/icon.png,false,-3
+400,500,images/objects/table/tableDrinkAndTaco.png,true,0
+700,1100,images/icon.png,true,0
+600,1100,images/icon.png,true,0

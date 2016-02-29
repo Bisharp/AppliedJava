@@ -66,12 +66,10 @@ public class GameStartBoard extends MPanel {
 
 		setLayout(new BorderLayout());
 
-		defaultDir = GameStartBoard.class.getProtectionDomain().getCodeSource()
-				.getLocation().getFile()
+		defaultDir = Statics.getBasedir()
 				+ "saveFiles/";
 		defaultDir = defaultDir.replace("/C:", "C:");
-		File dir = new File(GameStartBoard.class.getProtectionDomain()
-				.getCodeSource().getLocation().getFile()
+		File dir = new File(Statics.getBasedir()
 				+ "saveFiles");
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -154,7 +152,7 @@ try {
 		if (s != null && !s.equals("")) {
 			//String[] packs = Statics.listFolder(Statics.getBasedir() + "/maps");
 			
-				String[]packs=Statics.listFilesInJar("maps");
+				String[]packs=Statics.listFilesInNotJar("maps");
 		
 			String pack = ((String) JOptionPane.showInputDialog(this,
 					"Select a game.", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
