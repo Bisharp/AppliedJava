@@ -28,11 +28,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;import java.net.NetworkInterface;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;import java.time.format.TextStyle;
+import java.rmi.RemoteException;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -61,12 +63,8 @@ import com.dig.www.MultiPlayer.State.PlayerState;
 import com.dig.www.MultiPlayer.State.RemoveEnemy;
 import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.MultiPlayer.State.SwitchState;
-import com.dig.www.blocks.Block;
+import com.dig.www.blocks.*;
 import com.dig.www.blocks.Block.Blocks;
-import com.dig.www.blocks.Door;
-import com.dig.www.blocks.Portal;
-import com.dig.www.blocks.SpecialDoor;
-import com.dig.www.blocks.TexturePack;
 import com.dig.www.character.CharData;
 import com.dig.www.character.Club;
 import com.dig.www.character.Diamond;
@@ -121,24 +119,29 @@ public class Board extends MPanel implements ActionListener {
 	 * 
 	 */
 	private SwitchMenu switchMenu;
-	private ArrayList<String>actionStrings=new ArrayList<String>();
-	private ArrayList<String>actionIcons=new ArrayList<String>();
+	private ArrayList<String> actionStrings = new ArrayList<String>();
+	private ArrayList<String> actionIcons = new ArrayList<String>();
 	private int actionTimer;
-	private static final int ACTIONMAX=250;
-	public void addAction(String string,String icon){
+	private static final int ACTIONMAX = 250;
+
+	public void addAction(String string, String icon) {
 		actionStrings.add(string);
 		actionIcons.add(icon);
-		actionTimer=0;
+		actionTimer = 0;
 	}
-	private boolean lagPrevention=false;
-	public boolean lagPre(){
+
+	private boolean lagPrevention = false;
+
+	public boolean lagPre() {
 		return lagPrevention;
 	}
-	public int mult(){
-		if(lagPrevention)
+
+	public int mult() {
+		if (lagPrevention)
 			return 2;
 		return 1;
 	}
+
 	private int sendInt = 0;
 	private Board board = this;
 	private int times;
@@ -220,8 +223,8 @@ public class Board extends MPanel implements ActionListener {
 
 	public static final String DEFAULT = "Start";
 	private Timer timer;
-	private static final int NORMAL_TIMER=15;
-	private static final int LAG_TIMER=32;
+	private static final int NORMAL_TIMER = 15;
+	private static final int LAG_TIMER = 32;
 	private int timerWait = NORMAL_TIMER;
 	protected String userName;
 	protected String mode;
@@ -400,9 +403,11 @@ public class Board extends MPanel implements ActionListener {
 	public void changeArea() {
 		this.changeArea(-1);
 	}
-public boolean isServer(){
-	return server!=null;
-}
+
+	public boolean isServer() {
+		return server != null;
+	}
+
 	public void changeArea(int num) {
 		pointedPoint = null;
 		fP.clear();
@@ -454,8 +459,8 @@ public boolean isServer(){
 			((Spade) character).resetDirt();
 		} else if (character.getType() == Types.DIAMOND) {
 			((Diamond) character).newArea();
-		}else if(character.getType()==Types.WIZARD)
-			((Wizard)character).clearMagic();
+		} else if (character.getType() == Types.WIZARD)
+			((Wizard) character).clearMagic();
 
 		character.setX(Statics.BOARD_WIDTH / 2 - 50);
 		character.setY(Statics.BOARD_HEIGHT / 2 - 50);
@@ -481,8 +486,8 @@ public boolean isServer(){
 				((Spade) friends.get(c)).resetDirt();
 			} else if (friends.get(c).getType() == Types.DIAMOND) {
 				((Diamond) friends.get(c)).newArea();
-			}else if(friends.get(c).getType()==Types.WIZARD)
-				((Wizard)friends.get(c)).clearMagic();
+			} else if (friends.get(c).getType() == Types.WIZARD)
+				((Wizard) friends.get(c)).clearMagic();
 
 		}
 		for (int c = 0; c < enemies.size(); c++) {
@@ -571,7 +576,39 @@ public boolean isServer(){
 		GameCharacter.getInventory().setMoney(st.getMoney());
 		for (BlockState b : st.getWorld()) {
 
-			world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this, b.getB()));
+			// world.add(new Block(b.getX(), b.getY(), Statics.DUMMY, this,
+			// b.getB()));
+
+			switch (b.getB()) {
+			case CARPET:
+				world.add(new CarpetBlock(b.getX(), b.getY(), this));
+				break;
+			case CRYSTAL:
+				world.add(new StoneBlock(b.getX(), b.getY(), this, true));
+				break;
+			case DIRT:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.DIRT));
+				break;
+			case GROUND:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
+				break;
+			case LIQUID:
+				world.add(new LiquidBlock(b.getX(), b.getY(), this));
+				break;
+			case PIT:
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.PIT));
+				break;
+			case ROCK:
+				world.add(new StoneBlock(b.getX(), b.getY(), this, false));
+				break;
+			case WALL:
+				world.add(new WallBlock(b.getX(), b.getY(), this));
+				break;
+			default:
+				System.err.println("Type " + b.getB() + " does not have a creation case. Please add a creation case for " + b.getB() + ".");
+				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
+				break;
+			}
 			if (!b.getInv())
 				world.get(world.size() - 1).setVisible(false);
 		}
@@ -935,7 +972,7 @@ public boolean isServer(){
 							(int) pointedPoint.getY() - 50, this);
 
 			}
-			for (int c=0;c<friends.size();c++) {
+			for (int c = 0; c < friends.size(); c++) {
 
 				// g2d.setColor(Color.GREEN);
 				// //
@@ -990,25 +1027,24 @@ public boolean isServer(){
 			time.draw(g2d);
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 25));
-			int startX=Statics.BOARD_WIDTH-250;
-			int startY=(me!=null||server!=null)?135:10;
-			if(Statics.MAC)
-				startY+=23;
-			//System.out.println(actionStrings.size());
-			for(int c=0;c<actionStrings.size();c++){
-				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY+(c*60),50,50,this);
-				g2d.drawString(actionStrings.get(c), startX+55, startY+35+(c*60));
-				
+			int startX = Statics.BOARD_WIDTH - 250;
+			int startY = (me != null || server != null) ? 135 : 10;
+			if (Statics.MAC)
+				startY += 23;
+			// System.out.println(actionStrings.size());
+			for (int c = 0; c < actionStrings.size(); c++) {
+				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY + (c * 60), 50, 50, this);
+				g2d.drawString(actionStrings.get(c), startX + 55, startY + 35 + (c * 60));
+
 			}
-			if(actionStrings.size()>0&&state==State.INGAME){
-			if(actionTimer>ACTIONMAX-(actionStrings.size()-1)){
-				actionStrings.remove(0);
-				actionIcons.remove(0);
-				actionTimer=0;
+			if (actionStrings.size() > 0 && state == State.INGAME) {
+				if (actionTimer > ACTIONMAX - (actionStrings.size() - 1)) {
+					actionStrings.remove(0);
+					actionIcons.remove(0);
+					actionTimer = 0;
+				} else
+					actionTimer += mult();
 			}
-			else
-			actionTimer+=mult();}
-			
 
 			switch (weather) {
 			case RAIN:
@@ -1186,10 +1222,11 @@ public boolean isServer(){
 		g.dispose();
 	}
 
-	//String decision;
-public void setCharacter(GameCharacter chara){
-	character=chara;
-}
+	// String decision;
+	public void setCharacter(GameCharacter chara) {
+		character = chara;
+	}
+
 	public void openSwitchDialogue() {
 		character.releaseAll();
 		character.stop();
@@ -1206,53 +1243,60 @@ public void setCharacter(GameCharacter chara){
 		// scrollY = 0;
 
 		switching = false;
-new ActionMenu(this);
+		new ActionMenu(this);
 		// char[] names = {'S', 'C', 'D', 'H'};
 
-//		Thread t = new Thread(new Runnable() {
-//			public void run() {
-//				// state=State.SWITCHING;
-//				// JOptionPane.showMessageDialog(null, "Hello");
-//
-//				decision = ((String) JOptionPane.showInputDialog(board, (character.isDead() ? "Your current character has been defeated.\n" : "")
-//						+ "Please select a character: ", DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
-//
-//				if (decision == null) {
-//					// timer.restart();
-//					// time.resume();
-//					if (character.isDead()) {
-//						openSwitchDialogue();
-//					}
-//					return;
-//				}
-//
-//				if (!decision.equals(character.getType().charName())) {
-//					character.releaseAll();
-//					if (currentState != null)
-//						currentState.getActions().add(new SwitchState(character.getType().charName(), decision));
-//					GameCharacter current = character;
-//					int friendNum = getFriend(decision);
-//					friends.get(friendNum).releaseAll();
-//					character = friends.get(friendNum);
-//					friends.set(friendNum, current);
-//					character.setPlayer(true);
-//					friends.get(friendNum).setPlayer(false);
-//					character.stop();
-//					scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int) Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
-//					Collections.sort(friends);
-//				}
-//				// state=State.INGAME;
-//			}
-//		});
-//		t.start();
+		// Thread t = new Thread(new Runnable() {
+		// public void run() {
+		// // state=State.SWITCHING;
+		// // JOptionPane.showMessageDialog(null, "Hello");
+		//
+		// decision = ((String) JOptionPane.showInputDialog(board,
+		// (character.isDead() ? "Your current character has been defeated.\n" :
+		// "")
+		// + "Please select a character: ", DigIt.NAME,
+		// JOptionPane.PLAIN_MESSAGE, Statics.ICON, getCharacters(), null));
+		//
+		// if (decision == null) {
+		// // timer.restart();
+		// // time.resume();
+		// if (character.isDead()) {
+		// openSwitchDialogue();
+		// }
+		// return;
+		// }
+		//
+		// if (!decision.equals(character.getType().charName())) {
+		// character.releaseAll();
+		// if (currentState != null)
+		// currentState.getActions().add(new
+		// SwitchState(character.getType().charName(), decision));
+		// GameCharacter current = character;
+		// int friendNum = getFriend(decision);
+		// friends.get(friendNum).releaseAll();
+		// character = friends.get(friendNum);
+		// friends.set(friendNum, current);
+		// character.setPlayer(true);
+		// friends.get(friendNum).setPlayer(false);
+		// character.stop();
+		// scroll(Statics.BOARD_WIDTH / 2 - 50 - character.getX(), (int)
+		// Statics.BOARD_HEIGHT / 2 - 50 - character.getY());
+		// Collections.sort(friends);
+		// }
+		// // state=State.INGAME;
+		// }
+		// });
+		// t.start();
 
 		// timer.restart();
 		// time.resume();
-		//decision = null;
+		// decision = null;
 	}
-public void setSwitchingMenu(SwitchMenu switchM){
-	this.switchMenu=switchM;
-}
+
+	public void setSwitchingMenu(SwitchMenu switchM) {
+		this.switchMenu = switchM;
+	}
+
 	public String[] getCharacters() {
 		ArrayList<GameCharacter> friends = getAliveFriends();
 		ArrayList<String> s0 = new ArrayList<String>();
@@ -1269,7 +1313,7 @@ public void setSwitchingMenu(SwitchMenu switchM){
 		boolean wizard = false;
 		boolean kepler = false;
 		boolean macaroni = false;
-		boolean ryo=false;
+		boolean ryo = false;
 		for (String a : s0) {
 			if (a.equals(GameCharacter.Types.SPADE.charName()))
 				clark = true;
@@ -1315,8 +1359,8 @@ public void setSwitchingMenu(SwitchMenu switchM){
 			s1[c] = GameCharacter.Types.WIZARD.charName();
 			c++;
 		}
-		if(ryo){
-			s1[c]=GameCharacter.Types.RYO.charName();
+		if (ryo) {
+			s1[c] = GameCharacter.Types.RYO.charName();
 		}
 		// if(kepler){
 		// s1[c]=GameCharacter.Types.KEPLER.charName();
@@ -1402,7 +1446,7 @@ public void setSwitchingMenu(SwitchMenu switchM){
 					enemies.get(i).animate();
 					if (!enemies.get(i).isAlive()) {
 						enemies.remove(i);
-						if(isServer()){
+						if (isServer()) {
 							currentState.getActions().add(new RemoveEnemy(i));
 						}
 						i--;
@@ -1547,7 +1591,7 @@ public void setSwitchingMenu(SwitchMenu switchM){
 		default:
 			break;
 		}
-		if(switchMenu!=null){
+		if (switchMenu != null) {
 			switchMenu.updateList();
 		}
 		// character.setMpName(null);
@@ -1637,13 +1681,14 @@ public void setSwitchingMenu(SwitchMenu switchM){
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
+									character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 
 					for (GameCharacter character : friends) {
 						currentState.getPlayerStates().add(
 								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 										.getAttackTimer(), character.getDirection(), character.getS(), character.isPlayer(), character.getType()
-										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
+										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(),
+										character.isDead()));
 					}
 
 					for (Enemy en : enemies) {
@@ -1653,14 +1698,14 @@ public void setSwitchingMenu(SwitchMenu switchM){
 					server.broadcast(mpName, currentState);
 					currentState.clear(level);
 				} else
-					sendInt-=mult();
+					sendInt -= mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (me != null && character != null) {
 			try {
-				
+
 				Block b = world.get(0);
 				for (int s = 0; s < states.size(); s++) {
 					if (states.get(s) == null)
@@ -1684,7 +1729,7 @@ public void setSwitchingMenu(SwitchMenu switchM){
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
 
-												boolean hasGone = false;
+						boolean hasGone = false;
 						if (character.getType().toString().equals(playerState.getTypeToString()))
 							hasGone = true;
 						else
@@ -1709,11 +1754,11 @@ public void setSwitchingMenu(SwitchMenu switchM){
 							}
 						}
 					}
-					
-					if(states.get(s).isServer()){
-		chats.clear();				
-chats=states.get(s).getTalks();
-}
+
+					if (states.get(s).isServer()) {
+						chats.clear();
+						chats = states.get(s).getTalks();
+					}
 					for (ActionState actionState : states.get(s).getActions()) {
 						switch (actionState.getActionType()) {
 						case SWITCH:
@@ -1754,9 +1799,9 @@ chats=states.get(s).getTalks();
 							Statics.playSound(this, "blocks/shatter.wav");
 							break;
 						case REMOVEENN:
-							RemoveEnemy reEnn=((RemoveEnemy)actionState);
+							RemoveEnemy reEnn = ((RemoveEnemy) actionState);
 							enemies.remove(reEnn.getI());
-						break;
+							break;
 						case DIG:
 							DigPit digC = (DigPit) actionState;
 							// if(world.get(breakC.getI()).getType()==Blocks.CRYSTAL)
@@ -1786,13 +1831,13 @@ chats=states.get(s).getTalks();
 					currentState.getPlayerStates().add(
 							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
 									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire(),character.isDead()));
+									character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 				if (sendInt <= 0) {
 					sendInt = 3;
 					theServer.getTold(currentState);
 					currentState.clear(level);
 				} else
-					sendInt-=mult();
+					sendInt -= mult();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				// e1.printStackTrace();
@@ -1828,19 +1873,20 @@ chats=states.get(s).getTalks();
 	}
 
 	// Beginning of checkCollisions()-related code
-public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block b){
-	friend.setX(playerState.getX() + b.getX());
-	friend.setY(playerState.getY() + b.getY());
-	friend.setPlayer(playerState.isPlayer());
-	friend.setDirection(playerState.getDir());
-	friend.setImage(friend.newImage(playerState.getS()));
-	friend.setMpName(playerState.getMpName());
-	friend.setHealth(playerState.getHealth());
-	friend.setEnergy(playerState.getEnergy());
-	friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
-	friend.setDire(playerState.getDire());
-	friend.setDead(playerState.isDead());
-}
+	public void clientFriendStuff(GameCharacter friend, PlayerState playerState, Block b) {
+		friend.setX(playerState.getX() + b.getX());
+		friend.setY(playerState.getY() + b.getY());
+		friend.setPlayer(playerState.isPlayer());
+		friend.setDirection(playerState.getDir());
+		friend.setImage(friend.newImage(playerState.getS()));
+		friend.setMpName(playerState.getMpName());
+		friend.setHealth(playerState.getHealth());
+		friend.setEnergy(playerState.getEnergy());
+		friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+		friend.setDire(playerState.getDire());
+		friend.setDead(playerState.isDead());
+	}
+
 	public void setCharacterStates(Rectangle r3) {
 
 		Block b;
@@ -2062,10 +2108,9 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 							if (character.getMove() == Moves.BASH) {
 								bashHit = true;
 								shieldNum = c;
-							}
-							else if (character.getMove() == Moves.WIZ_S){
+							} else if (character.getMove() == Moves.WIZ_S) {
 								wizHit = true;
-							wizNum=c;	
+								wizNum = c;
 							}
 						}
 					}
@@ -2434,25 +2479,27 @@ public void clientFriendStuff(GameCharacter friend,PlayerState playerState,Block
 		}
 		// end
 	}
-public void toggleLagPrevention(){
-	lagPrevention=!lagPrevention;
-	if(lagPrevention)
-		timerWait=LAG_TIMER;
-	else
-		timerWait=NORMAL_TIMER;
-	
-	timer.setDelay(timerWait);
-}
+
+	public void toggleLagPrevention() {
+		lagPrevention = !lagPrevention;
+		if (lagPrevention)
+			timerWait = LAG_TIMER;
+		else
+			timerWait = NORMAL_TIMER;
+
+		timer.setDelay(timerWait);
+	}
+
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
-		if(key==KeyEvent.VK_8){
+		if (key == KeyEvent.VK_8) {
 			toggleLagPrevention();
 		}
-		
+
 		if (key == KeyEvent.VK_M) {
-			if (server == null&&me==null) {
-				mpName = JOptionPane.showInputDialog("What would you like to be called?",System.getProperty("user.name"));
+			if (server == null && me == null) {
+				mpName = JOptionPane.showInputDialog("What would you like to be called?", System.getProperty("user.name"));
 				passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
 				server = new ChatServer(this, passWord);
 				currentState = new GameState(mode, level, true);
@@ -2684,6 +2731,10 @@ public void toggleLagPrevention(){
 			return Color.DARK_GRAY;
 		case HAUNTED:
 			return Statics.SAND_BLUE;
+
+		case EVIL:
+			return Color.BLACK;
+
 		case GRASSY:
 		default:
 			return Statics.OFF_GREEN;
@@ -2701,8 +2752,7 @@ public void toggleLagPrevention(){
 
 	public void save() {
 		if (userName != null) {
-			String location = (Statics.getBasedir() + "/saveFiles/"
-					+ userName + "/");
+			String location = (Statics.getBasedir() + "/saveFiles/" + userName + "/");
 			File loc = new File(location);
 			if (loc.exists()) {
 				File locFile = new File(location + userName + ".txt");
@@ -2752,8 +2802,7 @@ public void toggleLagPrevention(){
 	public void loadSave() {
 		level = DEFAULT;
 		try {
-			String location = (Statics.getBasedir() + "/saveFiles/"
-					+ userName + "/");
+			String location = (Statics.getBasedir() + "/saveFiles/" + userName + "/");
 			File saveFile = new File(location + userName + ".txt");
 
 			if (saveFile.exists()) {
@@ -2818,8 +2867,8 @@ public void toggleLagPrevention(){
 						name = "wizard";
 					else if (lines.get(c).startsWith("macaroni"))
 						name = "macaroni";
-					else if(lines.get(c).startsWith("ryo"))
-						name="ryo";
+					else if (lines.get(c).startsWith("ryo"))
+						name = "ryo";
 					if (character == null) {
 						character = getACharacter(name);
 						character.setPlayer(true);
@@ -2900,8 +2949,7 @@ public void toggleLagPrevention(){
 			}
 		changeArea();
 		if (userName != null)
-			preferences.save(Statics.getBasedir()+ "/saveFiles/"
-					+ owner.getUserName() + "/");
+			preferences.save(Statics.getBasedir() + "/saveFiles/" + owner.getUserName() + "/");
 		// for(Items i:Items.values())
 		// GameCharacter.getInventory().addItem(i, 100);
 	}
@@ -3188,7 +3236,7 @@ public void toggleLagPrevention(){
 	}
 
 	public void getTold(GameState state) {
-		if(server!=null&&state.isServer())
+		if (server != null && state.isServer())
 			return;
 		if (server == null && state.isServer() && mode == null) {
 			mode = state.getPack();
@@ -3241,16 +3289,17 @@ public void toggleLagPrevention(){
 						.getPlayerStates()))))
 			states.add(state);
 
-for(int c=0;c<state.getTalks().size();c++){
-	chats.add(state.getTalks().get(c));
-}
+		for (int c = 0; c < state.getTalks().size(); c++) {
+			chats.add(state.getTalks().get(c));
+		}
 
 	}
 
 	public void setOtherServer(IChatServer server) {
 		theServer = server;
 	}
-	public IChatServer getOtherServer(){
+
+	public IChatServer getOtherServer() {
 		return theServer;
 	}
 
@@ -3291,7 +3340,7 @@ for(int c=0;c<state.getTalks().size();c++){
 			chara = (new Macaroni(0, 0, this, false));
 			break;
 		case "ryo":
-			chara=new Ryo(0,0,this,false);
+			chara = new Ryo(0, 0, this, false);
 			break;
 		}
 		return chara;

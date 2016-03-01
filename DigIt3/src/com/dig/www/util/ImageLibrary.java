@@ -76,13 +76,13 @@ public class ImageLibrary {
 
 	private static final int[] RED = new int[] { 255, 0, 0, 255 };
 	private static final int[] YELLOW = new int[] { 255, 242, 0, 255 };
+	public static final int[] SHADOW = { 0, 0, 0, 200 };
 
 	private static Image createShadow(Image i, boolean isEnemy) {
 		BufferedImage toReturn = new BufferedImage(i.getWidth(null), i.getHeight(null), BufferedImage.TYPE_4BYTE_ABGR_PRE);
 		((Graphics2D) toReturn.getGraphics()).drawImage(i, 0, 0, null);
 		WritableRaster rr = toReturn.getRaster();
 
-		final int[] shadow = { 0, 0, 0, 200 };
 		int[] pixel;
 
 		for (int x = 0; x < toReturn.getWidth(); x++)
@@ -90,7 +90,7 @@ public class ImageLibrary {
 				pixel = rr.getPixel(x, y, (int[]) null);
 
 				if (pixel[pixel.length - 1] > 50 && (isEnemy? !equals(pixel, RED) && !equals(pixel, YELLOW) : true))
-					rr.setPixel(x, y, shadow);
+					rr.setPixel(x, y, SHADOW);
 			}
 
 		return toReturn;
