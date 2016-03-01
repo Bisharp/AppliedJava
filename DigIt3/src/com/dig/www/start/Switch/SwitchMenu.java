@@ -38,7 +38,6 @@ public SwitchMenu(Board owner){
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			Board b=SwitchMenu.this.owner;
 			if(list.getSelectedIndex()>=0){
 				
@@ -61,6 +60,19 @@ public SwitchMenu(Board owner){
 		}}
 	});
 	south.add(switchB);
+	JButton cancel=new JButton("cancel");
+	cancel.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Board b=SwitchMenu.this.owner;
+			b.setFocusable(true);
+			b.requestFocus();
+			b.setSwitchingMenu(null);
+			SwitchMenu.this.dispose();
+		}
+	});
+	south.add(cancel);
 	this.add(list,BorderLayout.CENTER);
 	this.add(south,BorderLayout.SOUTH);
 	owner.setSwitchingMenu(this);
