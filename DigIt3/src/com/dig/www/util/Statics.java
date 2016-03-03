@@ -34,6 +34,7 @@ public final class Statics {
 	public static final String MAIN="Story Mode";
 	public static final int BLOCK_HEIGHT = 100;
 	public static final String FONT = "Trebuchet MS";
+	public static boolean isJar;
 public static boolean MAC=false;
 	// static {
 	// if (System.getProperty("os.name").startsWith("Windows"))
@@ -327,8 +328,12 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		if (basedir != null)
 		{
 			//from jar
-			if (!basedir.endsWith("/"))
-				basedir = basedir + "/";
+			if (!basedir.endsWith("/")){
+				basedir = basedir + "/resources/";
+			isJar=true;	
+			//basedir+="resources/";
+			//System.setProperty("java.library.path", "resources");
+			}
 
 			return basedir;
 		}
@@ -339,11 +344,16 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		{ // for deployed jar this will be the jar file. so need to get the
 			// parent
 			// in Eclipse this will be the bin dir
+			isJar=true;
+			
+			//System.setProperty("java.library.path", "resources");
 			applicationRootPath = applicationRootPath.getParentFile();
 		}
 		basedir = applicationRootPath.getAbsolutePath();
 		if (!basedir.endsWith("/"))
 			basedir = basedir + "/";
+		if(isJar)
+		basedir+="resources/";
 		System.out.println(basedir);
 		return basedir;
 	}

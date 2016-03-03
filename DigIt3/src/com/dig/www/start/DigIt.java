@@ -3,6 +3,7 @@ package com.dig.www.start;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.lang.reflect.Field;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -61,6 +62,16 @@ private String level=Board.DEFAULT;
 	}
 
 	public static void main(String[] args) {
+		Statics.getBasedir();
+		if(Statics.isJar){
+			System.setProperty( "java.library.path", "resources" );
+			try{
+			Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+			fieldSysPath.setAccessible( true );
+			fieldSysPath.set( null, null );}catch(Exception ex){
+				
+			}
+		}
 		new DigIt();
 	}
 

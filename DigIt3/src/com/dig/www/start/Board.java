@@ -1361,6 +1361,7 @@ public class Board extends MPanel implements ActionListener {
 		}
 		if (ryo) {
 			s1[c] = GameCharacter.Types.RYO.charName();
+			c++;
 		}
 		// if(kepler){
 		// s1[c]=GameCharacter.Types.KEPLER.charName();

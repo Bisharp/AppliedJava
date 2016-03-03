@@ -132,7 +132,7 @@ g2d.drawString(""+burnTimer,10,400);
 		if (slowTimer > 0)
 			g2d.drawImage(newImage("images/effects/ice.png"), x, y,width,height, owner);
 		if(burnTimer>0)
-			g2d.drawImage(newImage("images/effects/explosion.png"), x, y,width,height, owner);
+			g2d.drawImage(newImage("images/effects/fire.gif"), x, y,width,height, owner);
 		if (slipped)
 			g2d.drawImage(newImage("images/effects/slip.png"), x, y - 59,width,height, owner);
 

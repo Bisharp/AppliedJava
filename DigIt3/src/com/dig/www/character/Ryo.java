@@ -229,7 +229,7 @@ case 2:
 
 	@Override
 	public String getRangedString() {
-		return "baseball.png";
+		return "fireball.gif";
 	}
 	@Override
 	public Image newImage(String name) {
