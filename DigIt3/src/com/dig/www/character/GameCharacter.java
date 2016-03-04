@@ -1278,11 +1278,9 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 				if (!i.isWeapon() && !i.isConsumable()) {
 					owner.addItem(i);
-				}
-				else if(i.isConsumable()){
-					stop();
-				}
-				else if (i.isWeapon()) {
+				} else if (i.isConsumable()) {
+					owner.consume(i.getPath(), 50, i.stop());
+				} else if (i.isWeapon()) {
 					owner.getfP().add(new FProjectile(dir, x, y, 25, this, i.getPath(), owner, Moves.ITEM));
 				}
 				i.doAct(owner);
@@ -2669,5 +2667,44 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	public int getDire() {
 		return dir;
+	}
+
+	public int getEatX() {
+		switch (direction) {
+		case DOWN:
+			return 25;
+		case DIAG_DL:
+		case DIAG_UL:
+		case LEFT:
+			return 15;
+		case DIAG_DR:
+		case DIAG_UR:
+		case RIGHT:
+			return 35;
+		case UP:
+		case NONE:
+		default:
+			return 25;
+
+		}
+	}
+
+	public int getEatY() {
+		switch (direction) {
+		case DOWN:
+			return 3;
+		case UP:
+			return -5;
+		case DIAG_DL:
+		case DIAG_UL:
+		case LEFT:
+		case DIAG_DR:
+		case DIAG_UR:
+		case RIGHT:
+		case NONE:
+		default:
+			return 3;
+
+		}
 	}
 }

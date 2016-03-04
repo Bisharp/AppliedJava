@@ -71,6 +71,7 @@ import com.dig.www.character.Diamond;
 import com.dig.www.character.FProjectile;
 import com.dig.www.character.Field;
 import com.dig.www.character.GameCharacter;
+import com.dig.www.character.GameCharacter.Direction;
 import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Heart;
 import com.dig.www.character.Inventory;
@@ -217,6 +218,7 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public static Preferences preferences;
+
 	static {
 		preferences = new Preferences();
 	}
@@ -266,6 +268,17 @@ public class Board extends MPanel implements ActionListener {
 
 	private int startPoint = 0;
 	private Time time;
+	private String consumePath;
+	private int consumeTimer;
+	private boolean consumeStop;
+
+	public void consume(String consumePath, int consumeTimer, boolean consumeStop) {
+this.consumePath=consumePath;
+this.consumeTimer=consumeTimer;
+this.consumeStop=consumeStop;
+if(consumeStop)
+	character.stop();
+	}
 
 	public ArrayList<String> getGoneFriends() {
 		return goneFriends;
@@ -343,16 +356,16 @@ public class Board extends MPanel implements ActionListener {
 		setDoubleBuffered(true);
 		state = State.LOADING;
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
-		this.mpName = JOptionPane.showInputDialog(this, "What would you like to be called?", System.getProperty("user.name"));
+		this.mpName = JOptionPane.showInputDialog(this, "What would you like to be called?",
+				System.getProperty("user.name"));
 		try {
 
-			me = new ChatClient(
-					this,
-					JOptionPane
-							.showInputDialog(
-									"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.",
-									InetAddress.getLocalHost().getHostAddress()), mpName, JOptionPane.showInputDialog(
-							"What is the server's password?\nNone is the default.", "None"));
+			me = new ChatClient(this,
+					JOptionPane.showInputDialog(
+							"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.",
+							InetAddress.getLocalHost().getHostAddress()),
+					mpName,
+					JOptionPane.showInputDialog("What is the server's password?\nNone is the default.", "None"));
 		} catch (HeadlessException | RemoteException | AlreadyBoundException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -448,7 +461,8 @@ public class Board extends MPanel implements ActionListener {
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level,
+							((DropPoint) o).type()));
 				}
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
@@ -536,6 +550,7 @@ public class Board extends MPanel implements ActionListener {
 		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
 		spawnNum = sB.getSpawnNum();
 		save();
+		GameCharacter.getInventory().addItem(Items.POTATOGUY, 100);
 	}
 
 	public void changeClientArea() {
@@ -605,7 +620,8 @@ public class Board extends MPanel implements ActionListener {
 				world.add(new WallBlock(b.getX(), b.getY(), this));
 				break;
 			default:
-				System.err.println("Type " + b.getB() + " does not have a creation case. Please add a creation case for " + b.getB() + ".");
+				System.err.println("Type " + b.getB()
+						+ " does not have a creation case. Please add a creation case for " + b.getB() + ".");
 				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
 				break;
 			}
@@ -661,7 +677,8 @@ public class Board extends MPanel implements ActionListener {
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level, ((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level,
+							((DropPoint) o).type()));
 				}
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
@@ -802,8 +819,10 @@ public class Board extends MPanel implements ActionListener {
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+							e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+							e.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -839,8 +858,10 @@ public class Board extends MPanel implements ActionListener {
 					p = fP.get(i);
 					if (!(fP.get(i) instanceof Field)) {
 						// Line-of-sight mechanics
-						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
-						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
+						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+								p.getMidX() + 10 };
+						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+								p.getMidY() + 10 };
 						poly = new Polygon(xs, ys, xs.length);
 
 						for (int x = 0; x < wallList.size(); x++) {
@@ -865,8 +886,10 @@ public class Board extends MPanel implements ActionListener {
 
 				if (obj.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, obj.getMidX() + 10 };
-					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, obj.getMidY() + 10 };
+					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+							obj.getMidX() + 10 };
+					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+							obj.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -898,8 +921,10 @@ public class Board extends MPanel implements ActionListener {
 			for (Portal p2 : portals)
 				if (p2.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p2.getMidX() + 10 };
-					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p2.getMidY() + 10 };
+					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+							p2.getMidX() + 10 };
+					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+							p2.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -920,8 +945,10 @@ public class Board extends MPanel implements ActionListener {
 			for (NPC npc : npcs)
 				if (npc.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
-					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+							npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+							npc.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -965,8 +992,8 @@ public class Board extends MPanel implements ActionListener {
 			// ;
 			if (pointedPoint != null) {
 				if (pointedPointType == -1)
-					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50, (int) pointedPoint.getY() - 50,
-							this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50,
+							(int) pointedPoint.getY() - 50, this);
 				else
 					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"), (int) pointedPoint.getX() - 50,
 							(int) pointedPoint.getY() - 50, this);
@@ -1022,7 +1049,11 @@ public class Board extends MPanel implements ActionListener {
 			}
 			if (character != null)
 				character.draw(g2d);
-			// g2d.setColor(Color.BLUE);
+			if(consumeTimer>0){
+				g2d.drawImage(Statics.newImage(consumePath), character.getX()+character.getEatX(), character.getY()+character.getEatY(),50,50,this);
+			if(character.getDirection()==Direction.UP)
+				g2d.drawImage(character.getImage(), character.getX(), character.getY(), this);
+			}// g2d.setColor(Color.BLUE);
 			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 			time.draw(g2d);
 			g2d.setColor(Color.WHITE);
@@ -1033,7 +1064,8 @@ public class Board extends MPanel implements ActionListener {
 				startY += 23;
 			// System.out.println(actionStrings.size());
 			for (int c = 0; c < actionStrings.size(); c++) {
-				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY + (c * 60), 50, 50, this);
+				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY + (c * 60),
+						50, 50, this);
 				g2d.drawString(actionStrings.get(c), startX + 55, startY + 35 + (c * 60));
 
 			}
@@ -1104,8 +1136,8 @@ public class Board extends MPanel implements ActionListener {
 
 					if (weatherList.isEmpty())
 						for (int i2 = 0; i2 < 700; i2++) {
-							weatherList
-									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
+							weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5),
+									Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
 						}
 
 					if (weatherList.size() < 1000 && state != State.NPC)
@@ -1192,7 +1224,8 @@ public class Board extends MPanel implements ActionListener {
 		case LOADING:
 			g2d.setColor(Color.ORANGE);
 			g2d.fill(getScreen());
-			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH - 100, Statics.BOARD_HEIGHT - 100, this);
+			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH - 100, Statics.BOARD_HEIGHT - 100,
+					this);
 			// g2d.drawImage(new
 			// ImageIcon(getClass().getResource("images/icon.png")).getImage(),
 			// 0, 0, this);
@@ -1436,6 +1469,11 @@ public class Board extends MPanel implements ActionListener {
 		case INGAME:
 
 			character.animate();
+			if(consumeTimer>0){
+				consumeTimer-=mult();
+				if(consumeStop)
+					character.stop();
+			}
 			boolean notMe = me == null;
 			for (GameCharacter character : friends) {
 				character.animate();
@@ -1554,7 +1592,8 @@ public class Board extends MPanel implements ActionListener {
 					} else {
 						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
 
-							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds()) && !friends.get(c2).isPlayer()) {
+							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds())
+									&& !friends.get(c2).isPlayer()) {
 								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
@@ -1608,7 +1647,8 @@ public class Board extends MPanel implements ActionListener {
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
 						for (GameCharacter friend : friends) {
-							if (playerState.isPlayer() && friend.getType().toString().equals(playerState.getTypeToString())) {
+							if (playerState.isPlayer()
+									&& friend.getType().toString().equals(playerState.getTypeToString())) {
 								friend.setX(playerState.getX() + b.getX());
 								friend.setY(playerState.getY() + b.getY());
 								friend.setPlayer(true);
@@ -1679,21 +1719,23 @@ public class Board extends MPanel implements ActionListener {
 				if (sendInt <= 0) {
 					currentState.getTalks().clear();
 					currentState.getTalks().addAll(chats);
-					currentState.getPlayerStates().add(
-							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
-									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
+					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
+							character.getY() - b.getY(), character.getActing(), character.getAttackTimer(),
+							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
+							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 
 					for (GameCharacter character : friends) {
-						currentState.getPlayerStates().add(
-								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
-										.getAttackTimer(), character.getDirection(), character.getS(), character.isPlayer(), character.getType()
-										.toString(), character.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(),
-										character.isDead()));
+						currentState.getPlayerStates()
+								.add(new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(),
+										character.getActing(), character.getAttackTimer(), character.getDirection(),
+										character.getS(), character.isPlayer(), character.getType().toString(),
+										character.getMpName(), character.getHealth(), character.getEnergy(),
+										character.getDire(), character.isDead()));
 					}
 
 					for (Enemy en : enemies) {
-						currentState.getEnemyStates().add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
+						currentState.getEnemyStates()
+								.add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
 					}
 					sendInt = 3;
 					server.broadcast(mpName, currentState);
@@ -1829,10 +1871,10 @@ public class Board extends MPanel implements ActionListener {
 				}
 				states.clear();
 				if (sendInt <= 0)
-					currentState.getPlayerStates().add(
-							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getActing(), character
-									.getAttackTimer(), character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-									character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
+					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
+							character.getY() - b.getY(), character.getActing(), character.getAttackTimer(),
+							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
+							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 				if (sendInt <= 0) {
 					sendInt = 3;
 					theServer.getTold(currentState);
@@ -1913,11 +1955,14 @@ public class Board extends MPanel implements ActionListener {
 				// Line-of-sight
 				if (b.isOnScreen())
 					if (b.getType() != Block.Blocks.WALL) {
-						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
-						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
+						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
+								b.getMidX() + 10 };
+						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
+								b.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+							if (wallList.get(x).isOnScreen()
+									&& new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -1954,14 +1999,19 @@ public class Board extends MPanel implements ActionListener {
 					}
 
 					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
-									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+							|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
+									&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
+											|| b.getType() == Blocks.PIT))) {
+						if (b.getBounds().intersects(character.getActBounds())
+								&& !b.getBounds().intersects(character.getCollisionBounds())) {
 
-							if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
-											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
-								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+							if ((character.getMove() == Moves.CLUB && !character.hasMeleed()
+									&& b.getType() == Blocks.CRYSTAL)
+									|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
+											&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
+													|| b.getType() == Blocks.PIT)))
+								if (b.getBounds().intersects(character.getActBounds())
+										&& !b.getBounds().intersects(character.getCollisionBounds())) {
 
 									b.interact(i);
 									character.endAction();
@@ -2015,7 +2065,8 @@ public class Board extends MPanel implements ActionListener {
 				}
 				for (int c = 0; c < fP.size(); c++) {
 					FProjectile character = fP.get(c);
-					o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
+					o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds()
+							: character.getBounds();
 
 					// This modification would allow us to make certain
 					// projectiles behave differently with their bounds;
@@ -2114,9 +2165,11 @@ public class Board extends MPanel implements ActionListener {
 				}
 
 				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
-								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+						|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
+								&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
+										|| b.getType() == Blocks.PIT))) {
+					if (b.getBounds().intersects(character.getActBounds())
+							&& !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact(i);
 						character.endAction();
@@ -2143,7 +2196,6 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 				}
-				
 
 				if (movingObjects.size() > 0) {
 
@@ -2288,7 +2340,8 @@ public class Board extends MPanel implements ActionListener {
 						bounds = null;
 					}
 				}
-				if (bounds != null && n.getBounds().intersects(bounds) && (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
+				if (bounds != null && n.getBounds().intersects(bounds)
+						&& (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
 					current = n;
 					current.setLine();
 					state = State.NPC;
@@ -2326,7 +2379,8 @@ public class Board extends MPanel implements ActionListener {
 				if (o.intersects(character.getCollisionBounds())) {
 					n.collidePlayer(-1);
 					if (n instanceof PushCube && currentState != null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(),
+								-world.get(0).getY() + n.getY(), u));
 					// if(me==null)
 					if (n instanceof Collectible && ((Collectible) n).collectible()) {
 						if (n instanceof MoneyObject) {
@@ -2362,7 +2416,8 @@ public class Board extends MPanel implements ActionListener {
 					&& bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
 				if (n.interact()) {
 					if (n instanceof PushCube && currentState != null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(),
+								-world.get(0).getY() + n.getY(), u));
 					hasTalked = true;
 					if (n instanceof CheckPoint) {
 						spawnLoc = new Point(n.getX(), n.getY());
@@ -2500,8 +2555,10 @@ public class Board extends MPanel implements ActionListener {
 
 		if (key == KeyEvent.VK_M) {
 			if (server == null && me == null) {
-				mpName = JOptionPane.showInputDialog("What would you like to be called?", System.getProperty("user.name"));
-				passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
+				mpName = JOptionPane.showInputDialog("What would you like to be called?",
+						System.getProperty("user.name"));
+				passWord = JOptionPane
+						.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
 				server = new ChatServer(this, passWord);
 				currentState = new GameState(mode, level, true);
 				chatBox = new ChatBox(this);
@@ -2525,7 +2582,8 @@ public class Board extends MPanel implements ActionListener {
 		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
-			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
+					JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -2759,7 +2817,8 @@ public class Board extends MPanel implements ActionListener {
 				File locFile = new File(location + userName + ".txt");
 				try {
 					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum);
+					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + ","
+							+ spawnNum);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
 					writer.write(character.getSave() + ",true");
@@ -3113,7 +3172,8 @@ public class Board extends MPanel implements ActionListener {
 
 	protected void updateRain() {
 		if ((time.getGeneralTime() == Time.DAY || dN == DayNight.DAY) && dN != DayNight.NIGHT)
-			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
+			setBackground(
+					weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
 			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 	}
@@ -3209,7 +3269,8 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public boolean lighterDark() {
-		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY)) && dN != DayNight.NIGHT;
+		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY))
+				&& dN != DayNight.NIGHT;
 	}
 
 	public int getSpawnNum() {
@@ -3285,9 +3346,8 @@ public class Board extends MPanel implements ActionListener {
 				currentState = null;
 				friends.clear();
 			}
-		} else if (mode != null
-				&& (state.isServer() || (server != null && server.contains(state.getPlayerStates())) || (me != null && me.contains(state
-						.getPlayerStates()))))
+		} else if (mode != null && (state.isServer() || (server != null && server.contains(state.getPlayerStates()))
+				|| (me != null && me.contains(state.getPlayerStates()))))
 			states.add(state);
 
 		for (int c = 0; c < state.getTalks().size(); c++) {
@@ -3363,8 +3423,8 @@ public class Board extends MPanel implements ActionListener {
 		if (rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 			return true;
 		for (int c = 0; c < friends.size(); c++) {
-			if (rect.intersects(new Rectangle(friends.get(c).getX() - Statics.BOARD_WIDTH / 2, friends.get(c).getY() - Statics.BOARD_HEIGHT / 2,
-					Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+			if (rect.intersects(new Rectangle(friends.get(c).getX() - Statics.BOARD_WIDTH / 2,
+					friends.get(c).getY() - Statics.BOARD_HEIGHT / 2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 				return true;
 		}
 
@@ -3381,8 +3441,8 @@ public class Board extends MPanel implements ActionListener {
 
 	// protected static final Color c = new Color(255, 96, 0);
 
-	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK,
-			Color.WHITE };
+	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN,
+			Color.ORANGE, Color.PINK, Color.WHITE };
 	protected static final int BH_10 = Statics.BOARD_HEIGHT / 10;
 	protected static final int BW_10 = Statics.BOARD_WIDTH / 10;
 	protected static final int BH_20 = Statics.BOARD_HEIGHT / 20;

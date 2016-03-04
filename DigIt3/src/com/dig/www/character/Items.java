@@ -43,7 +43,11 @@ POTATOGUY{
 		// TODO Auto-generated method stub
 		owner.getCharacter().poison();
 	}
-	
+	@Override
+	public boolean stop() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 },NandNs{
 	@Override public String toString(){
 		return "N&Ns";
@@ -477,4 +481,7 @@ POTATOGUY{
 	public void doAct(Board owner){
 	}
 	public abstract String toString();
+	public boolean stop(){
+		return false;
+	}
 }
