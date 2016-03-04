@@ -319,7 +319,7 @@ public class Inventory implements Serializable {
 		for (int i = 0; i < items.size(); i++) {
 			w = items.get(i);
 
-			if (itemNums.get(w) > 0 && (!showOnlyThrowable || w.isThrowable()))
+			if (itemNums.get(w) > 0 && (!showOnlyThrowable || w.isThrowable()||w.isConsumable()))
 				toReturn.add(w.toString() + (showVals ? " x" + itemNums.get(w) : ""));
 		}
 

@@ -2,11 +2,93 @@ package com.dig.www.character;
 
 import java.io.Serializable;
 
+import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
 public enum Items implements Serializable {
+POTATOGUY{
+	@Override public String toString(){
+		return "Potato Guy";
+	}
+	@Override
+	protected String getPersonalDesc() {
+		// TODO Auto-generated method stub
+		return "Is this thing alive?";
+	}
 
+	@Override
+	public String getPath() {
+		// TODO Auto-generated method stub
+		return "images/objects/food/PotatoGuy.png";
+	}
+
+	@Override
+	public boolean isThrowable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isWeapon() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isConsumable() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public void doAct(Board owner) {
+		// TODO Auto-generated method stub
+		owner.getCharacter().poison();
+	}
+	
+},NandNs{
+	@Override public String toString(){
+		return "N&Ns";
+	}
+	@Override
+	protected String getPersonalDesc() {
+		// TODO Auto-generated method stub
+		return "N&Ns: Chocolate balls of goodness.";
+	}
+
+	@Override
+	public String getPath() {
+		// TODO Auto-generated method stub
+		return "images/objects/food/Candy.png";
+	}
+
+	@Override
+	public boolean isThrowable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isWeapon() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isConsumable() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public void doAct(Board owner) {
+		// TODO Auto-generated method stub
+		owner.getCharacter().heal(50);
+	}
+	
+},
 	NULL {
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Null";
+	}
 		@Override
 		protected String getPersonalDesc() {
 			return "<html>A value for items which do not go in the inventory. If you are reading this (and not looking in the code), <i>do not</i> use this item, as it may cause undefined behavior.";
@@ -78,28 +160,12 @@ public enum Items implements Serializable {
 			return false;
 		}
 	},
-	FOOD_NORMAL {
-		@Override
-		protected String getPersonalDesc() {
-			return null;
-		}
-
-		@Override
-		public String getPath() {
-			return "images/objects/food/" + Statics.RAND.nextInt(Statics.getFolderCont("images/objects/food/")) + ".png";
-		}
-
-		@Override
-		public boolean isThrowable() {
-			return false;
-		}
-
-		@Override
-		public boolean isWeapon() {
-			return false;
-		}
-	},
 	PROJECTILE {
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "Projectile";
+		}
 		@Override
 		protected String getPersonalDesc() {
 			return null;
@@ -388,7 +454,10 @@ public enum Items implements Serializable {
 	public abstract String getPath();
 
 	public abstract boolean isThrowable();
-
+	public boolean isConsumable(){
+		return false;
+	}
+	
 	public abstract boolean isWeapon();
 
 	public int getDamage() {
@@ -405,4 +474,7 @@ public enum Items implements Serializable {
 
 		return i;
 	}
+	public void doAct(Board owner){
+	}
+	public abstract String toString();
 }

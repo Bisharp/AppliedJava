@@ -1970,7 +1970,120 @@ public class Board extends MPanel implements ActionListener {
 					}
 				}
 			}
+			Enemy e;
+			boolean bashHit = false;
+			int shieldNum = -1;
+			boolean wizHit = false;
+			int wizNum = -1;
+			for (int u = 0; u < enemies.size(); u++) {
 
+				e = enemies.get(u);
+				// if (e.isOnScreen()) {
+				if (e.getBounds().intersects(b.getBounds())) {
+					switch (b.getType()) {
+					case PIT:
+						if (!e.flying)
+							e.setAlive(false);
+						break;
+
+					case CRYSTAL:
+					case WALL:
+						e.turnAround(b.getX(), b.getY());
+						break;
+					case LIQUID:
+						if (!e.flying)
+							e.turnAround(b.getX(), b.getY());
+						break;
+					default:
+						break;
+					}
+				}
+
+				if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+					if (me != null) {
+						// if(currentState!=null)
+						// currentState.getActions().add(new AttackState(u,
+						// character.getMove(),
+						// false,character.getType().toString()));
+						// return;
+					} else
+						e.interact(character.getMove(), character, false);
+					if (character.getMove() == Moves.BASH)
+						bashHit = true;
+					else if (character.getMove() == Moves.WIZ_S)
+						wizHit = true;
+				}
+				for (int c = 0; c < fP.size(); c++) {
+					FProjectile character = fP.get(c);
+					o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
+
+					// This modification would allow us to make certain
+					// projectiles behave differently with their bounds;
+					// could be implemented with other objects.
+
+					if (o.intersects(e.getBounds()) && character.isOnScreen()
+					// && character.getHarming()
+					) {
+						if ((!(e instanceof Projectile) || (character instanceof Field))
+								&& (!(fP.get(c) instanceof Shield) || (((Shield) fP.get(c)).isHarming()))) {
+							if (me != null) {
+								// if(currentState!=null)
+								// currentState.getActions().add(new
+								// AttackState(u, character.getMove(),
+								// true,character.getMaker().getType().toString()));
+								// return;
+							} else {
+								e.interact(character.getMove(), character.getMaker(), true);
+							}
+							fP.get(c).setOnScreen(false);
+
+						}
+					}
+				}
+
+				for (int c = 0; c < friends.size(); c++) {
+					GameCharacter character = friends.get(c);
+					if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+						if (me == null)
+							e.interact(character.getMove(), character, false);
+						if (character.getMove() == Moves.BASH) {
+							bashHit = true;
+							shieldNum = c;
+						} else if (character.getMove() == Moves.WIZ_S) {
+							wizHit = true;
+							wizNum = c;
+						}
+					}
+				}
+
+				if (e.getBounds().intersects(r3) && e.willHarm()) {
+					e.turnAround(character.getX(), character.getY());
+					character.takeDamage(e.getDamage(), e.poisons());
+
+				}
+
+				for (GameCharacter character : friends) {
+					Rectangle r2 = character.getBounds();
+					if (e.getBounds().intersects(r2) && e.willHarm()) {
+						e.turnAround(character.getX(), character.getY());
+						character.takeDamage(e.getDamage(), e.poisons());
+					}
+				}
+			}
+			// }
+			if (bashHit) {
+				if (shieldNum == -1)
+					character.endAction();
+				else
+					friends.get(shieldNum).endAction();
+			}
+			if (wizHit) {
+				if (wizNum == -1)
+					character.endAction();
+				else
+					friends.get(wizNum).endAction();
+			}
+			// end of enemy loop
 			if (b.isOnScreen()) {
 
 				if (!b.traversable()) {
@@ -2030,120 +2143,7 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 				}
-				Enemy e;
-				boolean bashHit = false;
-				int shieldNum = -1;
-				boolean wizHit = false;
-				int wizNum = -1;
-				for (int u = 0; u < enemies.size(); u++) {
-
-					e = enemies.get(u);
-					// if (e.isOnScreen()) {
-					if (e.getBounds().intersects(b.getBounds())) {
-						switch (b.getType()) {
-						case PIT:
-							if (!e.flying)
-								e.setAlive(false);
-							break;
-
-						case CRYSTAL:
-						case WALL:
-							e.turnAround(b.getX(), b.getY());
-							break;
-						case LIQUID:
-							if (!e.flying)
-								e.turnAround(b.getX(), b.getY());
-							break;
-						default:
-							break;
-						}
-					}
-
-					if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-						if (me != null) {
-							// if(currentState!=null)
-							// currentState.getActions().add(new AttackState(u,
-							// character.getMove(),
-							// false,character.getType().toString()));
-							// return;
-						} else
-							e.interact(character.getMove(), character, false);
-						if (character.getMove() == Moves.BASH)
-							bashHit = true;
-						else if (character.getMove() == Moves.WIZ_S)
-							wizHit = true;
-					}
-					for (int c = 0; c < fP.size(); c++) {
-						FProjectile character = fP.get(c);
-						o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
-
-						// This modification would allow us to make certain
-						// projectiles behave differently with their bounds;
-						// could be implemented with other objects.
-
-						if (o.intersects(e.getBounds()) && character.isOnScreen()
-						// && character.getHarming()
-						) {
-							if ((!(e instanceof Projectile) || (character instanceof Field))
-									&& (!(fP.get(c) instanceof Shield) || (((Shield) fP.get(c)).isHarming()))) {
-								if (me != null) {
-									// if(currentState!=null)
-									// currentState.getActions().add(new
-									// AttackState(u, character.getMove(),
-									// true,character.getMaker().getType().toString()));
-									// return;
-								} else {
-									e.interact(character.getMove(), character.getMaker(), true);
-								}
-								fP.get(c).setOnScreen(false);
-
-							}
-						}
-					}
-
-					for (int c = 0; c < friends.size(); c++) {
-						GameCharacter character = friends.get(c);
-						if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
-							if (me == null)
-								e.interact(character.getMove(), character, false);
-							if (character.getMove() == Moves.BASH) {
-								bashHit = true;
-								shieldNum = c;
-							} else if (character.getMove() == Moves.WIZ_S) {
-								wizHit = true;
-								wizNum = c;
-							}
-						}
-					}
-
-					if (e.getBounds().intersects(r3) && e.willHarm()) {
-						e.turnAround(character.getX(), character.getY());
-						character.takeDamage(e.getDamage(), e.poisons());
-
-					}
-
-					for (GameCharacter character : friends) {
-						Rectangle r2 = character.getBounds();
-						if (e.getBounds().intersects(r2) && e.willHarm()) {
-							e.turnAround(character.getX(), character.getY());
-							character.takeDamage(e.getDamage(), e.poisons());
-						}
-					}
-				}
-				// }
-				if (bashHit) {
-					if (shieldNum == -1)
-						character.endAction();
-					else
-						friends.get(shieldNum).endAction();
-				}
-				if (wizHit) {
-					if (wizNum == -1)
-						character.endAction();
-					else
-						friends.get(wizNum).endAction();
-				}
-				// end of enemy loop
+				
 
 				if (movingObjects.size() > 0) {
 

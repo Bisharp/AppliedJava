@@ -58,6 +58,7 @@ private String level=Board.DEFAULT;
 		setResizable(false);
 		setFocusable(false);
 		Statics.is1024=Statics.BOARD_WIDTH<=1024;
+		setIconImage(Statics.ICON.getImage());
 		setVisible(true);
 	}
 
