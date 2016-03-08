@@ -405,6 +405,8 @@ public class StageBuilder {
 						case NPC.PLATO:
 							npcs.add(new PLATO(nX, nY, owner, loc));
 							break;
+						case "Hi":
+							npcs.add(new Hi(nX, nY, owner, loc));
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -479,7 +481,7 @@ public class StageBuilder {
 							if (val == 0)
 								npcs.add(new Objects(nX, nY, loc, wall, owner, value));
 							else if (val == -1) {
-								npcs.add(new SpecialCollectible(nX, nY, loc, owner, count));
+								npcs.add(new KeyCrystal(nX, nY, loc, owner, count));
 								count++;
 							} else if (val == -2)
 								npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
@@ -502,15 +504,15 @@ public class StageBuilder {
 							} else if (val == -8) {
 								npcs.add(new ActivatedBossWall(nX, nY, owner));
 							} else if (val == -9) {
-								npcs.add(new PushCube(nX, nY, owner, wall));
+								npcs.add(new PushCube(nX, nY, owner));
 							} else if (val == -10) {
-								npcs.add(new BombCube(nX, nY, wall, owner));
+								npcs.add(new BombCube(nX, nY, owner));
 							} else if (val == -11) {
 								npcs.add(new CubeButtonMoneyGiver(nX, nY, owner));
 							} else if (val == -12)
 								npcs.add(new BigRedButton(nX, nY, owner));
 							else if (val == -13)
-								npcs.add(new Lamp(nX, nY, loc, owner, 9));
+								npcs.add(new Lamp(nX, nY, loc, owner, Integer.parseInt(stuff.get(3))));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))

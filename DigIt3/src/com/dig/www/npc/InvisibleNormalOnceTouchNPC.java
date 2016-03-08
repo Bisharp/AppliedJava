@@ -25,7 +25,7 @@ public InvisibleNormalOnceTouchNPC(int x, int y, Board owner,
 public InvisibleNormalOnceTouchNPC(int x, int y, Board owner, String[] dialogs,
 		String s, String location, NPCOption[] options, String hiChar,
 		String byeI, String byeChar, boolean b, String[] strings2,
-		String string, String string2, String string3, String string4) {
+		CutSceneImage string, CutSceneImage string2, CutSceneImage string3, CutSceneImage string4) {
 	// TODO Auto-generated constructor stub
 	super(x, y,null, owner, dialogs, s, location, options, hiChar, byeI, byeChar,
 			false,string,string2,string3,string4);

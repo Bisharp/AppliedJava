@@ -38,6 +38,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.jws.Oneway;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -104,7 +105,7 @@ import com.dig.www.objects.Mirror;
 import com.dig.www.objects.MoneyObject;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.PushCube;
-import com.dig.www.objects.SpecialCollectible;
+import com.dig.www.objects.KeyCrystal;
 import com.dig.www.objects.ThrownObject;
 import com.dig.www.start.Switch.ActionMenu;
 import com.dig.www.start.Switch.SwitchMenu;
@@ -247,6 +248,7 @@ public class Board extends MPanel implements ActionListener {
 	private ArrayList<NPC> npcs = new ArrayList<NPC>();
 	private NPC current = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Enemy>onScreenEnemies=new ArrayList<Enemy>();
 	private ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	private int scrollX = 0;
@@ -550,7 +552,6 @@ if(consumeStop)
 		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
 		spawnNum = sB.getSpawnNum();
 		save();
-		GameCharacter.getInventory().addItem(Items.POTATOGUY, 100);
 	}
 
 	public void changeClientArea() {
@@ -773,7 +774,6 @@ if(consumeStop)
 		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
 				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
-
 	public void paint(Graphics g) {
 		super.paint(g);
 
@@ -801,7 +801,7 @@ if(consumeStop)
 				if (b.isOnScreen() && b.isVisible())
 					switch (weather) {
 					case FOG:
-						if (!b.canSee() || !fogCompute(b.getX(), b.getY()))
+						if ((!b.canSee()&&!character.isDead()) || !fogCompute(b.getX(), b.getY()))
 							break;
 
 						if (b.traversable())
@@ -834,7 +834,7 @@ if(consumeStop)
 						tag = true;
 					}
 					// end of that code
-					if (tag || e instanceof Boss)
+					if (tag || e instanceof Boss||character.isDead())
 						switch (weather) {
 
 						case FOG:
@@ -876,7 +876,7 @@ if(consumeStop)
 					} else
 						tag = true;
 
-					if (tag)
+					if (tag||character.isDead())
 						p.draw(g2d);
 				}
 			}
@@ -901,7 +901,7 @@ if(consumeStop)
 						tag = true;
 					}
 					// end of that code
-					if (tag)
+					if (tag||character.isDead())
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(obj.getX(), obj.getY())) {
@@ -937,7 +937,7 @@ if(consumeStop)
 					}
 					// end of that code
 
-					if (tag)
+					if (tag||character.isDead())
 						p2.draw(g2d);
 				}
 
@@ -961,7 +961,7 @@ if(consumeStop)
 					}
 					// end of that code
 
-					if (tag)
+					if (tag||character.isDead())
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(npc.getX(), npc.getY())) {
@@ -1478,7 +1478,7 @@ if(consumeStop)
 			for (GameCharacter character : friends) {
 				character.animate();
 			}
-
+onScreenEnemies.clear();
 			for (int i = 0; i < enemies.size(); i++) {
 
 				if (notMe) {
@@ -1493,7 +1493,12 @@ if(consumeStop)
 					}
 				} else
 					enemies.get(i).basicAnimate();
-				enemies.get(i).setOnScreen(enemies.get(i).getBounds().intersects(getScreen()));
+				if(enemies.get(i).getBounds().intersects(getScreen())){
+				enemies.get(i).setOnScreen(true);
+				onScreenEnemies.add(enemies.get(i));
+				}
+				else
+					enemies.get(i).setOnScreen(false);
 				// /\
 				// || Nightmare Fuel
 			}
@@ -1559,7 +1564,6 @@ if(consumeStop)
 			if (switching)
 				openSwitchDialogue();
 
-			// TODO weather
 			if (weather != Weather.NORMAL && weatherTimer <= 0) {
 				if (Statics.RAND.nextInt(100) == 0)
 					switch (weather) {
@@ -1743,7 +1747,6 @@ if(consumeStop)
 				} else
 					sendInt -= mult();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (me != null && character != null) {
@@ -1882,7 +1885,6 @@ if(consumeStop)
 				} else
 					sendInt -= mult();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				// e1.printStackTrace();
 				JOptionPane.showMessageDialog(this, "Lost connection to server. Leaving game.");
 				System.exit(0);
@@ -1931,7 +1933,7 @@ if(consumeStop)
 	}
 
 	public void setCharacterStates(Rectangle r3) {
-
+//TODO Start
 		Block b;
 		Shape o;
 
@@ -1975,7 +1977,7 @@ if(consumeStop)
 				b.setCanSee(tag);
 				// End of line-of-sight
 			}
-			// TODO working
+			// working
 			for (GameCharacter character : friends) {
 				Rectangle r2 = character.getCollisionBounds();
 
@@ -1983,22 +1985,18 @@ if(consumeStop)
 					if (!b.traversable() && b.getBounds().intersects(r2)) {
 
 						switch (b.getType()) {
-
-						// Cases for the floor
-						case GROUND:
-						case ROCK:
-						case CARPET:
-						case DIRT:
-							break;
 						case PIT:
 						case WALL:
 						case CRYSTAL:
 						case LIQUID:
 							character.collision(b, false);
+							break;
+							default:
+								break;
 						}
 					}
 
-					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+					if ((b.getType() == Blocks.CRYSTAL&&character.getMove() == Moves.CLUB && !character.hasMeleed())
 							|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
 									&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
 											|| b.getType() == Blocks.PIT))) {
@@ -2212,7 +2210,7 @@ if(consumeStop)
 				}
 			}
 
-		}
+		}//TODO END WORLD LOOP
 
 		for (GameCharacter friend : friends) {
 			if (friend.getMove() == Moves.AURA && !friend.hasMeleed()) {
@@ -2392,10 +2390,10 @@ if(consumeStop)
 								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(), u));
 							u--;
 							beenPicked = true;
-						} else if (n instanceof SpecialCollectible) {
+						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
-							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
-							data.collect(((SpecialCollectible) n).id);
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
+							data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 
 							beenPicked = true;
@@ -2432,10 +2430,10 @@ if(consumeStop)
 							if (currentState != null)
 								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(), u));
 							u--;
-						} else if (n instanceof SpecialCollectible) {
+						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
-							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
-							data.collect(((SpecialCollectible) n).id);
+							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
+							data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 							u--;
 
@@ -2533,7 +2531,7 @@ if(consumeStop)
 				}
 			}
 		}
-		// end
+		//TODO end
 	}
 
 	public void toggleLagPrevention() {
@@ -2617,7 +2615,7 @@ if(consumeStop)
 			break;
 		}
 
-		repaint();
+	//	repaint();
 	}
 
 	@Override
@@ -2803,7 +2801,9 @@ if(consumeStop)
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
-
+public ArrayList<Enemy>getOnScreenEnemies(){
+	return onScreenEnemies;
+}
 	public void save(int spawnNum) {
 		this.spawnNum = spawnNum;
 		this.save();

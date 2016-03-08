@@ -69,12 +69,6 @@ public class Heart extends GameCharacter {
 	}
 
 	@Override
-	public void animate() {
-		super.animate();
-
-	}
-
-	@Override
 	protected void drawCSHUD(Graphics2D g2d) {
 	}
 

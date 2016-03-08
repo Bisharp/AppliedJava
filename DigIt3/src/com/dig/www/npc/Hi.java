@@ -1,6 +1,7 @@
 package com.dig.www.npc;
 
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.dig.www.start.Board;
@@ -17,7 +18,7 @@ private boolean hasTalked=false;
 		super(x, y,owner, new String[]{"hi","hi","hi","hi","hi"}, NPC.MACARONI,location,new NPCOption[]
 			{
 			
-			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{},"images/npcs/cutScenes/test0/0.png","images/npcs/cutScenes/test0/0.png","images/npcs/cutScenes/test0/1.png","images/npcs/cutScenes/test0/2.png"
+			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{},new CutSceneImage("images/gifTest.gif",new Color(34,177,76)),new CutSceneImage("images/effects/fire.gif"),new CutSceneImage("images/objects/bombCube.png"),new CutSceneImage("images/Loading.gif")
 	);
 	}
 

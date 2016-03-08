@@ -27,7 +27,7 @@ public class TerrainBlock extends Block {
 	}
 
 	public boolean canSee(Graphics2D g2d) {
-		if (canSee && type != Blocks.PIT)
+		if ((canSee||owner.getCharacter().isDead()) && type != Blocks.PIT)
 			return true;
 
 		g2d.setColor(Color.BLACK);

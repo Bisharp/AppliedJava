@@ -11,7 +11,7 @@ import com.dig.www.npc.QuestNPC;
 import com.dig.www.npc.Reyzu;
 import com.dig.www.objects.DropPoint;
 import com.dig.www.objects.Objects;
-import com.dig.www.objects.SpecialCollectible;
+import com.dig.www.objects.KeyCrystal;
 import com.dig.www.start.Board;
 import com.dig.www.util.Quest;
 import com.dig.www.util.Statics;
@@ -144,8 +144,8 @@ public class CharData implements Serializable {
 				String name) {
 
 			for (Objects obj : objectList)
-				if (obj instanceof SpecialCollectible)
-					specialCollectibles.put(((SpecialCollectible) obj).id,
+				if (obj instanceof KeyCrystal)
+					specialCollectibles.put(((KeyCrystal) obj).id,
 							false);
 				else if (obj instanceof DropPoint)
 					hasDropPoints = true;
@@ -257,7 +257,7 @@ specialCollectibles.remove(address);
 
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
-				if (!(obj instanceof SpecialCollectible)) {
+				if (!(obj instanceof KeyCrystal)) {
 
 					if (points != null)
 						if (obj instanceof DropPoint) {
@@ -273,7 +273,7 @@ specialCollectibles.remove(address);
 
 					objList.add(obj);
 				} else if (specialCollectibles
-						.containsKey(((SpecialCollectible) obj).id) ? !hasCollected(((SpecialCollectible) obj).id)
+						.containsKey(((KeyCrystal) obj).id) ? !hasCollected(((KeyCrystal) obj).id)
 						: true)
 					objList.add(obj);
 			}

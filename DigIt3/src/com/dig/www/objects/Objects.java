@@ -92,8 +92,8 @@ public class Objects extends Sprite {
 				return "This looks like a button, but it doesn't do anything when stepped on, even with all of us together.";
 			case "pushCube":
 				return "Push cube: a pushable cube. It can activate certain buttons if it is on top of them.";
-			case "companionCube":
-				return "The Weighted Companion Cube will never threaten to stab you and, in fact, cannot speak.";
+			case "bombCube":
+				return "It says not to touch it, perhaps we should listen.";
 			case "BossBlock":
 				return "This strange portal-like wall bars the way.";
 			case "HookObject":

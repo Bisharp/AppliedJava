@@ -113,20 +113,20 @@ POTATOGUY{
 			return false;
 		}
 	},
-	SPECIAL_COLLECTIBLE {
+	KEYCRYSTAL {
 		@Override
 		protected String getPersonalDesc() {
-			return "<html>An item required to progress through the game;<br>full decription to be written. (Hi, this is a message for someone else. If you are not someone else, please disregard this message.)";
+			return "A Key Crystal. Enough of these will open special red portals.";
 		}
 
 		@Override
 		public String getPath() {
-			return "images/objects/collectibles/special.png";
+			return "images/objects/collectibles/keyCrystal/1.png";
 		}
 
 		@Override
 		public String toString() {
-			return "Golden Troll Face";
+			return "Key Crystal";
 		}
 
 		@Override
@@ -474,7 +474,7 @@ POTATOGUY{
 
 		do {
 			i = values()[Statics.RAND.nextInt(values().length)];
-		} while (i == Items.SPECIAL_COLLECTIBLE || i == Items.NULL || i == Items.PROJECTILE);
+		} while (i == Items.KEYCRYSTAL || i == Items.NULL || i == Items.PROJECTILE);
 
 		return i;
 	}

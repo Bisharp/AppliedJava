@@ -22,8 +22,8 @@ private DefaultListModel<String>listMod=new DefaultListModel<String>();
 private JList<String>list=new JList<String>(listMod);
 public SwitchMenu(Board owner){
 	this.owner=owner;
-	setSize(400,400);
-	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,Statics.BOARD_HEIGHT/2-this.getHeight()/2);
+	setSize(400,300);
+	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,0);
 	setAlwaysOnTop(true);
 	setFocusable(true);
 	requestFocus();

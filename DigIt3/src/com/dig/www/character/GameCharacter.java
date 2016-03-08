@@ -384,7 +384,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	protected float health = HP_MAX;
 	protected Hashtable<Direction, Boolean> collisionFlags;
-	// TODO strength stuff
 	protected int strength;
 	// private int strengthIncrementer = 0;
 	// private int timesIncremented = 1;
@@ -442,6 +441,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			basicAnimate();
 			onScreen = getBounds().intersects(owner.getScreen());
 		} else {
+			//TODO On this computer
 			if (dead) {
 				basicAnimate();
 				if (owner.getCharacter() != this && !owner.getCharacter().isDead()
@@ -459,6 +459,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				setActing(0, 0);
 				releaseAll();
 			} else {
+				//TODO Alive
 				collisionFlagged = false;
 				if (poisonTimer > 0) {
 					if (poisonHurtTimer <= 0) {
@@ -800,22 +801,22 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						default:
 							rect = new Rectangle();
 						}
-
-						for (int c = 0; c < owner.getEnemies().size(); c++) {
-							if (((this instanceof Diamond && owner.getEnemies().get(c) instanceof Projectile
-									&& new Point(getMidX(), getMidY()).distance(owner.getEnemies().get(c).getMidX(),
-											owner.getEnemies().get(c).getMidY()) < 750)
-									|| getActBounds().intersects(owner.getEnemies().get(c).getBounds()))
-									&& !owner.getEnemies().get(c).isInvincible()
-									&& (!(owner.getEnemies().get(c) instanceof Projectile)
+ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
+						for (int c = 0; c < enemies.size(); c++) {
+							if (((this instanceof Diamond && enemies.get(c) instanceof Projectile
+									&& new Point(getMidX(), getMidY()).distance(enemies.get(c).getMidX(),
+											enemies.get(c).getMidY()) < 750)
+									|| getActBounds().intersects(enemies.get(c).getBounds()))
+									&& !enemies.get(c).isInvincible()
+									&& (!(enemies.get(c) instanceof Projectile)
 											|| this instanceof Diamond)) {
 								shouldPressMelee = true;
 
 								break;
 							} else {
-								if (!shouldRangedPress && rect.intersects(owner.getEnemies().get(c).getBounds())
-										&& !owner.getEnemies().get(c).isInvincible()
-										&& !(owner.getEnemies().get(c) instanceof Projectile)) {
+								if (!shouldRangedPress && rect.intersects(enemies.get(c).getBounds())
+										&& !enemies.get(c).isInvincible()
+										&& !(enemies.get(c) instanceof Projectile)) {
 									shouldRangedPress = true;
 								}
 							}
@@ -879,7 +880,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						s = "n";
 					}
 
-				}
+				}//TODO end not player
 
 				if (hitstunTimer > 0) {
 					hitstunTimer -= owner.mult();
@@ -902,7 +903,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					hpTimer = HP_TIMER_MAX;
 				}
 
-				if (!wallBound) {
+				if (!wallBound) {//TODO not wallbound
 
 					if (animationTimer >= ANIMAX) {
 
@@ -994,7 +995,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						y += deltaY * owner.mult();
 					}
 				} else {
-
+//TODO wallbound player
 					if (player) {
 						double tempD = Statics.pointTowards(new Point(wallX, wallY), owner.getCharPoint()) + 180;
 						if (tempD > 360)
@@ -1096,7 +1097,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 				onScreen = getBounds().intersects(owner.getScreen());
 				resetFlags();
 			}
-
+//TODO end alive
 			illuminated = false;
 		}
 		if (owner.getState() == State.INGAME && !dead) {
@@ -1284,7 +1285,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 					owner.getfP().add(new FProjectile(dir, x, y, 25, this, i.getPath(), owner, Moves.ITEM));
 				}
 				i.doAct(owner);
-				// TODO More strength stuff; this code would be removed if we
+				// More strength stuff; this code would be removed if we
 				// don't allow characters to get stronger. Currently removed
 				// until I actually present the idea.
 
@@ -1442,7 +1443,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		collisionFlags.put(placement[i], false);
 	}
 
-	// TODO stuff
 	// private static final Direction[] placement = new Direction[] {
 	// Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT };
 	private static final Direction[] placement = new Direction[] { Direction.UP, Direction.RIGHT, Direction.DOWN,
@@ -1467,7 +1467,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		return super.getMidY() + CLIP;
 	}
 
-	// TODO collision
 	public void collision(Sprite collide, boolean isPlayer) {
 		// if (isPlayer) {
 		// if ((!goTo) && (enPoint != null)) {
@@ -1489,7 +1488,6 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		}
 	}
 
-	// TODO forwardBounds
 	public static final int CLIP = 40;
 
 	public Rectangle[] getForwardBounds() {
@@ -1837,13 +1835,13 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 			drawTLBar(normWidth - 75, g2d);
 			// int normWidth2 = 280;
-			String colectibleName = "DK";
+			String colectibleName = "KC";
 			int baseWidth = 100;
 			// boolean
 			// b=getInventory().items.contains(Items.SPECIAL_COLLECTIBLE);
 			int collectibles = 0;
-			if (getInventory().contains(Items.SPECIAL_COLLECTIBLE))
-				collectibles = getInventory().getItemNum(Items.SPECIAL_COLLECTIBLE);
+			if (getInventory().contains(Items.KEYCRYSTAL))
+				collectibles = getInventory().getItemNum(Items.KEYCRYSTAL);
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(normWidth - 20, 0 + macH, baseWidth + (13 * numOfDigits(collectibles)), 50);
 			g2d.setColor(Statics.BROWN);
@@ -1886,11 +1884,16 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			break;
 
 		case RIGHT:
+		case DIAG_DR:
+		case DIAG_UR:
+		case NONE:
 			dX = x + Statics.BLOCK_HEIGHT - 50;
 			dY = y;
 			break;
 
 		case LEFT:
+		case DIAG_DL:
+		case DIAG_UL:
 			dX = x - 100;
 			dY = y;
 			break;
@@ -2019,7 +2022,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 			hitstunTimer = HITSTUN_MAX;
 		}
 		if (health <= 0) {
-
+stop();
+if(owner.getCharacter()==this){
+	owner.setScrollX(0);
+	owner.setScrollY(0);
+}
 			if (owner.getAliveFriends().size() == 0)
 				owner.setState(Board.State.DEAD);
 			else {
@@ -2379,6 +2386,10 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	}
 
 	public class LevelUp extends JFrame {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		JLabel levelLabel;
 		JButton mHealth;
 		JButton mEn;

@@ -5,7 +5,7 @@ import com.dig.www.start.Board;
 
 public class Gatekeeper extends BlockerNPC {
 
-	public static final String COLLECTIBLE = Items.SPECIAL_COLLECTIBLE
+	public static final String COLLECTIBLE = Items.KEYCRYSTAL
 			.toString();
 
 	public Gatekeeper(int x, int y, String loc, Board owner, String location,

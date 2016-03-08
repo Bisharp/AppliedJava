@@ -25,8 +25,8 @@ public class ActionMenu extends JFrame{
 public ActionMenu(Board owner){
 	this.owner=owner;
 	owner.setFocusable(false);
-	setSize(400,400);
-	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,Statics.BOARD_HEIGHT/2-this.getHeight()/2);
+	setSize(400,300);
+	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,0);
 	setAlwaysOnTop(true);
 	setFocusable(true);
 	requestFocus();

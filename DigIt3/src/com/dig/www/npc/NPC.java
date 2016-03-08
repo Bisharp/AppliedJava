@@ -44,13 +44,13 @@ public abstract class NPC extends Sprite {
 	protected String hiChar;
 	protected String lastI;
 	protected String lastChar;
-	protected String lastICut;
-	protected String lastCharCut;
+	protected CutSceneImage lastICut;
+	protected CutSceneImage lastCharCut;
 
-	protected String hiCutSceneChar;
-	protected String hiCutSceneI;
-	protected String byeCutSceneChar;
-	protected String byeCutSceneI;
+	protected CutSceneImage hiCutSceneChar;
+	protected CutSceneImage hiCutSceneI;
+	protected CutSceneImage byeCutSceneChar;
+	protected CutSceneImage byeCutSceneI;
 	
 	protected boolean isObstacle=true;
 	
@@ -154,7 +154,7 @@ public abstract class NPC extends Sprite {
 		}
 		public NPC(int x, int y, String loc, Board owner, String[] dialogs,
 				String s, String location, NPCOption[] options, String hiChar,
-				String byeI, String byeChar,boolean isObstacle,String hiCutSceneChar,String hiCutSceneI,String byeCutSceneChar,String byeCutSceneI) {//Note NO hiI because that is s.
+				String byeI, String byeChar,boolean isObstacle,CutSceneImage hiCutSceneChar,CutSceneImage hiCutSceneI,CutSceneImage byeCutSceneChar,CutSceneImage byeCutSceneI) {//Note NO hiI because that is s.
 			super(x, y, loc, owner);
 			this.hiCutSceneChar=hiCutSceneChar;
 			this.hiCutSceneI=hiCutSceneI;
@@ -320,14 +320,16 @@ if (iTalk)
 		for (int c = 0; c < string.length; c++)
 			g2d.drawString(string[c], 6, Statics.BOARD_HEIGHT - boxHeight / 2
 					- 100 + ((c - string.length) * font.getSize()));
-		g2d.setColor(Color.BLACK);
+		
 		if(iTalk){
 			if(lastICut!=null){
+				g2d.setColor(lastICut.getBackColor());
 				g2d.fillRect(0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight);
-		g2d.drawImage(Statics.newImage(lastICut), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
+		g2d.drawImage(Statics.newImage(lastICut.getLoc()), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
 			}}else if(lastCharCut!=null){
+				g2d.setColor(lastCharCut.getBackColor());
 				g2d.fillRect(0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight);
-			g2d.drawImage(Statics.newImage(lastCharCut), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
+			g2d.drawImage(Statics.newImage(lastCharCut.getLoc()), 0, 0, Statics.BOARD_WIDTH,Statics.BOARD_HEIGHT - boxHeight, owner);
 			}
 		if (inDialogue && !wait)
 			if (iTalk)

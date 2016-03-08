@@ -75,7 +75,7 @@ public void digDo(){
 	public abstract void draw(Graphics2D g2d) ;
 	
 	public boolean canSee(Graphics2D g2d) {
-		if (canSee)
+		if (canSee||owner.getCharacter().isDead())
 			return true;
 		
 		g2d.setColor(Color.BLACK);

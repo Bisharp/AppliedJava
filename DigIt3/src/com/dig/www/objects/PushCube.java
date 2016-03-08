@@ -16,8 +16,8 @@ import com.dig.www.start.DigIt;
 public class PushCube extends Objects{
 protected boolean willIsWall;
 protected boolean inBetween;//This makes it so that friends will pathfind around it.
-	public PushCube(int x, int y,Board owner,boolean temp) {
-		super(x, y, "images/objects/pushCube.png", true, owner, "pushCube");
+	public PushCube(int x, int y,Board owner) {
+		super(x, y, "images/objects/pushCube.png",true, owner, "pushCube");
 	}
 	public PushCube(int x, int y,String loc,Board owner, String identifier) {
 		super(x, y, loc, true, owner,identifier);
