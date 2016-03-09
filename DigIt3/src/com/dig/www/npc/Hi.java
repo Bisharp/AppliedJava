@@ -18,7 +18,7 @@ private boolean hasTalked=false;
 		super(x, y,owner, new String[]{"hi","hi","hi","hi","hi"}, NPC.MACARONI,location,new NPCOption[]
 			{
 			
-			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{},new CutSceneImage("images/gifTest.gif",new Color(34,177,76)),new CutSceneImage("images/effects/fire.gif"),new CutSceneImage("images/objects/bombCube.png"),new CutSceneImage("images/Loading.gif")
+			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{},new CutSceneImage("images/npcs/cutScenes/RyoBoss2/out.gif"),new CutSceneImage("images/gifTest.gif",new Color(34,177,76)),new CutSceneImage("images/objects/bombCube.png"),new CutSceneImage("images/Loading.gif")
 	);
 	}
 
