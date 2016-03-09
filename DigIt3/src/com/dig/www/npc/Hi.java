@@ -15,10 +15,10 @@ public class Hi extends InvisibleNormalOnceTouchNPC{
 private boolean hasTalked=false;
 	public Hi(int x, int y, Board owner,
 			String location) {
-		super(x, y,owner, new String[]{"hi","hi","hi","hi","hi"}, NPC.MACARONI,location,new NPCOption[]
+		super(x, y,owner, new String[]{"hi","hi","hi","hi","hi"}, "black",location,new NPCOption[]
 			{
 			
-			},NPC.SPADE,NPC.HEART,NPC.KEPLER,false,new String[]{},new CutSceneImage("images/npcs/cutScenes/RyoBoss2/out.gif"),new CutSceneImage("images/gifTest.gif",new Color(34,177,76)),new CutSceneImage("images/objects/bombCube.png"),new CutSceneImage("images/Loading.gif")
+			},"black",NPC.HEART,NPC.KEPLER,false,new String[]{},new CutSceneImage("images/npcs/cutScenes/RyoBoss2/out.gif"),new CutSceneImage("images/gifTest.gif",new Color(34,177,76)),new CutSceneImage("images/objects/bombCube.png"),new CutSceneImage("images/Loading.gif")
 	);
 	}
 
@@ -30,7 +30,7 @@ private boolean hasTalked=false;
 	@Override
 	protected String getGreeting() {
 		// TODO Auto-generated method stub
-		return "hi";
+		return "";
 	}
 
 	@Override
