@@ -15,10 +15,9 @@ public class WizardGuy extends NPC {
 				"images/npcs/map/stationary/wizard.png",
 				owner,
 				new String[] {
-						"Magic is cool!",
-						"It's dangerous to go alone. Take this!",
-						"Mom told me I could grow up to be anything I wanted, so I became a wizard!",
-						"Can you believe that guy? He thinks science is superior to magic!" },
+					"Magic is cool!",
+					"Tours of the wizard tower are free for friends!",
+					"Magic is awesome!"},
 				WIZARD,
 				location,
 				new NPCOption[] {

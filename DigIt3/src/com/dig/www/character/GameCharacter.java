@@ -2026,6 +2026,9 @@ stop();
 if(owner.getCharacter()==this){
 	owner.setScrollX(0);
 	owner.setScrollY(0);
+	for(int c=0;c<owner.getFriends().size();c++){
+		owner.getFriends().get(c).clearPath();
+	}
 }
 			if (owner.getAliveFriends().size() == 0)
 				owner.setState(Board.State.DEAD);
@@ -2717,5 +2720,9 @@ if(owner.getCharacter()==this){
 			return 3;
 
 		}
+	}
+	public void clearPath(){
+		path=null;
+		pathUpdateTimer=25;
 	}
 }

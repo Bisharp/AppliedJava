@@ -11,6 +11,11 @@ public abstract class InvisibleNormalOnceTouchNPC extends NPC implements TouchNP
 	protected boolean hasTalked;
 	protected boolean cantExit;
 	protected String[] chars;
+	public InvisibleNormalOnceTouchNPC(int x,int y,Board owner,String[]dialogs,String s,String location,NPCOption[] currentOptions) {
+	super(x, y, null, owner, dialogs, s, location, currentOptions);
+	isObstacle=false;
+		// TODO Auto-generated constructor stub
+	}
 public InvisibleNormalOnceTouchNPC(int x, int y, Board owner,
 			String[] dialogs, String s, String location, NPCOption[] options,
 			String hiChar, String byeI, String byeChar,boolean cantExit,String[]chars) {
@@ -47,6 +52,7 @@ public boolean buttonTalk() {
 
 public boolean isChars(){
 	String chara=owner.getCharacter().getType().toString();
+	if(chars!=null)
 	for(String s:chars){
 		if(s.equals(chara))
 			return true;

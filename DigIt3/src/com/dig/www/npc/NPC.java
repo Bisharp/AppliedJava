@@ -212,7 +212,8 @@ public abstract class NPC extends Sprite {
 if (iTalk)
 			doOption();
 		posX = 0;
-		posY = Statics.BOARD_HEIGHT - (boxHeight / 3) * 2;
+		//System.out.println((int)g2d.getFontMetrics(g2d.getFont()).getStringBounds("W", g2d).getHeight());
+		posY = Statics.BOARD_HEIGHT - boxHeight / 2 - 102+23;
 
 		for (int i = 0; i < l.length(); i++) {
 			if (posX > Statics.BOARD_WIDTH - 160) {

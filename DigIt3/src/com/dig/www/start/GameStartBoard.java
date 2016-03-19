@@ -23,6 +23,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -380,18 +381,41 @@ try {
 						new JLabel(
 								"Your Host Code is below. You can copy it to your clipboard.",
 								SwingConstants.CENTER), BorderLayout.NORTH);
-				String s = "Could not get Host Code.";
+				JPanel tpan=new JPanel();
+				tpan.setLayout(new BoxLayout(tpan, BoxLayout.Y_AXIS));
+				JPanel apan=new JPanel();
+				String sa = "Could not get Host Code.";
 				try {
-					s = InetAddress.getLocalHost().getHostAddress();
-				} catch (UnknownHostException e) {
+					//sa=Statics.getPublicAddress();
+					sa = InetAddress.getLocalHost().getHostAddress();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				JTextField tf = new JTextField(s, 1);
+				JTextField tfa = new JTextField(sa, 25);
+
+				// tf.setFocusable(false);
+				tfa.setEditable(false);
+				apan.add(new JLabel("Same wifi:"));
+				apan.add(tfa);
+				tpan.add(apan);
+				String s = "Could not get Host Code.";
+				JPanel bpan=new JPanel();
+				try {
+					s=Statics.getPublicAddress();
+					//s = InetAddress.getLocalHost().getHostAddress();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				JTextField tf = new JTextField(s, 25);
 
 				// tf.setFocusable(false);
 				tf.setEditable(false);
-				this.add(tf, BorderLayout.SOUTH);
+				bpan.add(new JLabel("Outside wifi"));
+				bpan.add(tf);
+				tpan.add(bpan);
+				this.add(tpan, BorderLayout.SOUTH);
 				setVisible(true);
 			}
 		}

@@ -99,12 +99,12 @@ public boolean isWall() {
 		return false;
 }
 public boolean interact(){
-	String[]options={"Leave","Pull"};
-boolean b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
+	String[]options={"Leave","Pull","Open"};
+int b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
 			+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 			new ImageIcon(image),options,"Leave"
-			)==1;
-if(b){
+			);
+if(b==1){
 		int tx=owner.getCharacterX();
 		int ty=owner.getCharacterY();
 		int willX=x;
@@ -124,7 +124,10 @@ if(b){
 		y=willY;
 			}
 		}
+	}else if(b==2){
+		JOptionPane.showMessageDialog(owner, "It's filled with rubber duckies...", DigIt.NAME
+			+ " Item Description", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(image));
 	}
-	return b;
+	return b!=0;
 }
 }

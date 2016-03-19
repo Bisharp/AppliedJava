@@ -32,11 +32,11 @@ private boolean exploded;
 		super.draw(g2d);
 		}
 	public boolean interact(){
-		String[]options={"Leave","Pull"};
+		String[]options={"Leave","Pull","Open"};
 	boolean b=JOptionPane.showOptionDialog(owner,desc, DigIt.NAME
 				+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(image),options,"Leave"
-				)==1;
+				)!=0;
 	if(b&&!exploded){
 		setWall(false);
 		exploded=true;

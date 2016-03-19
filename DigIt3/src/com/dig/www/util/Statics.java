@@ -12,9 +12,14 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.NetworkInterface;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.zip.ZipEntry;
@@ -432,4 +437,12 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		return filesList.toArray(new String[filesList.size()]);
 	}
 	private static String basedir = null;
+	public static String getPublicAddress() throws IOException{
+		URL whatismyip = new URL("http://checkip.amazonaws.com");
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+		                whatismyip.openStream()));
+
+		String ip = in.readLine();
+		return ip;
+	}
 }
