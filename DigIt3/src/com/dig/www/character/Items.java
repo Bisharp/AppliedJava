@@ -41,7 +41,7 @@ POTATOGUY{
 	@Override
 	public void doAct(Board owner) {
 		// TODO Auto-generated method stub
-		owner.getCharacter().poison();
+		owner.getCharacter().poison(true);
 	}
 	@Override
 	public boolean stop() {

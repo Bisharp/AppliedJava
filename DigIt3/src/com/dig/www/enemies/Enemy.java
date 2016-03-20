@@ -405,7 +405,10 @@ if(burnTimer>0){
 		// for now, only Projectiles poison, full thing to be implemented later
 		return false;
 	}
-
+public boolean isPoison(){
+	return true;
+	//is poison, otherwise fire
+}
 	protected boolean hitstunRenders() {
 		return hitstunTimer % 3 == 0 || hitstunTimer <= 0;
 	}

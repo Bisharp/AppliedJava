@@ -2107,7 +2107,7 @@ onScreenEnemies.clear();
 
 				if (e.getBounds().intersects(r3) && e.willHarm()) {
 					e.turnAround(character.getX(), character.getY());
-					character.takeDamage(e.getDamage(), e.poisons());
+					character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
 
 				}
 
@@ -2115,7 +2115,7 @@ onScreenEnemies.clear();
 					Rectangle r2 = character.getBounds();
 					if (e.getBounds().intersects(r2) && e.willHarm()) {
 						e.turnAround(character.getX(), character.getY());
-						character.takeDamage(e.getDamage(), e.poisons());
+						character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
 					}
 				}
 			}

@@ -38,6 +38,8 @@ public abstract class NPC extends Sprite {
 	public static final String CLUB = "club";
 	public static final String DIAMOND = "diamond";
 	public static final String HEART = "heart";
+	public static final String RYO = "ryo";
+	public static final String KYSERYX = "kyseryx";
 
 	protected String byeI;
 	protected String byeChar;

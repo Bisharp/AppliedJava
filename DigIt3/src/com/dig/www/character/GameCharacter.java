@@ -181,10 +181,11 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 
 	protected int poisonTimer;
 	protected int poisonHurtTimer;
-
-	public void poison() {
+protected boolean isPoison;
+	public void poison(boolean isPoison) {
 		poisonTimer = 375;
 		poisonHurtTimer = 15;
+		this.isPoison=isPoison;
 	}
 
 	public boolean hasSpecialed() {
@@ -434,7 +435,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		s = "n";
 		resetFlags();
 	}
-
+private int reviveTimer;
 	@Override
 	public void animate() {
 		if (!(this == owner.getCharacter() || (owner.getClient() == null && !player))) {
@@ -443,18 +444,24 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 		} else {
 			//TODO On this computer
 			if (dead) {
+				if(reviveTimer>0)
+					reviveTimer-=owner.mult();
 				basicAnimate();
+				if(reviveTimer<=0){
 				if (owner.getCharacter() != this && !owner.getCharacter().isDead()
-						&& getBounds().intersects(owner.getCharacter().getBounds()))
+						&& getBounds().intersects(owner.getCharacter().getBounds())){
 					dead = false;
+				reviveTimer=50;}
+				else
 				for (int c = 0; c < owner.getFriends().size(); c++) {
 
 					if (owner.getFriends().get(c) != this && !owner.getFriends().get(c).isDead()
 							&& getBounds().intersects(owner.getFriends().get(c).getBounds())) {
 						dead = false;
+						reviveTimer=50;
 						break;
 					}
-				}
+				}}
 				onScreen = getBounds().intersects(owner.getScreen());
 				setActing(0, 0);
 				releaseAll();
@@ -466,7 +473,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 						health -= 1;
 						hpTimer = 100;
 						if (health <= 0)
-							takeDamage(0, false);
+							takeDamage(0, false,false);
 						poisonHurtTimer = 15;
 					} else
 						poisonHurtTimer -= owner.mult();
@@ -1852,8 +1859,12 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
 
 		}
-		if (poisonTimer > 0)
+		if (poisonTimer > 0){
+			if(isPoison)
 			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/poison.gif"), x, y, owner);
+			else
+			g2d.drawImage(DigIt.lib.checkLibrary("/images/effects/fire.gif"), x, y, owner);
+				}
 		// if (owner.getState() == State.INGAME) {
 		// timersCount();
 		// }
@@ -2013,9 +2024,9 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 	// // + SPEED);
 	// }
 
-	public void takeDamage(int amount, boolean poison) {
+	public void takeDamage(int amount, boolean poison,boolean isPoison) {
 		if (poison)
-			poison();
+			poison(isPoison);
 		if (amount > 0 && hitstunTimer <= 0) {
 			health -= amount;
 			hpTimer = 100;
@@ -2196,7 +2207,8 @@ if(owner.getCharacter()==this){
 	}
 
 	public void heal(int i) {
-
+if(dead)
+	return;
 		health += i;
 		if (health > HP_MAX) {
 			health = HP_MAX;

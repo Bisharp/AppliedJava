@@ -21,8 +21,11 @@ protected static final int boxHeight = 120;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
-		public void act(NPCOption option) {
-		}
+	public void act(NPCOption npcOption){
+		//npcOption is null
+//		if(c==0)
+//			System.out.println("This is how you tell whether to do something");
+	}
 	@Override
 		public void drawOption(Graphics2D g2d) {
 			// TODO Auto-generated method stub
@@ -153,6 +156,7 @@ protected static final int boxHeight = 120;
 	public void exit() {
 		// TODO Auto-generated method stub
 		c++;
+		act(null);
 		if(c>=cutScenes.length)
 			end();
 	}
