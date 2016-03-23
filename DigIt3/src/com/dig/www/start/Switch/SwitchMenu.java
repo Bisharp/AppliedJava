@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.dig.www.MultiPlayer.State.SwitchState;
 import com.dig.www.character.GameCharacter;
@@ -25,8 +27,8 @@ public SwitchMenu(Board owner){
 	setSize(400,300);
 	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,0);
 	setAlwaysOnTop(true);
-	setFocusable(true);
-	requestFocus();
+	setFocusable(false);
+	//requestFocus();
 	setUndecorated(true);
 	String[]alive=owner.getCharacters();
 	for(String element:alive)
@@ -77,6 +79,17 @@ public SwitchMenu(Board owner){
 	this.add(south,BorderLayout.SOUTH);
 	owner.setSwitchingMenu(this);
 	setVisible(true);
+	list.addListSelectionListener(new ListSelectionListener() {
+		
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			// TODO Auto-generated method stub
+			SwitchMenu.this.owner.requestFocus();
+		}
+	});
+	if(listMod.size()>0){
+		list.setSelectedIndex(0);
+	}
 }
 public void updateList(){
 	String selected=list.getSelectedValue();

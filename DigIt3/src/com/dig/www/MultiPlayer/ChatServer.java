@@ -109,6 +109,7 @@ return new StartState(owner,owner.getSpawnLoc());
 			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 			}catch(Exception ex){
+			//	ex.printStackTrace();
 //				System.out.println(((IChatClient)clientMap.values().toArray()[c]));
 //				HashMap<String, IChatClient> clientMap2 = new HashMap<>();
 //				for(int c2=0;c2<clientMap.size();c2++){
@@ -118,7 +119,7 @@ return new StartState(owner,owner.getSpawnLoc());
 				System.err.println(keys.get(c)+" left the wrong way.");
 				String playerName="";
 				for(int c2=0;c2<owner.getFriends().size();c2++){
-					if(owner.getFriends().get(c2).getMpName().equals(keys.get(c))){
+					if(owner.getFriends().get(c2).getMpName()!=null&&owner.getFriends().get(c2).getMpName().equals(keys.get(c))){
 						playerName=owner.getFriends().get(c).getType().charName();
 						break;
 					}

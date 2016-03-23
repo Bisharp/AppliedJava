@@ -11,10 +11,14 @@ public class GameState implements Serializable{
 	protected boolean server;
 protected ArrayList<PlayerState>playerStates=new ArrayList<PlayerState>();
 protected ArrayList<EnemyState>enemyStates=new ArrayList<EnemyState>();
+protected ArrayList<NPCState>npcStates=new ArrayList<NPCState>();
 protected ArrayList<String>talks=new ArrayList<String>();
 protected ArrayList<ActionState>actions=new ArrayList<ActionState>();
 public ArrayList<PlayerState>getPlayerStates(){
 	return playerStates;
+}
+public ArrayList<NPCState>getNPCStates(){
+	return npcStates;
 }
 public ArrayList<ActionState>getActions(){
 	return actions;

@@ -3,6 +3,7 @@ package com.dig.www.enemies;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 
 import com.dig.www.MultiPlayer.State.AttackState;
@@ -14,7 +15,7 @@ import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
-public abstract class Enemy extends Sprite {
+public abstract class Enemy extends Sprite implements Cloneable{
 
 	/**
 	 * 
@@ -433,5 +434,19 @@ public boolean isPoison(){
 	}
 	public void setHealth(int setter){
 		health=setter;
+	}
+	public Enemy getClone(){
+		try {
+			return (Enemy)this.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			//System.err.println("Could not clone");
+			return new StandEnemy(0, 0, loc, null, flying, health);
+		}
+	}
+	public Image newShadow() {
+		// TODO Auto-generated method stub
+		return newShadow(loc);
 	}
 }

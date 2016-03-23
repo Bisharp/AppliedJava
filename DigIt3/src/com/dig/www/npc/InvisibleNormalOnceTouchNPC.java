@@ -16,6 +16,11 @@ public abstract class InvisibleNormalOnceTouchNPC extends NPC implements TouchNP
 	isObstacle=false;
 		// TODO Auto-generated constructor stub
 	}
+	public InvisibleNormalOnceTouchNPC(int x,int y,Board owner,boolean isObstacle) {
+		super(x, y, null, owner, null, "black", null, new NPCOption[0]);
+		this.isObstacle=isObstacle;
+			// TODO Auto-generated constructor stub
+		}
 public InvisibleNormalOnceTouchNPC(int x, int y, Board owner,
 			String[] dialogs, String s, String location, NPCOption[] options,
 			String hiChar, String byeI, String byeChar,boolean cantExit,String[]chars) {

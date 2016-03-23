@@ -12,6 +12,7 @@ import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.enemies.Boss;
+import com.dig.www.npc.NPC;
 
 public abstract class Sprite implements Serializable {
 
@@ -181,5 +182,20 @@ public abstract class Sprite implements Serializable {
 
 	public void setImage(Image i) {
 		image = i;
+	}
+	public void setShadow(Image i) {
+		shadow = i;
+	}
+	public void removeOwner(){
+		owner=null;
+	}
+	public void setOwner(Board b){
+		owner=b;
+	}
+
+	public static void basicAnimate(NPC n) {
+		// TODO Auto-generated method stub
+		n.setX(n.getX()+n.getOwner().getScrollX());
+		n.setY(n.getY()+n.getOwner().getScrollY());
 	}
 }

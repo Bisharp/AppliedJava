@@ -544,4 +544,9 @@ if (iTalk)
 	public boolean willTalk(){
 	return true;	
 	}
+
+	public String getLoc() {
+		// TODO Auto-generated method stub
+		return loc;
+	}
 }

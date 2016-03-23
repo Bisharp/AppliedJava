@@ -10,6 +10,8 @@ import com.dig.www.blocks.TexturePack;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Launch;
+import com.dig.www.npc.MPNPC;
+import com.dig.www.npc.NPC;
 import com.dig.www.objects.MoneyObject;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.PushCube;
@@ -20,6 +22,7 @@ public class StartState implements Serializable{
 	protected ArrayList<Enemy>enemies=new ArrayList<Enemy>();
 	protected ArrayList<BlockState>blocks=new ArrayList<BlockState>();
 	protected ArrayList<ObjectState>objects=new ArrayList<ObjectState>();
+	protected ArrayList<NPC>npcs=new ArrayList<NPC>();
 	protected TexturePack texture;
 	protected Point spawnLoc;
 public StartState(Board owner,Point spawnLoc){
@@ -55,7 +58,14 @@ for(Objects b:owner.getObjects()){
 for(Enemy e:owner.getEnemies()){
 	//EnemyType type=EnemyType.STAND;
 	//enemies.add(new EnemyState(e.getX(), e.getY(),e.getLoc(),e.getHealth(),e.flying,type));
-enemies.add(e);
+//e.removeOwner();//Don't want to send that over
+	enemies.add(e.getClone());
+	enemies.get(enemies.size()-1).setOwner(null);
+}
+for(NPC e:owner.getNPCs()){
+	//EnemyType type=EnemyType.STAND;
+	//enemies.add(new EnemyState(e.getX(), e.getY(),e.getLoc(),e.getHealth(),e.flying,type));
+npcs.add(new MPNPC(e.getX(), e.getY(), null, e.getLoc(), e.isObstacle()));
 }
 }
 public ArrayList<BlockState>getWorld(){
@@ -76,5 +86,9 @@ public int getMoney(){
 }
 public Point getSpawnLoc(){
 	return spawnLoc;
+}
+public ArrayList<NPC> getNPCs() {
+	// TODO Auto-generated method stub
+	return npcs;
 }
 }

@@ -23,13 +23,14 @@ public class ActionMenu extends JFrame{
 //	DefaultListModel<String>listMod=new DefaultListModel<String>();
 //	JList<String>list=new JList<>(listMod);
 public ActionMenu(Board owner){
+	owner.setActionMenu(this);
 	this.owner=owner;
-	owner.setFocusable(false);
+	//owner.setFocusable(false);
 	setSize(400,300);
 	setLocation(Statics.BOARD_WIDTH/2-this.getWidth()/2,0);
 	setAlwaysOnTop(true);
-	setFocusable(true);
-	requestFocus();
+	setFocusable(false);
+	//requestFocus();
 	setUndecorated(true);
 	setLayout(new BorderLayout());
 //	String[]alive=owner.getCharacters();
@@ -47,22 +48,28 @@ public ActionMenu(Board owner){
 			// TODO Auto-generated method stub
 			new SwitchMenu(ActionMenu.this.owner);
 			ActionMenu.this.dispose();
+			ActionMenu.this.owner.setActionMenu(null);
+			//ActionMenu.this.owner.requestFocus();
 		}
 	});
 	south.add(switchB);
 	this.add(south,BorderLayout.SOUTH);
-	addKeyListener(new KeyListener() {
-		
-		public void keyTyped(KeyEvent e) {}
-		public void keyReleased(KeyEvent e) {}
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode()==KeyEvent.VK_ESCAPE){
-			ActionMenu.this.owner.setFocusable(true);
-			ActionMenu.this.dispose();
-			}
-		}
-	});
+//	addKeyListener(new KeyListener() {
+//		
+//		public void keyTyped(KeyEvent e) {}
+//		public void keyReleased(KeyEvent e) {}
+//		@Override
+//		public void keyPressed(KeyEvent e) {
+//			if(e.getKeyCode()==KeyEvent.VK_R){
+//			ActionMenu.this.owner.setFocusable(true);
+//			ActionMenu.this.owner.requestFocus();
+//			ActionMenu.this.dispose();
+//			ActionMenu.this.owner.setActionMenu(false);
+//			}
+//		}
+//	});
 	setVisible(true);
+	setFocusable(false);
+owner.requestFocus();	
 }
 }

@@ -57,6 +57,7 @@ import com.dig.www.MultiPlayer.State.EnemyState;
 import com.dig.www.MultiPlayer.State.GameState;
 import com.dig.www.MultiPlayer.State.MoneyState;
 import com.dig.www.MultiPlayer.State.MoveObjectState;
+import com.dig.www.MultiPlayer.State.NPCState;
 import com.dig.www.MultiPlayer.State.ObjectPickUpState;
 import com.dig.www.MultiPlayer.State.ObjectState;
 import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
@@ -92,6 +93,7 @@ import com.dig.www.enemies.Launch;
 import com.dig.www.enemies.Projectile;
 import com.dig.www.enemies.StandEnemy;
 import com.dig.www.npc.Chest;
+import com.dig.www.npc.MPNPC;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.TouchNPC;
 import com.dig.www.objects.CheckPoint;
@@ -111,6 +113,7 @@ import com.dig.www.start.Switch.ActionMenu;
 import com.dig.www.start.Switch.SwitchMenu;
 import com.dig.www.util.Irregular;
 import com.dig.www.util.Preferences;
+import com.dig.www.util.Sprite;
 import com.dig.www.util.StageBuilder;
 import com.dig.www.util.Statics;
 import com.dig.www.util.Time;
@@ -585,9 +588,9 @@ if(consumeStop)
 		objects.clear();
 		movingObjects.clear();
 		enemies.clear();
+		npcs.clear();
 		fP.clear();
 
-		// npcs.clear();
 		texturePack = st.getTexture();
 		GameCharacter.getInventory().setMoney(st.getMoney());
 		for (BlockState b : st.getWorld()) {
@@ -649,6 +652,13 @@ if(consumeStop)
 			// e.isFlying(), e.getHealth()));
 			// }
 			enemies.add(e);
+			e.setShadow(e.newShadow());
+		}
+		for(NPC n:st.getNPCs()){
+			npcs.add(n);
+			n.setOwner(this);
+			n.setImage(n.newImage(n.getLoc()));
+			n.setShadow(n.newShadow(n.getLoc()));
 		}
 		// for(PlayerState p:st.getPlayers()){
 		//
@@ -1261,8 +1271,22 @@ if(consumeStop)
 	}
 
 	public void openSwitchDialogue() {
+		switching = false;
+		if(actionMenu==null&&switchMenu==null){
 		character.releaseAll();
 		character.stop();
+		new ActionMenu(this);}
+		else{ if(actionMenu!=null){
+			actionMenu.dispose();
+			actionMenu=null;
+			}
+		if(switchMenu!=null){
+			switchMenu.dispose();
+			switchMenu=null;
+		}
+			
+		}
+		// char[] names = {'S', 'C', 'D', 'H'};
 		// scrollX *= -2;
 		// scrollY *= -2;
 		// reAnimate();
@@ -1274,11 +1298,6 @@ if(consumeStop)
 		// character.stop();
 		// scrollX = 0;
 		// scrollY = 0;
-
-		switching = false;
-		new ActionMenu(this);
-		// char[] names = {'S', 'C', 'D', 'H'};
-
 		// Thread t = new Thread(new Runnable() {
 		// public void run() {
 		// // state=State.SWITCHING;
@@ -1715,6 +1734,16 @@ onScreenEnemies.clear();
 										break;
 									}
 								break;
+							case ADDEN:
+								break;
+							case MOVE:
+								break;
+							case PICKUP:
+								break;
+							case REMOVEENN:
+								break;
+							default:
+								break;
 
 							}
 						}
@@ -1740,6 +1769,10 @@ onScreenEnemies.clear();
 					for (Enemy en : enemies) {
 						currentState.getEnemyStates()
 								.add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
+					}
+					for (NPC en : npcs) {
+						currentState.getNPCStates()
+								.add(new NPCState(en.getX() - b.getX(), en.getY() - b.getY(),false,null,en.isObstacle()));
 					}
 					sendInt = 3;
 					server.broadcast(mpName, currentState);
@@ -1870,6 +1903,17 @@ onScreenEnemies.clear();
 						enemies.get(c).setX(states.get(s).getEnemyStates().get(c).getX() + b.getX());
 						enemies.get(c).setY(states.get(s).getEnemyStates().get(c).getY() + b.getY());
 						enemies.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
+					}
+					for (int c = 0; c < states.get(s).getNPCStates().size(); c++) {
+						if (npcs.size() <= c) {
+							// changeClientArea();
+							break;
+						}
+						npcs.get(c).setX(states.get(s).getNPCStates().get(c).getX() + b.getX());
+						npcs.get(c).setY(states.get(s).getNPCStates().get(c).getY() + b.getY());
+						if(states.get(s).getNPCStates().get(c).isChange())
+							npcs.get(c).newImage(states.get(s).getNPCStates().get(c).getChange());
+						//npcs.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
 					}
 				}
 				states.clear();
@@ -2321,7 +2365,10 @@ onScreenEnemies.clear();
 
 		Rectangle bounds = character.getTalkBounds();
 		for (NPC n : npcs) {
-			n.animate();
+			if(me == null){
+			n.animate();}
+			else
+				Sprite.basicAnimate(n);
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 
 			if (n.isOnScreen()) {
@@ -3475,5 +3522,8 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 			g2d.drawLine(Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT),
 					Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT));
 		}
+	}private ActionMenu actionMenu;
+	public void setActionMenu(ActionMenu actionMenu){
+		this.actionMenu=actionMenu;
 	}
 }
