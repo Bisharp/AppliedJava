@@ -6,9 +6,9 @@ import java.awt.Point;
 import com.dig.www.enemies.PoisonOrFlame;
 import com.dig.www.start.Board;
 
-public class CutSceneTest extends CutScene {
+public class RyoBoss2Start extends CutScene {
 
-	public CutSceneTest(int x, int y, Board owner, String location) {
+	public RyoBoss2Start(int x, int y, Board owner, String location) {
 		super(x, y, owner, location,
 				new CSDialog[] { new CSDialog("", "black", new CutSceneImage("images/npcs/cutScenes/RyoBoss2/out.gif")),
 						new CSDialog("Whew, it's hot! We should've brought sunscreen.", NPC.SPADE,
@@ -18,7 +18,8 @@ public class CutSceneTest extends CutScene {
 				new CSDialog("Oh no, not this guy.", NPC.SPADE,
 						new CutSceneImage("images/npcs/cutScenes/RyoBoss2/ohNo.png")),
 				new CSDialog("Let's get him.", NPC.CLUB, new CutSceneImage("images/npcs/cutScenes/RyoBoss2/ryo2.gif")),
-				new CSDialog("Ye are c'rtainly outmatch'd.", NPC.KYSERYX, new CutSceneImage("images/npcs/cutScenes/RyoBoss2/ryo2.gif")),new CSDialog("Whoa! Why can't we talk this through?!", NPC.SPADE, new CutSceneImage("images/npcs/cutScenes/RyoBoss2/ohNo.png"))});
+				new CSDialog("Ye are c'rtainly outmatch'd.", NPC.KYSERYX, new CutSceneImage("images/npcs/cutScenes/RyoBoss2/ryoShot.gif")),
+				new CSDialog("Whoa! Why can't we talk this through?!", NPC.SPADE, new CutSceneImage("images/npcs/cutScenes/RyoBoss2/jump.gif"))});
 		// TODO Auto-generated constructor stub
 	}
 

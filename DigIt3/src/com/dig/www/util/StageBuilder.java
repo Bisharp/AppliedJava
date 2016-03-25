@@ -406,7 +406,7 @@ public class StageBuilder {
 							npcs.add(new PLATO(nX, nY, owner, loc));
 							break;
 						case "Hi":
-							npcs.add(new CutSceneTest(nX, nY, owner, loc));
+							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
