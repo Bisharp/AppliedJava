@@ -1,0 +1,6 @@
+Launch,2050,2950,images/enemies/turrets/0.png,false,100,100
+Tracking,1750,700,images/enemies/unique/ghost.png,false,100
+Launch,1300,2200,images/enemies/turrets/0.png,false,100,100
+Path,2600,550,images/enemies/unique/potato.png,false,100,1'1'1'1'1'1'0'1'0'1'0'1'0'1'0'1'0'1'0'1'-1'1'0'1'1'1'0'1'0'1'0'1'1'1'0'1'0'1'-1'1'-1'1'0'1'-1'1'-1'1'-1'0'-1'0,B
+Standing,350,1100,images/enemies/unique/blob.png,false,100
+Tracking,500,2500,images/enemies/unique/ghost.png,true,100

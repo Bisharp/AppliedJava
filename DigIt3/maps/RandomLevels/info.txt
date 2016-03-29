@@ -1,0 +1,5 @@
+Volcano
+shovel
+club
+diamond
+heart
