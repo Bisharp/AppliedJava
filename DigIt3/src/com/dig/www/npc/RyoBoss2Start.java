@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 
 import com.dig.www.enemies.PoisonOrFlame;
+import com.dig.www.enemies.RyoBoss2;
 import com.dig.www.start.Board;
 
 public class RyoBoss2Start extends CutScene {
@@ -26,7 +27,7 @@ public class RyoBoss2Start extends CutScene {
 	public void act(NPCOption option) {
 		if (c == cutScenes.length) {
 			owner.getEnemies()
-					.add(new PoisonOrFlame(owner.getCharacter().getX(), owner.getCharacter().getY(), false, owner));
+					.add(new PoisonOrFlame(owner.getCharacter().getX(), owner.getCharacter().getY(), false, owner,true));
 			Point[] ps = new Point[owner.getFriends().size() + 1];
 			ps[0] = owner.getCharPoint();
 			for (int c = 0; c < owner.getFriends().size(); c++)
@@ -38,6 +39,9 @@ public class RyoBoss2Start extends CutScene {
 				owner.getFriends().get(c).setX(ps[c + 1].x);
 				owner.getFriends().get(c).setY(ps[c + 1].y);
 			}
+			for(int c=0;c<owner.getEnemies().size();c++)
+				if(owner.getEnemies().get(c) instanceof RyoBoss2)
+					((RyoBoss2) owner.getEnemies().get(c)).activate();
 		}
 	}
 

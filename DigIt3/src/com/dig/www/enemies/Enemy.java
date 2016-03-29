@@ -359,7 +359,8 @@ if(burnTimer>0){
 	burnHurtTimer-=owner.mult();
 	if(burnHurtTimer<=0){
 		burnHurtTimer=4;
-	takeDamage(1, null);
+	if(!takeDamage(1, null)&&this instanceof Boss)
+		((Boss)this).removeSpecWalls();
 	burnTimer--;}
 }
 		if (harmTimer > 0)

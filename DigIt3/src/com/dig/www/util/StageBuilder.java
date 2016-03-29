@@ -281,6 +281,9 @@ public class StageBuilder {
 						case "Pod":
 							enemies.add(new SpinnyBoss(enX, enY, owner));
 							break;
+						case "Ryo2":
+							enemies.add(new RyoBoss2(enX, enY, owner));
+							break;
 
 						}
 					} catch (IndexOutOfBoundsException ex) {

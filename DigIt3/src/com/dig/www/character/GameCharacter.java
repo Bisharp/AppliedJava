@@ -183,6 +183,8 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	protected int poisonHurtTimer;
 protected boolean isPoison;
 	public void poison(boolean isPoison) {
+		if(isDead())
+			return;
 		poisonTimer = 375;
 		poisonHurtTimer = 15;
 		this.isPoison=isPoison;
@@ -444,6 +446,7 @@ private int reviveTimer;
 		} else {
 			//TODO On this computer
 			if (dead) {
+				poisonTimer=0;
 				if(reviveTimer>0)
 					reviveTimer-=owner.mult();
 				basicAnimate();
@@ -2025,7 +2028,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 	// }
 
 	public void takeDamage(int amount, boolean poison,boolean isPoison) {
-		if (poison)
+		if (poison&&!isDead())
 			poison(isPoison);
 		if (amount > 0 && hitstunTimer <= 0) {
 			health -= amount;
@@ -2034,6 +2037,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		}
 		if (health <= 0) {
 stop();
+pointTimer=0;
 if(owner.getCharacter()==this){
 	owner.setScrollX(0);
 	owner.setScrollY(0);

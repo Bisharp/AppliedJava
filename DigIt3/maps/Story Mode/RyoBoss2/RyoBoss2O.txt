@@ -1,0 +1,10 @@
+1050,2000,images/icon.png,false,-3
+300,1000,images/objects/PTree0.png,true,0
+150,350,images/objects/PTree0.png,true,0
+1500,200,images/portals/bossWall.png,false,-4
+1500,300,images/portals/bossWall.png,false,-4
+1500,400,images/portals/bossWall.png,false,-4
+1600,400,images/portals/bossWall.png,false,-4
+1700,400,images/portals/bossWall.png,false,-4
+1800,400,images/portals/bossWall.png,false,-4
+1900,400,images/portals/bossWall.png,false,-4

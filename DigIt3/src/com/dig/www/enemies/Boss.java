@@ -128,8 +128,8 @@ public abstract class Boss extends Enemy {
 			active = true;
 
 		if (active) {
-			if (!alive && DigIt.soundPlayer.playerThread != null) {
-				makeDeadExplosion();
+			if (!alive){  if(DigIt.soundPlayer.playerThread != null) {
+				makeDeadExplosion();}
 				removeSpecWalls();
 			} else if (DigIt.soundPlayer.playerThread == null || !DigIt.soundPlayer.isPlaying()) {
 				Statics.playSound(owner, musicLoc);
@@ -194,5 +194,8 @@ public abstract class Boss extends Enemy {
 				c--;
 			}
 		}
+	}
+	public void activate(){
+		active=true;
 	}
 }

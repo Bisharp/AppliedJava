@@ -6,7 +6,7 @@ import com.dig.www.start.Board;
 
 public class TailEnemy extends ChainEnemy {
 
-	private Enemy myFollows;
+	protected Enemy myFollows;
 
 	public TailEnemy(int x, int y, String loc, Board owner, boolean flying, int health, int links, Enemy myOwner) {
 		super(x, y, loc, owner, flying, health, links);

@@ -1,1 +1,2 @@
 1300,1300,LuigisMansion,0,normal,-1
+400,1600,RyoBoss2,0,normal,-1
