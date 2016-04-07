@@ -76,9 +76,10 @@ public class Character extends Entity {
 		else if (x < 0)
 			x = 0;
 
-		if (y > Climb.GH || y < 0) {
+		if (y > Climb.GH)
+			owner.die();
+		else if (y < 0)
 			owner.centerScreen();
-		}
 	}
 
 	protected void normalAnimate() {
@@ -122,7 +123,7 @@ public class Character extends Entity {
 					dY = SPEED;
 			} else {
 				dY--;
-				if (dY < -SPEED)
+				if (dY < -SPEED * 2)
 					dY = -SPEED;
 			}
 		else if (dY > 0)
@@ -153,7 +154,7 @@ public class Character extends Entity {
 		timer--;
 		if (timer <= 0) {
 			newImage(im + "_" + (frame0 = !frame0));
-			timer = TIMER;
+			timer = TIMER / 2;
 		}
 	}
 
@@ -312,8 +313,10 @@ public class Character extends Entity {
 		return super.getBounds();
 	}
 
-	public void switchArea() {
-		x = Climb.GW / 2;
+	public void switchArea(int newY) {
+		//x = Climb.GW / 2;
 		walking = false;
+		hasCat = false;
+		setY(newY - height);
 	}
 }

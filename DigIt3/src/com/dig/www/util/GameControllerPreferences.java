@@ -13,6 +13,7 @@ import java.io.Serializable;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -62,6 +63,12 @@ public class GameControllerPreferences implements Serializable {
 		else
 			return moveX == GameControllerRunnable.X_STICK ? "Left Stick" : "Right Stick";
 	}
+	protected String getMouseScheme() {
+		if (mouseDPad)
+			return "D-Pad";
+		else
+			return mouseX == GameControllerRunnable.X_STICK ? "Left Stick" : "Right Stick";
+	}
 
 	public void setValues() {
 		new SetValues();
@@ -73,29 +80,37 @@ public class GameControllerPreferences implements Serializable {
 		protected JButton projB = new JButton("Projectile: " + trans(projectile));
 		protected JButton specB = new JButton("Special: " + trans(special));
 		protected JButton moveB = new JButton("Movement scheme: " + getMovementScheme());
+		protected JButton mouseB = new JButton("Mouse scheme: " + getMouseScheme());
+		protected JButton clickB = new JButton("Mouse Click: " + trans(mouseClick));
 
 		protected JButton pseB = new JButton("Pause: " + trans(pause));
 		protected JButton swchB = new JButton("Switch characters: " + trans(switchC));
 		protected JButton tlkB = new JButton("Talk to NPCs: " + trans(npc));
 		protected JButton itmB = new JButton("Use items: " + trans(item));
 
-		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (walkSensitivity * 10) > 10 ? 10
-				: (int) (walkSensitivity * 10) < 2 ? 2 : 10 - (int) (walkSensitivity * 10));
-		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, (int) (zSensitivity * 10) > 10 ? 10 : (int) (zSensitivity * 10));
+		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(walkSensitivity));
+		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(zSensitivity));
+		protected JSlider mouseS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(mouseSensitivity));
 
 		protected JButton reset = new JButton("Reset to Defaults");
-		
+
 		protected boolean allSet = true;
+		
+		protected int getInitialValue(float sensitivity) {
+			return (int) (sensitivity * 10) > 10 ? 10
+					: (int) (sensitivity * 10) < 2 ? 2 : 10 - (int) (sensitivity * 10);
+		}
 
 		public SetValues() {
 
-			initiateSlider(moveS);
-			initiateSlider(zS);
+//			initiateSlider(moveS);
+//			initiateSlider(zS);
+//			initiateSlider(mouseS);
 
-			this.setSize(new Dimension(675, 200));
+			this.setSize(new Dimension(675, 300));
 			this.setLayout(new BorderLayout());
 
-			Dimension d = new Dimension(225, 200);
+			//Dimension d = new Dimension(225, 200);
 
 			JPanel pane1 = new JPanel();
 			JPanel pane2 = new JPanel();
@@ -152,16 +167,41 @@ public class GameControllerPreferences implements Serializable {
 					tlkB.setText("Talk to NPCs: " + trans(npc));
 				}
 			});
+			moveB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
 
-			pane1.setPreferredSize(d);
-			pane2.setPreferredSize(d);
-			pane3.setPreferredSize(d);
+					try {
+						setMovementScheme((JButton) arg0.getSource());
+						((JButton) arg0.getSource()).setText("Movement scheme: " + getMovementScheme());
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+			mouseB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+
+					try {
+						setMovementScheme((JButton) arg0.getSource());
+						((JButton) arg0.getSource()).setText("Mouse scheme: " + getMouseScheme());
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+
+//			pane1.setPreferredSize(d);
+//			pane2.setPreferredSize(d);
+//			pane3.setPreferredSize(d);
 
 			pane1.setBackground(Color.black);
 			pane2.setBackground(Color.black);
 			pane3.setBackground(Color.black);
 
 			pane1.add(moveB);
+			pane1.add(mouseB);
 			pane1.add(pseB);
 			pane1.add(swchB);
 			pane1.add(itmB);
@@ -172,8 +212,10 @@ public class GameControllerPreferences implements Serializable {
 			pane2.add(tlkB);
 
 			pane3.add(reset);
-			pane3.add(new JLabel("Movement Sensitivity:"));
+			pane3.add(new JLabel("Walk Sensitivity:"));
 			pane3.add(moveS);
+			pane3.add(new JLabel("Mouse Sensitivity:"));
+			pane3.add(mouseS);
 			pane3.add(new JLabel("Z-Axis Sensitivity:"));
 			pane3.add(zS);
 
@@ -185,7 +227,7 @@ public class GameControllerPreferences implements Serializable {
 
 				@Override
 				public void windowClosing(WindowEvent e) {
-					
+
 					super.windowClosed(e);
 				}
 			});
@@ -208,47 +250,63 @@ public class GameControllerPreferences implements Serializable {
 			framesPerSecond.setPaintTicks(true);
 			framesPerSecond.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		}
-		
-		protected String[] movementSchemes = new String[]{ "Left Stick", "Right Stick", "D-Pad" };
+
+		protected final String[] movementSchemes = new String[] { "Left Stick", "Right Stick", "D-Pad" };
+
 		protected void setMovementScheme(JButton source) throws Exception {
-			String s = (String) JOptionPane.showInputDialog(this, "Please select the key you want to be associated with the following action:\nMovement",
-					DigIt.NAME, JOptionPane.PLAIN_MESSAGE, Statics.ICON, movementSchemes, null);
-			
+			String s = (String) JOptionPane.showInputDialog(this, "Please select the directional inpput for the following action:\n", DigIt.NAME, JOptionPane.PLAIN_MESSAGE,
+					Statics.ICON, movementSchemes, null);
+
 			if (s.equals(movementSchemes[0])) {
-				if (source == moveB && mouseX == GameControllerRunnable.X_STICK)
+				if ((source == moveB && mouseX == GameControllerRunnable.X_STICK) || (source == mouseB && moveX == GameControllerRunnable.X_STICK))
 					throw new Exception("The stick is already taken.");
-//				else if (source == mouseB && moveX == GameControllerRunnable.X)
-//						throw new Exception("The stick is already taken.");
-				
+				// else if (source == mouseB && moveX ==
+				// GameControllerRunnable.X)
+				// throw new Exception("The stick is already taken.");
+
 				if (source == moveB) {
 					moveX = GameControllerRunnable.X_STICK;
 					moveY = GameControllerRunnable.Y_STICK;
 					isDPad = false;
+				} else if (source == mouseB) {
+					mouseX = GameControllerRunnable.X_STICK;
+					mouseY = GameControllerRunnable.Y_STICK;
+					mouseDPad = false;
 				}
 			} else if (s.equals(movementSchemes[1])) {
-				if (source == moveB && mouseX == GameControllerRunnable.X2_STICK)
+				if ((source == moveB && mouseX == GameControllerRunnable.X2_STICK) || (source == mouseB && moveX == GameControllerRunnable.X2_STICK))
 					throw new Exception("The stick is already taken.");
-//				else if (source == mouseB && moveX == GameControllerRunnable.X)
-//						throw new Exception("The stick is already taken.");
-				
+				// else if (source == mouseB && moveX ==
+				// GameControllerRunnable.X)
+				// throw new Exception("The stick is already taken.");
+
 				if (source == moveB) {
 					moveX = GameControllerRunnable.X2_STICK;
 					moveY = GameControllerRunnable.Y2_STICK;
 					isDPad = false;
+				} else if (source == mouseB) {
+					mouseX = GameControllerRunnable.X2_STICK;
+					mouseY = GameControllerRunnable.Y2_STICK;
+					mouseDPad = false;
 				}
 			} else if (s.equals(movementSchemes[2])) {
-				if (source == moveB && mouseDPad)
+				if ((source == moveB && mouseDPad) || (source == mouseB && isDPad))
 					throw new Exception("The d-pad is already taken.");
-//				else if (source == mouseB && moveX == GameControllerRunnable.X)
-//						throw new Exception("The d-pad is already taken.");
-				
+				// else if (source == mouseB && moveX ==
+				// GameControllerRunnable.X)
+				// throw new Exception("The d-pad is already taken.");
+
 				if (source == moveB) {
 					moveX = -1;
 					moveY = -1;
 					isDPad = true;
+				} else if (source == mouseB) {
+					mouseX = -1;
+					mouseY = -1;
+					mouseDPad = true;
 				}
 			}
-			
+
 		}
 
 		protected int getButton(String action, int orig) {
@@ -284,17 +342,17 @@ public class GameControllerPreferences implements Serializable {
 				if (verify == i) {
 					throw new Exception("The button is already taken.");
 				}
-			
+
 			if (orig == lZAxis)
 				lZAxis = -1;
 			else if (orig == rZAxis)
 				rZAxis = -1;
-			
+
 			if (verify == lZAxis)
 				lZAxis = verify;
 			else if (verify == rZAxis)
 				rZAxis = verify;
-			
+
 			return verify;
 		}
 
@@ -303,14 +361,18 @@ public class GameControllerPreferences implements Serializable {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
-				if (!source.getValueIsAdjusting())
-					if (source == zS) {
-						zSensitivity = 1 - source.getValue() / 10;
-						System.out.println(zSensitivity);
-					} else {
-						walkSensitivity = 1 - source.getValue() / 10;
-						System.out.println(walkSensitivity);
-					}
+				
+				if (!source.getValueIsAdjusting()) {
+					
+					final int sense = 1 - source.getValue() / 10;
+					System.out.println(sense);
+					if (source == zS)
+						zSensitivity = sense;
+					else if (source == mouseS)
+						mouseSensitivity = sense;
+					else if (source == moveS)
+						walkSensitivity = sense;
+				}
 			}
 		}
 	}

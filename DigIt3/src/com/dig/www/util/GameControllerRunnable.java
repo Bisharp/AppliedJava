@@ -90,7 +90,7 @@ public class GameControllerRunnable implements Runnable {
 		} else
 			dM.nullCThread();
 	}
-	
+
 	public static void synchControllerPrefs() {
 		p = Board.preferences.getGCP();
 	}
@@ -203,8 +203,10 @@ public class GameControllerRunnable implements Runnable {
 
 				if (mouseClick == -1)
 					rOB.keyRelease(press);
-				else
+				else {
 					robot.mouseRelease(mouseClick);
+					System.out.println(log.toString());
+				}
 
 				buttonPressed[6] = false;
 			}
@@ -384,7 +386,6 @@ public class GameControllerRunnable implements Runnable {
 
 	protected void handleSMouse() {
 		// TODO Code run if the control stick is pressed in the Y axis
-		Point mouse = MouseInfo.getPointerInfo().getLocation();
 
 		boolean move = false;
 
@@ -402,32 +403,47 @@ public class GameControllerRunnable implements Runnable {
 				xAmount = 0;
 		}
 
-		if (move)
+		if (move) {
+			Point mouse = MouseInfo.getPointerInfo().getLocation();
 			robot.mouseMove(mouse.x + (int) (xAmount * p.mouseSpeed), mouse.y + (int) (yAmount * p.mouseSpeed));
+		}
 	}
 
+	private static StringBuilder log = new StringBuilder();
 	protected void handleDMouse() {
 		if (data == 0.125) {
 			xAmount = -diag;
 			yAmount = -diag;
 		} else if (data == 0.25) {
+			xAmount = 0;
 			yAmount = -1;
 		} else if (data == 0.375) {
 			xAmount = diag;
 			yAmount = -diag;
 		} else if (data == 0.5) {
 			xAmount = 1;
+			yAmount = 0;
 		} else if (data == 0.625) {
 			xAmount = diag;
 			yAmount = diag;
 		} else if (data == 0.75) {
+			xAmount = 0;
 			yAmount = 1;
 		} else if (data == 0.875) {
 			xAmount = -diag;
 			yAmount = diag;
 		} else if (data == 1) {
 			xAmount = -diag;
+			yAmount = 0;
+		} else {
+			xAmount = 0;
+			yAmount = 0;
 		}
+
+		Point mouse = MouseInfo.getPointerInfo().getLocation();
+		robot.mouseMove(mouse.x + (int) (xAmount * p.mouseSpeed), mouse.y + (int) (yAmount * p.mouseSpeed));
+		
+		log.append(xAmount + ", " + yAmount + "\n");
 	}
 
 	public boolean getController() {

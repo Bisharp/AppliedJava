@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -33,13 +34,26 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 	static final int GH = 600;
 	static final int GW = 600;
 	static final int SWITCH_MAX = 50;
-	static final float TIMER_MAX = 30;
 	static final int TIMER_ADD = 10;
 	static final Font CLIMB = new Font("Trebuchet MS", Font.BOLD, 30);
-	
+	static final int TIME_MAX = 15;
+	static final int TIME_DIV = 10;
+	static final int CAT_BONUS = 5;
+
+	static final Image TIMER = Statics.newImage("images/climb/timer/timer.png");
+	static final Image CLOCK = Statics.newImage("images/climb/other/clock.png");
+	static final Image[] NUMS;
+	static {
+		NUMS = new Image[10];
+		for (int i = 0; i < 10; i++)
+			NUMS[i] = Statics.newImage("images/climb/timer/" + i + ".png");
+	}
+
 	private Timer t;
 	private Pane pane;
 	protected float timer = 0;
+
+	protected float timeTimer = TIME_MAX;
 
 	private enum GameState {
 		SWITCH, GAME, MAIN, HIGH_SCORES
@@ -56,6 +70,38 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 	private Color worldColor = new Color(0, 90, 0);
 	private Color backColor = new Color(0, 150, 0);
+
+	class CRunnable implements Runnable {
+
+		protected int timer = 0;
+		protected boolean keepGoing = true;
+
+		@Override
+		public void run() {
+			while (keepGoing) {
+				try {
+					Thread.sleep(1);
+					if (timer < Integer.MAX_VALUE)
+						timer++;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					keepGoing = false;
+				}
+			}
+		}
+
+		protected int getClear() {
+			int temp = timer;
+			timer = 0;
+			return temp;
+		}
+
+		protected void end() {
+			keepGoing = false;
+		}
+	}
+
+	protected CRunnable c;
 
 	public Climb() {
 		setBackground(backColor);
@@ -83,13 +129,17 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 	protected void newGame() {
 		flux = true;
+		timeTimer = TIME_DIV * 3;
 		level = 1;
 		world = new WorldBuilder().getWorld(this, level);
 		player = new Character(GW / 2, world.get(world.size() - 1).getY(), this);
 		toRemove = new ArrayList<Object>();
 		toAdd = new ArrayList<Object>();
 		myState = GameState.GAME;
-		timer = TIMER_MAX;
+		timer = TIME_DIV * 4;
+		c = new CRunnable();
+		new Thread(c).start();
+		centerScreen();
 		flux = false;
 	}
 
@@ -97,20 +147,27 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		flux = true;
 		level++;
 		world = new WorldBuilder().getWorld(this, level);
-		player.setCat(false);
-		player.setY(world.get(world.size() - 1).getY());
+		
+		if (player.hasCat())
+			timer += CAT_BONUS;
+		
 		switchTimer = 0;
 		myState = GameState.GAME;
+
+		player.switchArea(world.get(world.size() - 1).getY());
+
+		// TODOif (level % 4 == 0)
+		world.add(new Boss("boss", this, true, level));
+
+		c.getClear();
+		centerScreen();
 		flux = false;
-		
-		player.switchArea();
-		
-	//	TODOif (level % 4 == 0)
-			world.add(new Boss("boss", this, true, level));
 	}
 
 	protected void mainMenu() {
 		flux = true;
+		if (c != null)
+			c.end();
 		myState = GameState.MAIN;
 		world = new ArrayList<Object>();
 		world.add(new Object(50, 20, "images/climb/menu/climb.png", this));
@@ -157,11 +214,39 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 
 				if (player.fallenTooFar())
 					g2d.drawImage(Statics.newImage("images/climb/other/!.png"), player.getX(), player.getY() - 40, this);
-				
-				g2d.setFont(CLIMB);
-				g2d.drawString("" + (int) timer, GW - GW / 3, GH / 10);
+
+				// g2d.setFont(CLIMB);
+				g2d.drawImage(TIMER, GW - GW / 4, GH / 10, this);
+				// g2d.drawString("" + (int) timer, GW - GW / 3, GH / 10);
+				g2d.drawImage(NUMS[calc(0)], GW - GW / 4 + 3, GH / 10 + 3, this);
+				g2d.drawImage(NUMS[calc(1)], GW - GW / 4 + 33, GH / 10 + 3, this);
+
+				for (int i = 0; i < getAdd() / 5; i++) {
+					g2d.drawImage(CLOCK, 50 * i + 50, 25 /*
+														 * +
+														 * (Statics.RAND.nextInt
+														 * (5) *
+														 * (Statics.RAND.nextBoolean
+														 * ()? -1 : 1))
+														 */, this);
+				}
+
 				break;
 			}
+		}
+
+		protected int calc(int which) {
+			if (which == 0 && timer < 10)
+				return 0;
+			
+			if (timer < 0)
+				return 0;
+			
+			String s = timer + "";
+			if (timer >= 10)
+				return Integer.parseInt("" + s.charAt(which));
+			else
+				return Integer.parseInt("" + s.charAt(0));
 		}
 	}
 
@@ -197,8 +282,11 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		Object o;
 		Enemy e;
 		int i;
-		
-		timer -= (float) (TIMER_REFRAIN / 1000.0);
+
+		float gC = c.getClear() / 1000.0f;
+
+		timer -= gC;
+		timeTimer -= gC;
 		if (timer <= 0)
 			die();
 
@@ -276,12 +364,29 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 		if (falling)
 			player.startFalling();
 	}
-	
+
 	protected void progress(Switch o) {
 		o.press();
 		myState = GameState.SWITCH;
-		switchTimer = SWITCH_MAX;
-		timer += TIMER_ADD;
+
+		if (level % 4 == 0) {
+			switchTimer = SWITCH_MAX;
+			timer += getAdd();
+			if (timer > 99)
+				timer = 99;
+			timeTimer = TIME_DIV * 3;
+		}
+	}
+
+	protected int getAdd() {
+		if (timeTimer >= TIME_DIV * 2)
+			return 15;
+		else if (timeTimer >= TIME_DIV)
+			return 10;
+		else if (timeTimer >= 0)
+			return 5;
+		else
+			return 0;
 	}
 
 	@Override
@@ -317,6 +422,9 @@ public class Climb extends JFrame implements KeyListener, ActionListener {
 	}
 
 	protected void die() {
+		if (flux)
+			return;
+
 		JOptionPane.showMessageDialog(this, "You died.", "Climb", JOptionPane.WARNING_MESSAGE);
 		// System.exit(0);
 		mainMenu();
