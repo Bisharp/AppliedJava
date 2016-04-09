@@ -3,6 +3,8 @@ package com.dig.www.start;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.lang.reflect.Field;
 
 import javax.swing.JDialog;
@@ -39,6 +41,12 @@ private String level=Board.DEFAULT;
 		}catch(Exception ex){
 			Statics.MAC=false;
 		}
+		JFrame f=new JFrame(DigIt.NAME);
+		f.setSize(0, 0);
+		f.setIconImage(Statics.ICON.getImage());
+		f.setLocation(-100,-100);
+		f.setVisible(true);
+		
 		setUndecorated(true);
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
@@ -48,7 +56,7 @@ private String level=Board.DEFAULT;
 		gCR = new GameControllerRunnable(this);
 		controllerThread = new Thread(gCR);
 		controllerThread.start();
-
+		f.dispose();
 		setVisible(true);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,6 +68,42 @@ private String level=Board.DEFAULT;
 		Statics.is1024=Statics.BOARD_WIDTH<=1024;
 		setIconImage(Statics.ICON.getImage());
 		setVisible(true);
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+			
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Pushing code here
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				
+			}
+		});
 	}
 
 	public static void main(String[] args) {

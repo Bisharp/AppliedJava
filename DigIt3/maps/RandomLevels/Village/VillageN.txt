@@ -1,0 +1,2 @@
+150,4250,Chest,Plain Key
+3750,6700,Chest,Plain Key

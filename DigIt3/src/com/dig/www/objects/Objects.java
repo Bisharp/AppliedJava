@@ -112,6 +112,8 @@ public class Objects extends Sprite {
 
 			case "LeavesDesert":
 				return "How did these leaves get here? There isn't a tree in sight.";
+			case "RIP":
+				return"This tombstone looks old. The lower text is unreadable.";
 			}
 		// Find by loc
 		if (loc == null)

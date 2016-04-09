@@ -11,11 +11,13 @@ public class SideToPlayer extends Enemy {
 	boolean xAxis = true;
 	int speed = 1;
 	private int dir;
-
+private boolean turning=true;
+private boolean drawsShadow;
 	public SideToPlayer(int x, int y, String loc, Board owner, boolean xAxis, int health) {
 		super(x, y, loc, owner, true, health);
 		this.xAxis = xAxis;
 		this.damage = Integer.MAX_VALUE;
+		drawsShadow=!loc.startsWith("images/effects/");
 	}
 
 	@Override
@@ -47,18 +49,20 @@ public class SideToPlayer extends Enemy {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-
+if(turning)
 		g2d.rotate(Math.toRadians(dir * 90), x + image.getWidth(owner) / 2, y + image.getHeight(owner) / 2);
 		g2d.drawImage(image, x, y, owner);
-
+if(drawsShadow)
 		drawShadow(g2d);
-
+if(turning)
 		g2d.rotate(-Math.toRadians(dir * 90), x + image.getWidth(owner) / 2, y + image.getHeight(owner) / 2);
 
 		drawStatus(g2d);
 
 	}
-
+public void setTurning(boolean turning) {
+	this.turning = turning;
+}
 	@Override
 	public void interact(Moves move, GameCharacter chr, boolean fromP) {
 

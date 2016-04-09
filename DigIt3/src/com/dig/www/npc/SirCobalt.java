@@ -38,7 +38,7 @@ public class SirCobalt extends BlockerNPC {
 		if (willJoin && !iTalk) {
 			isWall = false;
 			owner.getFriends().add(new com.dig.www.character.SirCobalt(x, y, owner, false));
-		owner.heyIaddedAFriendBack(Types.SIR_COBALT.toString());
+		owner.heyIaddedAFriendBack(owner.getFriends().get(owner.getFriends().size()-1),Types.SIR_COBALT.toString());
 		}
 	}
 

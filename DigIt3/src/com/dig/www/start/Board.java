@@ -289,9 +289,10 @@ if(consumeStop)
 		return goneFriends;
 	}
 
-	public void heyIaddedAFriendBack(String typeToString) {
+	public void heyIaddedAFriendBack(GameCharacter chara,String typeToString) {
 		for (int c = 0; c < goneFriends.size(); c++) {
 			if (goneFriends.get(c).equals(typeToString)) {
+				chara.load(goneFriends.get(c));
 				goneFriends.remove(c);
 			}
 		}
@@ -462,11 +463,11 @@ if(consumeStop)
 
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
-
+portals=data.filterPortals(portals);
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level,
+					npcs.add(new Chest(o.getX(), o.getY(), this, level,
 							((DropPoint) o).type()));
 				}
 		if (character == null) {
@@ -546,6 +547,8 @@ if(consumeStop)
 			spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
 			spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
 		}
+		if(GameCharacter.getInventory().contains(Items.PLAINKEY))
+		GameCharacter.getInventory().decrementItem(Items.PLAINKEY, GameCharacter.getInventory().getItemNum(Items.PLAINKEY));
 		changeWeather();
 		updateBackground();
 		Statics.wipeColors();
@@ -684,11 +687,11 @@ if(consumeStop)
 
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
-
+portals =data.filterPortals(portals);
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), "images/objects/chestC.png", this, level,
+					npcs.add(new Chest(o.getX(), o.getY(), this, level,
 							((DropPoint) o).type()));
 				}
 		if (character == null) {
@@ -2346,8 +2349,9 @@ onScreenEnemies.clear();
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
 						if (p.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
-				} else {
+				} else if(p.interact()){
 					if (!(p instanceof Door || p instanceof SpecialDoor)) {
+					
 						timer.stop();
 						time.pause();
 						level = p.getArea();
@@ -2359,6 +2363,11 @@ onScreenEnemies.clear();
 						setState(State.DOOROPEN);
 						doorStateLev = p.getArea();
 					}
+				}else{
+					character.collision(p, false);
+					for (int rI = 0; rI < character.getDirBounds().length; rI++)
+						if (p.getBounds().intersects(character.getDirBounds()[rI]))
+							character.presetCollisionFlag(rI);
 				}
 			}
 		}
@@ -2440,6 +2449,7 @@ onScreenEnemies.clear();
 						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
 							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
+							if(((KeyCrystal)n).id>-1)
 							data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 
@@ -2480,6 +2490,7 @@ onScreenEnemies.clear();
 						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
 							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
+							if(((KeyCrystal)n).id>-1)
 							data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 							u--;

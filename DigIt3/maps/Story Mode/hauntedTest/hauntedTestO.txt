@@ -2,7 +2,7 @@
 300,1500,images/objects/collectibles/coin10.png,true,10
 300,1600,images/objects/collectibles/coin10.png,true,10
 300,1700,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,10,Invisible Cloak
-300,1800,images/objects/InventoryObjects/videoGame8.png,true,10,Jump Video Game
+300,1800,images/objects/InventoryObjects/plainKey.png,true,10,Plain Key
 500,1500,images/dummy.png,n,-6
 2000,1600,images/dummy.png,n,-6
 2000,1800,images/objects/pushCube.png,false,-9

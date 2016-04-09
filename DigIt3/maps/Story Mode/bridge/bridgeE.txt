@@ -1,4 +1,4 @@
-Lizard-Man,1550,9700,Lizard-Man,f,1000
+Lizard Man,1550,9700,Lizard Man,f,1000
 Side To Player,100,10700,images/enemies/unique/birdy.png,f,-10
 Side To Player,200,10700,images/enemies/unique/birdy.png,f,-10
 Side To Player,300,10700,images/enemies/unique/birdy.png,f,-10

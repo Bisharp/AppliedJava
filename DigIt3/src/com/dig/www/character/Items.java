@@ -433,6 +433,70 @@ POTATOGUY{
 		@Override public boolean isWeapon(){
 			return false;
 		}
+	},PLAINKEY{
+
+		@Override
+		protected String getPersonalDesc() {
+			// TODO Auto-generated method stub
+			return "A normal key";
+		}
+
+		@Override
+		public String getPath() {
+			// TODO Auto-generated method stub
+			return "images/objects/InventoryObjects/plainKey.png";
+		}
+
+		@Override
+		public boolean isThrowable() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "Plain Key";
+		}
+		
+	},GRAVEBOX{
+
+		@Override
+		protected String getPersonalDesc() {
+			// TODO Auto-generated method stub
+			return "This is a box found under the tombstone of an adventurer.\nWhat could the dangerous light be?";
+		}
+
+		@Override
+		public String getPath() {
+			// TODO Auto-generated method stub
+			return "images/objects/InventoryObjects/graveBox.png";
+		}
+
+		@Override
+		public boolean isThrowable() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isWeapon() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "Box from a grave";
+		}
+		
 	}
 	;
 
