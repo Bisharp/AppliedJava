@@ -1,8 +1,8 @@
 850,500,images/objects/HookObject.png,false,-5
 450,400,images/objects/HookObject.png,false,-5
-1100,2400,3,images/objects/collectibles/special.png,-1
-1650,950,3,images/objects/collectibles/special.png,-1
-100,2750,1,images/objects/collectibles/special.png,-1
+1100,2400,3,false,-1
+1650,950,3,false,-1
+100,2750,1,false,-1
 850,325,images/objects/collectibles/coin10.png,false,10
 300,550,images/icon.png,false,-3
 1150,1100,images/objects/collectibles/coin1.png,false,1

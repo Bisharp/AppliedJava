@@ -1746,7 +1746,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 				g2d.drawImage(image, x + width, y, -width, height, owner);
 				if (owner.darkenWorld() && !illuminated)
 					g2d.drawImage(shadow, x + width, y, -width, height, owner);
-			} else // ((direction.isDiag() ? (diagBackup != Direction.LEFT)
+			} else if(direction!=Direction.UP) // ((direction.isDiag() ? (diagBackup != Direction.LEFT)
 					// : (direction != Direction.LEFT)) && direction !=
 					// Direction.UP)
 			{
@@ -1758,11 +1758,11 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 			if (!(this instanceof Diamond))
 				drawTool(g2d);
 
-			// if (direction == Direction.UP) {
-			// g2d.drawImage(image, x, y, owner);
-			// if (owner.darkenWorld())
-			// g2d.drawImage(shadow, x, y, owner);
-			// }
+			 if (direction == Direction.UP) {
+			 g2d.drawImage(image, x, y, owner);
+			 if (owner.darkenWorld())
+			 g2d.drawImage(shadow, x, y, owner);
+			 }
 
 			if (this instanceof Diamond)
 				drawTool(g2d);

@@ -146,7 +146,7 @@ private boolean exitingA;
 		}else if(option.question().equals("Will you join us now?")){
 			isWall=false;
 			owner.getFriends().add(new Macaroni(x, y, owner, false));
-			owner.heyIaddedAFriendBack(Types.MACARONI.toString());
+			owner.heyIaddedAFriendBack(owner.getFriends().get(owner.getFriends().size()-1),Types.MACARONI.toString());
 		exitingA=true;
 		exiting=true;
 		}

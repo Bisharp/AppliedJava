@@ -387,7 +387,7 @@ try {
 				String sa = "Could not get Host Code.";
 				try {
 					//sa=Statics.getPublicAddress();
-					sa = InetAddress.getLocalHost().getHostAddress();
+					sa =Statics.getPrivateAddress();// = InetAddress.getLocalHost().getHostAddress();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

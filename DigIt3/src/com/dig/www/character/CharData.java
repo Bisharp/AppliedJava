@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import com.dig.www.blocks.BossPortal;
+import com.dig.www.blocks.Door;
+import com.dig.www.blocks.Portal;
 import com.dig.www.npc.BlockerNPC;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.QuestNPC;
@@ -32,14 +35,14 @@ public class CharData implements Serializable {
 		currentKey = key;
 		this.owner = owner;
 
-		areas.put(key, new LevelData(owner.getObjects(), owner.getNPCs(), key));
+		areas.put(key, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(), key));
 	}
 
 	// SpecialCollectible
 	public void enterLevel(String level) {
 
 		if (!areas.containsKey(level))
-			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),
+			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(),
 					level));
 
 		currentKey = level;
@@ -52,7 +55,9 @@ public class CharData implements Serializable {
 	public ArrayList<NPC> filterNPC(ArrayList<NPC> input) {
 		return areas.get(currentKey).filterNPC(input);
 	}
-
+public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
+	return areas.get(currentKey).filterPortals(input);
+}
 	public boolean hasBeenCollected(int address) {
 		return areas.get(currentKey).hasCollected(address);
 	}
@@ -134,13 +139,14 @@ public class CharData implements Serializable {
 		private Hashtable<Integer, Boolean> specialCollectibles = new Hashtable<Integer, Boolean>();
 		private Hashtable<Integer, SimpleQuest> locQuests = new Hashtable<Integer, SimpleQuest>();
 		private Hashtable<Integer, Boolean> blockerNPCs = new Hashtable<Integer, Boolean>();
+		private Hashtable<Integer,Boolean>portals = new Hashtable<Integer,Boolean>();
 		private final String location;
 		// Quest generation
 		private boolean hasDropPoints = false;
 
 		// end
 
-		private LevelData(ArrayList<Objects> objectList, ArrayList<NPC> npcs,
+		private LevelData(ArrayList<Objects> objectList, ArrayList<NPC> npcs,ArrayList<Portal>portalList,
 				String name) {
 
 			for (Objects obj : objectList)
@@ -149,7 +155,11 @@ public class CharData implements Serializable {
 							false);
 				else if (obj instanceof DropPoint)
 					hasDropPoints = true;
-
+for(int c=0;c<portalList.size();c++)
+	if(portalList.get(c) instanceof BossPortal)
+		portals.put(c, ((BossPortal) portalList.get(c)).getCollectibleNum()==0);
+	else if(portalList.get(c) instanceof Door)
+		portals.put(c, ((Door) portalList.get(c)).isLocked());
 			QuestNPC qNPC;
 			for (NPC npc : npcs)
 				if (npc instanceof QuestNPC) {
@@ -280,7 +290,14 @@ specialCollectibles.remove(address);
 
 			return objList;
 		}
-
+public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
+	Enumeration<Integer>portalStuff=portals.keys();
+	while(portalStuff.hasMoreElements()){
+		int i=portalStuff.nextElement();
+		input.get(i).doBoolean(portals.get(i));}
+	
+	return input;
+}
 		// Quest generation
 
 		public ArrayList<NPC> filterNPC(ArrayList<NPC> input) {
@@ -384,6 +401,11 @@ specialCollectibles.remove(address);
 		public void setCompleted(boolean completed) {
 			this.completed = completed;
 		}
+	}
+
+	public void unlockDoor(int indexOf) {
+		// TODO Auto-generated method stub
+		areas.get(currentKey).portals.replace(indexOf, false);
 	}
 
 }

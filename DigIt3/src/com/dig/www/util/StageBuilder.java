@@ -275,7 +275,7 @@ public class StageBuilder {
 						case "Head Boss":
 							enemies.add(new HeadBoss(enX, enY, owner));
 							break;
-						case "Lizard-Man":
+						case "Lizard Man":
 							enemies.add(new LizardMan(enX, enY, owner));
 							break;
 						case "Pod":
@@ -283,6 +283,10 @@ public class StageBuilder {
 							break;
 						case "Ryo2":
 							enemies.add(new RyoBoss2(enX, enY, owner));
+							break;
+						case "Stone":
+							System.out.println("Stone");
+							enemies.add(new StoneBoss(enX, enY, owner));
 							break;
 
 						}
@@ -408,8 +412,12 @@ public class StageBuilder {
 						case NPC.PLATO:
 							npcs.add(new PLATO(nX, nY, owner, loc));
 							break;
+						case "Chest":
+							npcs.add(new Chest(nX, nY, owner, loc, Items.translate(stuff.get(3))));
+							break;
 						case "Hi":
 							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
+						break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -516,6 +524,18 @@ public class StageBuilder {
 								npcs.add(new BigRedButton(nX, nY, owner));
 							else if (val == -13)
 								npcs.add(new Lamp(nX, nY, loc, owner, Integer.parseInt(stuff.get(3))));
+							else if(val==-14)
+								npcs.add(new StrangeBookTable(nX, nY, wall, owner,loc));
+							else if(val==-15)
+								npcs.add(new Gate(nX, nY, loc, wall, owner));
+							else if(val==-16)
+								npcs.add(new Trap(nX, nY, owner));
+							else if(val==-17)
+								npcs.add(new Trap2(nX,nY,owner));
+							else if(val==-18)
+								npcs.add(new Trap3(nX,nY,owner));
+							else if(val==-19)
+								npcs.add(new DestroySideToPlayerGate(nX, nY, loc, wall, owner));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
@@ -529,7 +549,7 @@ public class StageBuilder {
 					}
 			}
 
-			// }
+			// }a
 		} catch (Exception ex) {
 			System.err.println("ERROR: could not load objects.");
 		}
@@ -690,15 +710,18 @@ public class StageBuilder {
 					int enX = Integer.parseInt(stuff.get(0));
 					int enY = Integer.parseInt(stuff.get(1));
 					String area = stuff.get(2);
-					int collectibleNum = Integer.parseInt(stuff.get(3));
+					String collectibleNum = stuff.get(3);
 					String type = stuff.get(4);
 					int spawnNum = Integer.parseInt(stuff.get(5));
 					String type2 = stuff.size() > 7 ? stuff.get(6) : "brown";
-					if (type.equals("normal") || type.equals("boss"))
-						portals.add(new Portal(enX, enY, owner, area, collectibleNum, type, spawnNum));
-					else
-						portals.add(new Door(enX, enY, owner, area, collectibleNum, type, type2, spawnNum));
-
+					if (type.equals("normal"))
+						portals.add(new Portal(enX, enY, owner, area, type, spawnNum));
+					else if(type.equals("boss"))
+						portals.add(new BossPortal(enX, enY, owner, area, type, spawnNum,Integer.parseInt(collectibleNum),new String[]{"shovel","club"}));
+					else{
+						System.out.println(collectibleNum);
+						portals.add(new Door(enX, enY, owner, area, type, type2, spawnNum,collectibleNum.startsWith("t")));
+					}
 				}
 			}
 

@@ -127,7 +127,18 @@ public abstract class Sprite implements Serializable {
 	}
 
 	public void resetImage(Board b) {
+		if(loc==null){
+			image=new ImageIcon().getImage();
+			shadow=new ImageIcon().getImage();
+			width=100;
+			height=100;//by default null images have bounds of 100x100
+		}else{
 		image = newImage(loc);
+		if (!(this instanceof GameCharacter) && !(this instanceof Boss))
+			shadow = newShadow(loc);
+
+		width = image.getWidth(null);
+		height = image.getHeight(null);}
 		owner = b;
 	}
 

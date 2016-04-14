@@ -20,8 +20,8 @@ public class Chest extends NPC {
 			"... (You can tell from his blanker than normal stare that it's empty)", "Nothing to see in here." };
 	private Items type;
 
-	public Chest(int x, int y, String loc, Board owner, String location, Items type) {
-		super(x, y, loc, owner, new String[] { "It's a chest!", "It appears to be a chest.", "Oh fun, it's a chest!",
+	public Chest(int x, int y, Board owner, String location, Items type) {
+		super(x, y, "images/objects/chestC.png", owner, new String[] { "It's a chest!", "It appears to be a chest.", "Oh fun, it's a chest!",
 				"... (You can tell from the slight upward curve of the corners of his mouth that it's a chest)", "It's a chest." }, "shovel", location,
 				new NPCOption[] { new NPCOption("Check inside", type.toString(), new String[] { "This chest contains:",
 						"This hunk of junk contains:", "...", "Ooh, what's inside? I can hardly bear the suspense... It holds a..." }, true, owner) });

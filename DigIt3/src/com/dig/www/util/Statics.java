@@ -445,4 +445,7 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 		String ip = in.readLine();
 		return ip;
 	}
+	public static String getPrivateAddress() throws IOException{
+		return InetAddress.getLocalHost().getHostAddress();
+	}
 }
