@@ -16,8 +16,8 @@ import com.dig.www.util.Irregular;
 import com.dig.www.util.Statics;
 
 public class Vine extends StandEnemy implements Irregular{
-	Image vineMid=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/middle.gif")).getImage();
-	Image vineEnd=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/end.gif")).getImage();
+	transient Image vineMid=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/middle.gif")).getImage();
+	transient Image vineEnd=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/end.gif")).getImage();
 	Point en;
 	boolean updating=true;
 	public Vine(int x, int y, Board owner,Enemy maker) {
