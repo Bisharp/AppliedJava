@@ -190,6 +190,6 @@ public class VineBoss extends Boss{
 	@Override
 	public Image newShadow() {
 		// TODO Auto-generated method stub
-		return super.newShadow(getPath() + name + ".png");
+		return super.newShadow(getPath() +"n.png");
 	}
 }
