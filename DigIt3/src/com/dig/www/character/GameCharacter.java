@@ -464,9 +464,14 @@ private int reviveTimer;
 						reviveTimer=50;
 						break;
 					}
-				}}
+				}
+				if(!dead){
+					rangedTimer=NEG_TIMER_RANGED;
+					meleeTimer=NEG_TIMER_MELEE;
+					specialTimer=NEG_TIMER_SPECIAL;
+				}
+				}
 				onScreen = getBounds().intersects(owner.getScreen());
-				setActing(0, 0);
 				releaseAll();
 			} else {
 				//TODO Alive
@@ -1139,7 +1144,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Left
 		if (keyCode == Preferences.LEFT()) {
 			//
-			// direction = Direction.LEFT;
+			 direction = Direction.LEFT;
 			if (deltaY == 0) {
 				if (!collisionFlags.get(Direction.LEFT)) {
 					// moveX = false;
@@ -1169,7 +1174,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Right
 		else if (keyCode == Preferences.RIGHT()) {
 			//
-			// direction = Direction.RIGHT;
+			 direction = Direction.RIGHT;
 			if (deltaY == 0) {
 				if (!collisionFlags.get(Direction.RIGHT)) {
 					// moveX = false;
@@ -1199,7 +1204,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Up
 		else if (keyCode == Preferences.UP()) {
 			//
-			// direction = Direction.UP;
+			 direction = Direction.UP;
 			if (deltaX == 0) {
 				if (!collisionFlags.get(Direction.UP)) {
 					// moveY = false;
@@ -1231,7 +1236,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Down
 		else if (keyCode == Preferences.DOWN()) {
 			//
-			// direction = Direction.DOWN;
+			 direction = Direction.DOWN;
 			if (deltaX == 0) {
 				if (!collisionFlags.get(Direction.DOWN)) {
 					// moveY = false;
@@ -2171,16 +2176,13 @@ if(owner.getCharacter()==this){
 		specialPress = false;
 	}
 
-	public void setActing(int acting, int timer) {
-		meleeTimer = -owner.mult();
-		rangedTimer = -owner.mult();
-		specialTimer = -owner.mult();
-		if (acting == 1)
-			meleeTimer = timer;
-		else if (acting == 2)
-			rangedTimer = timer;
-		else if (acting == 3)
-			specialTimer = timer;
+	public void setActing(int m, int r,int s) {
+		//meleeTimer = -owner.mult();
+		//rangedTimer = -owner.mult();
+		//specialTimer = -owner.mult();
+		meleeTimer=m;
+		rangedTimer=r;
+		specialTimer=s;
 	}
 
 	public int getAttackTimer() {
@@ -2740,5 +2742,8 @@ if(dead)
 	public void clearPath(){
 		path=null;
 		pathUpdateTimer=25;
+	}
+	public int[]getTimers(){
+		return new int[]{meleeTimer,rangedTimer,specialTimer};
 	}
 }

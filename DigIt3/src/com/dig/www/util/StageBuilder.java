@@ -285,10 +285,14 @@ public class StageBuilder {
 							enemies.add(new RyoBoss2(enX, enY, owner));
 							break;
 						case "Stone":
-							System.out.println("Stone");
 							enemies.add(new StoneBoss(enX, enY, owner));
 							break;
-
+						case "GiantBoss":
+							enemies.add(new GiantBoss(enX, enY, owner));
+							break;
+						case "VineBoss":
+							enemies.add(new VineBoss(enX, enY, owner));
+							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();

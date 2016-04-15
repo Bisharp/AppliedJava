@@ -42,6 +42,7 @@ public class ChatServer  implements IChatServer
 		{
 			existingClients.add(client);
 		}
+		owner.addAction(name.substring(0, 10)+" joined", "images/icon.png");
 		//owner.getCurrentState().clear(owner.getLevel());
 		//sendMessage(owner.getMPName(), name, new StartState(owner.getMode(),owner.getLevel()));
 		return(existingClients);
