@@ -108,8 +108,10 @@ public abstract class Sprite implements Serializable {
 	}
 	
 	public void drawShadow(Graphics2D g2d) {
-		if (owner.darkenWorld() && !illuminated)
-			g2d.drawImage(shadow, x, y, owner);
+		if (owner.darkenWorld() && !illuminated){
+			if(shadow==null)
+				shadow=newShadow(loc);
+			g2d.drawImage(shadow, x, y, owner);}
 	}
 
 	public Rectangle getBounds() {
