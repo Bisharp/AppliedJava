@@ -187,4 +187,9 @@ public class VineBoss extends Boss{
 		}
 		return false;
 	}
+	@Override
+	public Image newShadow() {
+		// TODO Auto-generated method stub
+		return super.newShadow(getPath() + name + ".png");
+	}
 }
