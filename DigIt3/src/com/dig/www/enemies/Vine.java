@@ -85,6 +85,11 @@ public Rectangle getBounds() {
 
 	@Override
 	public Polygon getIrregularBounds() {
+		if(vineMid==null){
+			vineMid=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/middle.gif")).getImage();
+			vineEnd=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/end.gif")).getImage();
+			
+		}
 		// TODO Auto-generated method stub
 		double d=pointTowards(new Point(en.x+50, en.y+50));
 		
