@@ -26,7 +26,7 @@ private int waveTimer=(60/owner.mult()*300);
 	public WaveMaker(int x, int y,String waveStuff, Board owner) {
 		super(x, y, "images/effects/shadow/0.png",false, owner, "update");
 		// TODO Auto-generated constructor stub
-		loc="images/effects/shadow/";
+		//loc="images/effects/shadow/";
 		String[]waveProps=waveStuff.split("\\|");
 		for(String s:waveProps)
 			System.out.println(s);
@@ -91,8 +91,8 @@ private int waveTimer=(60/owner.mult()*300);
 				anNum++;
 				if(anNum>3)
 					anNum=0;
-				image=newImage(loc+anNum+".png");
-				shadow=newShadow(loc+anNum+".png");
+				image=newImage("images/effects/shadow/"+anNum+".png");
+				shadow=newShadow("images/effects/shadow/"+anNum+".png");
 			}anTimer--;
 		}
 	@Override
