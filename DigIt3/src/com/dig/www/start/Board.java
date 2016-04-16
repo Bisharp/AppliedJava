@@ -642,6 +642,7 @@ portals=data.filterPortals(portals);
 		for (ObjectState o : st.getObjects()) {
 			switch (o.getType()) {
 			case NORMAL:
+				System.out.println(o.getLoc());
 				objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), o.isWall(), this, o.getIdent()));
 				break;
 			case MONEY:
