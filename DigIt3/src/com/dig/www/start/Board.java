@@ -1898,6 +1898,9 @@ onScreenEnemies.clear();
 							break;
 						case ADDEN:
 							AddEnemy add = (AddEnemy) actionState;
+							System.out.println(add.getEnemy().getOwner()==this);
+							System.out.println(add.getEnemy().getOwner()==null);
+							System.out.println("------------------------");
 							enemies.add(add.getEnemy());
 							break;
 						default:
