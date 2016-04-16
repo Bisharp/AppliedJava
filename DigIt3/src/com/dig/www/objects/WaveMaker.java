@@ -22,7 +22,7 @@ private int waveNum=1;
 private int anNum;
 private int anTimer;
 private boolean timerGoing=true;
-private int waveTimer=(60/owner.mult()*120);
+private int waveTimer=(60/owner.mult()*300);
 	public WaveMaker(int x, int y,String waveStuff, Board owner) {
 		super(x, y, "images/effects/shadow/0.png",false, owner, "update");
 		// TODO Auto-generated constructor stub
