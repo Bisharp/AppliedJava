@@ -419,7 +419,7 @@ public class StageBuilder {
 						case "Chest":
 							npcs.add(new Chest(nX, nY, owner, loc, Items.translate(stuff.get(3))));
 							break;
-						case "Hi":
+						case "RyoBoss2Start":
 							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
 						break;
 						}
@@ -540,6 +540,10 @@ public class StageBuilder {
 								npcs.add(new Trap3(nX,nY,owner));
 							else if(val==-19)
 								npcs.add(new DestroySideToPlayerGate(nX, nY, loc, wall, owner));
+							else if(val==-20)
+								npcs.add(new BossActivator(nX, nY,owner));
+							else if(val==-21)
+								npcs.add(new WaveMaker(nX, nY, loc, owner));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))

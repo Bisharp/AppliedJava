@@ -22,13 +22,15 @@ public class VineBoss extends Boss{
 	private Vine vine;
 	public VineBoss(int x, int y,Board owner) {
 		super(x, y, "n", owner, true, 1000, "Botanus", 10,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
-	damage=5;
+	damage=2;
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
 		owner.getEnemies().add(new Explosion(x, y, owner));
-		if(vine!=null)
-			vine.setP(x, y);
+		if(vine!=null){
+			owner.getEnemies().remove(vine);
+		}
+			//vine.setP(x, y);
 	}
 	@Override
 	public void animate() {
@@ -54,18 +56,57 @@ public class VineBoss extends Boss{
 		if(!acted&&active){
 			if(!getBounds().intersects(getOwnerPlusBounds())){
 				//realSeq=sequence;
-				follow(5, 0, 1.5);
+				follow(5, 0, 1);
 			}else{
 			if(actTimer<=0){
 				if(sequence==0){
-				follow(200, 50,0.7);
+				follow(200, 60,0.5);
 				sequence++;}
 				else if(sequence==1){
-					createProjectile("images/enemies/blasts/pollen.png",15,
+					createProjectile("images/enemies/blasts/pollen.png",12,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4,15);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4,10);
 					sequence++;
-				}else
+				}
+				else if(sequence==2){
+					createProjectile("images/enemies/blasts/pollen.png",12,
+							Statics.pointTowards(new Point((int) x,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,50,width/2,height/4,10);
+					sequence++;
+				}
+				else if(sequence==3&&phase>0){
+					
+					chargeAttack(100, 70, 1.1+(phase==2?0.2:0));
+					sequence++;
+				}
+				else if(sequence==4&&phase>1){
+					vine.setGoTo(new Point(x+50, y+40));
+					createProjectile("images/enemies/blasts/pollen.png",10,
+							Statics.pointTowards(new Point((int) x,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))-25,true,0,width/2,height/4,10);
+					createProjectile("images/enemies/blasts/pollen.png",10,
+							Statics.pointTowards(new Point((int) x,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,0,width/2,height/4,10);
+					createProjectile("images/enemies/blasts/pollen.png",10,
+							Statics.pointTowards(new Point((int) x,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))+25,true,0,width/2,height/4,10);
+					sequence++;
+				}
+				else if(sequence==5&&phase>1){
+					if(vine.goToNull()){
+						actTimer=10;
+						sequence++;}
+				}
+				else if(sequence==6&&phase>1){
+					Point charP=new Point(owner.getCharacterX()+50, owner.getCharacterY()+40);
+					double d = Statics.pointTowards(new Point((int) x, (int) y), charP);
+					charP.x += Math.cos((double) Math.toRadians((double) d)) *175*owner.mult();
+					charP.y += Math.sin((double) Math.toRadians((double) d)) *175*owner.mult();
+					vine.setGoTo(charP);
+					actTimer=100;
+					sequence++;
+				}
+				else
 					sequence=0;
 				}}
 			}

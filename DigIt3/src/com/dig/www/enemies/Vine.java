@@ -20,10 +20,12 @@ public class Vine extends StandEnemy implements Irregular{
 	transient Image vineEnd=new ImageIcon(getClass().getResource("/images/enemies/bosses/vineBoss/vines/end.gif")).getImage();
 	Point en;
 	boolean updating=true;
+	Point goTo;
 	public Vine(int x, int y, Board owner,Enemy maker) {
 		super(x, y, "images/enemies/bosses/vineBoss/vines/middle.gif", owner, true, -10);
 		// TODO Auto-generated constructor stub
 		en=new Point(maker.getX(),maker.getY());
+		damage=7;
 	}
 	public void setP(int x,int y){
 		en.setLocation(x, y);
@@ -35,11 +37,40 @@ public class Vine extends StandEnemy implements Irregular{
 		//if(!still){
 			en.x+=owner.getScrollX();
 			en.y+=owner.getScrollY();
+			if(goTo!=null){
+			goTo.x+=owner.getScrollX();
+			goTo.y+=owner.getScrollY();}
 			//}
 	}
 @Override
 public void draw(Graphics2D g2d) {
 	// TODO Auto-generated method stub
+	if(goTo!=null){
+		int vineSpeed=13;
+		if(Statics.dist(x, y, goTo.x, goTo.y)<vineSpeed*1.2){
+			x=goTo.x;
+			y=goTo.y;
+			goTo=null;
+		}
+		else{
+			double d = Statics.pointTowards(new Point((int) x, (int) y), goTo);
+			x += Math.cos((double) Math.toRadians((double) d)) *vineSpeed*owner.mult();
+			y += Math.sin((double) Math.toRadians((double) d)) *vineSpeed*owner.mult();
+//			int s=5;
+//			if(x>=goTo.x+s){
+//				x-=s;
+//			}else if(x<=goTo.x-s){
+//				x+=s;
+//			}else
+//				x=goTo.x;
+//			if(y>=goTo.y+s){
+//				y-=s;
+//			}else if(y<=goTo.y-s){
+//				y+=s;
+//			}else
+//				y=goTo.y;
+		}
+	}
 	int x=this.x;
 	int y=this.y;
 	if(stunTimer>0){
@@ -112,7 +143,9 @@ public void doScroll(int x,int y){
 	
 		en.x+=x;
 		en.y+=y;
-	
+		if(goTo!=null){
+		goTo.x+=x;
+		goTo.y+=y;}
 		//en.setLocation(en.x+x, en.y+y);
 }
 @Override
@@ -120,5 +153,12 @@ public void interact(Moves move, GameCharacter character, boolean fromP) {
 if(fromP){
 	stunTimer=STUN_MAX;
 }
+}
+public void setGoTo(Point p) {
+	// TODO Auto-generated method stub
+	goTo=p;
+}
+public boolean goToNull(){
+	return goTo==null;
 }
 }
