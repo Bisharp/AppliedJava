@@ -7,6 +7,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import com.dig.www.MultiPlayer.State.AddEnemy;
 import com.dig.www.enemies.WaveTrackingEnemy;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
@@ -59,6 +60,8 @@ private int waveTimer=(60/owner.mult()*300);
 		
 		
 		owner.getEnemies().add(new WaveTrackingEnemy(enX,enY, enLoc, owner, true, 100));
+		if(owner.isServer())
+			owner.getCurrentState().getActions().add(new AddEnemy(owner.getEnemies().get(owner.getEnemies().size()-1)));
 	}
 	count=waveSize+waveNum-1;
 	}
