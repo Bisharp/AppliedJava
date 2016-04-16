@@ -110,7 +110,7 @@ return new StartState(owner,owner.getSpawnLoc());
 			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 			}catch(Exception ex){
-			//	ex.printStackTrace();
+				ex.printStackTrace();
 //				System.out.println(((IChatClient)clientMap.values().toArray()[c]));
 //				HashMap<String, IChatClient> clientMap2 = new HashMap<>();
 //				for(int c2=0;c2<clientMap.size();c2++){
