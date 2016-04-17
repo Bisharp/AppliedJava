@@ -26,9 +26,4 @@ public class WaveTrackingEnemy extends Enemy{
 			y += Math.sin((double) Math.toRadians((double) d)) * getSpeed()*owner.mult();}
 		//}
 	}
-	@Override
-	public int getSpeed() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
 }
