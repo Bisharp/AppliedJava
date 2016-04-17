@@ -660,6 +660,8 @@ portals=data.filterPortals(portals);
 			// e.isFlying(), e.getHealth()));
 			// }
 			enemies.add(e);
+			e.setOwner(this);
+			e.setImage(e.newImage(e.getLoc()));
 			e.setShadow(e.newShadow());
 		}
 		for(NPC n:st.getNPCs()){
@@ -1900,6 +1902,8 @@ onScreenEnemies.clear();
 							AddEnemy add = (AddEnemy) actionState;
 							add.getEnemy().setOwner(this);
 							System.out.println("------------------------");
+							add.getEnemy().setImage(add.getEnemy().newImage(add.getEnemy().getLoc()));
+							add.getEnemy().setShadow(add.getEnemy().newShadow());
 							enemies.add(add.getEnemy());
 							break;
 						default:
