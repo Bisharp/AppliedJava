@@ -1902,6 +1902,7 @@ onScreenEnemies.clear();
 							AddEnemy add = (AddEnemy) actionState;
 							add.getEnemy().setOwner(this);
 							System.out.println("------------------------");
+							System.out.println(add.getEnemy().getWidth()+","+add.getEnemy().getHeight());
 							add.getEnemy().setImage(add.getEnemy().newImage(add.getEnemy().getLoc()));
 							add.getEnemy().setShadow(add.getEnemy().newShadow());
 							enemies.add(add.getEnemy());
