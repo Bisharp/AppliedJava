@@ -1901,8 +1901,6 @@ onScreenEnemies.clear();
 						case ADDEN:
 							AddEnemy add = (AddEnemy) actionState;
 							add.getEnemy().setOwner(this);
-							System.out.println("------------------------");
-							System.out.println(add.getEnemy().getWidth()+","+add.getEnemy().getHeight());
 							add.getEnemy().setImage(add.getEnemy().newImage(add.getEnemy().getLoc()));
 							add.getEnemy().setShadow(add.getEnemy().newShadow());
 							enemies.add(add.getEnemy());
@@ -2169,7 +2167,6 @@ onScreenEnemies.clear();
 						}
 					}
 				}
-
 				if (bounds.intersects(r3) && e.willHarm()) {
 					e.turnAround(character.getX(), character.getY());
 					character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
