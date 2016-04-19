@@ -18,6 +18,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Area;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,16 +30,13 @@ import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.jws.Oneway;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -47,7 +45,6 @@ import com.dig.www.MultiPlayer.ChatClient;
 import com.dig.www.MultiPlayer.ChatServer;
 import com.dig.www.MultiPlayer.IChatServer;
 import com.dig.www.MultiPlayer.State.ActionState;
-import com.dig.www.MultiPlayer.State.ActionState.ActionType;
 import com.dig.www.MultiPlayer.State.AddEnemy;
 import com.dig.www.MultiPlayer.State.AttackState;
 import com.dig.www.MultiPlayer.State.BlockState;
@@ -60,13 +57,21 @@ import com.dig.www.MultiPlayer.State.MoveObjectState;
 import com.dig.www.MultiPlayer.State.NPCState;
 import com.dig.www.MultiPlayer.State.ObjectPickUpState;
 import com.dig.www.MultiPlayer.State.ObjectState;
-import com.dig.www.MultiPlayer.State.ObjectState.ObjectsTypes;
 import com.dig.www.MultiPlayer.State.PlayerState;
 import com.dig.www.MultiPlayer.State.RemoveEnemy;
 import com.dig.www.MultiPlayer.State.StartState;
 import com.dig.www.MultiPlayer.State.SwitchState;
-import com.dig.www.blocks.*;
+import com.dig.www.blocks.Block;
 import com.dig.www.blocks.Block.Blocks;
+import com.dig.www.blocks.CarpetBlock;
+import com.dig.www.blocks.Door;
+import com.dig.www.blocks.LiquidBlock;
+import com.dig.www.blocks.Portal;
+import com.dig.www.blocks.SpecialDoor;
+import com.dig.www.blocks.StoneBlock;
+import com.dig.www.blocks.TerrainBlock;
+import com.dig.www.blocks.TexturePack;
+import com.dig.www.blocks.WallBlock;
 import com.dig.www.character.CharData;
 import com.dig.www.character.Club;
 import com.dig.www.character.Diamond;
@@ -89,11 +94,8 @@ import com.dig.www.character.Spade;
 import com.dig.www.character.Wizard;
 import com.dig.www.enemies.Boss;
 import com.dig.www.enemies.Enemy;
-import com.dig.www.enemies.Launch;
 import com.dig.www.enemies.Projectile;
-import com.dig.www.enemies.StandEnemy;
 import com.dig.www.npc.Chest;
-import com.dig.www.npc.MPNPC;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.TouchNPC;
 import com.dig.www.objects.CheckPoint;
@@ -102,12 +104,12 @@ import com.dig.www.objects.CollectibleCharacter;
 import com.dig.www.objects.CollectibleObject;
 import com.dig.www.objects.Dispenser;
 import com.dig.www.objects.DropPoint;
+import com.dig.www.objects.KeyCrystal;
 import com.dig.www.objects.Light;
 import com.dig.www.objects.Mirror;
 import com.dig.www.objects.MoneyObject;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.PushCube;
-import com.dig.www.objects.KeyCrystal;
 import com.dig.www.objects.ThrownObject;
 import com.dig.www.start.Switch.ActionMenu;
 import com.dig.www.start.Switch.SwitchMenu;
@@ -357,6 +359,7 @@ if(consumeStop)
 		owner.setFocusable(false);
 
 		addKeyListener(new TAdapter());
+		addMouseListener(new MouseL());
 		setFocusable(true);
 
 		setDoubleBuffered(true);
@@ -408,6 +411,7 @@ if(consumeStop)
 		owner.setFocusable(false);
 
 		addKeyListener(new TAdapter());
+		addMouseListener(new MouseL());
 		setFocusable(true);
 
 		setDoubleBuffered(true);
@@ -638,6 +642,7 @@ portals=data.filterPortals(portals);
 		for (ObjectState o : st.getObjects()) {
 			switch (o.getType()) {
 			case NORMAL:
+				System.out.println(o.getLoc());
 				objects.add(new Objects(o.getX(), o.getY(), o.getLoc(), o.isWall(), this, o.getIdent()));
 				break;
 			case MONEY:
@@ -655,6 +660,8 @@ portals=data.filterPortals(portals);
 			// e.isFlying(), e.getHealth()));
 			// }
 			enemies.add(e);
+			e.setOwner(this);
+			e.setImage(e.newImage(e.getLoc()));
 			e.setShadow(e.newShadow());
 		}
 		for(NPC n:st.getNPCs()){
@@ -1454,6 +1461,7 @@ portals =data.filterPortals(portals);
 		for (Enemy b : enemies) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
+			b.doScroll(x,y);
 		}
 		for (FProjectile b : fP) {
 			b.setX(b.getX() + x);
@@ -1515,7 +1523,8 @@ onScreenEnemies.clear();
 					}
 				} else
 					enemies.get(i).basicAnimate();
-				if(enemies.get(i).getBounds().intersects(getScreen())){
+				Shape ebounds=enemies.get(i) instanceof Irregular?((Irregular) enemies.get(i)).getIrregularBounds():enemies.get(i).getBounds();
+				if(ebounds.intersects(getScreen())){
 				enemies.get(i).setOnScreen(true);
 				onScreenEnemies.add(enemies.get(i));
 				}
@@ -1756,14 +1765,14 @@ onScreenEnemies.clear();
 					currentState.getTalks().clear();
 					currentState.getTalks().addAll(chats);
 					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
-							character.getY() - b.getY(), character.getActing(), character.getAttackTimer(),
+							character.getY() - b.getY(), character.getTimers(),
 							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
 							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 
 					for (GameCharacter character : friends) {
 						currentState.getPlayerStates()
 								.add(new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(),
-										character.getActing(), character.getAttackTimer(), character.getDirection(),
+										character.getTimers(), character.getDirection(),
 										character.getS(), character.isPlayer(), character.getType().toString(),
 										character.getMpName(), character.getHealth(), character.getEnergy(),
 										character.getDire(), character.isDead()));
@@ -1891,6 +1900,9 @@ onScreenEnemies.clear();
 							break;
 						case ADDEN:
 							AddEnemy add = (AddEnemy) actionState;
+							add.getEnemy().setOwner(this);
+							add.getEnemy().setImage(add.getEnemy().newImage(add.getEnemy().getLoc()));
+							add.getEnemy().setShadow(add.getEnemy().newShadow());
 							enemies.add(add.getEnemy());
 							break;
 						default:
@@ -1922,7 +1934,7 @@ onScreenEnemies.clear();
 				states.clear();
 				if (sendInt <= 0)
 					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
-							character.getY() - b.getY(), character.getActing(), character.getAttackTimer(),
+							character.getY() - b.getY(), character.getTimers(),
 							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
 							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 				if (sendInt <= 0) {
@@ -1974,7 +1986,7 @@ onScreenEnemies.clear();
 		friend.setMpName(playerState.getMpName());
 		friend.setHealth(playerState.getHealth());
 		friend.setEnergy(playerState.getEnergy());
-		friend.setActing(playerState.getAttackNum(), playerState.getAttackTimer());
+		friend.setActing(playerState.getMeleeT(),playerState.getRangedT(),playerState.getSpecialT());
 		friend.setDire(playerState.getDire());
 		friend.setDead(playerState.isDead());
 	}
@@ -2073,8 +2085,12 @@ onScreenEnemies.clear();
 			for (int u = 0; u < enemies.size(); u++) {
 
 				e = enemies.get(u);
-				// if (e.isOnScreen()) {
-				if (e.getBounds().intersects(b.getBounds())) {
+				Shape bounds=e.getBounds();
+				if(e instanceof Irregular) {
+					bounds=((Irregular) e).getIrregularBounds();
+				}
+				 if (atAllOnScreen(bounds)) {
+				if (bounds.intersects(b.getBounds())) {
 					switch (b.getType()) {
 					case PIT:
 						if (!e.flying)
@@ -2094,7 +2110,7 @@ onScreenEnemies.clear();
 					}
 				}
 
-				if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+				if (character.getActing() > 0 && bounds.intersects(character.getActBounds())) {
 					if (me != null) {
 						// if(currentState!=null)
 						// currentState.getActions().add(new AttackState(u,
@@ -2117,7 +2133,7 @@ onScreenEnemies.clear();
 					// projectiles behave differently with their bounds;
 					// could be implemented with other objects.
 
-					if (o.intersects(e.getBounds()) && character.isOnScreen()
+					if (polygonsInt(bounds, o) && character.isOnScreen()
 					// && character.getHarming()
 					) {
 						if ((!(e instanceof Projectile) || (character instanceof Field))
@@ -2139,7 +2155,7 @@ onScreenEnemies.clear();
 
 				for (int c = 0; c < friends.size(); c++) {
 					GameCharacter character = friends.get(c);
-					if (character.getActing() > 0 && character.getActBounds().intersects(e.getBounds())) {
+					if (character.getActing() > 0 && bounds.intersects(character.getActBounds())) {
 						if (me == null)
 							e.interact(character.getMove(), character, false);
 						if (character.getMove() == Moves.BASH) {
@@ -2151,8 +2167,7 @@ onScreenEnemies.clear();
 						}
 					}
 				}
-
-				if (e.getBounds().intersects(r3) && e.willHarm()) {
+				if (bounds.intersects(r3) && e.willHarm()) {
 					e.turnAround(character.getX(), character.getY());
 					character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
 
@@ -2160,13 +2175,13 @@ onScreenEnemies.clear();
 
 				for (GameCharacter character : friends) {
 					Rectangle r2 = character.getBounds();
-					if (e.getBounds().intersects(r2) && e.willHarm()) {
+					if (bounds.intersects(r2) && e.willHarm()) {
 						e.turnAround(character.getX(), character.getY());
 						character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
 					}
 				}
 			}
-			// }
+			}
 			if (bashHit) {
 				if (shieldNum == -1)
 					character.endAction();
@@ -2591,7 +2606,28 @@ onScreenEnemies.clear();
 		}
 		//TODO end
 	}
-
+	public void multiplayer(){
+			if (server == null && me == null) {
+				mpName = JOptionPane.showInputDialog("What would you like to be called?",
+						System.getProperty("user.name"));
+				if(mpName==null)
+					return;
+				passWord = JOptionPane
+						.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
+				if(passWord==null)
+					return;
+				server = new ChatServer(this, passWord);
+				currentState = new GameState(mode, level, true);
+				chatBox = new ChatBox(this);
+				addAction("started server", "images/icon.png");
+			}
+		
+	}
+public boolean polygonsInt(Shape poly1,Shape poly2){
+	Area area = new Area(poly1);
+	area.intersect(new Area(poly2));
+	return !area.isEmpty();
+}
 	public void toggleLagPrevention() {
 		lagPrevention = !lagPrevention;
 		if (lagPrevention)
@@ -2609,17 +2645,6 @@ onScreenEnemies.clear();
 			toggleLagPrevention();
 		}
 
-		if (key == KeyEvent.VK_M) {
-			if (server == null && me == null) {
-				mpName = JOptionPane.showInputDialog("What would you like to be called?",
-						System.getProperty("user.name"));
-				passWord = JOptionPane
-						.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
-				server = new ChatServer(this, passWord);
-				currentState = new GameState(mode, level, true);
-				chatBox = new ChatBox(this);
-			}
-		}
 		// else if (key == KeyEvent.VK_T) {
 		// if (me != null && theServer != null) {
 		// currentState.addTalk(JOptionPane.showInputDialog("Hi"));
@@ -2692,7 +2717,55 @@ onScreenEnemies.clear();
 			keyPress(e.getKeyCode());
 		}
 	}
+private class MouseL implements MouseListener{
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int button=e.getButton();
+		switch(button){
+		case 1:
+			keyPress(Preferences.PROJECTILE());
+			break;
+		case 3:
+			keyPress(Preferences.SPECIAL());
+			break;
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int button=e.getButton();
+		switch(button){
+		case 1:
+			keyRelease(Preferences.PROJECTILE());
+			break;
+		case 3:
+			keyRelease(Preferences.SPECIAL());
+			break;
+		}
+	}
+	
+}
 	public void ingameHandler(int key) {
 		if (character != null)
 			character.keyPressed(key);
@@ -3477,7 +3550,7 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 		}
 	}
 
-	public boolean atAllOnScreen(Rectangle rect) {
+	public boolean atAllOnScreen(Shape rect) {
 		if (rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 			return true;
 		for (int c = 0; c < friends.size(); c++) {

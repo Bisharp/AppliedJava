@@ -17,7 +17,7 @@ public class Club extends GameCharacter {
 	private static final long serialVersionUID = 1L;
 
 	public Club(int x, int y, Board owner, boolean player) {
-		super(x, y, owner, Types.CLUB, "club", player, -20, -40, -50, 20, 10, 140, 100, 10, 100, 15, 25, 70, 20, 10, 20, Statics.STRENGTH + 5);
+		super(x, y, owner, Types.CLUB, "club", player, -20, -40, -2250, 20, 10, 140, 100, 10, 100, 15, 25, 95, 20, 10, 20, Statics.STRENGTH + 5);
 		// TODO Auto-generated constructor stub
 	}
 

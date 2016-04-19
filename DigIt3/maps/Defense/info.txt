@@ -1,0 +1,5 @@
+Defense
+shovel
+club
+diamond
+heart

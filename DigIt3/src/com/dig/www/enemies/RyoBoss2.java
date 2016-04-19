@@ -1,6 +1,7 @@
 package com.dig.www.enemies;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -12,6 +13,11 @@ import com.dig.www.util.Statics;
 public class RyoBoss2 extends Boss{
 private boolean gone;
 private Kyseryx sword;
+private int imNum;
+private int imTimer;
+private boolean moveActed;
+private static final int IM_TIMER_MAX=6;
+private boolean notOnce;
 	public RyoBoss2(int x, int y, Board owner) {
 		super(x, y, "images/characters/ryo/front/n.png", owner, true, 1000, "Ryo", 7,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav",
 				"gunSFX/explosion-2.wav");
@@ -90,9 +96,27 @@ private Kyseryx sword;
 			}
 				
 			
-		image=newImage(getPath());
+		//image=newImage(getPath());
 		if(!acted&&actTimer>0)
 			actTimer--;
+if(!moveActed){
+	if(notOnce){
+			notOnce=false;
+			image=newImage("n");}
+		}else{
+			//System.out.println(imTimer+","+imNum);
+	if(imTimer<=0){
+		notOnce=true;
+		image=newImage("w"+imNum);
+		
+		imNum++;
+		if(imNum>3){
+			imNum=0;
+		}
+		imTimer=IM_TIMER_MAX;
+	}else{
+		imTimer-=owner.mult();
+	}}
 	}
 	@Override
 	public int getKillXP() {
@@ -121,7 +145,9 @@ private Kyseryx sword;
 
 	}
 	public boolean sortAction() {
+		moveActed=false;
 		if (attackNum == 0) {
+			moveActed=true;
 			moveDForward();
 			for (Block b : owner.getWorld()) {
 				if (b.getBounds().intersects(getBounds())) {
@@ -146,6 +172,7 @@ private Kyseryx sword;
 			}
 			return true;
 		} else if (attackNum == 1) {
+			moveActed=true;
 			pointAndMove();
 			followTimer-=owner.mult();
 			if (followTimer == 0) {
@@ -156,7 +183,6 @@ private Kyseryx sword;
 		return false;
 	}
 public String getPath(){
-	int moveInt=0;
 	String dire="side";
 	boolean xFir=Math.abs(Math.sin(Math.toRadians(dir)))<0.67;
 	if(!xFir){
@@ -165,7 +191,7 @@ public String getPath(){
 		else
 			dire="back";
 	}
-		return "images/characters/ryo/"+dire+"/w"+moveInt+".png";
+		return "images/characters/ryo/"+dire+"/";
 	}
 @Override
 public void myDraw(Graphics2D g2d) {
@@ -191,4 +217,12 @@ g2d.drawString(""+burnTimer,10,400);
 }
 	drawBar((double) health / (double) maxHealth, g2d);
 	}
+public Image newImage(String name) {
+	if(name.contains("/"))
+	return super.newImage(name);	
+	else{
+		System.out.println(getPath() + name + ".png");
+		shadow=newShadow(getPath() + name + ".png");
+	return super.newImage(getPath() + name + ".png");}
+}
 }

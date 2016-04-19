@@ -42,6 +42,7 @@ public class ChatServer  implements IChatServer
 		{
 			existingClients.add(client);
 		}
+		owner.addAction(name.substring(0, name.length()>9?9:0)+" joined", "images/icon.png");
 		//owner.getCurrentState().clear(owner.getLevel());
 		//sendMessage(owner.getMPName(), name, new StartState(owner.getMode(),owner.getLevel()));
 		return(existingClients);
@@ -109,7 +110,7 @@ return new StartState(owner,owner.getSpawnLoc());
 			try{
 			((IChatClient)clientMap.values().toArray()[c]).receiveMessage(message, sender);
 			}catch(Exception ex){
-			//	ex.printStackTrace();
+				ex.printStackTrace();
 //				System.out.println(((IChatClient)clientMap.values().toArray()[c]));
 //				HashMap<String, IChatClient> clientMap2 = new HashMap<>();
 //				for(int c2=0;c2<clientMap.size();c2++){

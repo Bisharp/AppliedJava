@@ -405,7 +405,8 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 
 	public void unlockDoor(int indexOf) {
 		// TODO Auto-generated method stub
-		areas.get(currentKey).portals.replace(indexOf, false);
+		areas.get(currentKey).portals.put(indexOf, false);
+		//areas.get(currentKey).portals.set(indexOf, false);
 	}
 
 }

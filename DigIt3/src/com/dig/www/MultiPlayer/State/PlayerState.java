@@ -5,7 +5,6 @@ import java.io.Serializable;
 import com.dig.www.character.GameCharacter.Direction;
 
 public class PlayerState extends SpriteState implements Serializable{
-protected int attackNum;
 protected Direction dir;
 protected String s;
 protected boolean isPlayer;
@@ -13,26 +12,26 @@ protected String typeToString;
 protected String mpName;
 protected float health;
 protected float energy;
-protected int attackTimer;
 protected int dire;
 protected boolean isDead;
-	public PlayerState(int x, int y,int attackNum,int attackTimer,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy,int dire,boolean isDead) {
+private int meleeT;
+private int rangedT;
+private int specialT;
+	public PlayerState(int x, int y,int[] timers,Direction dir,String s,boolean isPlayer,String typeToString,String mpName,float health,float energy,int dire,boolean isDead) {
 		super(x, y);
 		this.dire=dire;
-		this.attackTimer=attackTimer;
 		this.health=health;
 		this.energy=energy;
 		this.s=s;
 		this.dir=dir;
 		this.isPlayer=isPlayer;
-		this.attackNum=attackNum;
 		this.typeToString=typeToString;
 		this.mpName=mpName;
 		this.isDead=isDead;
+		this.meleeT=timers[0];
+		this.specialT=timers[1];
+		this.specialT=timers[2];
 	}
-public int getAttackNum(){
-	return attackNum;
-}
 public boolean isPlayer(){
 	return isPlayer;
 }
@@ -59,13 +58,20 @@ public float getHealth(){
 public float getEnergy(){
 	return energy;
 }
-public int getAttackTimer(){
-	return attackTimer;
-}
+
 public int getDire(){
 	return dire;
 }
 public boolean isDead(){
 	return isDead;
+}
+public int getMeleeT(){
+	return meleeT;
+}
+public int getRangedT(){
+	return rangedT;
+}
+public int getSpecialT(){
+	return specialT;
 }
 }

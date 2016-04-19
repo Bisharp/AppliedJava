@@ -23,8 +23,8 @@ public abstract class Enemy extends Sprite implements Cloneable{
 	private static final long serialVersionUID = 1L;
 protected int flameHurt;
 protected boolean once;
-	protected transient boolean alive = true;
-	protected transient int health;
+	protected boolean alive = true;
+	protected int health;
 	protected int maxHealth;
 	protected int hitstunTimer = 0;
 	protected static final int HITSTUN_MAX = 15;
@@ -449,5 +449,8 @@ public boolean isPoison(){
 	public Image newShadow() {
 		// TODO Auto-generated method stub
 		return newShadow(loc);
+	}
+	public void doScroll(int x, int y){
+		
 	}
 }

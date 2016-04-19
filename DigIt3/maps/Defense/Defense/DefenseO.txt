@@ -1,0 +1,2 @@
+1600,1700,images/enemies/unique/ghost.png|6|1500|1500,true,-21
+1600,1900,images/icon.png,true,-3

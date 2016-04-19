@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
@@ -447,5 +449,117 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 	}
 	public static String getPrivateAddress() throws IOException{
 		return InetAddress.getLocalHost().getHostAddress();
+	}
+	public static Polygon rtRect(Rectangle rect, Point center, double dir) {
+		Point p1 = new Point();
+		//dir = -dir;
+		Polygon p = new Polygon();
+		int cx = (int) rect.getWidth() / 2;
+		int cy = (int) rect.getHeight() / 2;
+		// p.addPoint((int)(
+		// (rect.getX() - cx) * Math.cos(Math.toRadians(90))
+		// - (rect.getY() - cy) * Math.sin(Math.toRadians(90)) + cx),(int)(
+		// (rect.getX() - cx) * Math.sin(Math.toRadians(90))
+		// + (rect.getY() - cy) * Math.cos(Math.toRadians(90)) + cy));
+
+		// p1.setLocation(rect.getX(), rect.getY());
+		// p1.setLocation((p1.getX()-cx) * Math.cos(Math.toRadians(90)) -
+		// (p1.getY()-cy) * Math.sin(Math.toRadians(90))+cx,
+		// (p1.getX()-cx) * Math.sin(Math.toRadians(90)) + (p1.getY()-cy) *
+		// Math.cos(Math.toRadians(90))+cy);
+		// p.addPoint((int)p1.getX(),(int)p1.getY());
+		//
+		// p1.setLocation(rect.getX()+rect.getWidth(), rect.getY());
+		// p1.setLocation((p1.getX()-cx) * Math.cos(Math.toRadians(90)) -
+		// (p1.getY()-cy) * Math.sin(Math.toRadians(90))+cx,
+		// (p1.getX()-cx) * Math.sin(Math.toRadians(90)) + (p1.getY()-cy) *
+		// Math.cos(Math.toRadians(90))+cy);
+		// p.addPoint((int)p1.getX(),(int)p1.getY());
+		//
+		// p1.setLocation(rect.getX()+rect.getWidth(),
+		// rect.getY()+rect.getHeight());
+		// p1.setLocation((p1.getX()-cx) * Math.cos(Math.toRadians(90)) -
+		// (p1.getY()-cy) * Math.sin(Math.toRadians(90))+cx,
+		// (p1.getX()-cx) * Math.sin(Math.toRadians(90)) + (p1.getY()-cy) *
+		// Math.cos(Math.toRadians(90))+cy);
+		// p.addPoint((int)p1.getX(),(int)p1.getY());
+		// p1.setLocation(rect.getX(), rect.getY()+rect.getHeight());
+		// p1.setLocation((p1.getX()-cx) * Math.cos(Math.toRadians(90)) -
+		// (p1.getY()-cy) * Math.sin(Math.toRadians(90))+cx,
+		// (p1.getX()-cx) * Math.sin(Math.toRadians(90)) + (p1.getY()-cy) *
+		// Math.cos(Math.toRadians(90))+cy);
+		// p.addPoint((int)p1.getX(),(int)p1.getY());
+		// p.addPoint((int)rect.getX(), (int)rect.getY());
+		// p.addPoint(522, 300 + (int) rect.getHeight()
+		// - (int) (rect.getHeight() * Math.sin(Math.toRadians(dir))));
+		// p.addPoint(522
+		// - (int) (rect.getWidth() * Math.cos(Math.toRadians(dir)))
+		// + (int) (rect.getWidth() * 2 * Math.cos(Math.toRadians(dir))),
+		// 300 + (int) (rect.getWidth() * Math.sin(Math.toRadians(dir))));
+		// p.addPoint(
+		// 522
+		// + (int) (rect.getWidth() * Math.cos(Math.toRadians(dir)))
+		// + (int) (rect.getHeight() * Math.sin(Math
+		// .toRadians(-dir))),
+		// 300
+		// + (int) (rect.getWidth() * Math.sin(Math.toRadians(dir)))
+		// + (int) (rect.getHeight() * Math.cos(Math
+		// .toRadians(-dir))));
+		// p.addPoint(
+		// 522 + (int) (rect.getHeight() * Math.sin(Math.toRadians(-dir))),
+		// 300 + (int) (rect.getHeight() * Math.cos(Math.toRadians(-dir))));
+
+		// p.addPoint((int) rect.getX(), (int) rect.getY());
+		// p.addPoint(
+		// (int) rect.getX()
+		// + (int) (rect.getWidth() * Math
+		// .cos(Math.toRadians(dir))),
+		// (int) rect.getY()
+		// + (int) (rect.getWidth() * Math.sin(Math.toRadians(dir))));
+		// p.addPoint(
+		// (int) rect.getX()
+		// + (int) (rect.getWidth() * Math.cos(Math.toRadians(dir)))
+		// + (int) (rect.getHeight() * Math.sin(Math
+		// .toRadians(-dir))),
+		// (int) rect.getY()
+		// + (int) (rect.getWidth() * Math.sin(Math.toRadians(dir)))
+		// + (int) (rect.getHeight() * Math.cos(Math
+		// .toRadians(-dir))));
+		// p.addPoint(
+		// (int) rect.getX()
+		// + (int) (rect.getHeight() * Math.sin(Math
+		// .toRadians(-dir))),
+		// (int) rect.getY()
+		// + (int) (rect.getHeight() * Math.cos(Math
+		// .toRadians(-dir))));
+
+		// new Point((int) rect.getX(), (int) (rect.getY() + rect
+		// .getHeight() / 2))
+		Point aPoint = rotatePoint(
+				new Point((int) rect.getX(), (int) rect.getY()), center, dir);
+		p.addPoint((int) aPoint.getX(), (int) aPoint.getY());
+
+		aPoint = rotatePoint(new Point((int) (rect.getX() + rect.getWidth()),
+				(int) rect.getY()), center, dir);
+		p.addPoint((int) aPoint.getX(), (int) aPoint.getY());
+
+		aPoint = rotatePoint(new Point((int) (rect.getX() + rect.getWidth()),
+				(int) (rect.getY() + rect.getHeight())), center, dir);
+		p.addPoint((int) aPoint.getX(), (int) aPoint.getY());
+		aPoint = rotatePoint(new Point((int) rect.getX(),
+				(int) (rect.getY() + rect.getHeight())), center, dir);
+		p.addPoint((int) aPoint.getX(), (int) aPoint.getY());
+		return p;
+	}
+	public static Point rotatePoint(Point pt, Point center, double angleDeg) {
+		double angleRad = (angleDeg / 180) * Math.PI;
+		double cosAngle = Math.cos(angleRad);
+		double sinAngle = Math.sin(angleRad);
+		double dx = (pt.x - center.x);
+		double dy = (pt.y - center.y);
+
+		pt.x = center.x + (int) (dx * cosAngle - dy * sinAngle);
+		pt.y = center.y + (int) (dx * sinAngle + dy * cosAngle);
+		return pt;
 	}
 }

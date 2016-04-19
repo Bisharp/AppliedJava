@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
+import javax.swing.border.Border;
 
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -40,7 +41,7 @@ public ActionMenu(Board owner){
 	JPanel south=new JPanel();
 	//west.setLayout(new BoxLayout(west, BoxLayout.Y_AXIS));
 	//west.add(list);
-	JButton switchB=new JButton("Switch");
+	JButton switchB=new JButton("switch");
 	switchB.addActionListener(new ActionListener() {
 		
 		@Override
@@ -52,7 +53,34 @@ public ActionMenu(Board owner){
 			//ActionMenu.this.owner.requestFocus();
 		}
 	});
+	JButton mulB=new JButton("start multiplayer server");
+	mulB.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			//new SwitchMenu(ActionMenu.this.owner);
+			ActionMenu.this.dispose();
+			ActionMenu.this.owner.setActionMenu(null);
+			ActionMenu.this.owner.multiplayer();
+			//ActionMenu.this.owner.requestFocus();
+		}
+	});
+	JButton cancelB=new JButton("cancel");
+	cancelB.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		ActionMenu.this.dispose();
+		ActionMenu.this.owner.setActionMenu(null);
+		ActionMenu.this.owner.requestFocus();
+		}
+	});
+	JPanel pan=new JPanel();
+	pan.add(mulB);
+	this.add(pan,BorderLayout.NORTH);
 	south.add(switchB);
+	south.add(cancelB);
 	this.add(south,BorderLayout.SOUTH);
 //	addKeyListener(new KeyListener() {
 //		

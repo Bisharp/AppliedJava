@@ -114,6 +114,10 @@ public class Objects extends Sprite {
 				return "How did these leaves get here? There isn't a tree in sight.";
 			case "RIP":
 				return"This tombstone looks old. The lower text is unreadable.";
+			case "Explosives":
+				return "A box of explosives.\n We should probably leave them alone.";
+			case "ExplosivesVine":
+				return "A box of explosives.\n Why are we looking at these right now and why are they even here?";
 			}
 		// Find by loc
 		if (loc == null)

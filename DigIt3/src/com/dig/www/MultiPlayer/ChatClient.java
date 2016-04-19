@@ -38,6 +38,7 @@ public class ChatClient implements IChatClient
 		try{
 		chatServer.enterChatRoom(this, myName,passWord);}
 		catch(Exception ex){
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(owner, "Could not connect to server. You probably have the wrong password.");
 		System.exit(0);
 		}

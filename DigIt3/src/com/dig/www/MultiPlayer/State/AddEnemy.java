@@ -6,7 +6,8 @@ public class AddEnemy extends ActionState{
 protected Enemy enemy;
 	public AddEnemy(Enemy enemy) {
 		super(ActionType.ADDEN);
-		this.enemy=enemy;
+		this.enemy=enemy.getClone();
+		this.enemy.setOwner(null);
 	}
 public Enemy getEnemy(){
 	return enemy;
