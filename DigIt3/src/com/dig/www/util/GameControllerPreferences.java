@@ -88,9 +88,9 @@ public class GameControllerPreferences implements Serializable {
 		protected JButton tlkB = new JButton("Talk to NPCs: " + trans(npc));
 		protected JButton itmB = new JButton("Use items: " + trans(item));
 
-		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(walkSensitivity));
-		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(zSensitivity));
-		protected JSlider mouseS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(mouseSensitivity));
+//		protected JSlider moveS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(walkSensitivity));
+//		protected JSlider zS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(zSensitivity));
+//		protected JSlider mouseS = new JSlider(JSlider.HORIZONTAL, 2, 10, getInitialValue(mouseSensitivity));
 
 		protected JButton reset = new JButton("Reset to Defaults");
 
@@ -212,12 +212,12 @@ public class GameControllerPreferences implements Serializable {
 			pane2.add(tlkB);
 
 			pane3.add(reset);
-			pane3.add(new JLabel("Walk Sensitivity:"));
-			pane3.add(moveS);
-			pane3.add(new JLabel("Mouse Sensitivity:"));
-			pane3.add(mouseS);
-			pane3.add(new JLabel("Z-Axis Sensitivity:"));
-			pane3.add(zS);
+//			pane3.add(new JLabel("Walk Sensitivity:"));
+//			pane3.add(moveS);
+//			pane3.add(new JLabel("Mouse Sensitivity:"));
+//			pane3.add(mouseS);
+//			pane3.add(new JLabel("Z-Axis Sensitivity:"));
+//			pane3.add(zS);
 
 			add(pane1, BorderLayout.WEST);
 			add(pane2, BorderLayout.EAST);
@@ -240,16 +240,16 @@ public class GameControllerPreferences implements Serializable {
 			setVisible(true);
 		}
 
-		public void initiateSlider(JSlider framesPerSecond) {
-			framesPerSecond.addChangeListener(new Listener());
-
-			// Turn on labels at major tick marks.
-
-			framesPerSecond.setMajorTickSpacing(10);
-			framesPerSecond.setMinorTickSpacing(1);
-			framesPerSecond.setPaintTicks(true);
-			framesPerSecond.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-		}
+//		public void initiateSlider(JSlider framesPerSecond) {
+//			framesPerSecond.addChangeListener(new Listener());
+//
+//			// Turn on labels at major tick marks.
+//
+//			framesPerSecond.setMajorTickSpacing(10);
+//			framesPerSecond.setMinorTickSpacing(1);
+//			framesPerSecond.setPaintTicks(true);
+//			framesPerSecond.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+//		}
 
 		protected final String[] movementSchemes = new String[] { "Left Stick", "Right Stick", "D-Pad" };
 
@@ -356,25 +356,25 @@ public class GameControllerPreferences implements Serializable {
 			return verify;
 		}
 
-		protected class Listener implements ChangeListener {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSlider source = (JSlider) e.getSource();
-				
-				if (!source.getValueIsAdjusting()) {
-					
-					final int sense = 1 - source.getValue() / 10;
-					System.out.println(sense);
-					if (source == zS)
-						zSensitivity = sense;
-					else if (source == mouseS)
-						mouseSensitivity = sense;
-					else if (source == moveS)
-						walkSensitivity = sense;
-				}
-			}
-		}
+//		protected class Listener implements ChangeListener {
+//
+//			@Override
+//			public void stateChanged(ChangeEvent e) {
+//				JSlider source = (JSlider) e.getSource();
+//				
+//				if (!source.getValueIsAdjusting()) {
+//					
+//					final int sense = 1 - source.getValue() / 10;
+//					System.out.println(sense);
+//					if (source == zS)
+//						zSensitivity = sense;
+//					else if (source == mouseS)
+//						mouseSensitivity = sense;
+//					else if (source == moveS)
+//						walkSensitivity = sense;
+//				}
+//			}
+//		}
 	}
 
 	protected int[] nums = GameControllerRunnable.nums;

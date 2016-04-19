@@ -1139,7 +1139,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Left
 		if (keyCode == Preferences.LEFT()) {
 			//
-			// direction = Direction.LEFT;
+			direction = Direction.LEFT;
 			if (deltaY == 0) {
 				if (!collisionFlags.get(Direction.LEFT)) {
 					// moveX = false;
@@ -1169,7 +1169,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Right
 		else if (keyCode == Preferences.RIGHT()) {
 			//
-			// direction = Direction.RIGHT;
+			direction = Direction.RIGHT;
 			if (deltaY == 0) {
 				if (!collisionFlags.get(Direction.RIGHT)) {
 					// moveX = false;
@@ -1199,7 +1199,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Up
 		else if (keyCode == Preferences.UP()) {
 			//
-			// direction = Direction.UP;
+			direction = Direction.UP;
 			if (deltaX == 0) {
 				if (!collisionFlags.get(Direction.UP)) {
 					// moveY = false;
@@ -1231,7 +1231,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// Down
 		else if (keyCode == Preferences.DOWN()) {
 			//
-			// direction = Direction.DOWN;
+			direction = Direction.DOWN;
 			if (deltaX == 0) {
 				if (!collisionFlags.get(Direction.DOWN)) {
 					// moveY = false;
@@ -1295,16 +1295,6 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 					owner.getfP().add(new FProjectile(dir, x, y, 25, this, i.getPath(), owner, Moves.ITEM));
 				}
 				i.doAct(owner);
-				// More strength stuff; this code would be removed if we
-				// don't allow characters to get stronger. Currently removed
-				// until I actually present the idea.
-
-				// strengthIncrementer++;
-				// if (strengthIncrementer == 5 * timesIncremented) {
-				// strength++;
-				// strengthIncrementer = 0;
-				// timesIncremented++;
-				// }
 			}
 		}
 	}

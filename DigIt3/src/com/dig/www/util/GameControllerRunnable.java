@@ -310,7 +310,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[3] = true;
 			break;
 		case 125:
-			releaseKeys(1, 3);
+			//releaseKeys(1, 3);
+			releaseKeys();
 			if (!buttonPressed[1]) {
 				rOB.keyPress(UP);
 				buttonPressed[1] = true;
@@ -326,7 +327,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[1] = true;
 			break;
 		case 375:
-			releaseKeys(1, 2);
+			//releaseKeys(1, 2);
+			releaseKeys();
 			if (!buttonPressed[1]) {
 				rOB.keyPress(UP);
 				buttonPressed[1] = true;
@@ -342,7 +344,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[2] = true;
 			break;
 		case 625:
-			releaseKeys(2, 0);
+			//releaseKeys(2, 0);
+			releaseKeys();
 			if (!buttonPressed[2]) {
 				rOB.keyPress(RIGHT);
 				buttonPressed[2] = true;
@@ -358,7 +361,8 @@ public class GameControllerRunnable implements Runnable {
 			buttonPressed[0] = true;
 			break;
 		case 875:
-			releaseKeys(3, 0);
+			//releaseKeys(3, 0);
+			releaseKeys();
 			if (!buttonPressed[3]) {
 				rOB.keyPress(LEFT);
 				buttonPressed[3] = true;
