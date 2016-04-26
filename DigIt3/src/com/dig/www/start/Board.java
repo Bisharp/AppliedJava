@@ -119,6 +119,7 @@ import com.dig.www.util.Sprite;
 import com.dig.www.util.StageBuilder;
 import com.dig.www.util.Statics;
 import com.dig.www.util.Time;
+import com.dig.www.util.GameControllerRunnable;
 
 public class Board extends MPanel implements ActionListener {
 
@@ -2516,7 +2517,7 @@ onScreenEnemies.clear();
 							// character following you. You would be able to
 							// switch
 							// to him.
-							friends.add(((CollectibleCharacter) n).getCharacter());
+							((CollectibleCharacter) n).getCharacter();
 							objects.remove(u);
 							u--;
 						} else if (n instanceof CollectibleObject) {
@@ -3088,6 +3089,8 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 					is.close();
 					GameCharacter.setInventory(w);
 					GameCharacter.getInventory().setOwner(this);
+					
+					GameControllerRunnable.renewKeys();
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
 				}

@@ -191,6 +191,13 @@ public class GameControllerPreferences implements Serializable {
 					}
 				}
 			});
+			clickB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					mouseClick = getButton("Mouse Click", mouseClick);
+					clickB.setText("Mouse Click: " + trans(mouseClick));
+				}
+			});
 
 //			pane1.setPreferredSize(d);
 //			pane2.setPreferredSize(d);
@@ -202,14 +209,15 @@ public class GameControllerPreferences implements Serializable {
 
 			pane1.add(moveB);
 			pane1.add(mouseB);
+			pane1.add(clickB);
 			pane1.add(pseB);
 			pane1.add(swchB);
-			pane1.add(itmB);
 
 			pane2.add(atkB);
 			pane2.add(projB);
 			pane2.add(specB);
 			pane2.add(tlkB);
+			pane2.add(itmB);
 
 			pane3.add(reset);
 //			pane3.add(new JLabel("Walk Sensitivity:"));

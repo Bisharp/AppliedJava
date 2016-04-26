@@ -93,6 +93,7 @@ public class GameControllerRunnable implements Runnable {
 
 	public static void synchControllerPrefs() {
 		p = Board.preferences.getGCP();
+		System.err.println(p.mouseClick);
 	}
 
 	@Override

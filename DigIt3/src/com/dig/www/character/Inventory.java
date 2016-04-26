@@ -177,7 +177,7 @@ public class Inventory implements Serializable {
 
 		if (r.intersects(options))
 			if (DigIt.hasController())
-				DigIt.getCTR().getPreferences().setValues();
+				DigIt.getGCP().setValues();
 			else
 				Board.preferences.setValues(owner);
 		else if (r.intersects(view))
