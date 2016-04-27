@@ -2517,7 +2517,7 @@ onScreenEnemies.clear();
 							// character following you. You would be able to
 							// switch
 							// to him.
-							((CollectibleCharacter) n).getCharacter();
+							((CollectibleCharacter) n).makeCharacter();
 							objects.remove(u);
 							u--;
 						} else if (n instanceof CollectibleObject) {
@@ -2623,6 +2623,14 @@ onScreenEnemies.clear();
 				addAction("started server", "images/icon.png");
 			}
 		
+	}
+	public void talk(NPC n){
+		current = n;
+		current.setLine();
+		state = State.NPC;
+		character.setImage(character.newImage("n"));
+		for (GameCharacter character : friends)
+			character.setImage(character.newImage("n"));
 	}
 public boolean polygonsInt(Shape poly1,Shape poly2){
 	Area area = new Area(poly1);

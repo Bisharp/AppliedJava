@@ -18,9 +18,6 @@ public class CollectibleCharacter extends Collectible {
 	public CollectibleCharacter(int x, int y, String loc, Board owner) {
 		super(x, y, loc,true, owner, Items.NULL);
 	}
-public void getCharacter(){
-	//TODO remove this
-}
 	public void makeCharacter() {
 		
 		String[] s = loc.split("/");

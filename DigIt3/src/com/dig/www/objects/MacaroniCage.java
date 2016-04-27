@@ -42,7 +42,7 @@ public boolean interact() {
 				//locked=false;
 				//owner.getData().unlockDoor(owner.getPortals().indexOf(this));
 				//image=newImage(path+"c.png");
-				//owner.talk(new CagedMacaroni(-10000, -10000, owner, location,true));
+				owner.talk(new CagedMacaroni(-10000, -10000, owner, location,true));
 				for(Enemy e:owner.getEnemies())
 					if(e instanceof SpinnyBoss)
 						((SpinnyBoss)e).deactivateShield();
@@ -51,7 +51,7 @@ public boolean interact() {
 			
 			JOptionPane.showMessageDialog(owner, "You do not have a key.", DigIt.NAME + " Door Dialog", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(image));
 		}
-		//owner.talk(new CagedMacaroni(-10000, -10000, owner, location,false));
+		owner.talk(new CagedMacaroni(-10000, -10000, owner, location,false));
 		return false;
 	//}
 	
