@@ -93,20 +93,27 @@ public class WorldBuilder {
 		}
 
 		boolean hasVSwitch = false;
+		boolean prevVSwitch = hasVSwitch;
 		for (y = 0; y < height; y++) {
 			for (x = 0; x < width; x++) {
 
-				if (c[x][y] == '1' && !hasVSwitch) {
-					world.add(new Switch((x + 2) * BLOCK, y * BLOCK - 20, owner));
+				if (c[x][y] == 'L' && c[x][y - 1] != 'E' && !hasVSwitch && level % 4 != 0) {
+					world.add(new Switch((x + 2) * BLOCK, y * BLOCK - 20, owner, level % 4 == 0));
+					hasVSwitch = true;
+				} else if (c[x][y] == '1' && c[x][y - 1] != 'E' && !hasVSwitch && level % 4 == 0) {
+					world.add(new Switch((x + 2) * BLOCK, y * BLOCK - 20, owner, level % 4 == 0));
 					hasVSwitch = true;
 				}
 
 				switch (c[x][y]) {
 
 				case '1':
-					world.add(new Object((x + 2) * BLOCK, y * BLOCK, BLOCK, BLOCK, owner));
+						world.add(new Object((x + 2) * BLOCK, y * BLOCK, BLOCK, BLOCK, owner));
 					break;
 				case 'E':
+					if (prevVSwitch != hasVSwitch)
+						break;
+
 					if (Statics.RAND.nextInt(level) > 20)
 						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/tank.gif", owner, Enemy.Type.WALK, true));
 					else if (Statics.RAND.nextInt(level * 2) > 20)
@@ -117,21 +124,28 @@ public class WorldBuilder {
 						world.add(new Enemy((x + 2) * BLOCK, y * BLOCK, "images/climb/evil/ghostRock.png", owner, Enemy.Type.STAND));
 					break;
 				case 'L':
+					if (prevVSwitch != hasVSwitch && level % 4 != 0)
+						world.add(new Object(0, y * BLOCK, (x + 2) * BLOCK, BLOCK, owner));
+					
 					world.add(new Ladder((x + 2) * BLOCK, y * BLOCK, "images/climb/other/ladder.png", owner, c[x][y - 1] == '0'));
 					if (c[x][y - 1] == '0')
 						world.add(new Object((x + 2) * BLOCK, y * BLOCK, BLOCK, 7, owner));
+					
+					if (prevVSwitch != hasVSwitch && level % 4 != 0)
+						world.add(new Object((x + 2) * BLOCK, y * BLOCK, Climb.GW - (x + 2) * BLOCK, BLOCK, owner));
 					break;
 
 				case 'C':
 					world.add(new Cat((x + 2) * BLOCK, y * BLOCK, owner));
 				}
 				System.out.print(c[x][y]);
+				prevVSwitch = hasVSwitch;
 			}
 			System.out.println();
-			
+
 			if (y + 1 == height)
 				world.add(new Object(0, y * BLOCK, Climb.GW, BLOCK, owner));
-				
+
 		}
 
 		// world.add(new Object(0, Climb.GH - 50, 600, 100, owner));

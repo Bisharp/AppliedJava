@@ -39,6 +39,7 @@ public class Slime extends WalkingEnemy {
 
 	protected Hashtable<String, Hashtable<String, Image>> lib = new Hashtable<String, Hashtable<String, Image>>();
 
+	// TODO Make the loc hardcoded
 	public Slime(int x, int y, String loc, Board owner, boolean flying, int health) {
 		super(x, y, loc, owner, flying, health);
 
@@ -191,11 +192,17 @@ public class Slime extends WalkingEnemy {
 			drawShadow(g2d, x, y);
 		} else {
 			g2d.drawImage(getImage(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
-			drawShadow(g2d);
+			drawShadow(g2d, x, y);
 		}
 
 		drawStatus(g2d);
 
 		drawBar((double) health / (double) maxHealth, g2d);
+	}
+	
+	protected void drawShadow(Graphics2D g2d, int x, int y) {
+		if (owner.darkenWorld() && !illuminated) {
+			g2d.drawImage(getShadow(), x + (scrollX < 0 ? width : 0), y, width * (scrollX < 0 ? -1 : 1), height, owner);
+		}
 	}
 }
