@@ -92,7 +92,7 @@ protected ArrayList<HookObject>hooks=new ArrayList<HookObject>();
 		return collideWithHook;
 	}
 	public void pull(){
-		if(getBounds().intersects(owner.getScreen()))
+		if(getBounds().intersects(owner.getScreen())&&!collideWithHook)
 		moving=true;
 	}
 }

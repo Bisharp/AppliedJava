@@ -302,6 +302,7 @@ public class StageBuilder {
 
 			// }
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			System.err.println("ERROR: could not load Enemies.");
 		}
 
@@ -544,13 +545,16 @@ public class StageBuilder {
 								npcs.add(new BossActivator(nX, nY,owner));
 							else if(val==-21)
 								npcs.add(new WaveMaker(nX, nY, loc, owner));
+							else if(val==-22)
+								npcs.add(new MacaroniCage(nX, nY, this.loc, owner));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
-						else if (Items.translate(stuff.get(5)).equals(Items.NULL.toString()))
+						else if (stuff.get(5).equals("Null"))
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
-						else
+						else{
 							npcs.add(new CollectibleObject(nX, nY, loc, wall, owner, Items.translate(stuff.get(5))));
-
+						System.out.println(stuff.get(5));
+						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
 

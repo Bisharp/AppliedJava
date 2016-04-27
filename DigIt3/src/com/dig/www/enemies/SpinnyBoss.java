@@ -9,6 +9,8 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.util.ArrayList;
 
+import com.dig.www.character.GameCharacter;
+import com.dig.www.character.Moves;
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
 
@@ -17,14 +19,18 @@ private Image image2;
 private Image image3;
 private int rotate1=0;
 private int rotate2=0;
+private boolean shielded=true;
+private Image shield;
+private int sR;
 	public SpinnyBoss(int x, int y, Board owner) {
 		super(x, y, "images/enemies/bosses/pod/pod.png", owner, true, 1000,
-				"SpinnyBoss", 6,
+				"Botanus's Spinner Mech", 6,
 				"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav",
 				"gunSFX/explosion-2.wav");
 		// TODO Auto-generated constructor stub
 		image2=newImage("images/enemies/bosses/pod/ring1.png");//bigger
 		image3=newImage("images/enemies/bosses/pod/ring0.png");//medium
+		shield=newImage("images/enemies/bosses/pod/shield.png");
 	}
 
 	@Override
@@ -176,7 +182,8 @@ private int rotate2=0;
 		rotate1%=360;
 		if(rotate2<0)
 			rotate2+=360;
-		
+		sR+=3;
+		sR%=360;
 		if (harmTimer > 0)
 			g2d.drawImage(newImage("images/effects/heart.png"), x, y, owner);
 		else if (slowTimer > 0)
@@ -185,6 +192,12 @@ private int rotate2=0;
 			// g2d.setFont(enFont);
 			// g2d.setColor(Color.BLACK);
 			// g2d.drawString("" + health, x, y - 10);
+		if(shielded){
+			g2d.rotate(Math.toRadians(sR), x+107.5, y+107.5);
+			g2d.drawImage(shield,x,y, owner);
+			g2d.rotate(-Math.toRadians(sR), x+107.5, y+107.5);
+		}
+			
 			drawBar((double) health / (double) maxHealth, g2d);
 		
 	}
@@ -228,5 +241,14 @@ private int rotate2=0;
 		super.makeDeadExplosion();
 		owner.getEnemies().add(new Explosion(x, y,  owner));
 		
+	}
+@Override
+	public void interact(Moves move, GameCharacter character, boolean fromP) {
+	if(!shielded)
+		super.interact(move, character, fromP);
+	}
+	public void deactivateShield() {
+		// TODO Auto-generated method stub
+		shielded=false;
 	}
 }

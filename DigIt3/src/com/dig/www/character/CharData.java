@@ -403,10 +403,14 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 		}
 	}
 
-	public void unlockDoor(int indexOf) {
+	public void unlockDoor(int indexOf,boolean b) {
 		// TODO Auto-generated method stub
-		areas.get(currentKey).portals.put(indexOf, false);
-		//areas.get(currentKey).portals.set(indexOf, false);
+		areas.get(currentKey).portals.remove(indexOf);
+		areas.get(currentKey).portals.put(indexOf, b);
+	
+		//areas.get(currentKey).portals.replace(indexOf, false);
 	}
-
+	public void unlockDoor(int indexOf) {
+		unlockDoor(indexOf, false);
+	}
 }

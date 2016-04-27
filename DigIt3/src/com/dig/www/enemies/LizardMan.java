@@ -22,7 +22,7 @@ private static final int IM_TIMER_MAX=6;
 int roarTimer;
 	public LizardMan(int x, int y, Board owner) {
 		super(x, y, "n", owner, true, 1000,
-				"Lizard-Man of Destruction", 5, "music/zeldaCopyright2.mp3",
+				"Azildr", 5, "music/zeldaCopyright2.mp3",
 				"gunSFX/explosion-2.wav", "enemy/LizHurt.wav");
 		// TODO Auto-generated constructor stub
 	}

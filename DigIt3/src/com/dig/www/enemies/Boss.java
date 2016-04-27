@@ -3,12 +3,14 @@ package com.dig.www.enemies;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 
 import com.dig.www.blocks.Block;
 import com.dig.www.objects.BossBlock;
 import com.dig.www.objects.Objects;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.util.Irregular;
 import com.dig.www.util.SoundPlayer;
 import com.dig.www.util.Statics;
 
@@ -91,7 +93,20 @@ public abstract class Boss extends Enemy {
 		if (attackNum == 0) {
 			moveDForward();
 			for (Block b : owner.getWorld()) {
-				if (!b.traversable() && b.getBounds().intersects(getBounds())) {
+				boolean stopped=false;
+				Shape s=getBounds();
+				if(this instanceof Irregular)
+					s=((Irregular)this).getIrregularBounds();
+				if(!b.traversable() && s.intersects(b.getBounds()))
+					stopped=true;
+				else{
+					for(Objects o:owner.getObjects()){
+						if(o.isWall()&&s.intersects(o.getBounds())){
+							stopped=true;break;}
+						
+					}
+				}
+				if (stopped) {
 					followTimer = 0;
 					attackNum = -1;
 					dir += 180;

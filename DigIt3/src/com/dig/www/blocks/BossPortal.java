@@ -27,6 +27,8 @@ public int getCollectibleNum(){
 public void doBoolean(Boolean boolean1) {
 	// TODO Auto-generated method stub
 	opened=boolean1;
+	if(boolean1)
+	type="boss/open";
 }
 @Override
 	public boolean interact() {
@@ -89,6 +91,7 @@ public void doBoolean(Boolean boolean1) {
 				GameCharacter.getInventory().decrementItem(Items.KEYCRYSTAL, GameCharacter.getInventory().getItemNum(Items.KEYCRYSTAL));
 				opened=true;
 				type="boss/open";
+				owner.getData().unlockDoor(owner.getPortals().indexOf(this),true);
 				return false;
 				}
 				JOptionPane.showMessageDialog(owner, "You do not have enough Key Crystals.", DigIt.NAME+ " Dimensional Key Dialog", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(image));
