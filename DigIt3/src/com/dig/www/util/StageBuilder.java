@@ -669,7 +669,9 @@ public class StageBuilder {
 			}
 		} catch (Exception e) {
 			System.err.println("ERROR: This map most likely doesn't exist.");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(owner, "This map most likely doesn't exist. Leaving game.");
+			System.exit(0);
+			//e.printStackTrace();
 			// }
 
 		}

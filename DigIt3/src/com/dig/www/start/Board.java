@@ -573,7 +573,7 @@ portals=data.filterPortals(portals);
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		pointedPoint = null;
-		fP.clear();
+		//fP.clear();
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -1269,7 +1269,7 @@ portals =data.filterPortals(portals);
 		}
 		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
 		g2d.setColor(Color.WHITE);
-		g2d.drawString("FPS:" + fps, 3, 170 + (Statics.MAC ? 23 : 0));
+		g2d.drawString("FPS:"+1000/(fps==0?1:fps)+":"+ fps, 3, 170 + (Statics.MAC ? 23 : 0));
 		if (corruptedWorld)
 			drawCorruptedBorder(g2d);
 		Toolkit.getDefaultToolkit().sync();
