@@ -1,0 +1,16 @@
+Standing,2800,2200,images/enemies/unique/goop.png,true,-100
+Standing,2800,2100,images/enemies/unique/goop.png,true,-100
+Standing,2800,2000,images/enemies/unique/goop.png,true,-100
+Standing,2800,1900,images/enemies/unique/goop.png,true,-100
+Standing,2800,1800,images/enemies/unique/goop.png,true,-100
+Standing,2800,1700,images/enemies/unique/goop.png,true,-100
+Walking,1400,1800,images/enemies/unique/redStuff.png,false,100
+Launch,4100,1500,images/enemies/turrets/1.png,false,100,25
+Launch,4100,1100,images/enemies/turrets/1.png,false,100,25
+Launch,4300,1100,images/enemies/turrets/1.png,false,100,25
+Launch,4500,1100,images/enemies/turrets/1.png,false,100,25
+Launch,4700,1100,images/enemies/turrets/1.png,false,100,25
+Launch,4900,1100,images/enemies/turrets/1.png,false,100,25
+Launch,4900,1500,images/enemies/turrets/1.png,false,100,25
+Launch,4700,1500,images/enemies/turrets/1.png,false,100,25
+Launch,4300,1500,images/enemies/turrets/1.png,false,100,25

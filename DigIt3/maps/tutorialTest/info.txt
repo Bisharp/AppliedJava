@@ -1,5 +1,0 @@
-tutorialTest
-shovel
-club
-heart
-diamond

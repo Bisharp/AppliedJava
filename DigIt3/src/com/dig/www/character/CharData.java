@@ -16,7 +16,9 @@ import com.dig.www.objects.DropPoint;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.KeyCrystal;
 import com.dig.www.start.Board;
+import com.dig.www.util.OnlyFirstTimeEnteringMap;
 import com.dig.www.util.Quest;
+import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
 public class CharData implements Serializable {
@@ -44,6 +46,20 @@ public class CharData implements Serializable {
 		if (!areas.containsKey(level))
 			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(),
 					level));
+		else{
+			for(int c=0;c<owner.getObjects().size();c++){
+				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap){
+				owner.getObjects().remove(c);
+				c--;
+				}
+			}
+			for(int c=0;c<owner.getNPCs().size();c++){
+				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap){
+				owner.getNPCs().remove(c);
+				c--;
+				}
+			}
+		}
 
 		currentKey = level;
 	}

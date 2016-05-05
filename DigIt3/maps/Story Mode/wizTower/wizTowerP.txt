@@ -1,0 +1,5 @@
+1800,1150,GiftShop,0,doors,0,brown
+300,850,BathM,0,doors,0,brown
+500,850,BathW,0,doors,0,brown
+1250,450,WizRoom,0,doors,0,brown
+1050,1950,Tutorial,0,doors,0,brown

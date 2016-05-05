@@ -1,0 +1,2 @@
+1100,1200,wizard
+1050,1750,EnterFirstTimeWizTower

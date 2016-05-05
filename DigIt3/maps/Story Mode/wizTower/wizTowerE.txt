@@ -1,0 +1,1 @@
+Slime,1800,850,images/enemies/unique/slime.png,false,100

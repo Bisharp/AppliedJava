@@ -1,0 +1,26 @@
+2300,1300,images/objects/HookObject.png,false,-5
+2100,1800,images/objects/PTree0.png,true,0
+3200,1900,images/objects/PTree0.png,true,0
+3500,600,images/objects/PTree0.png,true,0
+1700,950,images/icon.png,false,-3
+3900,1900,images/objects/HookObject.png,false,-5
+1300,1100,images/objects/HookObject.png,false,-5
+1900,1100,images/objects/woodSign/Sign Arrows.png,true,sign
+3000,300,images/objects/woodSign/Sign Dig.png,true,sign
+2500,1100,images/objects/woodSign/Sign Money.png,true,sign
+3900,700,images/objects/woodSign/Sign Break.png,true,sign
+3900,1400,images/objects/woodSign/Sign Defend.png,true,sign
+4600,2000,images/objects/woodSign/Sign Grapple.png,true,sign
+2900,2200,images/objects/woodSign/Sign Friend.png,true,sign
+2675,1375,images/objects/collectibles/coin10.png,false,10
+1575,1425,images/objects/collectibles/coin10.png,false,10
+2675,1050,images/objects/collectibles/coin5.png,false,5
+5175,1475,images/objects/collectibles/coin3.png,false,3
+1600,1300,images/objects/HookObject.png,false,-5
+2100,2100,images/objects/PTree0.png,true,
+2600,1800,images/objects/HookObject.png,false,-5
+800,1550,images/objects/HookObject.png,false,-5
+550,1100,images/objects/HookObject.png,false,-5
+925,975,images/objects/collectibles/coin1.png,false,1
+700,1200,images/objects/InventoryObjects/plainKey.png,false,1,Plain Key
+1000,1100,images/objects/woodSign/Sign Interact.png,true,0

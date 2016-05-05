@@ -422,6 +422,8 @@ public class StageBuilder {
 							break;
 						case "RyoBoss2Start":
 							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
+						case "EnterFirstTimeWizTower":
+							npcs.add(new EnterFirstTimeWizTower(nX, nY, owner, loc));
 						break;
 						}
 

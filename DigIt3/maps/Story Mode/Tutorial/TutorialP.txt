@@ -1,0 +1,2 @@
+1700,800,wizTower,0,doors,-1,brown
+300,1550,GiftShop,true,doors,1,brown

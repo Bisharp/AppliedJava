@@ -391,18 +391,8 @@ if(consumeStop)
 	public Board(DigIt dM, String mode, String name) {
 		this.mode = mode;
 		this.userName = name;
-		// character = new Spade(Statics.BOARD_WIDTH / 2 - 50,
-		// Statics.BOARD_HEIGHT / 2 - 50, this, true);
-		// friends.clear();
-		// friends.add(new Heart(Statics.BOARD_WIDTH / 2 + 150,
-		// Statics.BOARD_HEIGHT / 2 - 50, this, false));
-		// friends.add(new Diamond(Statics.BOARD_WIDTH / 2 + 150,
-		// Statics.BOARD_HEIGHT / 2 + 50, this, false));
-		// friends.add(new Club(Statics.BOARD_WIDTH / 2,
-		// Statics.BOARD_HEIGHT / 2 + 150, this, false));
-		// friends.add(new Macaroni(Statics.BOARD_WIDTH / 2,
-		// Statics.BOARD_HEIGHT / 2 + 150, this, false));
-
+if(mode.equals(Statics.MAIN))
+	GameCharacter.storyInt=0;
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
@@ -475,6 +465,7 @@ portals=data.filterPortals(portals);
 					npcs.add(new Chest(o.getX(), o.getY(), this, level,
 							((DropPoint) o).type()));
 				}
+		
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
 			System.exit(0);
@@ -2653,15 +2644,6 @@ public boolean polygonsInt(Shape poly1,Shape poly2){
 		if (key == KeyEvent.VK_8) {
 			toggleLagPrevention();
 		}
-
-		// else if (key == KeyEvent.VK_T) {
-		// if (me != null && theServer != null) {
-		// currentState.addTalk(JOptionPane.showInputDialog("Hi"));
-		// } else if (server != null) {
-		// System.out.println("talked");
-		// currentState.addTalk(JOptionPane.showInputDialog("Server hi"));
-		// }
-		// }
 		else if (key == KeyEvent.VK_J) {
 			if (pointedPoint == null) {
 
@@ -2958,7 +2940,7 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 				try {
 					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
 					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + ","
-							+ spawnNum);
+							+ spawnNum+","+GameCharacter.storyInt);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
 					writer.write(character.getSave() + ",true");
@@ -3039,6 +3021,7 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 						GameCharacter.setLevel(levUp);
 						int xp = Integer.parseInt(stuff.get(3));
 						int spawnNum = Integer.parseInt(stuff.get(4));
+						GameCharacter.storyInt = Integer.parseInt(stuff.get(5));
 						this.spawnNum = spawnNum;
 						GameCharacter.setXP(xp);
 					} catch (Exception e) {

@@ -1,0 +1,5 @@
+400,850,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+550,1200,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+1050,1750,images/icon.png,false,-3
+1300,1600,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+1100,1325,images/icon.png,false,-3

@@ -44,6 +44,7 @@ public abstract class GameCharacter extends Sprite implements Comparable<GameCha
 	/**
 	 * 
 	 */
+	public static int storyInt=Integer.MAX_VALUE;
 	protected String s = "n";
 	protected String nameDraw;
 	protected GameCharacter healing;
@@ -1135,10 +1136,6 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 					owner.getFriends().get(c).setEnergy(0);
 				}
 			}
-		} else if (keyCode == KeyEvent.VK_MINUS) {
-			level++;
-		} else if (keyCode == KeyEvent.VK_0) {
-			inventory.setMoney(Integer.MAX_VALUE);
 		}
 
 		// Left
@@ -1264,22 +1261,6 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 				move = false;
 			}
 		}
-
-		// Attack
-		else if (keyCode == Preferences.ATTACK()) {
-			meleePress = true;
-		}
-
-		// Projectile
-		else if (keyCode == Preferences.PROJECTILE()) {
-			rangedPress = true;
-		}
-
-		// Special
-		else if (keyCode == Preferences.SPECIAL()) {
-			specialPress = true;
-		}
-
 		// Talk to NPCs
 		else if (keyCode == Preferences.NPC()) {
 			willTalk = true;
@@ -1312,6 +1293,23 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 				// }
 			}
 		}
+		else if(storyInt>=1){
+		// Attack
+		 if (keyCode == Preferences.ATTACK()) {
+			meleePress = true;
+		}
+
+		// Projectile
+		else if (keyCode == Preferences.PROJECTILE()) {
+			rangedPress = true;
+		}
+
+		// Special
+		else if (keyCode == Preferences.SPECIAL()) {
+			specialPress = true;
+		}
+}
+		
 	}
 
 	protected void resetFlags() {
@@ -1800,28 +1798,12 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 
 		}
 		if (owner.getCharacter() == this) {
+			g2d.setFont(HUD);int macH = Statics.MAC ? 23 : 0;
+			
+			if(storyInt>=1){
 			g2d.setColor(Color.BLACK);
-			// 30 + (int) Math.ceil((double) wallet.getDigits()) * 30 + 340;
-			// if (normWidth < (int) Math.ceil((double) 75//HP_MAX
-			// / (double) 10) * 30 + 30) {
-			// normWidth = (int) Math.ceil((double) 75//HP_MAX
-			// / (double) 10) * 30 + 30;
-			// }
-
 			int normWidth = 300;
-			int macH = Statics.MAC ? 23 : 0;
 			g2d.fillRect(-10, 0 + macH, normWidth, 130);
-
-			// for (int i = 1; i <= (int) Math.ceil((double) HP_MAX/ (double)
-			// 10); i++) {
-			// g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i
-			// ? Color.RED : Color.DARK_GRAY);
-			// g2d.fillRect(i * 30, 70, 20, 20);
-			// g2d.setColor(Color.WHITE);
-			// g2d.drawRect(i * 30, 70, 20, 20);
-			// }
-			// g2d.setColor((int) Math.ceil((double) health / (double) 10) >= i
-			// ? Color.RED : Color.DARK_GRAY);
 			g2d.setColor(Color.GREEN);
 			g2d.fillRect(normWidth - 50,
 					50 + macH + +(int) (Math.max(0, ((double) meleeTimer / (double) NEG_TIMER_MELEE)) * 20), 20,
@@ -1841,7 +1823,6 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 			g2d.setColor(Color.WHITE);
 			g2d.drawRect(normWidth - 50, 100 + macH, 20, 20);
 			g2d.setColor(Color.RED);
-			g2d.setFont(HUD);
 			// g2d.drawString("HEALTH: | MONEY: " + wallet.getMoney(),
 			// 30, 50);
 			g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30 + macH);
@@ -1857,11 +1838,23 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 			int collectibles = 0;
 			if (getInventory().contains(Items.KEYCRYSTAL))
 				collectibles = getInventory().getItemNum(Items.KEYCRYSTAL);
+			int lowNumber=5;
+			if(storyInt>=lowNumber){
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(normWidth - 20, 0 + macH, baseWidth + (13 * numOfDigits(collectibles)), 50);
 			g2d.setColor(Statics.BROWN);
-			g2d.drawString(colectibleName + ": " + collectibles, normWidth - 10 - 25, 30 + macH);
+		g2d.drawString(colectibleName + ": " + collectibles, normWidth - 10 - 25, 30 + macH);
+			}
 			drawCSHUD(g2d);
+			}else{
+				int normWidth=300;
+				g2d.setColor(Color.BLACK);
+				g2d.fillRect(-10, 0 + macH, normWidth-75+20, 130);
+				g2d.setColor(Color.RED);
+				g2d.drawString("MONEY: " + inventory.getMoney(), 10, 30 + macH);
+				drawTHBar((double) health / (double) HP_MAX, normWidth - 75, g2d);
+				drawTEnBar((double) energy / (double) MAX_ENERGY, normWidth - 75, g2d);
+			}
 			// drawEnBar((double) energy / (double) MAX_ENERGY, g2d);
 		} else {
 			drawBar2((double) health / (double) HP_MAX, (double) energy / (double) MAX_ENERGY, g2d);
@@ -1882,9 +1875,6 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		// g2d.setColor(Color.magenta);
 		// g2d.draw(getTalkBounds());
 		// }
-		g2d.setColor(Color.ORANGE);
-		if (wallBound && player)
-			g2d.drawString("wallBound", 10, 350);
 	}
 
 	protected void drawTool(Graphics2D g2d) {
