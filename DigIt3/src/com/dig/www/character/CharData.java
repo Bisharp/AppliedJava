@@ -16,6 +16,7 @@ import com.dig.www.objects.DropPoint;
 import com.dig.www.objects.Objects;
 import com.dig.www.objects.KeyCrystal;
 import com.dig.www.start.Board;
+import com.dig.www.util.ConditionEnteringMap;
 import com.dig.www.util.OnlyFirstTimeEnteringMap;
 import com.dig.www.util.Quest;
 import com.dig.www.util.Sprite;
@@ -48,13 +49,13 @@ public class CharData implements Serializable {
 					level));
 		else{
 			for(int c=0;c<owner.getObjects().size();c++){
-				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap){
+				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap||(owner.getObjects().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getObjects().get(c)).enter())){
 				owner.getObjects().remove(c);
 				c--;
 				}
 			}
 			for(int c=0;c<owner.getNPCs().size();c++){
-				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap){
+				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap||(owner.getNPCs().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getNPCs().get(c)).enter())){
 				owner.getNPCs().remove(c);
 				c--;
 				}
