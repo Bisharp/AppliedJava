@@ -24,6 +24,8 @@ public class Launch extends Enemy {
 		String[] s = loc.split("/");
 
 		identity = s[s.length - 1].charAt(0);
+		if(identity=='2')
+			identity='0';
 		// identity=1;
 		DELAY = delay;
 	}

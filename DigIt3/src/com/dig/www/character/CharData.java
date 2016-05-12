@@ -37,31 +37,42 @@ public class CharData implements Serializable {
 	public CharData(String key, Board owner) {
 		currentKey = key;
 		this.owner = owner;
-
-		areas.put(key, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(), key));
+//enterLevel(level);
+//		areas.put(key, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(), key));
 	}
 
 	// SpecialCollectible
 	public void enterLevel(String level) {
-
-		if (!areas.containsKey(level))
+		
+		if (!areas.containsKey(level)){
 			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(),
-					level));
+					level));}
 		else{
 			for(int c=0;c<owner.getObjects().size();c++){
-				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap||(owner.getObjects().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getObjects().get(c)).enter())){
+				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap){
 				owner.getObjects().remove(c);
 				c--;
 				}
 			}
 			for(int c=0;c<owner.getNPCs().size();c++){
-				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap||(owner.getNPCs().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getNPCs().get(c)).enter())){
+				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap){
 				owner.getNPCs().remove(c);
 				c--;
 				}
 			}
 		}
-
+		for(int c=0;c<owner.getObjects().size();c++){
+			if((owner.getObjects().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getObjects().get(c)).enter())){
+			owner.getObjects().remove(c);
+			c--;
+			}
+		}
+		for(int c=0;c<owner.getNPCs().size();c++){
+			if((owner.getNPCs().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getNPCs().get(c)).enter())){
+			owner.getNPCs().remove(c);
+			c--;
+			}
+		}
 		currentKey = level;
 	}
 

@@ -1,2 +1,3 @@
 1100,1200,wizard
 1050,1750,EnterFirstTimeWizTower
+1200,1600,WizardTowerSirCobalt

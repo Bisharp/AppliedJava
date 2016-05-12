@@ -20,6 +20,7 @@ public abstract class NPC extends Sprite {
 	/**
 	 * 
 	 */
+	protected boolean cantExit;
 	private static final long serialVersionUID = 1L;
 	public static final Font NPC_NORMAL = new Font(Statics.FONT, Font.PLAIN, 20);
 	public static final Font NPC_THOUGHT = new Font(Statics.FONT, Font.ITALIC,
@@ -367,6 +368,9 @@ if (iTalk)
 	}
 
 	protected String append() {
+		if(cantExit&&!inDialogue)
+			return "";
+			else
 		return "\n+(" + KeyEvent.getKeyText(Preferences.NPC()) + " -> next)|";
 	}
 
@@ -426,7 +430,7 @@ if (iTalk)
 		lastChar = hiChar;
 		lastICut = hiCutSceneI;
 		lastCharCut = hiCutSceneChar;
-		line = greetingDialogs[Statics.RAND.nextInt(greetingDialogs.length)];
+		line = getDialog()[Statics.RAND.nextInt(getDialog().length)];
 		wait = true;
 		iTalk = false;
 		inDialogue = true;
@@ -485,8 +489,9 @@ if (iTalk)
 	}
 
 	public void exit() {
-
-		if (!inDialogue && !inConversation) {
+		if(cantExit)
+			wait=false;
+		else if (!inDialogue && !inConversation) {
 			line = exitLine();
 			index = -1;
 			exiting = true;

@@ -37,7 +37,7 @@ public class SecurityEnemy extends SeeEnemy {
 		hasTarget = false;
 
 		if (e == null) {
-			e = new TrackingEnemy(x, y, "images/enemies/unique/" + summon + ".png", owner, false, 5);
+			e = new TrackingEnemy(x, y,summon, owner, false, 5);
 			owner.addEnemy(e);
 		}
 	}

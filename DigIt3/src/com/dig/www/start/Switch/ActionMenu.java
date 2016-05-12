@@ -76,9 +76,20 @@ public ActionMenu(Board owner){
 		ActionMenu.this.owner.requestFocus();
 		}
 	});
+	JButton orderB=new JButton("order");
+	orderB.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new OrderMenu(ActionMenu.this.owner);
+			ActionMenu.this.dispose();
+			ActionMenu.this.owner.setActionMenu(null);
+		}
+	});
 	JPanel pan=new JPanel();
 	pan.add(mulB);
 	this.add(pan,BorderLayout.NORTH);
+	south.add(orderB);
 	south.add(switchB);
 	south.add(cancelB);
 	this.add(south,BorderLayout.SOUTH);

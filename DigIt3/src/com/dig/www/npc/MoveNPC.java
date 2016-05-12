@@ -13,6 +13,7 @@ protected boolean movingBack;
 protected MovePoint[]movePoints;
 protected boolean hasWaited;
 protected int speed;
+protected boolean isWaiting;
 	public MoveNPC(int x, int y, String loc, Board owner, String[] dialogs,
 			String s, String location, NPCOption[] options,MovePoint[]movePoints,int type,int speed) {
 		super(x, y, loc, owner, dialogs, s, location, options);
@@ -86,9 +87,21 @@ public void animate(){
 	}
 }
 public void hasWaited(){
-	hasWaited=true;
+		hasWaited=true;
+		for(int c=0;c<movePoints.length;c++){
+			if(movePoints[c].waitFirst){
+				movePoints[c].waitFirst=false;
+				break;}}
+	
 }
 public void setMovePointFirstWait(int i,boolean setter){
 	movePoints[i].waitFirst=setter;
+}
+@Override
+public void doScroll(int x, int y) {
+	for(MovePoint p:movePoints){
+		p.x+=x;
+		p.y+=y;
+	}
 }
 }

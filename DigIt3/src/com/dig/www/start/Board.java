@@ -112,6 +112,7 @@ import com.dig.www.objects.Objects;
 import com.dig.www.objects.PushCube;
 import com.dig.www.objects.ThrownObject;
 import com.dig.www.start.Switch.ActionMenu;
+import com.dig.www.start.Switch.OrderMenu;
 import com.dig.www.start.Switch.SwitchMenu;
 import com.dig.www.util.Irregular;
 import com.dig.www.util.Preferences;
@@ -453,9 +454,10 @@ if(mode.equals(Statics.MAIN))
 
 		if (data != null)
 			data.enterLevel(level);
-		else
+		else{
 			data = new CharData(level, this);
-
+			data.enterLevel(level);
+		}
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
 portals=data.filterPortals(portals);
@@ -1274,13 +1276,17 @@ portals =data.filterPortals(portals);
 
 	public void openSwitchDialogue() {
 		switching = false;
-		if(actionMenu==null&&switchMenu==null){
+		if(actionMenu==null&&switchMenu==null&&orderMenu==null){
 		character.releaseAll();
 		character.stop();
 		new ActionMenu(this);}
 		else{ if(actionMenu!=null){
 			actionMenu.dispose();
 			actionMenu=null;
+			}
+		if(orderMenu!=null){
+			orderMenu.dispose();
+			orderMenu=null;
 			}
 		if(switchMenu!=null){
 			switchMenu.dispose();
@@ -1467,10 +1473,12 @@ portals =data.filterPortals(portals);
 		for (NPC b : npcs) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
+			b.doScroll(x,y);
 		}
 		for (Objects b : objects) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
+		b.doScroll(x,y);
 		}
 	}
 
@@ -2651,7 +2659,7 @@ public boolean polygonsInt(Shape poly1,Shape poly2){
 			} else
 				pointedPoint = null;
 		}
-		if (key == Preferences.CHAR_CHANGE() && state != State.NPC)
+		if (key == Preferences.CHAR_CHANGE() && state != State.NPC&&GameCharacter.storyInt>3)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
 			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
@@ -3372,11 +3380,15 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 		return time.getGeneralTime() == Time.SUNSET && dN == DayNight.ANY;
 		// }
 	}
-
+private Weather lastWeather=Weather.NORMAL;
 	// TODO at work
 	public void changeWeather() {
-		if (weather == Weather.NONE)
-			switch (Statics.RAND.nextInt(100)) {
+		if (weather == Weather.NORMAL){
+			int rand=Statics.RAND.nextInt(50);
+			if(rand>1&&rand<17)
+				weather=lastWeather;
+			else
+			switch (rand) {
 			case 0:
 				weather = Weather.RAIN;
 				break;
@@ -3386,7 +3398,8 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 			default:
 				weather = Weather.NORMAL;
 				break;
-			}
+			}}
+		lastWeather=weather;
 	}
 
 	public float getTime() {
@@ -3603,5 +3616,10 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 	}private ActionMenu actionMenu;
 	public void setActionMenu(ActionMenu actionMenu){
 		this.actionMenu=actionMenu;
+	}
+private OrderMenu orderMenu;
+	public void setOrderMenu(OrderMenu orderMenu) {
+		// TODO Auto-generated method stub
+		this.orderMenu=orderMenu;
 	}
 }

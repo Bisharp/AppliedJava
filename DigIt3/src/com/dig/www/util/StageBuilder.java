@@ -355,7 +355,7 @@ public class StageBuilder {
 
 						switch (identity) {
 						case NPC.WIZARD:
-							npcs.add(new WizardGuy(nX, nY, owner, loc));
+							npcs.add(new TowerWizard(nX, nY, owner, loc));
 							break;
 						case NPC.KEPLER:
 							npcs.add(new Kepler(nX, nY, owner, loc));
@@ -422,9 +422,18 @@ public class StageBuilder {
 							break;
 						case "RyoBoss2Start":
 							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
+							break;
 						case "EnterFirstTimeWizTower":
 							npcs.add(new EnterFirstTimeWizTower(nX, nY, owner, loc));
-						break;
+							break;
+						case "TutorialWizard":
+							npcs.add(new TutorialWizard(nX, nY, owner, loc));
+							break;
+						case "FirstCutscene":
+							npcs.add(new FirstCutscene(nX, nY, owner, loc));
+							break;
+						case "WizardTowerSirCobalt":
+							npcs.add(new WizardTowerSirCobalt(nX, nY, owner, loc));
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -436,6 +445,7 @@ public class StageBuilder {
 			// }
 		} catch (Exception ex) {
 			System.err.println("ERROR: could not load NPCs.");
+ex.printStackTrace();
 		}
 
 		return npcs;
@@ -549,7 +559,13 @@ public class StageBuilder {
 								npcs.add(new WaveMaker(nX, nY, loc, owner));
 							else if(val==-22)
 								npcs.add(new MacaroniCage(nX, nY, this.loc, owner));
-							else
+							else if(val==-23)
+								npcs.add(new InvisibleWallObject(nX, nY, loc,stuff.get(3), owner));
+							else if(val==-24)
+								npcs.add(new TutorialWizardNext(nX, nY, owner));
+							else if(val==-25)
+								npcs.add(new FoldedBridge(nX, nY, owner));
+								else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));

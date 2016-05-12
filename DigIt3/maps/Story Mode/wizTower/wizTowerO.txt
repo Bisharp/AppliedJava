@@ -3,3 +3,7 @@
 1050,1750,images/icon.png,false,-3
 1300,1600,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
 1100,1325,images/icon.png,false,-3
+1100,400,100|200,3,-23
+1700,1250,200|100,3,-23
+1000,1900,200|100,2,-23
+600,1800,images/objects/woodSign/Sign Talk.png,true,0

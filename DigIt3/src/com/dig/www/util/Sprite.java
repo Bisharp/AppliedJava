@@ -209,4 +209,7 @@ public abstract class Sprite implements Serializable {
 		n.setX(n.getX()+n.getOwner().getScrollX());
 		n.setY(n.getY()+n.getOwner().getScrollY());
 	}
+	public void doScroll(int x, int y){
+		
+	}
 }

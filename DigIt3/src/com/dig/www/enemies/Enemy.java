@@ -450,7 +450,4 @@ public boolean isPoison(){
 		// TODO Auto-generated method stub
 		return newShadow(loc);
 	}
-	public void doScroll(int x, int y){
-		
-	}
 }

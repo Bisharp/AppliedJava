@@ -5,10 +5,11 @@ import java.awt.Rectangle;
 import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
 import com.dig.www.start.Board;
+import com.dig.www.util.ConditionEnteringMap;
 
-public class WizardGuy extends NPC {
+public class TowerWizard extends NPC implements ConditionEnteringMap{
 
-	public WizardGuy(int x, int y, Board owner, String location) {
+	public TowerWizard(int x, int y, Board owner, String location){
 		super(
 				x,
 				y,
@@ -149,8 +150,11 @@ public class WizardGuy extends NPC {
 	}
 	@Override
 	public Rectangle getBounds(){
-		
 		return new Rectangle(x+10,y,95,100);
-		
+	}
+
+	@Override
+	public boolean enter() {
+		return GameCharacter.storyInt>3;//Tutorial is done
 	}
 }

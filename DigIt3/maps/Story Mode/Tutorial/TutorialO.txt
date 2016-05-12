@@ -2,7 +2,7 @@
 2100,1800,images/objects/PTree0.png,true,0
 3200,1900,images/objects/PTree0.png,true,0
 3500,600,images/objects/PTree0.png,true,0
-1700,950,images/icon.png,false,-3
+2100,1175,images/icon.png,false,-3
 3900,1900,images/objects/HookObject.png,false,-5
 1300,1100,images/objects/HookObject.png,false,-5
 1900,1100,images/objects/woodSign/Sign Arrows.png,true,sign
@@ -24,3 +24,6 @@
 925,975,images/objects/collectibles/coin1.png,false,1
 700,1200,images/objects/InventoryObjects/plainKey.png,false,1,Plain Key
 1000,1100,images/objects/woodSign/Sign Interact.png,true,0
+3350,500,images/icon.png,true,-24
+3700,850,images/icon.png,true,-24
+3500,1475,images/icon.png,true,-25

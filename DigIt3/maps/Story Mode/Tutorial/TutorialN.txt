@@ -1,0 +1,2 @@
+1700,800,TutorialWizard
+2100,1175,FirstCutscene

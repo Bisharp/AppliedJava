@@ -796,6 +796,7 @@ private int reviveTimer;
 						// }
 						//
 						// }
+						if(storyInt>2){
 						boolean shouldPressMelee = false;
 						boolean shouldRangedPress = false;
 						Rectangle rect;
@@ -858,7 +859,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 						if (meleePress)
 							shouldRangedPress = false;
 						rangedPress = shouldRangedPress;
-
+						}
 						// if (enPoint != null) {
 						// boolean xway = false;
 						// if (Math.abs(enPoint.getX() - x) >
@@ -1293,7 +1294,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 				// }
 			}
 		}
-		else if(storyInt>=1){
+		else if(storyInt>=3){
 		// Attack
 		 if (keyCode == Preferences.ATTACK()) {
 			meleePress = true;
@@ -1800,7 +1801,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		if (owner.getCharacter() == this) {
 			g2d.setFont(HUD);int macH = Statics.MAC ? 23 : 0;
 			
-			if(storyInt>=1){
+			if(storyInt>=3){
 			g2d.setColor(Color.BLACK);
 			int normWidth = 300;
 			g2d.fillRect(-10, 0 + macH, normWidth, 130);
