@@ -1,7 +1,9 @@
 package com.dig.www.blocks;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
+import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
 import com.dig.www.util.Sprite;
 
@@ -19,13 +21,15 @@ protected int spawnNum=-1;
 	protected int skin = 0;
 	protected int timer = TIMER_MAX;
 	protected boolean animated = true;
-
+private int storyInt;
 	public Portal(int x, int y, Board owner, String area,String type,int spawnNum) {
-		super(x, y, "images/portals/" + type + "/0.png", owner);
+		super(x, y, "images/portals/" + type.split("\\|")[0] + "/0.png", owner);
 this.spawnNum=spawnNum;
 		this.area = area;
-		this.type = type;
-
+		this.type = type.split("\\|")[0];
+if(type.contains("|")){
+	storyInt=Integer.parseInt(type.split("\\|")[1]);
+}
 		if (type.equals("default"))
 			animated = false;
 	}
@@ -75,5 +79,11 @@ public int getSpawnNum(){
 	public void doBoolean(Boolean boolean1) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public Rectangle getBounds() {
+		if(storyInt<=GameCharacter.storyInt)
+		return super.getBounds();
+		return new Rectangle();
 	}
 }

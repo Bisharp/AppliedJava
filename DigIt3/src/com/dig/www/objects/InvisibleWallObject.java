@@ -17,7 +17,7 @@ private int lessThan;
 		public void animate() {
 			// TODO Auto-generated method stub
 			super.animate();
-			wall=GameCharacter.storyInt<lessThan;
+			wall=GameCharacter.storyInt<=lessThan;
 		}
 @Override
 public boolean interact() {

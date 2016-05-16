@@ -439,13 +439,13 @@ if (iTalk)
 
 	public void setLine(NPCOption option) {
 		line = option.answer();
-		if (option.acts())
-			act(option);
 		willOption = option;
 		lastI = option.getCharAnswer();
 		lastChar = option.getCharQuestion();
 		lastCharCut=option.cutSceneQ();
 		lastICut=option.cutSceneA();
+		if (option.acts())
+			act(option);
 	}
 
 	public void doOption() {

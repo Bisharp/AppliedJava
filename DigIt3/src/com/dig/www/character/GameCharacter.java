@@ -1839,7 +1839,7 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 			int collectibles = 0;
 			if (getInventory().contains(Items.KEYCRYSTAL))
 				collectibles = getInventory().getItemNum(Items.KEYCRYSTAL);
-			int lowNumber=5;
+			int lowNumber=6;
 			if(storyInt>=lowNumber){
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(normWidth - 20, 0 + macH, baseWidth + (13 * numOfDigits(collectibles)), 50);

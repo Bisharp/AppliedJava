@@ -1,0 +1,2 @@
+1050,400,wizTower,0,doors,0,brown
+300,1150,Tutorial,0,doors,1,brown
