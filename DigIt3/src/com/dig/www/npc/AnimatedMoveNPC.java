@@ -1,5 +1,7 @@
 package com.dig.www.npc;
 
+import java.awt.Graphics2D;
+
 import com.dig.www.start.Board;
 
 public abstract class AnimatedMoveNPC extends MoveNPC{
@@ -66,6 +68,7 @@ private static final int ANIMAX = 7;
 				if(animationTimer>=ANIMAX/speed*10){
 				animationTimer = 0;
 				image=newImage(loc+direction+"/"+"w" + counter+".png");
+				shadow=newShadow(loc+direction+"/"+"w" + counter+".png");
 				counter++;
 				if (counter == MAX)
 					counter = 0;
@@ -74,6 +77,7 @@ private static final int ANIMAX = 7;
 					animationTimer+=owner.mult();
 			}else{
 				image=newImage(loc+direction+"/n.png");
+				shadow=newShadow(loc+direction+"/n.png");
 			}
 //			System.out.println();
 //			System.out.println(y-movePoints[moveAt].getY());
@@ -89,4 +93,16 @@ private static final int ANIMAX = 7;
 			
 		}
 	}
+	@Override
+		public void draw(Graphics2D g2d) {
+		if(direction.equals("side")&&!right)
+			g2d.drawImage(image, x+100, y,-100,100, owner);
+		else
+		g2d.drawImage(image, x, y, owner);
+		if (owner.darkenWorld() && !illuminated){
+			if(direction.equals("side")&&!right)
+				g2d.drawImage(shadow, x+100, y,-100,100, owner);
+			else
+			g2d.drawImage(shadow, x, y, owner);}
+		}
 }

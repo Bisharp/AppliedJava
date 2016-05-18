@@ -36,15 +36,15 @@ public void collidePlayer(int playerNum) {
 	Point pMid=new Point(p.getMidX(),p.getMidY());
 	if(Math.abs(mid.x-pMid.x)>30){
 		if(mid.x>pMid.x)
-			x+=10;
+			x+=10*owner.mult();
 		else
-			x-=10;
+			x-=10*owner.mult();
 	}
 	if(Math.abs(mid.y-pMid.y)>30){
 		if(mid.y>pMid.y)
-			y+=10;
+			y+=10*owner.mult();
 		else
-			y-=10;
+			y-=10*owner.mult();
 	}
 	for (int i = owner.getStartPoint(); i < owner.getWorld().size(); i++) {
 		if(!owner.getWorld().get(i).traversable()&&owner.getWorld().get(i).getBounds().intersects(getBounds())){

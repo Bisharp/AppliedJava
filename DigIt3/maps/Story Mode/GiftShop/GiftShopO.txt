@@ -1,0 +1,11 @@
+600,1100,images/objects/table/table.png,true,0
+700,1100,images/objects/table/table.png,true,0
+800,1100,images/objects/table/table.png,true,0
+900,1100,images/objects/table/table.png,true,0
+200,300,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+400,300,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+600,300,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+200,500,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+200,700,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
+800,500,images/icon.png,false,-3
+400,900,images/icon.png,false,-3

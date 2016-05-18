@@ -9,12 +9,12 @@ import com.dig.www.util.ConditionEnteringMap;
 
 public class WizardTowerSirCobalt extends NPC implements ConditionEnteringMap {
 	public boolean visible;
-
+private boolean nameAsked;
 	public WizardTowerSirCobalt(int x, int y, Board owner, String location) {
 		super(x, y, "images/npcs/map/stationary/sirCobalt.png", owner,
 				new String[] {
 						"I will only answer a few things before you complete the course.(+Click| the black box to talk)" },
-				NPC.SIR_COBALT, location, new NPCOption[] { new NPCOption("Who are you?", "I'm the one who has been called \"the masked man\". My real name is Sir Cobalt.", new String[]{"Who are you?","Who are you?","Who are you?","Who are you?"}, false, new NPCOption[]{new NPCOption("Who was that plant man and why were we taken?",
+				NPC.SIR_COBALT, location, new NPCOption[] { new NPCOption("Who are you?", "I'm the one who has been called \"the masked man\". My real name is Sir Cobalt.", new String[]{"Who are you?","Who are you?","Who are you?","Who are you?"}, true, new NPCOption[]{new NPCOption("Who was that plant man and why were we taken?",
 						"The plant man is called Botanus, but I don't know why he took you. I'm sure The Wizard has found some  weapons for you by now.",
 						new String[] { "Who was that half monster and why did he take us?" }, true, owner)}, owner) });
 		cantExit = true;
@@ -22,11 +22,13 @@ public class WizardTowerSirCobalt extends NPC implements ConditionEnteringMap {
 
 	@Override
 	public void act(NPCOption option) {
-
+if(option.question.equals("Who are you?")){
+nameAsked=true;	
+}else{
 		if (GameCharacter.storyInt == 1)
 			GameCharacter.storyInt = 2;
 		options = new NPCOption[0];
-		cantExit = false;
+		cantExit = false;}
 
 	}
 
@@ -58,7 +60,7 @@ public class WizardTowerSirCobalt extends NPC implements ConditionEnteringMap {
 	@Override
 	public boolean enter() {
 		// TODO Auto-generated method stub
-		return GameCharacter.storyInt < 4;
+		return GameCharacter.storyInt < 5;
 	}
 
 	@Override
@@ -74,7 +76,8 @@ public class WizardTowerSirCobalt extends NPC implements ConditionEnteringMap {
 
 	@Override
 	public String getShowName() {
-		// TODO Auto-generated method stub
+		if(nameAsked)
+			return "Sir Cobalt";
 		return "masked man";
 	}
 

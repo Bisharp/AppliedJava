@@ -1,0 +1,2 @@
+1100,1100,wizTower,0,doors,2,brown
+500,1100,wizTower,0,doors,2,brown

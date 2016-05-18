@@ -27,3 +27,6 @@
 3350,500,images/icon.png,true,-24
 3700,850,images/icon.png,true,-24
 3500,1475,images/icon.png,true,-25
+2000,1900,images/icon.png,true,-26
+1000,1600,images/icon.png,true,-27
+500,1600,images/icon.png,false,-3

@@ -155,6 +155,6 @@ public class TowerWizard extends NPC implements ConditionEnteringMap{
 
 	@Override
 	public boolean enter() {
-		return GameCharacter.storyInt>3;//Tutorial is done
+		return GameCharacter.storyInt>4;//Tutorial is done
 	}
 }

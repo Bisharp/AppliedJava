@@ -451,6 +451,10 @@ public class StageBuilder {
 						case "FutureScientist":
 							npcs.add(new FutureScientist(nX, nY, owner, loc));
 							break;
+						break;
+						case "EnterFirstTimeWizTowerGiftShop":
+							npcs.add(new EnterFirstTimeWizTowerGiftShop(nX, nY, owner, loc));
+							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -582,6 +586,10 @@ ex.printStackTrace();
 								npcs.add(new TutorialWizardNext(nX, nY, owner));
 							else if(val==-25)
 								npcs.add(new FoldedBridge(nX, nY, owner));
+							else if(val==-26)
+								npcs.add(new TutorialWizardActivator(nX, nY, owner));
+							else if(val==-27)
+								npcs.add(new TutorialWizardNext2(nX, nY, owner));
 								else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))
@@ -763,9 +771,9 @@ ex.printStackTrace();
 					String type = stuff.get(4);
 					int spawnNum = Integer.parseInt(stuff.get(5));
 					String type2 = stuff.size() > 7 ? stuff.get(6) : "brown";
-					if (type.equals("normal"))
+					if (type.startsWith("normal"))
 						portals.add(new Portal(enX, enY, owner, area, type, spawnNum));
-					else if(type.equals("boss"))
+					else if(type.startsWith("boss"))
 						portals.add(new BossPortal(enX, enY, owner, area, type, spawnNum,Integer.parseInt(collectibleNum),new String[]{"shovel","club"}));
 					else{
 						System.out.println(collectibleNum);
