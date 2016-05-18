@@ -255,7 +255,7 @@ public class Board extends MPanel implements ActionListener {
 	private ArrayList<NPC> npcs = new ArrayList<NPC>();
 	private NPC current = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Enemy>onScreenEnemies=new ArrayList<Enemy>();
+	private ArrayList<Enemy> onScreenEnemies = new ArrayList<Enemy>();
 	private ArrayList<Portal> portals = new ArrayList<Portal>();
 
 	private int scrollX = 0;
@@ -282,18 +282,18 @@ public class Board extends MPanel implements ActionListener {
 	private boolean consumeStop;
 
 	public void consume(String consumePath, int consumeTimer, boolean consumeStop) {
-this.consumePath=consumePath;
-this.consumeTimer=consumeTimer;
-this.consumeStop=consumeStop;
-if(consumeStop)
-	character.stop();
+		this.consumePath = consumePath;
+		this.consumeTimer = consumeTimer;
+		this.consumeStop = consumeStop;
+		if (consumeStop)
+			character.stop();
 	}
 
 	public ArrayList<String> getGoneFriends() {
 		return goneFriends;
 	}
 
-	public void heyIaddedAFriendBack(GameCharacter chara,String typeToString) {
+	public void heyIaddedAFriendBack(GameCharacter chara, String typeToString) {
 		for (int c = 0; c < goneFriends.size(); c++) {
 			if (goneFriends.get(c).equals(typeToString)) {
 				chara.load(goneFriends.get(c));
@@ -367,16 +367,16 @@ if(consumeStop)
 		setDoubleBuffered(true);
 		state = State.LOADING;
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
-		this.mpName = JOptionPane.showInputDialog(this, "What would you like to be called?",
-				System.getProperty("user.name"));
+		this.mpName = JOptionPane.showInputDialog(this, "What would you like to be called?", System.getProperty("user.name"));
 		try {
 
-			me = new ChatClient(this,
-					JOptionPane.showInputDialog(
-							"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.",
-							InetAddress.getLocalHost().getHostAddress()),
-					mpName,
-					JOptionPane.showInputDialog("What is the server's password?\nNone is the default.", "None"));
+			me = new ChatClient(
+					this,
+					JOptionPane
+							.showInputDialog(
+									"What is the server's Host Code?\nThe server can find their Host Code by clicking Get Host Code in the Main Menu.\nThe Host Code below is your Host Code.",
+									InetAddress.getLocalHost().getHostAddress()), mpName, JOptionPane.showInputDialog(
+							"What is the server's password?\nNone is the default.", "None"));
 		} catch (HeadlessException | RemoteException | AlreadyBoundException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -392,8 +392,8 @@ if(consumeStop)
 	public Board(DigIt dM, String mode, String name) {
 		this.mode = mode;
 		this.userName = name;
-if(mode.equals(Statics.MAIN))
-	GameCharacter.storyInt=0;
+		if (mode.equals(Statics.MAIN))
+			GameCharacter.storyInt = 0;
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
@@ -454,20 +454,19 @@ if(mode.equals(Statics.MAIN))
 
 		if (data != null)
 			data.enterLevel(level);
-		else{
+		else {
 			data = new CharData(level, this);
 			data.enterLevel(level);
 		}
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
-portals=data.filterPortals(portals);
+		portals = data.filterPortals(portals);
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), this, level,
-							((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), this, level, ((DropPoint) o).type()));
 				}
-		
+
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
 			System.exit(0);
@@ -545,8 +544,8 @@ portals=data.filterPortals(portals);
 			spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
 			spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
 		}
-		if(GameCharacter.getInventory().contains(Items.PLAINKEY))
-		GameCharacter.getInventory().decrementItem(Items.PLAINKEY, GameCharacter.getInventory().getItemNum(Items.PLAINKEY));
+		if (GameCharacter.getInventory().contains(Items.PLAINKEY))
+			GameCharacter.getInventory().decrementItem(Items.PLAINKEY, GameCharacter.getInventory().getItemNum(Items.PLAINKEY));
 		changeWeather();
 		updateBackground();
 		Statics.wipeColors();
@@ -566,7 +565,7 @@ portals=data.filterPortals(portals);
 		preferences = new Preferences();
 		GameCharacter.setInventory(new Inventory(this));
 		pointedPoint = null;
-		//fP.clear();
+		// fP.clear();
 		scrollX = 0;
 		scrollY = 0;
 		if (levelChanged) {
@@ -625,8 +624,7 @@ portals=data.filterPortals(portals);
 				world.add(new WallBlock(b.getX(), b.getY(), this));
 				break;
 			default:
-				System.err.println("Type " + b.getB()
-						+ " does not have a creation case. Please add a creation case for " + b.getB() + ".");
+				System.err.println("Type " + b.getB() + " does not have a creation case. Please add a creation case for " + b.getB() + ".");
 				world.add(new TerrainBlock(b.getX(), b.getY(), this, Blocks.GROUND));
 				break;
 			}
@@ -658,7 +656,7 @@ portals=data.filterPortals(portals);
 			e.setImage(e.newImage(e.getLoc()));
 			e.setShadow(e.newShadow());
 		}
-		for(NPC n:st.getNPCs()){
+		for (NPC n : st.getNPCs()) {
 			npcs.add(n);
 			n.setOwner(this);
 			n.setImage(n.newImage(n.getLoc()));
@@ -688,12 +686,11 @@ portals=data.filterPortals(portals);
 
 		objects = data.filter(objects);
 		npcs = data.filterNPC(npcs);
-portals =data.filterPortals(portals);
+		portals = data.filterPortals(portals);
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), this, level,
-							((DropPoint) o).type()));
+					npcs.add(new Chest(o.getX(), o.getY(), this, level, ((DropPoint) o).type()));
 				}
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
@@ -788,6 +785,7 @@ portals =data.filterPortals(portals);
 		return Statics.dist(x, y, character.getX(), character.getY()) <= Weather.FOG.special()
 				&& (y > Statics.BLOCK_HEIGHT && y < Statics.BOARD_HEIGHT - Statics.BLOCK_HEIGHT);
 	}
+
 	public void paint(Graphics g) {
 		super.paint(g);
 
@@ -815,7 +813,7 @@ portals =data.filterPortals(portals);
 				if (b.isOnScreen() && b.isVisible())
 					switch (weather) {
 					case FOG:
-						if ((!b.canSee()&&!character.isDead()) || !fogCompute(b.getX(), b.getY()))
+						if ((!b.canSee() && !character.isDead()) || !fogCompute(b.getX(), b.getY()))
 							break;
 
 						if (b.traversable())
@@ -833,10 +831,8 @@ portals =data.filterPortals(portals);
 
 					e = enemies.get(i);
 					// Line-of-sight mechanics
-					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-							e.getMidX() + 10 };
-					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-							e.getMidY() + 10 };
+					int[] xs = { e.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, e.getMidX() + 10 };
+					int[] ys = { e.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, e.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -848,7 +844,7 @@ portals =data.filterPortals(portals);
 						tag = true;
 					}
 					// end of that code
-					if (tag || e instanceof Boss||character.isDead())
+					if (tag || e instanceof Boss || character.isDead())
 						switch (weather) {
 
 						case FOG:
@@ -872,10 +868,8 @@ portals =data.filterPortals(portals);
 					p = fP.get(i);
 					if (!(fP.get(i) instanceof Field)) {
 						// Line-of-sight mechanics
-						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-								p.getMidX() + 10 };
-						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-								p.getMidY() + 10 };
+						int[] xs = { p.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p.getMidX() + 10 };
+						int[] ys = { p.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p.getMidY() + 10 };
 						poly = new Polygon(xs, ys, xs.length);
 
 						for (int x = 0; x < wallList.size(); x++) {
@@ -890,7 +884,7 @@ portals =data.filterPortals(portals);
 					} else
 						tag = true;
 
-					if (tag||character.isDead())
+					if (tag || character.isDead())
 						p.draw(g2d);
 				}
 			}
@@ -900,10 +894,8 @@ portals =data.filterPortals(portals);
 
 				if (obj.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-							obj.getMidX() + 10 };
-					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-							obj.getMidY() + 10 };
+					int[] xs = { obj.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, obj.getMidX() + 10 };
+					int[] ys = { obj.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, obj.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -915,7 +907,7 @@ portals =data.filterPortals(portals);
 						tag = true;
 					}
 					// end of that code
-					if (tag||character.isDead())
+					if (tag || character.isDead())
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(obj.getX(), obj.getY())) {
@@ -935,10 +927,8 @@ portals =data.filterPortals(portals);
 			for (Portal p2 : portals)
 				if (p2.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-							p2.getMidX() + 10 };
-					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-							p2.getMidY() + 10 };
+					int[] xs = { p2.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, p2.getMidX() + 10 };
+					int[] ys = { p2.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, p2.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -951,7 +941,7 @@ portals =data.filterPortals(portals);
 					}
 					// end of that code
 
-					if (tag||character.isDead())
+					if (tag || character.isDead())
 						p2.draw(g2d);
 				}
 
@@ -959,10 +949,8 @@ portals =data.filterPortals(portals);
 			for (NPC npc : npcs)
 				if (npc.isOnScreen()) {
 					// Line-of-sight mechanics
-					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-							npc.getMidX() + 10 };
-					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-							npc.getMidY() + 10 };
+					int[] xs = { npc.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, npc.getMidX() + 10 };
+					int[] ys = { npc.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, npc.getMidY() + 10 };
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
@@ -975,7 +963,7 @@ portals =data.filterPortals(portals);
 					}
 					// end of that code
 
-					if (tag||character.isDead())
+					if (tag || character.isDead())
 						switch (weather) {
 						case FOG:
 							if (!fogCompute(npc.getX(), npc.getY())) {
@@ -1006,8 +994,8 @@ portals =data.filterPortals(portals);
 			// ;
 			if (pointedPoint != null) {
 				if (pointedPointType == -1)
-					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50,
-							(int) pointedPoint.getY() - 50, this);
+					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/go.png"), (int) pointedPoint.getX() - 50, (int) pointedPoint.getY() - 50,
+							this);
 				else
 					g2d.drawImage(DigIt.lib.checkLibrary("/images/pointed/attack.png"), (int) pointedPoint.getX() - 50,
 							(int) pointedPoint.getY() - 50, this);
@@ -1063,12 +1051,13 @@ portals =data.filterPortals(portals);
 			}
 			if (character != null)
 				character.draw(g2d);
-			if(consumeTimer>0){
-				g2d.drawImage(Statics.newImage(consumePath), character.getX()+character.getEatX(), character.getY()+character.getEatY(),50,50,this);
-			if(character.getDirection()==Direction.UP)
-				g2d.drawImage(character.getImage(), character.getX(), character.getY(), this);
+			if (consumeTimer > 0) {
+				g2d.drawImage(Statics.newImage(consumePath), character.getX() + character.getEatX(), character.getY() + character.getEatY(), 50, 50,
+						this);
+				if (character.getDirection() == Direction.UP)
+					g2d.drawImage(character.getImage(), character.getX(), character.getY(), this);
 			}// g2d.setColor(Color.BLUE);
-			// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
+				// g2d.fillRect(character.getX()+40, character.getY()+40, 5, 5);
 			time.draw(g2d);
 			g2d.setColor(Color.WHITE);
 			g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 25));
@@ -1078,8 +1067,7 @@ portals =data.filterPortals(portals);
 				startY += 23;
 			// System.out.println(actionStrings.size());
 			for (int c = 0; c < actionStrings.size(); c++) {
-				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY + (c * 60),
-						50, 50, this);
+				g2d.drawImage(new ImageIcon(Statics.newImage(actionIcons.get(c))).getImage(), startX, startY + (c * 60), 50, 50, this);
 				g2d.drawString(actionStrings.get(c), startX + 55, startY + 35 + (c * 60));
 
 			}
@@ -1150,8 +1138,8 @@ portals =data.filterPortals(portals);
 
 					if (weatherList.isEmpty())
 						for (int i2 = 0; i2 < 700; i2++) {
-							weatherList.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5),
-									Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
+							weatherList
+									.add(new int[] { Statics.RAND.nextInt(Statics.BOARD_WIDTH - 5), Statics.RAND.nextInt(Statics.BOARD_HEIGHT - 5) });
 						}
 
 					if (weatherList.size() < 1000 && state != State.NPC)
@@ -1238,8 +1226,7 @@ portals =data.filterPortals(portals);
 		case LOADING:
 			g2d.setColor(Color.ORANGE);
 			g2d.fill(getScreen());
-			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH - 100, Statics.BOARD_HEIGHT - 100,
-					this);
+			g2d.drawImage(Statics.newImage("images/Loading.gif"), Statics.BOARD_WIDTH - 100, Statics.BOARD_HEIGHT - 100, this);
 			// g2d.drawImage(new
 			// ImageIcon(getClass().getResource("images/icon.png")).getImage(),
 			// 0, 0, this);
@@ -1262,7 +1249,7 @@ portals =data.filterPortals(portals);
 		}
 		g2d.setFont(new Font(Statics.FONT, Font.PLAIN, 15));
 		g2d.setColor(Color.WHITE);
-		g2d.drawString("FPS:"+1000/(fps==0?1:fps)+":"+ fps, 3, 170 + (Statics.MAC ? 23 : 0));
+		g2d.drawString("FPS:" + 1000 / (fps == 0 ? 1 : fps) + ":" + fps, 3, 170 + (Statics.MAC ? 23 : 0));
 		if (corruptedWorld)
 			drawCorruptedBorder(g2d);
 		Toolkit.getDefaultToolkit().sync();
@@ -1276,23 +1263,24 @@ portals =data.filterPortals(portals);
 
 	public void openSwitchDialogue() {
 		switching = false;
-		if(actionMenu==null&&switchMenu==null&&orderMenu==null){
-		character.releaseAll();
-		character.stop();
-		new ActionMenu(this);}
-		else{ if(actionMenu!=null){
-			actionMenu.dispose();
-			actionMenu=null;
+		if (actionMenu == null && switchMenu == null && orderMenu == null) {
+			character.releaseAll();
+			character.stop();
+			new ActionMenu(this);
+		} else {
+			if (actionMenu != null) {
+				actionMenu.dispose();
+				actionMenu = null;
 			}
-		if(orderMenu!=null){
-			orderMenu.dispose();
-			orderMenu=null;
+			if (orderMenu != null) {
+				orderMenu.dispose();
+				orderMenu = null;
 			}
-		if(switchMenu!=null){
-			switchMenu.dispose();
-			switchMenu=null;
-		}
-			
+			if (switchMenu != null) {
+				switchMenu.dispose();
+				switchMenu = null;
+			}
+
 		}
 		// char[] names = {'S', 'C', 'D', 'H'};
 		// scrollX *= -2;
@@ -1459,7 +1447,7 @@ portals =data.filterPortals(portals);
 		for (Enemy b : enemies) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
-			b.doScroll(x,y);
+			b.doScroll(x, y);
 		}
 		for (FProjectile b : fP) {
 			b.setX(b.getX() + x);
@@ -1473,12 +1461,12 @@ portals =data.filterPortals(portals);
 		for (NPC b : npcs) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
-			b.doScroll(x,y);
+			b.doScroll(x, y);
 		}
 		for (Objects b : objects) {
 			b.setX(b.getX() + x);
 			b.setY(b.getY() + y);
-		b.doScroll(x,y);
+			b.doScroll(x, y);
 		}
 	}
 
@@ -1499,16 +1487,16 @@ portals =data.filterPortals(portals);
 		case INGAME:
 
 			character.animate();
-			if(consumeTimer>0){
-				consumeTimer-=mult();
-				if(consumeStop)
+			if (consumeTimer > 0) {
+				consumeTimer -= mult();
+				if (consumeStop)
 					character.stop();
 			}
 			boolean notMe = me == null;
 			for (GameCharacter character : friends) {
 				character.animate();
 			}
-onScreenEnemies.clear();
+			onScreenEnemies.clear();
 			for (int i = 0; i < enemies.size(); i++) {
 
 				if (notMe) {
@@ -1523,12 +1511,11 @@ onScreenEnemies.clear();
 					}
 				} else
 					enemies.get(i).basicAnimate();
-				Shape ebounds=enemies.get(i) instanceof Irregular?((Irregular) enemies.get(i)).getIrregularBounds():enemies.get(i).getBounds();
-				if(ebounds.intersects(getScreen())){
-				enemies.get(i).setOnScreen(true);
-				onScreenEnemies.add(enemies.get(i));
-				}
-				else
+				Shape ebounds = enemies.get(i) instanceof Irregular ? ((Irregular) enemies.get(i)).getIrregularBounds() : enemies.get(i).getBounds();
+				if (ebounds.intersects(getScreen())) {
+					enemies.get(i).setOnScreen(true);
+					onScreenEnemies.add(enemies.get(i));
+				} else
 					enemies.get(i).setOnScreen(false);
 				// /\
 				// || Nightmare Fuel
@@ -1627,8 +1614,7 @@ onScreenEnemies.clear();
 					} else {
 						if (!friends.get(c).getWallBound() && !friends.get(c2).getWallBound()) {
 
-							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds())
-									&& !friends.get(c2).isPlayer()) {
+							if (friends.get(c).getBounds().intersects(friends.get(c2).getBounds()) && !friends.get(c2).isPlayer()) {
 								friends.get(c).collision(friends.get(c2), true);
 							}
 						}
@@ -1682,8 +1668,7 @@ onScreenEnemies.clear();
 					// else
 					for (PlayerState playerState : states.get(s).getPlayerStates()) {
 						for (GameCharacter friend : friends) {
-							if (playerState.isPlayer()
-									&& friend.getType().toString().equals(playerState.getTypeToString())) {
+							if (playerState.isPlayer() && friend.getType().toString().equals(playerState.getTypeToString())) {
 								friend.setX(playerState.getX() + b.getX());
 								friend.setY(playerState.getY() + b.getY());
 								friend.setPlayer(true);
@@ -1764,27 +1749,23 @@ onScreenEnemies.clear();
 				if (sendInt <= 0) {
 					currentState.getTalks().clear();
 					currentState.getTalks().addAll(chats);
-					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
-							character.getY() - b.getY(), character.getTimers(),
-							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
+					currentState.getPlayerStates().add(
+							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getTimers(),
+									character.getDirection(), character.getS(), true, character.getType().toString(), mpName, character.getHealth(),
+									character.getEnergy(), character.getDire(), character.isDead()));
 
 					for (GameCharacter character : friends) {
-						currentState.getPlayerStates()
-								.add(new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(),
-										character.getTimers(), character.getDirection(),
-										character.getS(), character.isPlayer(), character.getType().toString(),
-										character.getMpName(), character.getHealth(), character.getEnergy(),
-										character.getDire(), character.isDead()));
+						currentState.getPlayerStates().add(
+								new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getTimers(), character
+										.getDirection(), character.getS(), character.isPlayer(), character.getType().toString(), character
+										.getMpName(), character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
 					}
 
 					for (Enemy en : enemies) {
-						currentState.getEnemyStates()
-								.add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
+						currentState.getEnemyStates().add(new EnemyState(en.getX() - b.getX(), en.getY() - b.getY(), en.getHealth()));
 					}
 					for (NPC en : npcs) {
-						currentState.getNPCStates()
-								.add(new NPCState(en.getX() - b.getX(), en.getY() - b.getY(),false,null,en.isObstacle()));
+						currentState.getNPCStates().add(new NPCState(en.getX() - b.getX(), en.getY() - b.getY(), false, null, en.isObstacle()));
 					}
 					sendInt = 3;
 					server.broadcast(mpName, currentState);
@@ -1926,17 +1907,17 @@ onScreenEnemies.clear();
 						}
 						npcs.get(c).setX(states.get(s).getNPCStates().get(c).getX() + b.getX());
 						npcs.get(c).setY(states.get(s).getNPCStates().get(c).getY() + b.getY());
-						if(states.get(s).getNPCStates().get(c).isChange())
+						if (states.get(s).getNPCStates().get(c).isChange())
 							npcs.get(c).newImage(states.get(s).getNPCStates().get(c).getChange());
-						//npcs.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
+						// npcs.get(c).setHealth(states.get(s).getEnemyStates().get(c).getHealth());
 					}
 				}
 				states.clear();
 				if (sendInt <= 0)
-					currentState.getPlayerStates().add(new PlayerState(character.getX() - b.getX(),
-							character.getY() - b.getY(), character.getTimers(),
-							character.getDirection(), character.getS(), true, character.getType().toString(), mpName,
-							character.getHealth(), character.getEnergy(), character.getDire(), character.isDead()));
+					currentState.getPlayerStates().add(
+							new PlayerState(character.getX() - b.getX(), character.getY() - b.getY(), character.getTimers(),
+									character.getDirection(), character.getS(), true, character.getType().toString(), mpName, character.getHealth(),
+									character.getEnergy(), character.getDire(), character.isDead()));
 				if (sendInt <= 0) {
 					sendInt = 3;
 					theServer.getTold(currentState);
@@ -1986,13 +1967,13 @@ onScreenEnemies.clear();
 		friend.setMpName(playerState.getMpName());
 		friend.setHealth(playerState.getHealth());
 		friend.setEnergy(playerState.getEnergy());
-		friend.setActing(playerState.getMeleeT(),playerState.getRangedT(),playerState.getSpecialT());
+		friend.setActing(playerState.getMeleeT(), playerState.getRangedT(), playerState.getSpecialT());
 		friend.setDire(playerState.getDire());
 		friend.setDead(playerState.isDead());
 	}
 
 	public void setCharacterStates(Rectangle r3) {
-//TODO Start
+		// TODO Start
 		Block b;
 		Shape o;
 
@@ -2016,14 +1997,11 @@ onScreenEnemies.clear();
 				// Line-of-sight
 				if (b.isOnScreen())
 					if (b.getType() != Block.Blocks.WALL) {
-						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10,
-								b.getMidX() + 10 };
-						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10,
-								b.getMidY() + 10 };
+						int[] xs = { b.getMidX() - 10, character.getMidX() - 10, character.getMidX() + 10, b.getMidX() + 10 };
+						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen()
-									&& new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -2050,25 +2028,20 @@ onScreenEnemies.clear();
 						case LIQUID:
 							character.collision(b, false);
 							break;
-							default:
-								break;
+						default:
+							break;
 						}
 					}
 
-					if ((b.getType() == Blocks.CRYSTAL&&character.getMove() == Moves.CLUB && !character.hasMeleed())
-							|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
-									&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
-											|| b.getType() == Blocks.PIT))) {
-						if (b.getBounds().intersects(character.getActBounds())
-								&& !b.getBounds().intersects(character.getCollisionBounds())) {
+					if ((b.getType() == Blocks.CRYSTAL && character.getMove() == Moves.CLUB && !character.hasMeleed())
+							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
-							if ((character.getMove() == Moves.CLUB && !character.hasMeleed()
-									&& b.getType() == Blocks.CRYSTAL)
-									|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
-											&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
-													|| b.getType() == Blocks.PIT)))
-								if (b.getBounds().intersects(character.getActBounds())
-										&& !b.getBounds().intersects(character.getCollisionBounds())) {
+							if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
+									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
+								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 									b.interact(i);
 									character.endAction();
@@ -2085,102 +2058,101 @@ onScreenEnemies.clear();
 			for (int u = 0; u < enemies.size(); u++) {
 
 				e = enemies.get(u);
-				Shape bounds=e.getBounds();
-				if(e instanceof Irregular) {
-					bounds=((Irregular) e).getIrregularBounds();
+				Shape bounds = e.getBounds();
+				if (e instanceof Irregular) {
+					bounds = ((Irregular) e).getIrregularBounds();
 				}
-				 if (atAllOnScreen(bounds)) {
-				if (bounds.intersects(b.getBounds())) {
-					switch (b.getType()) {
-					case PIT:
-						if (!e.flying)
-							e.setAlive(false);
-						break;
+				if (atAllOnScreen(bounds)) {
+					if (bounds.intersects(b.getBounds())) {
+						switch (b.getType()) {
+						case PIT:
+							if (!e.flying)
+								e.setAlive(false);
+							break;
 
-					case CRYSTAL:
-					case WALL:
-						e.turnAround(b.getX(), b.getY());
-						break;
-					case LIQUID:
-						if (!e.flying)
+						case CRYSTAL:
+						case WALL:
 							e.turnAround(b.getX(), b.getY());
-						break;
-					default:
-						break;
-					}
-				}
-
-				if (character.getActing() > 0 && bounds.intersects(character.getActBounds())) {
-					if (me != null) {
-						// if(currentState!=null)
-						// currentState.getActions().add(new AttackState(u,
-						// character.getMove(),
-						// false,character.getType().toString()));
-						// return;
-					} else
-						e.interact(character.getMove(), character, false);
-					if (character.getMove() == Moves.BASH)
-						bashHit = true;
-					else if (character.getMove() == Moves.WIZ_S)
-						wizHit = true;
-				}
-				for (int c = 0; c < fP.size(); c++) {
-					FProjectile character = fP.get(c);
-					o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds()
-							: character.getBounds();
-
-					// This modification would allow us to make certain
-					// projectiles behave differently with their bounds;
-					// could be implemented with other objects.
-
-					if (polygonsInt(bounds, o) && character.isOnScreen()
-					// && character.getHarming()
-					) {
-						if ((!(e instanceof Projectile) || (character instanceof Field))
-								&& (!(fP.get(c) instanceof Shield) || (((Shield) fP.get(c)).isHarming()))) {
-							if (me != null) {
-								// if(currentState!=null)
-								// currentState.getActions().add(new
-								// AttackState(u, character.getMove(),
-								// true,character.getMaker().getType().toString()));
-								// return;
-							} else {
-								e.interact(character.getMove(), character.getMaker(), true);
-							}
-							fP.get(c).setOnScreen(false);
-
+							break;
+						case LIQUID:
+							if (!e.flying)
+								e.turnAround(b.getX(), b.getY());
+							break;
+						default:
+							break;
 						}
 					}
-				}
 
-				for (int c = 0; c < friends.size(); c++) {
-					GameCharacter character = friends.get(c);
 					if (character.getActing() > 0 && bounds.intersects(character.getActBounds())) {
-						if (me == null)
+						if (me != null) {
+							// if(currentState!=null)
+							// currentState.getActions().add(new AttackState(u,
+							// character.getMove(),
+							// false,character.getType().toString()));
+							// return;
+						} else
 							e.interact(character.getMove(), character, false);
-						if (character.getMove() == Moves.BASH) {
+						if (character.getMove() == Moves.BASH)
 							bashHit = true;
-							shieldNum = c;
-						} else if (character.getMove() == Moves.WIZ_S) {
+						else if (character.getMove() == Moves.WIZ_S)
 							wizHit = true;
-							wizNum = c;
+					}
+					for (int c = 0; c < fP.size(); c++) {
+						FProjectile character = fP.get(c);
+						o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
+
+						// This modification would allow us to make certain
+						// projectiles behave differently with their bounds;
+						// could be implemented with other objects.
+
+						if (polygonsInt(bounds, o) && character.isOnScreen()
+						// && character.getHarming()
+						) {
+							if ((!(e instanceof Projectile) || (character instanceof Field))
+									&& (!(fP.get(c) instanceof Shield) || (((Shield) fP.get(c)).isHarming()))) {
+								if (me != null) {
+									// if(currentState!=null)
+									// currentState.getActions().add(new
+									// AttackState(u, character.getMove(),
+									// true,character.getMaker().getType().toString()));
+									// return;
+								} else {
+									e.interact(character.getMove(), character.getMaker(), true);
+								}
+								fP.get(c).setOnScreen(false);
+
+							}
+						}
+					}
+
+					for (int c = 0; c < friends.size(); c++) {
+						GameCharacter character = friends.get(c);
+						if (character.getActing() > 0 && bounds.intersects(character.getActBounds())) {
+							if (me == null)
+								e.interact(character.getMove(), character, false);
+							if (character.getMove() == Moves.BASH) {
+								bashHit = true;
+								shieldNum = c;
+							} else if (character.getMove() == Moves.WIZ_S) {
+								wizHit = true;
+								wizNum = c;
+							}
+						}
+					}
+					if (bounds.intersects(r3) && e.willHarm()) {
+						e.turnAround(character.getX(), character.getY());
+						character.takeDamage(e.getDamage(), e.poisons(), e.isPoison());
+
+					}
+
+					for (GameCharacter character : friends) {
+						Rectangle r2 = character.getBounds();
+						if (bounds.intersects(r2) && e.willHarm()) {
+							e.turnAround(character.getX(), character.getY());
+							character.takeDamage(e.getDamage(), e.poisons(), e.isPoison());
 						}
 					}
 				}
-				if (bounds.intersects(r3) && e.willHarm()) {
-					e.turnAround(character.getX(), character.getY());
-					character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
-
-				}
-
-				for (GameCharacter character : friends) {
-					Rectangle r2 = character.getBounds();
-					if (bounds.intersects(r2) && e.willHarm()) {
-						e.turnAround(character.getX(), character.getY());
-						character.takeDamage(e.getDamage(), e.poisons(),e.isPoison());
-					}
-				}
-			}
 			}
 			if (bashHit) {
 				if (shieldNum == -1)
@@ -2225,11 +2197,9 @@ onScreenEnemies.clear();
 				}
 
 				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-						|| (character.getMove() == Moves.PIT && !character.hasSpecialed()
-								&& (b.getType() == Blocks.GROUND || b.getType() == Blocks.DIRT
-										|| b.getType() == Blocks.PIT))) {
-					if (b.getBounds().intersects(character.getActBounds())
-							&& !b.getBounds().intersects(character.getCollisionBounds())) {
+						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
+								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
+					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
 
 						b.interact(i);
 						character.endAction();
@@ -2272,7 +2242,7 @@ onScreenEnemies.clear();
 				}
 			}
 
-		}//TODO END WORLD LOOP
+		}// TODO END WORLD LOOP
 
 		for (GameCharacter friend : friends) {
 			if (friend.getMove() == Moves.AURA && !friend.hasMeleed()) {
@@ -2364,9 +2334,9 @@ onScreenEnemies.clear();
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
 						if (p.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
-				} else if(p.interact()){
+				} else if (p.interact()) {
 					if (!(p instanceof Door || p instanceof SpecialDoor)) {
-					
+
 						timer.stop();
 						time.pause();
 						level = p.getArea();
@@ -2378,7 +2348,7 @@ onScreenEnemies.clear();
 						setState(State.DOOROPEN);
 						doorStateLev = p.getArea();
 					}
-				}else{
+				} else {
 					character.collision(p, false);
 					for (int rI = 0; rI < character.getDirBounds().length; rI++)
 						if (p.getBounds().intersects(character.getDirBounds()[rI]))
@@ -2389,9 +2359,9 @@ onScreenEnemies.clear();
 
 		Rectangle bounds = character.getTalkBounds();
 		for (NPC n : npcs) {
-			if(me == null){
-			n.animate();}
-			else
+			if (me == null) {
+				n.animate();
+			} else
 				Sprite.basicAnimate(n);
 			n.setOnScreen(n.getBounds().intersects(getScreen()));
 
@@ -2409,8 +2379,7 @@ onScreenEnemies.clear();
 						bounds = null;
 					}
 				}
-				if (bounds != null && n.getBounds().intersects(bounds)
-						&& (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
+				if (bounds != null && n.getBounds().intersects(bounds) && (!(n instanceof TouchNPC) || ((TouchNPC) n).buttonTalk()) && n.willTalk()) {
 					current = n;
 					current.setLine();
 					state = State.NPC;
@@ -2448,8 +2417,7 @@ onScreenEnemies.clear();
 				if (o.intersects(character.getCollisionBounds())) {
 					n.collidePlayer(-1);
 					if (n instanceof PushCube && currentState != null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(),
-								-world.get(0).getY() + n.getY(), u));
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
 					// if(me==null)
 					if (n instanceof Collectible && ((Collectible) n).collectible()) {
 						if (n instanceof MoneyObject) {
@@ -2464,8 +2432,8 @@ onScreenEnemies.clear();
 						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
 							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
-							if(((KeyCrystal)n).id>-1)
-							data.collect(((KeyCrystal) n).id);
+							if (((KeyCrystal) n).id > -1)
+								data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 
 							beenPicked = true;
@@ -2486,8 +2454,7 @@ onScreenEnemies.clear();
 					&& bounds != null && o.intersects(bounds) && !hasTalked && !(n instanceof DropPoint)) {
 				if (n.interact()) {
 					if (n instanceof PushCube && currentState != null)
-						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(),
-								-world.get(0).getY() + n.getY(), u));
+						currentState.getActions().add(new MoveObjectState(-world.get(0).getX() + n.getX(), -world.get(0).getY() + n.getY(), u));
 					hasTalked = true;
 					if (n instanceof CheckPoint) {
 						spawnLoc = new Point(n.getX(), n.getY());
@@ -2505,8 +2472,8 @@ onScreenEnemies.clear();
 						} else if (n instanceof KeyCrystal) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
 							GameCharacter.getInventory().addItem(((Collectible) n).getType(), ((KeyCrystal) n).getValue());
-							if(((KeyCrystal)n).id>-1)
-							data.collect(((KeyCrystal) n).id);
+							if (((KeyCrystal) n).id > -1)
+								data.collect(((KeyCrystal) n).id);
 							objects.remove(u);
 							u--;
 
@@ -2604,26 +2571,26 @@ onScreenEnemies.clear();
 				}
 			}
 		}
-		//TODO end
+		// TODO end
 	}
-	public void multiplayer(){
-			if (server == null && me == null) {
-				mpName = JOptionPane.showInputDialog("What would you like to be called?",
-						System.getProperty("user.name"));
-				if(mpName==null)
-					return;
-				passWord = JOptionPane
-						.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
-				if(passWord==null)
-					return;
-				server = new ChatServer(this, passWord);
-				currentState = new GameState(mode, level, true);
-				chatBox = new ChatBox(this);
-				addAction("started server", "images/icon.png");
-			}
-		
+
+	public void multiplayer() {
+		if (server == null && me == null) {
+			mpName = JOptionPane.showInputDialog("What would you like to be called?", System.getProperty("user.name"));
+			if (mpName == null)
+				return;
+			passWord = JOptionPane.showInputDialog("What would you like the entry password to be?\nNone is the default.", "None");
+			if (passWord == null)
+				return;
+			server = new ChatServer(this, passWord);
+			currentState = new GameState(mode, level, true);
+			chatBox = new ChatBox(this);
+			addAction("started server", "images/icon.png");
+		}
+
 	}
-	public void talk(NPC n){
+
+	public void talk(NPC n) {
 		current = n;
 		current.setLine();
 		state = State.NPC;
@@ -2631,11 +2598,13 @@ onScreenEnemies.clear();
 		for (GameCharacter character : friends)
 			character.setImage(character.newImage("n"));
 	}
-public boolean polygonsInt(Shape poly1,Shape poly2){
-	Area area = new Area(poly1);
-	area.intersect(new Area(poly2));
-	return !area.isEmpty();
-}
+
+	public boolean polygonsInt(Shape poly1, Shape poly2) {
+		Area area = new Area(poly1);
+		area.intersect(new Area(poly2));
+		return !area.isEmpty();
+	}
+
 	public void toggleLagPrevention() {
 		lagPrevention = !lagPrevention;
 		if (lagPrevention)
@@ -2651,19 +2620,17 @@ public boolean polygonsInt(Shape poly1,Shape poly2){
 		// Show me ya moves! }(B-)
 		if (key == KeyEvent.VK_8) {
 			toggleLagPrevention();
-		}
-		else if (key == KeyEvent.VK_J) {
+		} else if (key == KeyEvent.VK_J) {
 			if (pointedPoint == null) {
 
 				pointedPoint = MouseInfo.getPointerInfo().getLocation();
 			} else
 				pointedPoint = null;
 		}
-		if (key == Preferences.CHAR_CHANGE() && state != State.NPC&&GameCharacter.storyInt>3)
+		if (key == Preferences.CHAR_CHANGE() && state != State.NPC && GameCharacter.storyInt > 3)
 			switching = true;
 		else if (key == KeyEvent.VK_EQUALS)
-			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME,
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(owner, Preferences.getControls(), DigIt.NAME, JOptionPane.INFORMATION_MESSAGE);
 
 		else if (state != State.NPC && key == KeyEvent.VK_ESCAPE) {
 
@@ -2697,7 +2664,7 @@ public boolean polygonsInt(Shape poly1,Shape poly2){
 			break;
 		}
 
-	//	repaint();
+		// repaint();
 	}
 
 	@Override
@@ -2716,55 +2683,57 @@ public boolean polygonsInt(Shape poly1,Shape poly2){
 			keyPress(e.getKeyCode());
 		}
 	}
-private class MouseL implements MouseListener{
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	private class MouseL implements MouseListener {
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int button=e.getButton();
-		switch(button){
-		case 1:
-			keyPress(Preferences.PROJECTILE());
-			break;
-		case 3:
-			keyPress(Preferences.SPECIAL());
-			break;
 		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			int button = e.getButton();
+			switch (button) {
+			case 1:
+				keyPress(Preferences.PROJECTILE());
+				break;
+			case 3:
+				keyPress(Preferences.SPECIAL());
+				break;
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			int button = e.getButton();
+			switch (button) {
+			case 1:
+				keyRelease(Preferences.PROJECTILE());
+				break;
+			case 3:
+				keyRelease(Preferences.SPECIAL());
+				break;
+			}
+		}
+
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int button=e.getButton();
-		switch(button){
-		case 1:
-			keyRelease(Preferences.PROJECTILE());
-			break;
-		case 3:
-			keyRelease(Preferences.SPECIAL());
-			break;
-		}
-	}
-	
-}
 	public void ingameHandler(int key) {
 		if (character != null)
 			character.keyPressed(key);
@@ -2931,9 +2900,11 @@ private class MouseL implements MouseListener{
 	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
-public ArrayList<Enemy>getOnScreenEnemies(){
-	return onScreenEnemies;
-}
+
+	public ArrayList<Enemy> getOnScreenEnemies() {
+		return onScreenEnemies;
+	}
+
 	public void save(int spawnNum) {
 		this.spawnNum = spawnNum;
 		this.save();
@@ -2947,8 +2918,8 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 				File locFile = new File(location + userName + ".txt");
 				try {
 					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + ","
-							+ spawnNum+","+GameCharacter.storyInt);
+					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum + ","
+							+ GameCharacter.storyInt);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
 					writer.write(character.getSave() + ",true");
@@ -3088,7 +3059,7 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 					is.close();
 					GameCharacter.setInventory(w);
 					GameCharacter.getInventory().setOwner(this);
-					
+
 					GameControllerRunnable.renewKeys();
 				} catch (Exception badThing) {
 					badThing.printStackTrace();
@@ -3305,8 +3276,7 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 
 	protected void updateRain() {
 		if ((time.getGeneralTime() == Time.DAY || dN == DayNight.DAY) && dN != DayNight.NIGHT)
-			setBackground(
-					weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
+			setBackground(weatherTimer <= 0 ? Statics.sunriseColor(getTextureBack(), Statics.HALF_DARK) : getTextureBack());
 		else
 			setBackground(weatherTimer <= 0 ? Statics.darkenColor(getTextureBack()) : getTextureBack());
 	}
@@ -3380,26 +3350,29 @@ public ArrayList<Enemy>getOnScreenEnemies(){
 		return time.getGeneralTime() == Time.SUNSET && dN == DayNight.ANY;
 		// }
 	}
-private Weather lastWeather=Weather.NORMAL;
+
+	private Weather lastWeather = Weather.NORMAL;
+
 	// TODO at work
 	public void changeWeather() {
-		if (weather == Weather.NORMAL){
-			int rand=Statics.RAND.nextInt(50);
-			if(rand>1&&rand<17)
-				weather=lastWeather;
+		if (weather == Weather.NORMAL) {
+			int rand = Statics.RAND.nextInt(50);
+			if (rand > 1 && rand < 17)
+				weather = lastWeather;
 			else
-			switch (rand) {
-			case 0:
-				weather = Weather.RAIN;
-				break;
-			case 1:
-				weather = Weather.FOG;
-				break;
-			default:
-				weather = Weather.NORMAL;
-				break;
-			}}
-		lastWeather=weather;
+				switch (rand) {
+				case 0:
+					weather = Weather.RAIN;
+					break;
+				case 1:
+					weather = Weather.FOG;
+					break;
+				default:
+					weather = Weather.NORMAL;
+					break;
+				}
+		}
+		lastWeather = weather;
 	}
 
 	public float getTime() {
@@ -3407,8 +3380,7 @@ private Weather lastWeather=Weather.NORMAL;
 	}
 
 	public boolean lighterDark() {
-		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY))
-				&& dN != DayNight.NIGHT;
+		return (weather == Weather.RAIN && (time.getGeneralTime() == Time.DAY || dN == DayNight.DAY)) && dN != DayNight.NIGHT;
 	}
 
 	public int getSpawnNum() {
@@ -3484,8 +3456,9 @@ private Weather lastWeather=Weather.NORMAL;
 				currentState = null;
 				friends.clear();
 			}
-		} else if (mode != null && (state.isServer() || (server != null && server.contains(state.getPlayerStates()))
-				|| (me != null && me.contains(state.getPlayerStates()))))
+		} else if (mode != null
+				&& (state.isServer() || (server != null && server.contains(state.getPlayerStates())) || (me != null && me.contains(state
+						.getPlayerStates()))))
 			states.add(state);
 
 		for (int c = 0; c < state.getTalks().size(); c++) {
@@ -3561,8 +3534,8 @@ private Weather lastWeather=Weather.NORMAL;
 		if (rect.intersects(new Rectangle(0, 0, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 			return true;
 		for (int c = 0; c < friends.size(); c++) {
-			if (rect.intersects(new Rectangle(friends.get(c).getX() - Statics.BOARD_WIDTH / 2,
-					friends.get(c).getY() - Statics.BOARD_HEIGHT / 2, Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
+			if (rect.intersects(new Rectangle(friends.get(c).getX() - Statics.BOARD_WIDTH / 2, friends.get(c).getY() - Statics.BOARD_HEIGHT / 2,
+					Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT)))
 				return true;
 		}
 
@@ -3579,8 +3552,8 @@ private Weather lastWeather=Weather.NORMAL;
 
 	// protected static final Color c = new Color(255, 96, 0);
 
-	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN,
-			Color.ORANGE, Color.PINK, Color.WHITE };
+	protected static final Color[] list = { Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.ORANGE, Color.PINK,
+			Color.WHITE };
 	protected static final int BH_10 = Statics.BOARD_HEIGHT / 10;
 	protected static final int BW_10 = Statics.BOARD_WIDTH / 10;
 	protected static final int BH_20 = Statics.BOARD_HEIGHT / 20;
@@ -3613,13 +3586,22 @@ private Weather lastWeather=Weather.NORMAL;
 			g2d.drawLine(Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT),
 					Statics.RAND.nextInt(Statics.BOARD_WIDTH), Statics.RAND.nextInt(Statics.BOARD_HEIGHT));
 		}
-	}private ActionMenu actionMenu;
-	public void setActionMenu(ActionMenu actionMenu){
-		this.actionMenu=actionMenu;
 	}
-private OrderMenu orderMenu;
+
+	private ActionMenu actionMenu;
+
+	public void setActionMenu(ActionMenu actionMenu) {
+		this.actionMenu = actionMenu;
+	}
+
+	private OrderMenu orderMenu;
+
 	public void setOrderMenu(OrderMenu orderMenu) {
 		// TODO Auto-generated method stub
-		this.orderMenu=orderMenu;
+		this.orderMenu = orderMenu;
+	}
+
+	public int getGeneralTime() {
+		return time.getGeneralTime();
 	}
 }
