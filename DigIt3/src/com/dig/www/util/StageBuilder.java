@@ -274,6 +274,7 @@ public class StageBuilder {
 							break;
 						case "PoisonOrFlame":
 							enemies.add(new PoisonOrFlame(enX, enY,enImg ,owner,flying));
+							break;
 						case "Head Boss":
 							enemies.add(new HeadBoss(enX, enY, owner));
 							break;
@@ -459,7 +460,8 @@ public class StageBuilder {
 						case "TutorialWizard2":
 							npcs.add(new TutorialWizard2(nX, nY, owner, loc));
 							break;
-
+						case "FirstTimeEnterBotanus":
+							npcs.add(new FirstTimeEnterBotanus(nX, nY, owner, loc));
 						}
 
 					} catch (IndexOutOfBoundsException ex) {

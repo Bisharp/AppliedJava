@@ -1,0 +1,5 @@
+1800,300,bridge,30,boss,-1,four|wizard|sirCobalt|macaroni
+1400,1450,Canyons,0,normal,-1
+1700,2000,Village,0,normal,-1
+500,1950,BetweenTimes,0,normal,-1
+500,550,Volcano,0,normal,-1

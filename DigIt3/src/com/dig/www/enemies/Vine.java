@@ -25,7 +25,7 @@ public class Vine extends StandEnemy implements Irregular{
 		super(x, y, "images/enemies/bosses/vineBoss/vines/middle.gif", owner, true, -10);
 		// TODO Auto-generated constructor stub
 		en=new Point(maker.getX(),maker.getY());
-		damage=7;
+		damage=4;
 	}
 	public void setP(int x,int y){
 		en.setLocation(x, y);
@@ -46,7 +46,7 @@ public class Vine extends StandEnemy implements Irregular{
 public void draw(Graphics2D g2d) {
 	// TODO Auto-generated method stub
 	if(goTo!=null){
-		int vineSpeed=13;
+		int vineSpeed=10;
 		if(Statics.dist(x, y, goTo.x, goTo.y)<vineSpeed*1.2){
 			x=goTo.x;
 			y=goTo.y;

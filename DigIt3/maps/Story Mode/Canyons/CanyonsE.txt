@@ -1,0 +1,16 @@
+Slime,3000,3000,images/enemies/unique/slime.png,true,100
+Slime,1700,3300,images/enemies/unique/slime.png,true,100
+Slime,1300,2350,images/enemies/unique/slime.png,true,100
+Slime,250,1950,images/enemies/unique/slime.png,true,100
+Slime,2450,1650,images/enemies/unique/slime.png,true,100
+Slime,3300,1950,images/enemies/unique/slime.png,true,100
+Slime,3700,2450,images/enemies/unique/slime.png,true,100
+Slime,3750,1300,images/enemies/unique/slime.png,true,100
+Slime,3850,300,images/enemies/unique/slime.png,true,100
+Slime,3700,3600,images/enemies/unique/slime.png,true,100
+Explosive Spawning,100,1250,images/enemies/unique/explosiveBox.png,true,100,45
+Explosive Spawning,850,3050,images/enemies/unique/explosiveBox.png,true,100,45
+Explosive Spawning,200,3800,images/enemies/unique/explosiveBox.png,true,100,45
+Explosive Spawning,2600,3900,images/enemies/unique/explosiveBox.png,true,100,45
+Explosive Spawning,2200,2500,images/enemies/unique/explosiveBox.png,true,100,45
+Explosive Spawning,2750,750,images/enemies/unique/explosiveBox.png,true,100,45

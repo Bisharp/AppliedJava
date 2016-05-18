@@ -3604,4 +3604,12 @@ public class Board extends MPanel implements ActionListener {
 	public int getGeneralTime() {
 		return time.getGeneralTime();
 	}
+	public void newLevel(String name){
+		timer.stop();
+		time.pause();
+		level = name;
+		changeArea();
+		timer.restart();
+		time.resume();
+	}
 }

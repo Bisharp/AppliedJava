@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 import com.dig.www.blocks.Block;
+import com.dig.www.npc.BotanusDeadNPC;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
 import com.dig.www.util.Statics;
@@ -21,12 +22,13 @@ public class VineBoss extends Boss{
 	private boolean aonce=false;
 	private Vine vine;
 	public VineBoss(int x, int y,Board owner) {
-		super(x, y, "n", owner, true, 1000, "Botanus", 10,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
-	damage=2;
+		super(x, y, "n", owner, true, 750, "Botanus", 7,"music/zeldaCopyright.mp3","gunSFX/explosion-2.wav","gunSFX/explosion-2.wav");
+	damage=1;
 	}
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
-		owner.getEnemies().add(new Explosion(x, y, owner));
+		//owner.getEnemies().add(new Explosion(x, y, owner));
+		owner.talk(new BotanusDeadNPC(owner));
 		if(vine!=null){
 			owner.getEnemies().remove(vine);
 		}
@@ -63,15 +65,15 @@ public class VineBoss extends Boss{
 				follow(200, 60,0.5);
 				sequence++;}
 				else if(sequence==1){
-					createProjectile("images/enemies/blasts/pollen.png",12,
+					createProjectile("images/enemies/blasts/pollen.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4,10);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,40,width/2,height/4,6);
 					sequence++;
 				}
 				else if(sequence==2){
-					createProjectile("images/enemies/blasts/pollen.png",12,
+					createProjectile("images/enemies/blasts/pollen.png",10,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,50,width/2,height/4,10);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,50,width/2,height/4,6);
 					sequence++;
 				}
 				else if(sequence==3&&phase>0){
@@ -81,15 +83,15 @@ public class VineBoss extends Boss{
 				}
 				else if(sequence==4&&phase>1){
 					vine.setGoTo(new Point(x+50, y+40));
-					createProjectile("images/enemies/blasts/pollen.png",10,
+					createProjectile("images/enemies/blasts/pollen.png",8,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))-25,true,0,width/2,height/4,10);
-					createProjectile("images/enemies/blasts/pollen.png",10,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))-25,true,0,width/2,height/4,6);
+					createProjectile("images/enemies/blasts/pollen.png",8,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,0,width/2,height/4,10);
-					createProjectile("images/enemies/blasts/pollen.png",10,
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40)),true,0,width/2,height/4,6);
+					createProjectile("images/enemies/blasts/pollen.png",8,
 							Statics.pointTowards(new Point((int) x,
-							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))+25,true,0,width/2,height/4,10);
+							(int) y), new Point(owner.getCharacterX()+40,owner.getCharacterY()+40))+25,true,0,width/2,height/4,6);
 					sequence++;
 				}
 				else if(sequence==5&&phase>1){
