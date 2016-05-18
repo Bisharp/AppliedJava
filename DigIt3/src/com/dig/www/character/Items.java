@@ -497,6 +497,23 @@ POTATOGUY{
 			return "Box from a grave";
 		}
 		
+	},
+	URN{
+		@Override public String toString(){
+			return "Ancient Urn";
+		}
+		@Override protected String getPersonalDesc(){
+			return "An ancient urn depicting a man watching television. Perhaps it is not as old as it first appeared to be...";
+		}
+		@Override public String getPath(){
+			return "images/objects/InventoryObjects/ancientUrn.png";
+		}
+		@Override public boolean isThrowable() {
+			return false;
+		}
+		@Override public boolean isWeapon() {
+			return false;
+		}
 	}
 	;
 

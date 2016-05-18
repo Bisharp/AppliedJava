@@ -14,6 +14,7 @@ import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Items;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
+import com.dig.www.npc.betweenTimes.*;
 import com.dig.www.objects.*;
 import com.dig.www.start.Board;
 import com.dig.www.start.Board.DayNight;
@@ -293,6 +294,9 @@ public class StageBuilder {
 						case "VineBoss":
 							enemies.add(new VineBoss(enX, enY, owner));
 							break;
+						case "Troll Boss":
+							enemies.add(new TrollBoss(enX, enY, owner));
+							break;
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
@@ -434,6 +438,19 @@ public class StageBuilder {
 							break;
 						case "WizardTowerSirCobalt":
 							npcs.add(new WizardTowerSirCobalt(nX, nY, owner, loc));
+							break;
+						case "Peasant":
+							npcs.add(new GenericPeasant(nX, nY, owner, loc, stuff.get(3)));
+							break;
+						case "OldPeasant":
+							npcs.add(new OldPeasant(nX, nY, owner, loc));
+							break;
+						case "FutureGuard":
+							npcs.add(new FutureGuard(nX, nY, owner, loc));
+							break;
+						case "FutureScientist":
+							npcs.add(new FutureScientist(nX, nY, owner, loc));
+							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {

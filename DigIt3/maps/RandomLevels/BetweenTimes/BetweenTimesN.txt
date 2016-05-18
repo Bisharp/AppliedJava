@@ -1,0 +1,14 @@
+9300,6800,Peasant,M
+7050,6550,Chest,Ancient Urn
+10200,6800,Peasant,F
+9600,6800,Peasant,M
+10000,7400,Peasant,F
+10050,5950,Peasant,M
+9550,6150,Peasant,F
+3400,8200,Chest,Plain Key
+3550,2850,Chest,Plain Key
+2100,7491,FutureGuard
+2400,7491,FutureGuard
+2000,9091,FutureScientist
+5500,4700,OldPeasant
+10050,7850,shopkeep
