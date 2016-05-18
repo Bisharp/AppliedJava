@@ -451,7 +451,6 @@ public class StageBuilder {
 						case "FutureScientist":
 							npcs.add(new FutureScientist(nX, nY, owner, loc));
 							break;
-						break;
 						case "EnterFirstTimeWizTowerGiftShop":
 							npcs.add(new EnterFirstTimeWizTowerGiftShop(nX, nY, owner, loc));
 							break;
