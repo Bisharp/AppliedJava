@@ -272,7 +272,8 @@ public class StageBuilder {
 						case "Side To Player":
 							enemies.add(new SideToPlayer(enX, enY, enImg, owner, flying, health));
 							break;
-
+						case "PoisonOrFlame":
+							enemies.add(new PoisonOrFlame(enX, enY,enImg ,owner,flying));
 						case "Head Boss":
 							enemies.add(new HeadBoss(enX, enY, owner));
 							break;
@@ -297,6 +298,7 @@ public class StageBuilder {
 						case "Troll Boss":
 							enemies.add(new TrollBoss(enX, enY, owner));
 							break;
+							
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();
@@ -454,6 +456,10 @@ public class StageBuilder {
 						case "EnterFirstTimeWizTowerGiftShop":
 							npcs.add(new EnterFirstTimeWizTowerGiftShop(nX, nY, owner, loc));
 							break;
+						case "TutorialWizard2":
+							npcs.add(new TutorialWizard2(nX, nY, owner, loc));
+							break;
+
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -589,6 +595,10 @@ ex.printStackTrace();
 								npcs.add(new TutorialWizardActivator(nX, nY, owner));
 							else if(val==-27)
 								npcs.add(new TutorialWizardNext2(nX, nY, owner));
+							else if(val==-28)
+								npcs.add(new FactoryBridge(nX, nY, owner));
+							else if(val==-29)
+								npcs.add(new TutorialWizard2Nexter(nX, nY, stuff.get(3), owner));
 								else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))
@@ -769,13 +779,16 @@ ex.printStackTrace();
 					String collectibleNum = stuff.get(3);
 					String type = stuff.get(4);
 					int spawnNum = Integer.parseInt(stuff.get(5));
-					String type2 = stuff.size() > 7 ? stuff.get(6) : "brown";
+					
 					if (type.startsWith("normal"))
 						portals.add(new Portal(enX, enY, owner, area, type, spawnNum));
-					else if(type.startsWith("boss"))
-						portals.add(new BossPortal(enX, enY, owner, area, type, spawnNum,Integer.parseInt(collectibleNum),new String[]{"shovel","club"}));
+					else if(type.startsWith("boss")){
+						String type2 = stuff.size()>=7?stuff.get(6):"any";
+						PlayerList p=new PlayerList(type2,owner);
+portals.add(new BossPortal(enX, enY, owner, area, type, spawnNum,Integer.parseInt(collectibleNum), p));
+					}
 					else{
-						System.out.println(collectibleNum);
+						String type2 = stuff.size() > 7 ? stuff.get(6) : "brown";
 						portals.add(new Door(enX, enY, owner, area, type, type2, spawnNum,collectibleNum.startsWith("t")));
 					}
 				}
