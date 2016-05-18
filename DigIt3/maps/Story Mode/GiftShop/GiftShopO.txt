@@ -9,3 +9,4 @@
 200,700,images/objects/InventoryObjects/notSoInvisibleCloak.png,true,0
 800,500,images/icon.png,false,-3
 400,900,images/icon.png,false,-3
+200,1100,200|100,5,-23

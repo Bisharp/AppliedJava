@@ -487,11 +487,14 @@ if (iTalk)
 				inDialogue = true;
 			}
 	}
-
+public void startEnd(){
+	
+}
 	public void exit() {
 		if(cantExit)
 			wait=false;
 		else if (!inDialogue && !inConversation) {
+			startEnd();
 			line = exitLine();
 			index = -1;
 			exiting = true;

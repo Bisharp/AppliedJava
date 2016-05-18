@@ -1127,6 +1127,9 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 	}
 
 	public void keyPressed(int keyCode) {
+		if(keyCode==KeyEvent.VK_1){
+			storyInt=5;
+		}
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
 			for (int c = 0; c < owner.getFriends().size(); c++) {

@@ -1,0 +1,16 @@
+PoisonOrFlame,900,1800,images/effects/fire.gif,false,-100
+PoisonOrFlame,950,1650,images/effects/fire.gif,true,-100
+PoisonOrFlame,350,1300,images/effects/fire.gif,true,-100
+PoisonOrFlame,550,1100,images/effects/fire.gif,true,-100
+PoisonOrFlame,1050,900,images/effects/fire.gif,true,-100
+PoisonOrFlame,200,400,images/effects/fire.gif,true,-100
+PoisonOrFlame,3700,300,images/effects/fire.gif,true,-100
+PoisonOrFlame,2800,800,images/effects/fire.gif,true,-100
+PoisonOrFlame,3050,2150,images/effects/fire.gif,true,-100
+PoisonOrFlame,2900,2300,images/effects/fire.gif,true,-100
+PoisonOrFlame,3600,1750,images/effects/fire.gif,true,-100
+PoisonOrFlame,3300,1850,images/effects/fire.gif,true,-100
+Walking,1700,1850,images/enemies/unique/redStuff.png,true,100
+Walking,2850,1850,images/enemies/unique/redStuff.png,true,100
+Tracking,3400,1250,images/enemies/unique/ghost.png,true,100
+Launch,2050,500,images/enemies/turrets/1.png,false,100,75

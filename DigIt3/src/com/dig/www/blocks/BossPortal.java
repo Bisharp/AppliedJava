@@ -9,16 +9,18 @@ import com.dig.www.character.GameCharacter;
 import com.dig.www.character.Items;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.util.PlayerList;
 
 public class BossPortal extends Portal {
 private int collectibleNum;
 private boolean opened;
-private String[]list;
-	public BossPortal(int x, int y, Board owner, String area, String type, int spawnNum,int collectibles,String[]list) {
+private PlayerList list;
+	public BossPortal(int x, int y, Board owner, String area, String type, int spawnNum,int collectibles,PlayerList list) {
 		super(x, y, owner, area, type+"/"+(collectibles==0?"open":"closed"), spawnNum);
 		this.collectibleNum=collectibles;
 		opened=collectibleNum==0;
 		this.list=list;
+		System.out.println(collectibleNum);
 		// TODO Auto-generated constructor stub
 	}
 public int getCollectibleNum(){
@@ -38,11 +40,8 @@ public void doBoolean(Boolean boolean1) {
 			for(int c=0;c<owner.getFriends().size();c++){
 				names.add(owner.getFriends().get(c).getType().toString());
 			}
-			ArrayList<String>names2=new ArrayList<String>();
-			for(int c=0;c<list.length;c++){
-				names2.add(list[c]);
-			}
-			if(names.containsAll(names2)&&names2.containsAll(names)){
+	names.add(owner.getCharacter().getType().toString());
+			if(list.special()||(names.containsAll(list.getStuff())&&list.getStuff().containsAll(names))){
 			
 			return true;}
 			else{
@@ -52,30 +51,7 @@ public void doBoolean(Boolean boolean1) {
 						new ImageIcon(image),options,"Accept"
 						)==1;
 				if(b){
-					for(int c=0;c<names2.size();c++){
-						boolean friendsContain=false;
-						for(int c2=0;c2<owner.getFriends().size();c2++){
-							if(!names2.contains(owner.getFriends().get(c2).getType().toString())){
-								owner.getGoneFriends().add(owner.getFriends().get(c2).getSave());
-								owner.getFriends().remove(c2);
-							}
-							else if(names2.get(c).equals(owner.getFriends().get(c2).getType().toString())){
-								friendsContain=true;
-							}
-						}
-						if(!names2.contains(owner.getCharacter().getType().toString())){
-							//switch to other character
-						GameCharacter temp=owner.getFriends().get(0);
-						owner.getFriends().set(0, temp);
-						owner.setCharacter(temp);
-						}else if(owner.getCharacter().getType().toString().equals(names2.get(c))){
-							friendsContain=true;
-						}
-						if(!friendsContain){
-							owner.getFriends().add(owner.getACharacter(names2.get(c)));
-							owner.heyIaddedAFriendBack(owner.getFriends().get(owner.getFriends().size()-1), names2.get(c));
-						}
-					}
+					list.sort();
 				return true;}else
 					return false;
 			}

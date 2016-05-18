@@ -18,6 +18,11 @@ private boolean isPoison;
 		this.isPoison=isPoison;
 		damage=3;
 	}
+	public PoisonOrFlame(int x,int y,String loc,Board owner,boolean flying){
+		super(x,y,loc,owner,flying,-10);
+		this.isPoison=loc.endsWith("poison.gif");
+		damage=3;
+	}
 public boolean isPoison(){
 	return isPoison;
 }
