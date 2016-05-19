@@ -176,6 +176,7 @@ public class TutorialWizard extends AnimatedMoveNPC implements ConditionEntering
 	@Override
 	protected void end() {
 		if (GameCharacter.storyInt == 2) {
+			owner.addAction("added","images/weapons.png");
 			GameCharacter.storyInt = 3;
 			// hasWaited();
 		}

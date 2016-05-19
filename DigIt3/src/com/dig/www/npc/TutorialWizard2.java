@@ -1,7 +1,10 @@
 package com.dig.www.npc;
 
+import javax.swing.ImageIcon;
+
 import com.dig.www.character.GameCharacter;
 import com.dig.www.start.Board;
+import com.dig.www.util.Statics;
 
 public class TutorialWizard2 extends AnimatedMoveNPC{
 private boolean readyForNext=false;
@@ -69,6 +72,7 @@ return "Hello again.";}
 	@Override
 	public void act(NPCOption option) {
 		if(GameCharacter.storyInt==5){
+			owner.addAction("added","images/DK.png");
 			GameCharacter.storyInt++;
 			options=new NPCOption[]{new NPCOption("How do we get to Botanus?", "You need to collect Key Crystals and put them in this Dimensional Key.", new String[]{"How do we get to Botanus?","How do I get to Botanus?","...","How do we get to Botanus?"}, false, new NPCOption[]{}, owner)};}
 		cantExit = false;
