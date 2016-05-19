@@ -7,7 +7,7 @@ import com.dig.www.util.ConditionEnteringMap;
 public class EnterFirstTimeWizTowerGiftShop extends CutScene implements ConditionEnteringMap{
 
 	public EnterFirstTimeWizTowerGiftShop(int x, int y, Board owner, String location) {
-		super(x, y, owner, location,new CSDialog[]{ new CSDialog("HI", NPC.SPADE, null)});
+		super(x, y, owner, location,new CSDialog[]{ new CSDialog("There will be stuff.", "futureScientist", null)});
 		// TODO Auto-generated constructor stub
 	}
 

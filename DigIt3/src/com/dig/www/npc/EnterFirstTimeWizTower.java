@@ -8,7 +8,7 @@ import com.dig.www.util.OnlyFirstTimeEnteringMap;
 public class EnterFirstTimeWizTower extends CutScene implements ConditionEnteringMap{
 
 public EnterFirstTimeWizTower(int x, int y, Board owner, String location) {
-		super(x, y, owner, location,new CSDialog[]{new CSDialog("hi(Press the +X Key| while facing someone to talk)", NPC.SPADE, null)});
+		super(x, y, owner, location,new CSDialog[]{new CSDialog("There will be stuff(Press the +X Key| while facing someone to talk)", "futureScientist", null)});
 		// TODO Auto-generated constructor stub
 	}
 @Override

@@ -5,7 +5,7 @@ import com.dig.www.start.Board;
 public class BotanusDeadNPC extends CutScene{
 
 	public BotanusDeadNPC( Board owner) {
-		super(-1000, -1000, owner,"United Country",new CSDialog[]{new CSDialog("Botanus: Ow! You shot/hit me once or twice", "black", null)});
+		super(-1000, -1000, owner,"United Country",new CSDialog[]{new CSDialog("Ow! You shot/hit me once or twice", "botanus", null)});
 	}
 @Override
 public void act(NPCOption npcOption) {

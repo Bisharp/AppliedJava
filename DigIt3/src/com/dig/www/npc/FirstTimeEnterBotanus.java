@@ -10,7 +10,7 @@ public class FirstTimeEnterBotanus extends CutScene implements OnlyFirstTimeEnte
 private int waited=2;
 	public FirstTimeEnterBotanus(int x, int y, Board owner, String location) {
 		super(x, y, owner, location, new CSDialog[]{new CSDialog("Here comes the lawn mower of justice, you weed!", NPC.CLUB, null)
-				,new CSDialog("That's what we're going with? *sigh|",NPC.SPADE , null),new CSDialog("Botanus: That was the worst one-liner I've ever heard.","black", null),new CSDialog("Hey, that was rude! He's been working on that all day!", NPC.HEART, null),new CSDialog("Botanus: Did you really think I would be as easy a challenge as my subordinates?", "black", null),new CSDialog("That's what we were all hoping.", NPC.SPADE, null),new CSDialog("Not all of us. Those guys were terrible.",NPC.CLUB , null),new CSDialog("You four are either very brave or very foolish. Perhaps both.","black" , null),new CSDialog("I like to think that I'm not either of those things.",NPC.SPADE , null)});
+				,new CSDialog("That's what we're going with? *sigh|",NPC.SPADE , null),new CSDialog("That was the worst one-liner I've ever heard.","botanus", null),new CSDialog("Hey, that was rude! He's been working on that all day!", NPC.HEART, null),new CSDialog("Did you really think I would be as easy a challenge as my subordinates?", "botanus", null),new CSDialog("That's what we were all hoping.", NPC.SPADE, null),new CSDialog("Not all of us. Those guys were terrible.",NPC.CLUB , null),new CSDialog("You four are either very brave or very foolish. Perhaps both.","botanus" , null),new CSDialog("I like to think that I'm not either of those things.",NPC.SPADE , null)});
 	}
 @Override
 public void act(NPCOption npcOption) {
