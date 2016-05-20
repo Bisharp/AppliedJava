@@ -78,8 +78,6 @@ public void draw(Graphics2D g2d) {
 		y+=Statics.RAND.nextInt(7)-3;
 	}
 	double pointTo=Statics.pointTowards(new Point(x, y-vineMid.getHeight(owner)/2), new Point(en.x+50, en.y+50-vineMid.getHeight(owner)/2));
-	g2d.setColor(Color.WHITE);
-	g2d.fillRect(x-3, y-3, 6, 6);
 	g2d.rotate(Math.toRadians(pointTo), x, y);
 //g2d.drawImage(img, startX, startY, imNum, IM_TIMER_MAX, observer)
 	int dist=(int) Statics.dist(x, y-vineMid.getHeight(owner)/2, en.x+50, en.y+50-vineMid.getHeight(owner)/2);
@@ -106,7 +104,6 @@ public void draw(Graphics2D g2d) {
 	//g2d.drawImage(vineMid, startX, startY-vineMid.getHeight(owner)/2,dist,vineMid.getHeight(owner)
 	//		, owner);
 g2d.rotate(-Math.toRadians(pointTo), x, y);
-g2d.draw(getIrregularBounds());
 }
 @Override
 public Rectangle getBounds() {
