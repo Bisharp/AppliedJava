@@ -217,7 +217,12 @@ public static String getRandomItem(String folderLoc){
 //			return false;
 //		}
 //	};
-	String[]items=listFolder(folderLoc);
+	String[] items;
+	try {
+		items = listFilesInJar(folderLoc);
+	} catch (IOException e) {
+		return null;
+	}
 	
 	return items[RAND.nextInt(items.length)];
 }
@@ -420,10 +425,10 @@ public static String[] listFolder(String defaultDir) {//Outdated and will be rem
 			if (e == null)
 				break;
 			String name = e.getName();
-			if (name.startsWith(path + "/"))
+			if (name.startsWith(path))
 			{ // only want files starting with the path specified
 				// strip off the path from the name
-				name = name.substring(path.length() + 1);
+				name = name.substring(path.length());
 				if (name.length() > 0)
 				{
 					// remove trailing / if there is one

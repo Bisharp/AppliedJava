@@ -177,7 +177,7 @@ POTATOGUY{
 
 		@Override
 		public String getPath() {
-			return "images/objects/food/" + Statics.RAND.nextInt(Statics.getFolderCont("images/objects/food/")) + ".png";
+			return "images/objects/food/" + 0 + ".png";
 		}
 
 		@Override
