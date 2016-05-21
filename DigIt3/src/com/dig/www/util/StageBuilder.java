@@ -601,7 +601,9 @@ ex.printStackTrace();
 								npcs.add(new FactoryBridge(nX, nY, owner));
 							else if(val==-29)
 								npcs.add(new TutorialWizard2Nexter(nX, nY, stuff.get(3), owner));
-								else
+							else if(val==-30)
+								npcs.add(new Tree(nX,nY,loc,owner));
+							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
