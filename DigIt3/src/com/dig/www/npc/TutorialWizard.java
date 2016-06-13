@@ -28,7 +28,7 @@ public class TutorialWizard extends AnimatedMoveNPC implements ConditionEntering
 										"What am I supposed to do with this shovel? It's not a weapon.",
 										"What am I supposed to do with this shovel? It's not a weapon.",
 										"What am I supposed to do with this shovel? It's not a weapon." },
-								true, new NPCOption[0], owner)
+								true, new NPCOption[]{new NPCOption("That seems tiring.", "It won't be too bad. Plus, you could rest for a moment afterward.(The blue bar in the top left corner is your energy. The red is your health.)", new String[]{"That seems exhausting.","That seems exhausting.","That seems exhausting.","That seems exhausting."}, owner)}, owner)
 
 				}, owner) },
 				new MovePoint[] { new MovePoint(x, y + 100, false), new MovePoint(x + 200, y + 100, false),
@@ -89,7 +89,7 @@ public class TutorialWizard extends AnimatedMoveNPC implements ConditionEntering
 			if(nextInt==5)
 				cantExit=true;
 			options=new NPCOption[]{
-					new NPCOption("What's the obstacle?","There is another monster ahead, but this one can be killed.", new String[]{"What is it?","Fine. What is it?","...","Ooh! What is it?"}, true, new NPCOption[0], owner)
+					new NPCOption("What's the obstacle?","There is another monster ahead, but this one can be killed.(In order to attack, the inside of the respective white boxes must be black. If any part is green, you cannot attack with that ability)", new String[]{"What is it?","Fine. What is it?","...","Ooh! What is it?"}, true, new NPCOption[0], owner)
 			};
 		}
 		else if(nextInt==6){

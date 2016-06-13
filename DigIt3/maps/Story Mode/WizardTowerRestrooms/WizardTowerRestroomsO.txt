@@ -1,2 +1,10 @@
 400,900,images/icon.png,false,-3
 1100,900,images/icon.png,false,-3
+900,1000,images/objects/householdObjects/sinkRight.png,true,-32
+900,800,images/objects/householdObjects/sinkRight.png,true,-32
+700,800,images/objects/householdObjects/sinkLeft.png,true,-32
+700,1000,images/objects/householdObjects/sinkLeft.png,true,-32
+900,600,images/objects/householdObjects/toiletRight.png,true,-31
+900,400,images/objects/householdObjects/toiletRight.png,true,-31
+700,600,images/objects/householdObjects/toiletLeft.png,true,-31
+700,400,images/objects/householdObjects/toiletLeft.png,true,-31

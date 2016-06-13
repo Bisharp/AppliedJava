@@ -603,6 +603,10 @@ ex.printStackTrace();
 								npcs.add(new TutorialWizard2Nexter(nX, nY, stuff.get(3), owner));
 							else if(val==-30)
 								npcs.add(new Tree(nX,nY,loc,owner));
+							else if(val==-31)
+								npcs.add(new Toilet(nX,nY,loc,owner));
+							else if(val==-32)
+								npcs.add(new Sink(nX,nY,loc,owner));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))
