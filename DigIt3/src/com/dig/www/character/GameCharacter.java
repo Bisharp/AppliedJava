@@ -1130,6 +1130,13 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 		if(keyCode==KeyEvent.VK_1){
 			storyInt=5;
 		}
+		if(keyCode==KeyEvent.VK_2){
+			String s = "images/characters/projectiles" + "/" + getRangedString();
+			for(int c=0;c<36;c++){
+			owner.getfP().add(new FProjectile(c*10, x + rangedAddX(), y + rangedAddY(), 25, this, s, owner,
+					getRangedMove()));}
+			
+		}
 		if (keyCode == KeyEvent.VK_H) {
 			energy = 0;
 			for (int c = 0; c < owner.getFriends().size(); c++) {

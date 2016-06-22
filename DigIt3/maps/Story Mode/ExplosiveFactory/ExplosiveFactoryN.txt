@@ -1,1 +1,2 @@
 700,1000,TutorialWizard2
+1150,2200,FactoryEntryCutScene

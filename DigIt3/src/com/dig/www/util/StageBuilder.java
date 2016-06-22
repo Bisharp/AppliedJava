@@ -462,6 +462,8 @@ public class StageBuilder {
 							break;
 						case "FirstTimeEnterBotanus":
 							npcs.add(new FirstTimeEnterBotanus(nX, nY, owner, loc));
+						case "FactoryEntryCutScene":
+							npcs.add(new FactoryEntryCutScene(nX, nY, owner, loc));
 						}
 
 					} catch (IndexOutOfBoundsException ex) {

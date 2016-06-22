@@ -2099,13 +2099,15 @@ public class Board extends MPanel implements ActionListener {
 					}
 					for (int c = 0; c < fP.size(); c++) {
 						FProjectile character = fP.get(c);
-						o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
+						//o = character instanceof Irregular ? ((Irregular) character).getIrregularBounds() : character.getBounds();
 
 						// This modification would allow us to make certain
 						// projectiles behave differently with their bounds;
 						// could be implemented with other objects.
 
-						if (polygonsInt(bounds, o) && character.isOnScreen()
+						if (bounds.intersects(character.getBounds())
+								//polygonsInt(bounds, o)
+								&& character.isOnScreen()
 						// && character.getHarming()
 						) {
 							if ((!(e instanceof Projectile) || (character instanceof Field))
@@ -2599,11 +2601,11 @@ public class Board extends MPanel implements ActionListener {
 			character.setImage(character.newImage("n"));
 	}
 
-	public boolean polygonsInt(Shape poly1, Shape poly2) {
-		Area area = new Area(poly1);
-		area.intersect(new Area(poly2));
-		return !area.isEmpty();
-	}
+//	public boolean polygonsInt(Shape poly1, Shape poly2) {
+//		Area area = new Area(poly1);
+//		area.intersect(new Area(poly2));
+//		return !area.isEmpty();
+//	}
 
 	public void toggleLagPrevention() {
 		lagPrevention = !lagPrevention;
