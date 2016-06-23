@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.reflect.Field;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,9 +52,7 @@ public class DigIt extends JFrame {
 		setUndecorated(true);
 		activePanel = new GameStartBoard(this);
 		getContentPane().add(BorderLayout.CENTER, activePanel);
-
-		JOptionPane.showMessageDialog(this, "Please plug in any game controllers now.\nYou will not be able to later.", NAME,
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Please plug in any game controllers now.\nYou will not be able to later.", NAME, JOptionPane.INFORMATION_MESSAGE, Statics.ICON);
 
 		gCR = new GameControllerRunnable(this);
 		controllerThread = new Thread(gCR);

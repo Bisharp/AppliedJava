@@ -1621,7 +1621,9 @@ ArrayList<Enemy>enemies=owner.getOnScreenEnemies();
 						specialHit = false;
 					else if (energy >= SEnC)
 						specialHit = true;
-				} else {
+				}else if(type == Types.SPADE){
+					
+				}else {
 
 					energy -= SEnC;
 
@@ -2746,5 +2748,9 @@ if(dead)
 	}
 	public int[]getTimers(){
 		return new int[]{meleeTimer,rangedTimer,specialTimer};
+	}
+	public void specialMinus(){
+		if(type==Types.SPADE)
+			energy -= SEnC;
 	}
 }

@@ -555,6 +555,7 @@ public class Board extends MPanel implements ActionListener {
 		System.out.println("Before: " + freeMem + " After: " + Runtime.getRuntime().freeMemory());
 		spawnNum = sB.getSpawnNum();
 		save();
+		System.out.println((character.getX()-world.get(0).getX())+","+(character.getY()-world.get(0).getY()));
 	}
 
 	public void changeClientArea() {
@@ -2042,7 +2043,7 @@ public class Board extends MPanel implements ActionListener {
 									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
 								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-
+character.specialMinus();
 									b.interact(i);
 									character.endAction();
 								}
@@ -2202,7 +2203,7 @@ public class Board extends MPanel implements ActionListener {
 						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
 					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-
+						character.specialMinus();
 						b.interact(i);
 						character.endAction();
 					}

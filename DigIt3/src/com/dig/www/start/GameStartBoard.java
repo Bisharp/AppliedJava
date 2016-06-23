@@ -3,6 +3,7 @@ package com.dig.www.start;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -80,7 +81,7 @@ public class GameStartBoard extends MPanel {
 		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.black);
 		buttonPanel.setFocusable(false);
-		// mapMaker=new MapMakerPanel(Color.YELLOW?)//this is probably where
+		//GameSavePanel mapMaker=new GameSavePanel(0, Color.ORANGE);//new MapMakerPanel(Color.YELLOW?)//this is probably where
 		// MapMaker will go to center the game saves
 		game1 = new GameSavePanel(1, Color.RED);
 		game2 = new GameSavePanel(2, new Color(127, 127, 127));
@@ -88,22 +89,35 @@ public class GameStartBoard extends MPanel {
 		game4 = new GameSavePanel(4, new Color(255, 128, 255));
 		multiplayer = new MultiPlayerPanel(Color.BLUE);
 		
-		// buttonPanel.add(mapMaker);
+		 //buttonPanel.add(mapMaker);
+		buttonPanel.add(multiplayer);
 		buttonPanel.add(game1);
 		buttonPanel.add(game2);
 		buttonPanel.add(game3);
 		buttonPanel.add(game4);
 		
-		buttonPanel.add(multiplayer);
+		
 		add(buttonPanel, BorderLayout.SOUTH);
-		setBackground(Color.BLACK);
+		//setBackground(Color.BLACK);
+		
 		setDoubleBuffered(true);
 
 		setSize(Statics.BOARD_WIDTH, Statics.BOARD_HEIGHT);
 
 		this.addKeyListener(new MyAdapter());
 		setFocusable(true);
-
+add(new JPanel(){
+			@Override
+			protected void paintComponent(Graphics g) {
+				g.setColor(Color.BLACK);
+			g.fillRect(0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight());
+			g.setFont(Statics.MENU);
+			g.drawImage(Statics.newImage("images/enemies/bosses/Head.png"), 0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight()-150, GameStartBoard.this);
+			g.setColor(Color.RED);
+			System.out.println(GameStartBoard.this.getWidth()+","+ (GameStartBoard.this.getHeight()-150));
+			g.drawString(DigIt.NAME, GameStartBoard.this.getWidth()/3, GameStartBoard.this.getHeight()/6);
+			}
+		},BorderLayout.CENTER);
 		repaint();
 	}
 
@@ -283,7 +297,7 @@ try {
 		public MultiPlayerPanel(Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
+			this.setPreferredSize(new Dimension(120, 150));
 			this.setBackground(color);
 			this.setLayout(new BorderLayout());
 			this.setFocusable(false);
@@ -436,7 +450,7 @@ try {
 		public GameSavePanel(int saveNum, Color color) {
 			this.color = color;
 
-			this.setPreferredSize(new Dimension(Statics.is1024?150:200, 150));
+			this.setPreferredSize(new Dimension(120, 150));
 			this.setBackground(color);
 			this.saveNum = saveNum;
 			this.setLayout(new BorderLayout());

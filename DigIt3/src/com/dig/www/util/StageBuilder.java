@@ -22,6 +22,7 @@ import com.dig.www.start.Board.DayNight;
 public class StageBuilder {
 
 	private static final int OFF = Statics.BOARD_WIDTH / 2 - 50;
+	private static final int OFFH = Statics.BOARD_HEIGHT/2-50;
 	private static StageBuilder me;
 	private String loc;
 	private Board owner;
@@ -462,8 +463,10 @@ public class StageBuilder {
 							break;
 						case "FirstTimeEnterBotanus":
 							npcs.add(new FirstTimeEnterBotanus(nX, nY, owner, loc));
+							break;
 						case "FactoryEntryCutScene":
 							npcs.add(new FactoryEntryCutScene(nX, nY, owner, loc));
+							break;
 						}
 
 					} catch (IndexOutOfBoundsException ex) {
@@ -544,8 +547,10 @@ ex.printStackTrace();
 							} else if (val == -2)
 								npcs.add(new RandSkinObject(nX, nY, loc, wall, owner));
 							else if (val == -3) {
-								if (spawnCount <= spawnNum)
-									spawnPoint = new Point(-nX + OFF, -nY + OFF - 299);
+								if (spawnCount <= spawnNum){
+									spawnPoint = new Point(-nX + OFF, -nY+OFFH);
+									System.err.println((768-owner.getHeight()));
+								}
 								if (wall)
 									npcs.add(new CheckPoint(nX, nY, owner, spawnCount));
 								else if (stuff.get(3).equals("invisible"))
