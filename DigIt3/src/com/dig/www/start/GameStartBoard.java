@@ -1,5 +1,6 @@
 package com.dig.www.start;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import com.dig.www.util.Statics;
 
@@ -42,21 +44,27 @@ public class GameStartBoard extends MPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+private static int switchMax=200;
+private int switchTimer=switchMax;
 	private DigIt owner;
-
-	private Image screenImage;
+private Timer t;
+//	private Image screenImage;
 	private JPanel buttonPanel;
+	private static final int starts=2;
+	private int startInt=(Statics.RAND.nextInt(starts)+1);
 	// private JButton newGame;
 	// private JButton loadGame;
 
 	// private boolean knobMoved = false;
 	
 	// private MapMakerPanel mapMaker;
+	private JPanel draw;
 	private GameSavePanel game1;
 	private GameSavePanel game2;
 	private GameSavePanel game3;
 	private GameSavePanel game4;
-	
+	private Image startScreen;
+	private Image startScreen2;
 	private MultiPlayerPanel multiplayer;
 	private String address = "images/titleScreen/title.png";
 	private String defaultDir;
@@ -106,19 +114,42 @@ public class GameStartBoard extends MPanel {
 
 		this.addKeyListener(new MyAdapter());
 		setFocusable(true);
-add(new JPanel(){
+		newImages();
+		draw=new JPanel(){
 			@Override
-			protected void paintComponent(Graphics g) {
+			protected void paintComponent(Graphics g2) {
+				Graphics2D g=(Graphics2D)g2;
 				g.setColor(Color.BLACK);
 			g.fillRect(0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight());
 			g.setFont(Statics.MENU);
-			g.drawImage(Statics.newImage("images/enemies/bosses/Head.png"), 0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight()-150, GameStartBoard.this);
+			if(switchTimer<50){
+				g.drawImage(startScreen2, 0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight()-150, GameStartBoard.this);
+			//g.setComposite(AlphaComposite.SrcOver.derive((switchTimer/(float)50);
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, switchTimer/(float)50));}
+				g.drawImage(startScreen, 0, 0, GameStartBoard.this.getWidth(), GameStartBoard.this.getHeight()-150, GameStartBoard.this);
+			if(switchTimer<50)
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 			g.setColor(Color.RED);
-			System.out.println(GameStartBoard.this.getWidth()+","+ (GameStartBoard.this.getHeight()-150));
-			g.drawString(DigIt.NAME, GameStartBoard.this.getWidth()/3, GameStartBoard.this.getHeight()/6);
+			g.drawString(DigIt.NAME, GameStartBoard.this.getWidth()/2-239, GameStartBoard.this.getHeight()/6);
 			}
-		},BorderLayout.CENTER);
+		};
+add(draw,BorderLayout.CENTER);
 		repaint();
+		
+		t=new Timer(50, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+	switchTimer--;
+	if(switchTimer<0){
+		switchTimer=switchMax;
+		newImages();
+	}
+	draw.repaint();
+			}
+		});
+		t.start();
+		//System.out.println(buttonPanel.getPreferredSize().getHeight());
 	}
 
 	private boolean firstRun = true;
@@ -137,7 +168,18 @@ add(new JPanel(){
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
-
+public void newImages(){
+	
+	if(startScreen2!=null)
+		startScreen=startScreen2;
+	else{
+		startScreen=Statics.newImage("images/startScreens/startScreen"+startInt+".png");
+	}
+	startInt++;
+	if(startInt>starts)
+		startInt=1;
+	startScreen2=Statics.newImage("images/startScreens/startScreen"+startInt+".png");
+}
 	public Image newImage(String loc) {
 		return DigIt.lib.checkLibrary("/" + loc);
 	}
@@ -228,6 +270,7 @@ try {
 			}
 			// address = "images/titleScreen/loading.png";
 			repaint();
+			t.stop();
 			owner.newGame();
 
 		} else if (s != null)
@@ -244,7 +287,7 @@ try {
 
 	public void deletePaint() {
 		// TODO Auto-generated method stub
-		screenImage = null;
+		//screenImage = null;
 		repaint();
 	}
 
@@ -253,6 +296,7 @@ try {
 		owner.setUserName(save);
 		// address = "images/titleScreen/loading.png";
 		repaint();
+		t.stop();
 		owner.loadSave();
 	}
 

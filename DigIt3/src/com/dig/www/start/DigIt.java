@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.reflect.Field;
+import java.rmi.RemoteException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -160,17 +161,31 @@ public class DigIt extends JFrame {
 		}
 	}
 
-	public void quit() {
-
+	public void quit(boolean forced) {
+		Board activePanel=(Board)this.activePanel;
+if (forced||JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?\n(Unsaved data will be lost)", DigIt.NAME,
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,Statics.ICON) == JOptionPane.YES_OPTION){
+		
+			if (activePanel.getClient() != null && activePanel.getOtherServer() != null)
+				try {
+					String s = null;
+					if (activePanel.getCharacter() != null)
+						s =activePanel.getCharacter().getType().charName();
+					activePanel.getOtherServer().leaveChatRoom(activePanel.getMPName(), s);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
 		nullBoards();
 		Board.preferences = new Preferences();
-
-		activePanel = new GameStartBoard(this);
-		add(activePanel);
+		
+		this.activePanel = new GameStartBoard(this);
+		add(this.activePanel);
 		GameControllerRunnable.renewKeys();
 
 		System.gc();
-		validate();
+		validate();}
 		repaint();
 	}
 
@@ -195,14 +210,14 @@ public class DigIt extends JFrame {
 		this.userName = userName;
 	}
 
-	public void victory(String saveName) {
-		// TODO Add victory cutscene here
-
-		nullBoards();
-		setVisible(true);
-
-		quit();
-	}
+//	public void victory(String saveName) {
+//		// TODO Add victory cutscene here
+//
+//		nullBoards();
+//		setVisible(true);
+//
+//		quit();
+//	}
 
 	public DigIt getMe() {
 		return this;

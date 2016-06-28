@@ -549,7 +549,6 @@ ex.printStackTrace();
 							else if (val == -3) {
 								if (spawnCount <= spawnNum){
 									spawnPoint = new Point(-nX + OFF, -nY+OFFH);
-									System.err.println((768-owner.getHeight()));
 								}
 								if (wall)
 									npcs.add(new CheckPoint(nX, nY, owner, spawnCount));

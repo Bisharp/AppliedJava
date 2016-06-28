@@ -247,7 +247,7 @@ public class Board extends MPanel implements ActionListener {
 	private State state;
 	// private boolean debug = false;
 
-	private int deadTimer = 100;
+	private int deadTimer = 150;
 
 	private CharData data;
 	private ArrayList<Block> world = new ArrayList<Block>();
@@ -1222,7 +1222,7 @@ public class Board extends MPanel implements ActionListener {
 
 			g2d.setColor(Color.RED);
 			g2d.setFont(Statics.MENU);
-			g2d.drawString("GAME OVER", getWidth() / 3, getHeight() / 3);
+			g2d.drawString("GAME OVER", getWidth() / 2-193, getHeight() / 6);
 			break;
 		case LOADING:
 			g2d.setColor(Color.ORANGE);
@@ -1625,11 +1625,11 @@ public class Board extends MPanel implements ActionListener {
 			break;
 
 		case DEAD:
-			deadTimer--;
+			deadTimer-=mult();
 			if (deadTimer == 0) {
 				GameCharacter.setLevel(0);
 				GameCharacter.setXP(0);
-				owner.quit();
+				owner.quit(true);
 			}
 			repaint();
 			break;
@@ -2639,7 +2639,7 @@ character.specialMinus();
 
 			if (state != State.DEAD && state != State.LOADING)
 				setState(State.PAUSED);
-			Statics.exit(this);
+			owner.quit(false);
 		}
 		switch (state) {
 		case NPC:
