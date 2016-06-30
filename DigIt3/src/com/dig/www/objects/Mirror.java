@@ -13,6 +13,7 @@ import com.dig.www.blocks.Block;
 import com.dig.www.npc.NPC;
 import com.dig.www.start.Board;
 import com.dig.www.start.DigIt;
+import com.dig.www.util.Sprite;
 import com.dig.www.util.Statics;
 
 public class Mirror extends PushCube {
@@ -145,7 +146,7 @@ public class Mirror extends PushCube {
 			image = newImage(d + ".png");
 			shadow = newShadow(d + ".png");
 			hasSwitched = true;
-			 ArrayList<Block> walls = owner.getWallList();
+			 ArrayList<Sprite> walls = owner.getWallList();
 			ArrayList<NPC> npcs = owner.getNPCs();
 			ArrayList<Objects> objects = owner.getObjects();
 			switch (d) {

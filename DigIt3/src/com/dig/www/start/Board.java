@@ -97,6 +97,7 @@ import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
 import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
+import com.dig.www.npc.SunSetNPC;
 import com.dig.www.npc.TouchNPC;
 import com.dig.www.objects.CheckPoint;
 import com.dig.www.objects.Collectible;
@@ -146,8 +147,8 @@ public class Board extends MPanel implements ActionListener {
 	}
 
 	public int mult() {
-		if (lagPrevention)
-			return 2;
+//		if (lag8Prevention)
+//			return 2;
 		return 1;
 	}
 
@@ -166,7 +167,7 @@ public class Board extends MPanel implements ActionListener {
 	IChatServer theServer;
 	GameState currentState;
 	String mpName = "Server";
-
+private boolean firstSunSet;
 	ChatServer server;// maybe
 	ChatClient me;// maybe
 	/**
@@ -251,7 +252,7 @@ public class Board extends MPanel implements ActionListener {
 
 	private CharData data;
 	private ArrayList<Block> world = new ArrayList<Block>();
-	private ArrayList<Block> wallList = new ArrayList<Block>();
+	private ArrayList<Sprite> wallList = new ArrayList<Sprite>();
 	private ArrayList<NPC> npcs = new ArrayList<NPC>();
 	private NPC current = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -511,7 +512,7 @@ public class Board extends MPanel implements ActionListener {
 			enemies.get(c).resetImage(this);
 		}
 
-		wallList = new ArrayList<Block>();
+		wallList = new ArrayList<Sprite>();
 		for (Block b : world) {
 
 			b.initialAnimate(spawnX, spawnY);
@@ -520,7 +521,11 @@ public class Board extends MPanel implements ActionListener {
 			if (b.getType() == Block.Blocks.WALL)
 				wallList.add(b);
 		}
-
+for(Objects b:objects){
+	b.initialAnimate(spawnX, spawnY);
+	if (!b.seeOver()&&b.isWall())
+		wallList.add(b);
+}
 		for (Portal p : portals)
 			p.initialAnimate(spawnX, spawnY);
 
@@ -532,9 +537,9 @@ public class Board extends MPanel implements ActionListener {
 
 		for (NPC n : npcs)
 			n.initialAnimate(spawnX, spawnY);
-
-		for (Objects n : objects)
-			n.initialAnimate(spawnX, spawnY);
+//
+//		for (Objects n : objects)
+//			n.initialAnimate(spawnX, spawnY);
 
 		// TODO lightspot
 		// objects.add(new Lamp(character.getX() - 100, character.getY() - 500,
@@ -735,7 +740,7 @@ public class Board extends MPanel implements ActionListener {
 			enemies.get(c).resetImage(this);
 		}
 
-		wallList = new ArrayList<Block>();
+		wallList = new ArrayList<Sprite>();
 		for (Block b : world) {
 
 			b.initialAnimate(spawnX, spawnY);
@@ -757,8 +762,11 @@ public class Board extends MPanel implements ActionListener {
 		for (NPC n : npcs)
 			n.initialAnimate(spawnX, spawnY);
 
-		for (Objects n : objects)
+		for (Objects n : objects){
 			n.initialAnimate(spawnX, spawnY);
+			if (!n.seeOver()&&n.isWall())
+				wallList.add(n);
+		}
 
 		// TODO lightspot
 		// objects.add(new Lamp(character.getX() - 100, character.getY() - 500,
@@ -900,7 +908,7 @@ public class Board extends MPanel implements ActionListener {
 					poly = new Polygon(xs, ys, xs.length);
 
 					for (int x = 0; x < wallList.size(); x++) {
-						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())) {
+						if (wallList.get(x).isOnScreen() && poly.intersects(wallList.get(x).getBounds())&&obj!=wallList.get(x)) {
 							tag = false;
 							break;
 						}
@@ -1256,7 +1264,15 @@ public class Board extends MPanel implements ActionListener {
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
-
+public boolean noOneTouches(Rectangle rect){
+	if(character.getCollisionBounds().intersects(rect)){
+		return false;}
+	for(int c=0;c<friends.size();c++){
+		if(friends.get(c).getCollisionBounds().intersects(rect))
+			return false;
+	}
+	return true;
+}
 	// String decision;
 	public void setCharacter(GameCharacter chara) {
 		character = chara;
@@ -1656,6 +1672,10 @@ public class Board extends MPanel implements ActionListener {
 		if (switchMenu != null) {
 			switchMenu.updateList();
 		}
+		if(!firstSunSet&&time.getTime()>7.15F){
+			firstSunSet=true;
+			talk(new SunSetNPC(this,level));
+		}
 		// character.setMpName(null);
 		// for(int c=0;c<friends.size();c++)
 		// friends.get(c).setMpName(null);
@@ -2002,7 +2022,7 @@ public class Board extends MPanel implements ActionListener {
 						int[] ys = { b.getMidY() - 10, character.getMidY() - 10, character.getMidY() + 10, b.getMidY() + 10 };
 
 						for (int x = 0; x < wallList.size(); x++) {
-							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())) {
+							if (wallList.get(x).isOnScreen() && new Polygon(xs, ys, xs.length).intersects(wallList.get(x).getBounds())&&!getInBounds(b.getBounds()).intersects(wallList.get(x).getBounds())) {
 								tag = false;
 								break;
 							}
@@ -2034,19 +2054,19 @@ public class Board extends MPanel implements ActionListener {
 						}
 					}
 
-					if ((b.getType() == Blocks.CRYSTAL && character.getMove() == Moves.CLUB && !character.hasMeleed())
+					
+						
+					if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
 							|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 									|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-
-							if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
-									|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
-											|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT)))
-								if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-character.specialMinus();
-									b.interact(i);
-									character.endAction();
-								}
+						if (b.getBounds().intersects(character.getActBounds())) {
+							if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+								if(character.getMove()!=Moves.PIT||noOneTouches(b.getBounds())){
+								character.specialMinus();
+								b.interact(i);
+								character.endAction();
+							}
+							}
 						}
 					}
 				}
@@ -2198,14 +2218,17 @@ character.specialMinus();
 						if (b.getBounds().intersects(character.getDirBounds()[rI]))
 							character.presetCollisionFlag(rI);
 				}
-
+//TODO
 				if ((character.getMove() == Moves.CLUB && !character.hasMeleed() && b.getType() == Blocks.CRYSTAL)
 						|| (character.getMove() == Moves.PIT && !character.hasSpecialed() && (b.getType() == Blocks.GROUND
 								|| b.getType() == Blocks.DIRT || b.getType() == Blocks.PIT))) {
-					if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
-						character.specialMinus();
-						b.interact(i);
-						character.endAction();
+					if (b.getBounds().intersects(character.getActBounds())) {
+						if (b.getBounds().intersects(character.getActBounds()) && !b.getBounds().intersects(character.getCollisionBounds())) {
+							if(character.getMove()!=Moves.PIT||noOneTouches(b.getBounds())){
+							character.specialMinus();
+							b.interact(i);
+							character.endAction();
+						}}
 					}
 				}
 
@@ -2592,7 +2615,9 @@ character.specialMinus();
 		}
 
 	}
-
+public Rectangle getInBounds(Rectangle rect){
+	return new Rectangle(rect.x+10, rect.y+10, rect.width-20, rect.height-20);
+}
 	public void talk(NPC n) {
 		current = n;
 		current.setLine();
@@ -2621,6 +2646,9 @@ character.specialMinus();
 	@Override
 	public void keyPress(int key) {
 		// Show me ya moves! }(B-)
+		if(key==KeyEvent.VK_3){
+			GameCharacter.getInventory().addItem(Items.KEYCRYSTAL, 1);
+		}
 		if (key == KeyEvent.VK_8) {
 			toggleLagPrevention();
 		} else if (key == KeyEvent.VK_J) {
@@ -2837,7 +2865,7 @@ character.specialMinus();
 		return state;
 	}
 
-	public ArrayList<Block> getWallList() {
+	public ArrayList<Sprite> getWallList() {
 		return wallList;
 	}
 
@@ -2922,7 +2950,7 @@ character.specialMinus();
 				try {
 					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
 					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum + ","
-							+ GameCharacter.storyInt);
+							+ GameCharacter.storyInt+","+time.toString()+","+firstSunSet);
 					writer.newLine();
 					// if (normalPlayer(character.getType()))
 					writer.write(character.getSave() + ",true");
@@ -3004,6 +3032,9 @@ character.specialMinus();
 						int xp = Integer.parseInt(stuff.get(3));
 						int spawnNum = Integer.parseInt(stuff.get(4));
 						GameCharacter.storyInt = Integer.parseInt(stuff.get(5));
+						String[] timeS=stuff.get(6).split(" ");
+						time.setTime(Integer.parseInt(timeS[0])+(Integer.parseInt(timeS[1])/(float)100), timeS[2].equals("A.M."));
+						firstSunSet = Boolean.parseBoolean(stuff.get(7));
 						this.spawnNum = spawnNum;
 						GameCharacter.setXP(xp);
 					} catch (Exception e) {
@@ -3114,6 +3145,11 @@ character.specialMinus();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+		if (mode.equals(Statics.MAIN))
+			GameCharacter.storyInt = 0;
+		firstSunSet=false;
+		GameCharacter.resetStatics();
+		//GameCharacter.getXP()
 		changeArea();
 		if (userName != null)
 			preferences.save(Statics.getBasedir() + "/saveFiles/" + owner.getUserName() + "/");

@@ -50,7 +50,7 @@ private int switchTimer=switchMax;
 private Timer t;
 //	private Image screenImage;
 	private JPanel buttonPanel;
-	private static final int starts=2;
+	private static final int starts=3;
 	private int startInt=(Statics.RAND.nextInt(starts)+1);
 	// private JButton newGame;
 	// private JButton loadGame;

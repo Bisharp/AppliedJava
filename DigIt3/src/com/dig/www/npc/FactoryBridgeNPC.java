@@ -1,6 +1,7 @@
 package com.dig.www.npc;
 
 import com.dig.www.character.GameCharacter;
+import com.dig.www.objects.CheckPoint;
 import com.dig.www.objects.FactoryBridge;
 import com.dig.www.start.Board;
 
@@ -49,5 +50,9 @@ public void startEnd() {
 	maker.breakIt();
 if(GameCharacter.storyInt==6)
 	GameCharacter.storyInt++;
+for(int c=0;c<owner.getObjects().size();c++)
+	if(owner.getObjects().get(c) instanceof CheckPoint){
+		owner.save(((CheckPoint) owner.getObjects().get(c)).getSpawnNum());
+		break;}
 }
 }

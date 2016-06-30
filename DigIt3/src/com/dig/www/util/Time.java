@@ -17,7 +17,7 @@ public class Time implements ActionListener {
 
 	private Timer timer;
 	private Board owner;
-	private static final int TUTORIALSECOND = 10000;
+	private static final int TUTORIALSECOND =6000;
 	private static final int SECOND = 1000;
 	private static final float CHANGE = 7.0f;
 	private static final float CHANGE_PER = 0.6f;
@@ -31,8 +31,8 @@ public class Time implements ActionListener {
 	private static final float START = 4f;
 private boolean isTut;
 	public Time(Board b) {
-		timer = new Timer(GameCharacter.storyInt<=5?TUTORIALSECOND:SECOND, this);
-	isTut=GameCharacter.storyInt<=5;
+		timer = new Timer(GameCharacter.storyInt<=7?TUTORIALSECOND:SECOND, this);
+	isTut=GameCharacter.storyInt<=7;
 		owner = b;
 
 //		String time = String.format("%tr", new Date());
@@ -55,7 +55,7 @@ private boolean isTut;
 
 	@Override
 	public synchronized void actionPerformed(ActionEvent arg0) {
-if(isTut&&GameCharacter.storyInt>5){
+if(isTut&&GameCharacter.storyInt>7){
 	timer.setDelay(SECOND);
 	isTut=false;
 }

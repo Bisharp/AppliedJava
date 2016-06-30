@@ -2379,7 +2379,7 @@ if(dead)
 
 	public static void plusXP(int adder, GameCharacter chara) {
 		xp += adder;
-		if (xp >= (int) Math.pow(level + 1, 2) * 10) {
+		while (xp >= (int) Math.pow(level + 1, 2) * 10) {
 			xp -= (int) Math.pow(level + 1, 2) * 10;
 			level++;
 		}
@@ -2752,5 +2752,9 @@ if(dead)
 	public void specialMinus(){
 		if(type==Types.SPADE)
 			energy -= SEnC;
+	}
+	public static void resetStatics(){
+		xp=0;
+		level=0;
 	}
 }

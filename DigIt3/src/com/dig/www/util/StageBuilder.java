@@ -619,7 +619,6 @@ ex.printStackTrace();
 							npcs.add(new CollectibleCharacter(nX, nY, loc, owner));
 						else{
 							npcs.add(new CollectibleObject(nX, nY, loc, wall, owner, Items.translate(stuff.get(5))));
-						System.out.println(stuff.get(5));
 						}
 					} catch (IndexOutOfBoundsException ex) {
 						ex.printStackTrace();

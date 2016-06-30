@@ -1,0 +1,2 @@
+1300,300,images/icon.png,true,-3
+800,300,images/portals/doors/brown/l.png,true,houseDoor|false

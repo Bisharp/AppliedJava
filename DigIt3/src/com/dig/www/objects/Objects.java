@@ -15,12 +15,26 @@ public class Objects extends Sprite {
 	protected boolean wall;
 	protected String desc;
 	protected String identifier;
-
+protected boolean seeOver=true;
+public boolean seeOver(){
+	return seeOver;
+}
 	public Objects(int x, int y, String loc, boolean wall, Board owner, String identifier) {
 		super(x, y, loc, owner);
-		// TODO Auto-generated constructor stub
-		this.setWall(wall);
-		this.desc = getDescription(loc, identifier);
+		String[]idenStrings;
+		if(identifier==null)
+			idenStrings=new String[]{null};
+		else
+		idenStrings=identifier.split("\\|");
+		if(idenStrings.length>1)
+		try{
+			seeOver=Boolean.parseBoolean(idenStrings[1]);
+		}catch (Exception e) {
+			// TODO: handle exception
+		e.printStackTrace();
+		}
+			this.setWall(wall);
+		this.desc = getDescription(loc, idenStrings[0]);
 		this.identifier = identifier;
 	}
 
@@ -118,6 +132,8 @@ public class Objects extends Sprite {
 				return "A box of explosives.\n We should probably leave them alone.";
 			case "ExplosivesVine":
 				return "A box of explosives.\n Why are we looking at these right now and why are they even here?";
+			case "houseDoor":
+				return "This door is locked,which makes sense\nbecause most people don't want pesky kids coming into their house.";
 			}
 		// Find by loc
 		if (loc == null)

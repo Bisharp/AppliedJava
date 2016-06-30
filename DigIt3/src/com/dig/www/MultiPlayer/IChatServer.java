@@ -10,7 +10,7 @@ import com.dig.www.MultiPlayer.State.StartState;
 
 public interface IChatServer extends Remote
 {
-	public static final int PORT = 5000;
+	public static final int PORT = 4176;
 	// returns a list of all users in chat room
 	public Set<String> enterChatRoom(IChatClient chatclient, String name,String passWord) throws RemoteException,Exception;
 	public void leaveChatRoom(String name,String playerName) throws RemoteException;
