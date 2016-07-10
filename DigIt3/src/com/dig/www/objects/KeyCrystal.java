@@ -23,7 +23,7 @@ private int value;
 	@Override
 	public boolean interact(){
 		String[]options={"Leave","Take"};
-		return JOptionPane.showOptionDialog(owner,Items.getDesc(getType().toString())+getValDesc(), DigIt.NAME
+		return JOptionPane.showOptionDialog(owner,Items.getDesc(getType().toString(),owner)+getValDesc(), DigIt.NAME
 				+ " Item Description",JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
 				new ImageIcon(image),options,"Take"
 				)==1;

@@ -48,31 +48,11 @@ public class CharData implements Serializable {
 			areas.put(level, new LevelData(owner.getObjects(), owner.getNPCs(),owner.getPortals(),
 					level));}
 		else{
-			for(int c=0;c<owner.getObjects().size();c++){
-				if(owner.getObjects().get(c) instanceof OnlyFirstTimeEnteringMap){
-				owner.getObjects().remove(c);
-				c--;
-				}
-			}
-			for(int c=0;c<owner.getNPCs().size();c++){
-				if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap){
-				owner.getNPCs().remove(c);
-				c--;
-				}
-			}
+			areas.get(level).firstTime=false;
 		}
-		for(int c=0;c<owner.getObjects().size();c++){
-			if((owner.getObjects().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getObjects().get(c)).enter())){
-			owner.getObjects().remove(c);
-			c--;
-			}
-		}
-		for(int c=0;c<owner.getNPCs().size();c++){
-			if((owner.getNPCs().get(c) instanceof ConditionEnteringMap&&!((ConditionEnteringMap)owner.getNPCs().get(c)).enter())){
-			owner.getNPCs().remove(c);
-			c--;
-			}
-		}
+		
+		
+	
 		currentKey = level;
 	}
 
@@ -89,7 +69,9 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 	public boolean hasBeenCollected(int address) {
 		return areas.get(currentKey).hasCollected(address);
 	}
-
+	public void setSaveString(Objects address) {
+		areas.get(currentKey).setSaveString(address);
+	}
 	public void setOwner(Board owner) {
 		this.owner = owner;
 	}
@@ -163,12 +145,15 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 		/**
 		 * 
 		 */
+		protected transient ArrayList<Objects>objs=new ArrayList<Objects>();
+		protected boolean firstTime=true;
 		private static final long serialVersionUID = 1L;
 		private Hashtable<Integer, Boolean> specialCollectibles = new Hashtable<Integer, Boolean>();
 		private Hashtable<Integer, SimpleQuest> locQuests = new Hashtable<Integer, SimpleQuest>();
 		private Hashtable<Integer, Boolean> blockerNPCs = new Hashtable<Integer, Boolean>();
 		private Hashtable<Integer,Boolean>portals = new Hashtable<Integer,Boolean>();
 		private final String location;
+		private ArrayList<String>objectSaves=new ArrayList<String>();
 		// Quest generation
 		private boolean hasDropPoints = false;
 
@@ -177,12 +162,14 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 		private LevelData(ArrayList<Objects> objectList, ArrayList<NPC> npcs,ArrayList<Portal>portalList,
 				String name) {
 
-			for (Objects obj : objectList)
+			for (Objects obj : objectList){
+				objectSaves.add(obj.getSaveString());
 				if (obj instanceof KeyCrystal)
 					specialCollectibles.put(((KeyCrystal) obj).id,
 							false);
 				else if (obj instanceof DropPoint)
-					hasDropPoints = true;
+					hasDropPoints = true;}
+			
 for(int c=0;c<portalList.size();c++)
 	if(portalList.get(c) instanceof BossPortal)
 		portals.put(c, ((BossPortal) portalList.get(c)).getCollectibleNum()==0);
@@ -216,7 +203,9 @@ for(int c=0;c<portalList.size();c++)
 		public boolean hasCollected(int address) {
 			return specialCollectibles.get(address);
 		}
-
+public void setSaveString(Objects obj){
+objectSaves.set(objs.indexOf(obj),obj.getSaveString());
+}
 		// Sets the collectible specified by the address as collected
 		public boolean collect(int address) {
 
@@ -231,7 +220,11 @@ specialCollectibles.remove(address);
 		// SpecialCollectibles from the list, as well as having added a set of
 		// chests with random quest goals in them.
 		public ArrayList<Objects> filter(ArrayList<Objects> input) {
-
+			if(objs==null)
+				objs=new ArrayList<Objects>();
+			objs.clear();
+for(Objects i:input)
+	objs.add(i);
 			Objects obj;
 			ArrayList<Objects> objList = new ArrayList<Objects>();
 			ArrayList<Integer> points;
@@ -296,9 +289,9 @@ specialCollectibles.remove(address);
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
 				if (!(obj instanceof KeyCrystal)) {
-
-					if (points != null)
+boolean add=true;
 						if (obj instanceof DropPoint) {
+							if (points != null){
 							if (points.contains(count)) {
 								Items quest = quests2.get(Statics.RAND
 										.nextInt(quests2.size()));
@@ -306,11 +299,26 @@ specialCollectibles.remove(address);
 								quests2.remove(quest);
 								points.remove(new Integer(count));
 							}
-							count++;
+							count++;}
 						}
-
+						else if(obj instanceof OnlyFirstTimeEnteringMap){
+						add=firstTime;
+						}
+						else if(obj instanceof ConditionEnteringMap)
+							if(!((ConditionEnteringMap)obj).enter()){
+							add=false;
+							}
+//					for(int c=0;c<owner.getNPCs().size();c++){
+//						if(owner.getNPCs().get(c) instanceof OnlyFirstTimeEnteringMap){
+//						owner.getNPCs().remove(c);
+//						c--;
+//						}
+//					}
+obj.setSaveString(objectSaves.get(i));
+if(add&&obj.resolveSaveString())
 					objList.add(obj);
-				} else if (specialCollectibles
+			}
+			else if (specialCollectibles
 						.containsKey(((KeyCrystal) obj).id) ? !hasCollected(((KeyCrystal) obj).id)
 						: true)
 					objList.add(obj);
@@ -336,8 +344,16 @@ public ArrayList<Portal>filterPortals(ArrayList<Portal>input){
 
 			for (int i = 0; i < input.size(); i++) {
 				obj = input.get(i);
-
-				if (obj instanceof QuestNPC) {
+				
+				if(obj instanceof OnlyFirstTimeEnteringMap){
+				if(firstTime)
+					objList.add(obj);
+				}
+				else if(obj instanceof ConditionEnteringMap){
+						if(((ConditionEnteringMap)obj).enter())
+			objList.add(obj);
+			}
+				else if (obj instanceof QuestNPC) {
 					obj2 = (QuestNPC) obj;
 					obj2.setQuestState(getQuest(obj2.id));
 					objList.add(obj2);

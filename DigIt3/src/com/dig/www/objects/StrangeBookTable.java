@@ -72,7 +72,7 @@ public String getPoem(){
 	case 1:
 		return "<html>Most of the pages are too worn to read, but a different page is readable this time.\nIt reads:\n"
 				+ "<html><i>There once was a dangerous stone;\n"
-				+ "<html><i>it threatened the lives of the people.\n"
+				+ "<html><i>it threatened the lives of all.\n"
 				+ "<html><i>One man endeavored to hide it away,\n"
 				+ "<html><i>but his mission was only complete in part,\n"
 				+ "<html><i>and the stone lying near is a peril still.";
@@ -100,8 +100,8 @@ public String getPoem(){
 	case 0:
 	default:
 	return	"<html>Most of the pages are too worn to read, but one seems to have aged well.\nIt reads:\n"
-		+ "<html><i>Away from the greatest star of the sky,\n"
-		+ "<html><i>lies a man who died on a quest.\n"
+		+ "<html><i>Look to the heavens and away from the greatest star,\n"
+		+ "<html><i>for there lies a man who died on a quest.\n"
 		+ "<html><i>Under his stone an object rests,\n"
 		+ "<html><i>which together with a dangerous light,\n"
 		+ "<html><i>will be the key to what is sought.";

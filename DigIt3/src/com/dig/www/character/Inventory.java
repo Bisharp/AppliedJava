@@ -284,7 +284,7 @@ public class Inventory implements Serializable {
 									new Jump();
 								}
 							} else
-								JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0]), DigIt.NAME
+								JOptionPane.showMessageDialog(getMe(), Items.getDesc(jList.getSelectedValue().split(" x")[0],owner), DigIt.NAME
 										+ " Item Description", JOptionPane.INFORMATION_MESSAGE,
 										new ImageIcon(Items.translate(jList.getSelectedValue().split(" x")[0]).getPath()));
 

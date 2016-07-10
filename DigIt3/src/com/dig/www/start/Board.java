@@ -36,6 +36,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -95,11 +96,11 @@ import com.dig.www.character.Wizard;
 import com.dig.www.enemies.Boss;
 import com.dig.www.enemies.Enemy;
 import com.dig.www.enemies.Projectile;
-import com.dig.www.npc.Chest;
 import com.dig.www.npc.NPC;
 import com.dig.www.npc.SunSetNPC;
 import com.dig.www.npc.TouchNPC;
 import com.dig.www.objects.CheckPoint;
+import com.dig.www.objects.Chest;
 import com.dig.www.objects.Collectible;
 import com.dig.www.objects.CollectibleCharacter;
 import com.dig.www.objects.CollectibleObject;
@@ -128,6 +129,10 @@ public class Board extends MPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private HashMap<String, Integer>keyMap=new HashMap<String, Integer>();
+	public HashMap<String, Integer>getKeyMap(){
+		return keyMap;
+	}
 	private SwitchMenu switchMenu;
 	private ArrayList<String> actionStrings = new ArrayList<String>();
 	private ArrayList<String> actionIcons = new ArrayList<String>();
@@ -395,6 +400,8 @@ private boolean firstSunSet;
 		this.userName = name;
 		if (mode.equals(Statics.MAIN))
 			GameCharacter.storyInt = 0;
+		else
+			firstSunSet=true;
 		this.addMouseListener(new PersonalMouse());
 
 		owner = dM;
@@ -465,7 +472,7 @@ private boolean firstSunSet;
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), this, level, ((DropPoint) o).type()));
+					objects.add(new Chest(o.getX(), o.getY(), this, ((DropPoint) o).type()));
 				}
 
 		if (character == null) {
@@ -549,8 +556,8 @@ for(Objects b:objects){
 			spawnLoc.x -= spawnX - Statics.BOARD_WIDTH / 2 - 50 + 100;
 			spawnLoc.y -= spawnY - Statics.BOARD_HEIGHT / 2 - 50 + 100;
 		}
-		if (GameCharacter.getInventory().contains(Items.PLAINKEY))
-			GameCharacter.getInventory().decrementItem(Items.PLAINKEY, GameCharacter.getInventory().getItemNum(Items.PLAINKEY));
+		//if (GameCharacter.getInventory().contains(Items.PLAINKEY))
+		//	GameCharacter.getInventory().decrementItem(Items.PLAINKEY, GameCharacter.getInventory().getItemNum(Items.PLAINKEY));
 		changeWeather();
 		updateBackground();
 		Statics.wipeColors();
@@ -696,7 +703,7 @@ for(Objects b:objects){
 		for (Objects o : objects)
 			if (o instanceof DropPoint)
 				if (((DropPoint) o).hasDrop()) {
-					npcs.add(new Chest(o.getX(), o.getY(), this, level, ((DropPoint) o).type()));
+					objects.add(new Chest(o.getX(), o.getY(), this, ((DropPoint) o).type()));
 				}
 		if (character == null) {
 			System.err.println("Character is never intialized. Leaving game.");
@@ -2448,8 +2455,8 @@ public boolean noOneTouches(Rectangle rect){
 					if (n instanceof Collectible && ((Collectible) n).collectible()) {
 						if (n instanceof MoneyObject) {
 							Statics.playSound(this, "collectibles/marioCoin.wav");
-
 							GameCharacter.getInventory().addMoney(((MoneyObject) n).getValue());
+							((MoneyObject)n).saveStringFalse();
 							objects.remove(u);
 							if (currentState != null)
 								currentState.getActions().add(new MoneyState(((MoneyObject) n).getValue(), u));
@@ -2513,7 +2520,9 @@ public boolean noOneTouches(Rectangle rect){
 							objects.remove(u);
 							u--;
 						} else if (n instanceof CollectibleObject) {
+							
 							GameCharacter.getInventory().addItem(((Collectible) n).getType(), 1);
+								
 							objects.remove(u);
 							u--;
 						}
@@ -2946,35 +2955,33 @@ public Rectangle getInBounds(Rectangle rect){
 			String location = (Statics.getBasedir() + "/saveFiles/" + userName + "/");
 			File loc = new File(location);
 			if (loc.exists()) {
-				File locFile = new File(location + userName + ".txt");
-				try {
-					BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
-					writer.write(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum + ","
+				//File locFile = new File(location + userName + ".txt");
+				try {ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "save.ser"));
+					//BufferedWriter writer = new BufferedWriter(new FileWriter(locFile));
+				ArrayList<String>s=new ArrayList<String>();	
+				s.add(mode + "," + level + "," + GameCharacter.getLevel() + "," + GameCharacter.getXP() + "," + spawnNum + ","
 							+ GameCharacter.storyInt+","+time.toString()+","+firstSunSet);
-					writer.newLine();
+				
 					// if (normalPlayer(character.getType()))
-					writer.write(character.getSave() + ",true");
+				s.add(character.getSave() + ",true");
 					for (int c = 0; c < friends.size(); c++) {
 						// if (normalPlayer(friends.get(c).getType())) {
 
-						writer.newLine();
-						writer.write(friends.get(c).getSave() + ",true");
+						s.add(friends.get(c).getSave() + ",true");
 						// }
 					}
 					for (int c = 0; c < goneFriends.size(); c++) {
-						writer.write(goneFriends.get(c) + ",false");
+						s.add(goneFriends.get(c) + ",false");
 					}
 					// writer.newLine();
 					// writer.write(character != null ? "" +
 					// character.getInventory().getMoney() : "0");
-					writer.close();
+					
 
-					ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(location + "data.ser"));
+					os.writeObject(s);
 					os.writeObject(data);
-					os.close();
-
-					os = new ObjectOutputStream(new FileOutputStream(location + "inventory.ser"));
 					os.writeObject(GameCharacter.getInventory());
+					os.writeObject(keyMap);
 					os.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -2991,19 +2998,21 @@ public Rectangle getInBounds(Rectangle rect){
 		return without;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void loadSave() {
 		level = DEFAULT;
 		try {
 			String location = (Statics.getBasedir() + "/saveFiles/" + userName + "/");
-			File saveFile = new File(location + userName + ".txt");
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "save.ser"));
+			
+			File saveFile = new File(location+"save.ser");
 
 			if (saveFile.exists()) {
-				BufferedReader reader = new BufferedReader(new FileReader(saveFile));
-				String line;
-				ArrayList<String> lines = new ArrayList<String>();
-
-				while ((line = reader.readLine()) != null)
-					lines.add(line);
+				//BufferedReader reader = new BufferedReader(new FileReader(saveFile));
+				Object o=is.readObject();
+				@SuppressWarnings("unchecked")
+				ArrayList<String>lines=(ArrayList<String>)o;
+					
 
 				if (lines.size() > 0) {
 					ArrayList<String> stuff = new ArrayList<String>();
@@ -3074,35 +3083,34 @@ public Rectangle getInBounds(Rectangle rect){
 						friends.get(friends.size() - 1).load(lines.get(c).substring(name.length() + 1));
 					}
 				}
-				reader.close();
 
-				try {
-					ObjectInputStream is = new ObjectInputStream(new FileInputStream(location + "data.ser"));
+				
+					
 					data = ((CharData) is.readObject());
 					data.setOwner(this);
-					is.close();
+				//	is.close();
 
-					is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
-					preferences = ((Preferences) is.readObject());
-					is.close();
+					
 
 					// reader = new BufferedReader(new FileReader(location +
 					// "inventory.txt"));
-					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
+//					is = new ObjectInputStream(new FileInputStream(location + "inventory.ser"));
 					Inventory w = (Inventory) is.readObject();
+					keyMap=(HashMap<String, Integer>)is.readObject();
 					is.close();
 					GameCharacter.setInventory(w);
 					GameCharacter.getInventory().setOwner(this);
 
 					GameControllerRunnable.renewKeys();
-				} catch (Exception badThing) {
-					badThing.printStackTrace();
-				}
+				
 				changeArea(spawnNum);
+				is = new ObjectInputStream(new FileInputStream(location + "preferences.ser"));
+					preferences = ((Preferences) is.readObject());
+					is.close();
 			} else {
+				is.close();
 				throw new FileNotFoundException();
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			newGame(owner.getLevel());

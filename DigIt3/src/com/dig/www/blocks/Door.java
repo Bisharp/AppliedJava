@@ -54,8 +54,11 @@ private boolean locked;
 						new ImageIcon(image),options,"Leave"
 						)==1;
 				if(b){
-					if(GameCharacter.getInventory().contains(Items.PLAINKEY)){
+					if(GameCharacter.getInventory().contains(Items.PLAINKEY)&&owner.getKeyMap().containsKey(owner.getLevel())&&owner.getKeyMap().get(owner.getLevel())>0){
 						GameCharacter.getInventory().decrementItem(Items.PLAINKEY, 1);
+						int keys=owner.getKeyMap().get(owner.getLevel())-1;
+						owner.getKeyMap().remove(owner.getLevel());
+						owner.getKeyMap().put(owner.getLevel(), keys);
 						locked=false;
 						owner.getData().unlockDoor(owner.getPortals().indexOf(this));
 						image=newImage(path+"c.png");

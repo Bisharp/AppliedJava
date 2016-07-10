@@ -217,8 +217,8 @@ try {
 			if (pack == null)
 				return;
 
-			if (new File(Statics.getBasedir() + "saveFiles/" + s + "/" + s
-					+ ".txt").exists()) {
+			if (new File(Statics.getBasedir() + "saveFiles/" + s + "/"
+					+ "save.ser").exists()) {
 				if (JOptionPane
 						.showConfirmDialog(owner,
 								"Are you sure you want to delete this file and create a new game?") != JOptionPane.YES_OPTION)
@@ -235,10 +235,10 @@ try {
 				if (!f.exists())
 					f.mkdirs();
 
-				BufferedWriter writer = new BufferedWriter(new FileWriter((loc
-						+ s + ".txt")));
-				writer.write("");
-				writer.close();
+//				BufferedWriter writer = new BufferedWriter(new FileWriter((loc
+//						+ s + ".txt")));
+//				writer.write("");
+//				writer.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -308,7 +308,7 @@ try {
 						"Are you sure you want to delete this file?\n(Deleted data cannot be restored.)") == JOptionPane.YES_OPTION) {
 			new File(GameStartBoard.class.getProtectionDomain().getCodeSource()
 					.getLocation().getFile()
-					+ "saveFiles/" + s + "/" + s + ".txt").delete();
+					+ "saveFiles/" + s + "/save.ser").delete();
 
 			switch (s.charAt(s.length() - 1)) {
 			case '1':
@@ -542,7 +542,7 @@ try {
 			buttonPanel.add(create);
 			buttonPanel.setFocusable(false);
 			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/"
-					+ fileS() + ".txt")).exists()) {
+					+ "save.ser")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}
@@ -561,7 +561,7 @@ try {
 			buttonPanel.add(create);
 			buttonPanel.setFocusable(false);
 			if (new File((Statics.getBasedir() + "saveFiles/" + fileS() + "/"
-					+ fileS() + ".txt")).exists()) {
+					+  "save.ser")).exists()) {
 				buttonPanel.add(load);
 				buttonPanel.add(delete);
 			}

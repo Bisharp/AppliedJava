@@ -14,6 +14,7 @@ import com.dig.www.character.GameCharacter.Types;
 import com.dig.www.character.Items;
 import com.dig.www.enemies.*;
 import com.dig.www.npc.*;
+import com.dig.www.objects.Chest;
 import com.dig.www.npc.betweenTimes.*;
 import com.dig.www.objects.*;
 import com.dig.www.start.Board;
@@ -425,9 +426,6 @@ public class StageBuilder {
 						case NPC.PLATO:
 							npcs.add(new PLATO(nX, nY, owner, loc));
 							break;
-						case "Chest":
-							npcs.add(new Chest(nX, nY, owner, loc, Items.translate(stuff.get(3))));
-							break;
 						case "RyoBoss2Start":
 							npcs.add(new RyoBoss2Start(nX, nY, owner, loc));
 							break;
@@ -613,6 +611,8 @@ ex.printStackTrace();
 								npcs.add(new Toilet(nX,nY,loc,owner));
 							else if(val==-32)
 								npcs.add(new Sink(nX,nY,loc,owner));
+						else if(val==-33)
+							npcs.add(new Chest(nX, nY, owner, Items.translate(loc)));
 							else
 								npcs.add(new MoneyObject(nX, nY, loc, owner, val));
 						else if (stuff.get(5).equals("Null"))

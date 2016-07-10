@@ -1,6 +1,9 @@
 package com.dig.www.character;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
 
 import com.dig.www.start.Board;
 import com.dig.www.util.Statics;
@@ -11,7 +14,7 @@ POTATOGUY{
 		return "Potato Guy";
 	}
 	@Override
-	protected String getPersonalDesc() {
+	protected String getPersonalDesc(Board b) {
 		// TODO Auto-generated method stub
 		return "Is this thing alive?";
 	}
@@ -53,7 +56,7 @@ POTATOGUY{
 		return "N&Ns";
 	}
 	@Override
-	protected String getPersonalDesc() {
+	protected String getPersonalDesc(Board b) {
 		// TODO Auto-generated method stub
 		return "N&Ns: Chocolate balls of goodness.";
 	}
@@ -94,7 +97,7 @@ POTATOGUY{
 		return "Null";
 	}
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			return "<html>A value for items which do not go in the inventory. If you are reading this (and not looking in the code), <i>do not</i> use this item, as it may cause undefined behavior.";
 		}
 
@@ -115,7 +118,7 @@ POTATOGUY{
 	},
 	KEYCRYSTAL {
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			return "A Key Crystal. Enough of these will open special red portals.";
 		}
 
@@ -145,7 +148,7 @@ POTATOGUY{
 		}
 
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			return "<html>A bright blue cloak found in The Wizard's tower. What's this? The tag says \"Invisible Cloak.\"<br>Well, <i>that</i> can't be true; I can see it just fine!";
 		}
 
@@ -171,7 +174,7 @@ POTATOGUY{
 			return "Projectile";
 		}
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			return null;
 		}
 
@@ -198,7 +201,7 @@ POTATOGUY{
 		}
 		
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			// TODO Auto-generated method stub
 			return "<html>A banana, supposedly created by The Wizard using magic.<br>It <i>does</i> appear to have a Sunny Farm Fruits sticker on it, though...";
 		}
@@ -225,7 +228,7 @@ POTATOGUY{
 			return "Donut";
 		}
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			return "That cop asked for a donut. We could probably give him this one. I hope he likes food coloring.";
 		}
 		@Override
@@ -247,7 +250,7 @@ POTATOGUY{
 			return "????";
 		}
 		@Override
-		protected String getPersonalDesc(){
+		protected String getPersonalDesc(Board b){
 			return "I have no idea what this is or why we kept it.";
 		}
 		@Override
@@ -267,7 +270,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Gem";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "Guys, do you think maybe this was in the chest because WE WEREN'T SUPPOSED TO TAKE IT?!?!";
 		}
 		@Override public String getPath() {
@@ -284,7 +287,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Video Game Console";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "Video games are fun. Wouldn't it be so weird if WE were actually in a video game?";
 		}
 		@Override public String getPath() {
@@ -302,7 +305,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Jump Video Game";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "<html>A video game called Jump. You can only play Jump if you have a <i>Video Game Console</i>.";
 		}
 		@Override public String getPath() {
@@ -319,7 +322,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Sinister Black Orb of Ultimate Agony and Suffering";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "It feels sort of tingly...";
 		}
 		@Override public String getPath(){
@@ -336,7 +339,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Wizard Hat";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "The tag on the inside says \"If lost, draw a chalk circle around it, chant the magic words, and put it in the mail addressed to the forest tower.\"";
 		}
 		@Override public String getPath(){
@@ -353,7 +356,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Cobalt Hat";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "It looks exactly like Sir Cobalt's. Does wearing it make me look as cool as him?";
 		}
 		@Override public String getPath(){
@@ -370,7 +373,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Goggles";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "A spare pair of Dr. Kepler's lab goggles. How can he see through these?";
 		}
 		@Override public String getPath(){
@@ -387,7 +390,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Cape";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "This looks like it probably belongs to Super Macaroni Noodle Man. It could use some cleaning.";
 		}
 		@Override public String getPath(){
@@ -404,7 +407,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Bacon";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "Everybody loves this stuff. Except for vegetarians.";
 		}
 		@Override public String getPath(){
@@ -421,7 +424,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Ultimate Bacon";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "Destiny says that legend spoke of bacon that put all other bacon to shame. Apparently if I eat it everything else will taste terrible by comparison. I... think I'll pass.";
 		}
 		@Override public String getPath(){
@@ -434,11 +437,15 @@ POTATOGUY{
 			return false;
 		}
 	},PLAINKEY{
-
 		@Override
-		protected String getPersonalDesc() {
-			// TODO Auto-generated method stub
-			return "A normal key";
+		protected String getPersonalDesc(Board b) {
+		String s="A normal key.\nIt will only open doors in the area it was found in.\nYou have "+(b.getKeyMap().containsKey(b.getLevel())?b.getKeyMap().get(b.getLevel()):"0")+" from this area.";
+		String[]keys=b.getKeyMap().keySet().toArray(new String[0]);
+		Integer[]vals=b.getKeyMap().values().toArray(new Integer[0]);
+		for(int i=0;i<vals.length;i++){
+		s+="\n"+vals[i]+" from "+keys[i]+".";
+		}
+		return s;
 		}
 
 		@Override
@@ -468,7 +475,7 @@ POTATOGUY{
 	},GRAVEBOX{
 
 		@Override
-		protected String getPersonalDesc() {
+		protected String getPersonalDesc(Board b) {
 			// TODO Auto-generated method stub
 			return "This is a box found under the tombstone of an adventurer.\nWhat could the dangerous light be?";
 		}
@@ -502,7 +509,7 @@ POTATOGUY{
 		@Override public String toString(){
 			return "Ancient Urn";
 		}
-		@Override protected String getPersonalDesc(){
+		@Override protected String getPersonalDesc(Board b){
 			return "An ancient urn depicting a man watching television. Perhaps it is not as old as it first appeared to be...";
 		}
 		@Override public String getPath(){
@@ -526,15 +533,15 @@ POTATOGUY{
 		return NULL;
 	}
 
-	public static String getDesc(String string) {
+	public static String getDesc(String string,Board b) {
 		for (Items i : Items.values())
 			if (i.toString().equals(string))
-				return i.getPersonalDesc();
+				return i.getPersonalDesc(b);
 
-		return NULL.getPersonalDesc();
+		return NULL.getPersonalDesc(b);
 	}
 
-	protected abstract String getPersonalDesc();
+	protected abstract String getPersonalDesc(Board b);
 
 	public abstract String getPath();
 

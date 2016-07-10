@@ -16,6 +16,7 @@ public class Objects extends Sprite {
 	protected String desc;
 	protected String identifier;
 protected boolean seeOver=true;
+protected String saveString="";
 public boolean seeOver(){
 	return seeOver;
 }
@@ -167,5 +168,14 @@ public boolean seeOver(){
 	}
 	public String getIdentifier(){
 		return identifier;
+	}
+	public String getSaveString(){
+		return saveString;
+	}
+	public void setSaveString(String newString){
+		saveString=newString;
+	}
+	public boolean resolveSaveString(){
+		return true;
 	}
 }

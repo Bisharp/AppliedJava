@@ -28,7 +28,7 @@ public class VineBoss extends Boss{
 	public void  makeDeadExplosion(){
 		super.makeDeadExplosion();
 		//owner.getEnemies().add(new Explosion(x, y, owner));
-		owner.talk(new BotanusDeadNPC(owner));
+		owner.talk(new BotanusDeadNPC(owner,owner.getLevel()));
 			//vine.setP(x, y);
 	}
 	@Override

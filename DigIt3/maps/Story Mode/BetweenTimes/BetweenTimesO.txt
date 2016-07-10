@@ -254,3 +254,6 @@
 1100,9200,images/objects/bombCube.png,false,-10
 1525,9125,images/objects/collectibles/coin5.png,false,5
 1425,9225,images/objects/collectibles/coin5.png,false,5
+3400,8200,Plain Key,false,-33
+3550,2850,Plain Key,false,-33
+7050,6550,Ancient Urn,false,-33

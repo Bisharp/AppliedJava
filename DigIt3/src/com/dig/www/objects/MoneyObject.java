@@ -46,4 +46,8 @@ String[]options={"Leave","Take"};
 				)==1;
 		
 	}
+	public void saveStringFalse(){
+		 saveString="false";
+		 owner.getData().setSaveString(this);
+	}
 }

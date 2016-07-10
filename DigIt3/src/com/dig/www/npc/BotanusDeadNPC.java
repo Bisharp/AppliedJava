@@ -5,8 +5,8 @@ import com.dig.www.start.Board;
 
 public class BotanusDeadNPC extends CutScene{
 
-	public BotanusDeadNPC( Board owner) {
-		super(-1000, -1000, owner,"United Country",new CSDialog[]{new CSDialog("Stuff to be added", "futureScientist", null)});
+	public BotanusDeadNPC( Board owner,String location) {
+		super(-1000, -1000, owner,location,new CSDialog[]{new CSDialog("Stuff to be added", "futureScientist", null)});
 	}
 @Override
 public void act(NPCOption npcOption) {
